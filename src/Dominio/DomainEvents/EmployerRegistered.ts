@@ -1,4 +1,4 @@
-import { IDomainEvent } from "./IDomainEvent";
+import { IDomainEvent } from './IDomainEvent';
 
 export class EmployerRegistered implements IDomainEvent {
   public dateTimeOcurred: Date;
