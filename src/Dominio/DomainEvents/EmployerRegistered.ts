@@ -1,4 +1,8 @@
-class EmployeRegistered {
+import { IDomainEvent } from './IDomainEvent'
+
+export class EmployerRegistered implements IDomainEvent {
+    dateTimeOcurred: Date;
+
     Name:String;
     Description:String;
     Location:String;

@@ -1,4 +1,13 @@
-class Employer extends AggregateRoot implements IInternalEventHandler{
+
+import { EmployerRegistered } from 'src/Dominio/DomainEvents/EmployerRegistered';
+import { EmployerRegisteredHandler } from 'src/Dominio/DomainEvents/EmployerRegisteredHandler';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
+import { AggregateRoot } from '../AggregateRoot'
+import { IInternalEventHandler } from '../IInternalEventHandler';
+
+
+export class Employer extends AggregateRoot implements IInternalEventHandler{
     private Name:String;
     private Description:String;
     private Location:String;
@@ -9,14 +18,11 @@ class Employer extends AggregateRoot implements IInternalEventHandler{
     constructor(parameters) {
        super(); 
     }
-    protected When(event: object): void {
-        switch(event){
-            case EmployeRegistered:
-                //to do (Se necesita implementar los value objects)
-                break;
-        }
+    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
+        handler.handle(event, this);
     }
-    protected EsureValidState(): void {
+    protected EnsureValidState(): void {
+        console.log("protected")
         throw new Error("Method not implemented.");
     }
 
@@ -27,7 +33,7 @@ class Employer extends AggregateRoot implements IInternalEventHandler{
         Phone:String,
         Mail:String,
         ComDesignation:String){
-        this.Apply(new EmployeRegistered(
+        this.Apply(new EmployerRegistered(
             Name,
             Description,
             Location,
@@ -35,6 +41,6 @@ class Employer extends AggregateRoot implements IInternalEventHandler{
             Phone,
             Mail,
             ComDesignation
-        ));
+        ), new EmployerRegisteredHandler);
     }
 }
