@@ -1,20 +1,20 @@
 class EmployeRegistered {
-  public Name: String;
-  public Description: String;
-  public Location: String;
-  public Rif: String;
-  public Phone: String;
-  public Mail: String;
-  public ComDesignation: String;
+  public Name: string;
+  public Description: string;
+  public Location: string;
+  public Rif: string;
+  public Phone: string;
+  public Mail: string;
+  public ComDesignation: string;
 
   constructor(
-    Name: String,
-    Description: String,
-    Location: String,
-    Rif: String,
-    Phone: String,
-    Mail: String,
-    ComDesignation: String,
+    Name: string,
+    Description: string,
+    Location: string,
+    Rif: string,
+    Phone: string,
+    Mail: string,
+    ComDesignation: string,
   ) {
     this.Name = Name;
     this.Description = Description;
