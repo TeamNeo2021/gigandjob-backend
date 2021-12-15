@@ -5,6 +5,7 @@ export class EmployerRegistered implements IDomainEvent {
 
   public Name: string;
   public Description: string;
+  public State: number;
   public Location: string;
   public Rif: string;
   public Phone: string;
@@ -14,6 +15,7 @@ export class EmployerRegistered implements IDomainEvent {
   constructor(
     Name: string,
     Description: string,
+    State: number,
     Location: string,
     Rif: string,
     Phone: string,
@@ -23,6 +25,7 @@ export class EmployerRegistered implements IDomainEvent {
     this.dateTimeOcurred = new Date(Date.now());
     this.Name = Name;
     this.Description = Description;
+    this.State = State;
     this.Location = Location;
     this.Rif = Rif;
     this.Phone = Phone;

@@ -5,16 +5,13 @@ import { AggregateRoot } from '../AggregateRoot';
 import { EmployerRegisteredHandler } from '../../DomainEvents/EmployerRegisteredHandler';
 import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered';
 import { EmployerNameVo } from './ValueObjects/EmployerNameVo';
+import { EmployerStateVo } from './ValueObjects/EmployerStateVo';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
+  private EmployerId: string;
   private _Name: EmployerNameVo;
   private _Description: string;
-  public get Description(): string {
-    return this._Description;
-  }
-  public set Description(value: string) {
-    this._Description = value;
-  }
+  private _State: EmployerStateVo;
   private Location: string;
   private Rif: string;
   private Phone: string;
@@ -22,19 +19,30 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   private ComDesignation: string;
   constructor() {
     super();
+    //Por ahora ya que no se han implementdo los value objects
+    this.EmployerId = Date();
   }
   protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
     handler.handle(event, this);
   }
   protected EnsureValidState(): void {
-    console.log('protected');
-    console.log(this._Name);
-    //throw new Error('Method not implemented.');
+    const valid = this.EmployerId != null && this._Name != null; /*&&
+      
+      Comentaré esto por ahora ya que no se han implementado los demás value objects
+      this.Rif != null &&
+      this.Location != null &&
+      this.Phone != null &&
+      this.Mail != null &&
+      this.ComDesignation != null;*/
+    if (!valid) {
+      throw new Error('Verificacion de estado ha fallado, estado inválido');
+    }
   }
 
   public RegistrarEmpleado(
     Name: string,
     Description: string,
+    State: number,
     Location: string,
     Rif: string,
     Phone: string,
@@ -46,6 +54,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
       new EmployerRegistered(
         Name,
         Description,
+        State,
         Location,
         Rif,
         Phone,
@@ -56,10 +65,24 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     );
   }
 
+  //Getters y setters
   public get Name(): EmployerNameVo {
     return this._Name;
   }
   public set Name(value: EmployerNameVo) {
     this._Name = value;
+  }
+
+  public get Description(): string {
+    return this._Description;
+  }
+  public set Description(value: string) {
+    this._Description = value;
+  }
+  public get State(): EmployerStateVo {
+    return this._State;
+  }
+  public set State(value: EmployerStateVo) {
+    this._State = value;
   }
 }
