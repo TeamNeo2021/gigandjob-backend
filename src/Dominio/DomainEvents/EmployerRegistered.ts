@@ -1,4 +1,8 @@
-class EmployeRegistered {
+import { IDomainEvent } from "./IDomainEvent";
+
+export class EmployerRegistered implements IDomainEvent {
+  public dateTimeOcurred: Date;
+
   public Name: string;
   public Description: string;
   public Location: string;
@@ -16,6 +20,7 @@ class EmployeRegistered {
     Mail: string,
     ComDesignation: string,
   ) {
+    this.dateTimeOcurred = new Date(Date.now());
     this.Name = Name;
     this.Description = Description;
     this.Location = Location;
