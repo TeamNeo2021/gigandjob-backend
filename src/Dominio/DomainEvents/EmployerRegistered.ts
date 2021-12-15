@@ -1,11 +1,11 @@
 class EmployeRegistered {
-    Name:String;
-    Description:String;
-    Location:String;
-    Rif:String;
-    Phone:String;
-    Mail:String;
-    ComDesignation:String;
+    public Name:String;
+    public Description:String;
+    public Location:String;
+    public Rif:String;
+    public Phone:String;
+    public Mail:String;
+    public ComDesignation:String;
 
     constructor(Name:String,
         Description:String,
