@@ -6,9 +6,10 @@ import { EmployerRegisteredHandler } from '../../DomainEvents/EmployerRegistered
 import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered';
 import { EmployerNameVo } from './ValueObjects/EmployerNameVo';
 import { EmployerStateVo } from './ValueObjects/EmployerStateVo';
+import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
-  private EmployerId: string;
+  private EmployerId: EmployerIdVO;
   private _Name: EmployerNameVo;
   private _Description: string;
   private _State: EmployerStateVo;
@@ -20,7 +21,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   constructor() {
     super();
     //Por ahora ya que no se han implementdo los value objects
-    this.EmployerId = Date();
+    this.EmployerId = new EmployerIdVO(Date().toString());
   }
   protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
     handler.handle(event, this);
