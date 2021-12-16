@@ -8,4 +8,3 @@ export class MeetingScheduledHandler implements IDomainEventHandler {
       aggregate.date = event.appointment
   }
 }
-
