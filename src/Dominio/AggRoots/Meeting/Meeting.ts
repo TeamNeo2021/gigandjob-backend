@@ -15,11 +15,11 @@ export class Meeting extends AggregateRoot{
     private _date: MeetingDateVO;
     private _location: MeetingLocationVO;
     
-    constructor(id: string, state: MeetingStateVO, description: string, date: Date, location: string) {
+    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string) {
        super(); 
        this._id = new MeetingIDVO(id);
        this._state = state;
-       this._description = new MeetingDescriptionVO();
+       this._description = description;
        this._date = new MeetingDateVO(date);
        this._location = new MeetingLocationVO();
     }
