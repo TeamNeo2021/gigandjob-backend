@@ -1,6 +1,7 @@
-import { Meeting } from "../AggRoots/Meeting/Meeting";
-import { IDomainEventHandler } from "./IDomainEventHandler";
+import { Meeting } from "src/Dominio/AggRoots/Meeting/Meeting";
+import { IDomainEventHandler } from "../IDomainEventHandler";
 import { MeetingCanceled } from "./MeetingCanceled";
+
 
 export class MeetingCanceledHandler implements IDomainEventHandler {
   handle(event: MeetingCanceled, entity: Meeting): void {

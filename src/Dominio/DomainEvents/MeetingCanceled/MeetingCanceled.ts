@@ -1,5 +1,6 @@
-import { Meeting } from '../AggRoots/Meeting/Meeting';
-import { IDomainEvent } from './IDomainEvent';
+import { Meeting } from "src/Dominio/AggRoots/Meeting/Meeting";
+import { IDomainEvent } from "../IDomainEvent";
+
 
 export class MeetingCanceled implements IDomainEvent {
   public dateTimeOcurred: Date;
