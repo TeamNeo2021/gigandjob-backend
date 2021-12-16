@@ -5,6 +5,7 @@ import { AggregateRoot } from '../AggregateRoot'
 
 
 export class Meeting extends AggregateRoot implements IInternalEventHandler{
+    //private id: string;
     private id: string;
     private state:string;
     private description:string;
