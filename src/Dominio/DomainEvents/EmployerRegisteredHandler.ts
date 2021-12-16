@@ -1,3 +1,4 @@
+
 import { AggregateRoot } from '../AggRoots/AggregateRoot';
 import { IDomainEvent } from './IDomainEvent';
 import { IDomainEventHandler } from './IDomainEventHandler';
@@ -16,3 +17,4 @@ export class EmployerRegisteredHandler implements IDomainEventHandler {
     entity.State = new EmployerStateVo(event.State);
   }
 }
+
