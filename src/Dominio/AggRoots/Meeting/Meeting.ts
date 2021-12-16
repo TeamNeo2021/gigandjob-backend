@@ -1,6 +1,5 @@
 import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
-import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { MeetingIDVO } from './ValueObjects/MeetingIDVO';
 import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
