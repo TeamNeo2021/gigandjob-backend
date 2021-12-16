@@ -2,7 +2,7 @@ export class MeetingDateVO {
     value: Date;
     constructor(value: Date) {
         let today = new Date();
-        if (value > today){
+        if (value >= today){
             this.value = value
         }
         else {
