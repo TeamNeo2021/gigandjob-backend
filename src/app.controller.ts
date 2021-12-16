@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Employer } from './Domain/AggRoots/Employer/Employer';
-import { EmployerRegistered } from './Domain/DomainEvents/EmployerRegistered';
-import { EmployerRegisteredHandler } from './Domain/DomainEvents/EmployerRegisteredHandler';
+import { Employer } from './Dominio/AggRoots/Employer/Employer';
+import { EmployerRegistered } from './Dominio/DomainEvents/EmployerRegistered';
+import { EmployerRegisteredHandler } from './Dominio/DomainEvents/EmployerRegisteredHandler';
 
 
 @Controller()

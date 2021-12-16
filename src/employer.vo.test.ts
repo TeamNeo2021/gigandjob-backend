@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmployerNameVo } from './Domain/AggRoots/Employer/ValueObjects/EmployerNameVo';
+import { EmployerNameVo } from './Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo';
 describe('AppController', () => {
   let empNameVo: EmployerNameVo;
 

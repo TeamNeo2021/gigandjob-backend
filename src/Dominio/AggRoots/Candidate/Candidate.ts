@@ -1,5 +1,5 @@
-import { Entity } from "src/Domain/Core/Entity";
-import { IDomainEvent } from "src/Domain/DomainEvents/IDomainEvent";
+import { Entity } from "src/Dominio/Core/Entity";
+import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 
 export class Candidate extends Entity<String> {
     protected when(event: IDomainEvent) {
