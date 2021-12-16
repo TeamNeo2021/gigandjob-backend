@@ -22,15 +22,15 @@ export abstract class Entity<TId> implements IInternalEventHandler{
         this._applier = applier;
     }
 
-    protected abstract when(event: IDomainEvent);
+    protected abstract when(event: IDomainEvent,  handler: IDomainEventHandler);
     
-    protected apply(event:IDomainEvent){
-        this.when(event);
+    protected apply(event:IDomainEvent, handler: IDomainEventHandler){
+        this.when(event, handler);
         this._applier(event);
     }
 
     Handle(event: IDomainEvent, handler: IDomainEventHandler): void {
-        this.when(event);
+        this.when(event, handler);
     }
 
     
