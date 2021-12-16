@@ -1,4 +1,4 @@
-class EmployerNameVo {
+export class EmployerNameVo {
   value: string;
   constructor(value: string) {
     if ((value = '')) {

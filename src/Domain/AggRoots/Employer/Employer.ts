@@ -1,8 +1,8 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
+import { IDomainEvent } from 'src/Domain/DomainEvents/IDomainEvent';
+import { IDomainEventHandler } from 'src/Domain/DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot'
-import { EmployerRegisteredHandler } from 'src/Dominio/DomainEvents/EmployerRegisteredHandler';
+import { EmployerRegisteredHandler } from 'src/Domain/DomainEvents/EmployerRegisteredHandler';
 import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered'
 
 export class Employer extends AggregateRoot implements IInternalEventHandler{
