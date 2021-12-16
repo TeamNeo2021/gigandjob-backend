@@ -1,6 +1,6 @@
-import { AggregateRoot } from "../AggRoots/AggregateRoot";
-import { IDomainEvent } from "./IDomainEvent";
+import { AggregateRoot } from '../AggRoots/AggregateRoot';
+import { IDomainEvent } from './IDomainEvent';
 
-export interface IDomainEventHandler{
-    handle(event:IDomainEvent, aggregate:Object):void
+export interface IDomainEventHandler {
+  handle(event: IDomainEvent, aggregate: Object): void;
 }
