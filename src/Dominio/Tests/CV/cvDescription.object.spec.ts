@@ -1,5 +1,5 @@
-import { InvalidCvDescriptionError } from "../AggRoots/CV/Errors/invalidCvDescription.error"
-import { CvDescription } from "../AggRoots/CV/ValueObjects/cvDescription.object"
+import { InvalidCvDescriptionError } from "../../AggRoots/CV/Errors/invalidCvDescription.error"
+import { CvDescription } from "../../AggRoots/CV/ValueObjects/cvDescription.object"
 
 describe("CV Work Experience", () => {
     it("should not create when description is empty", () => {

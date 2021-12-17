@@ -1,5 +1,5 @@
-import { InvalidCVStudiesError } from "../AggRoots/CV/Errors/invalidCvStudies.error"
-import { CvStudies } from "../AggRoots/CV/ValueObjects/cvStudies.object"
+import { InvalidCVStudiesError } from "../../AggRoots/CV/Errors/invalidCvStudies.error"
+import { CvStudies } from "../../AggRoots/CV/ValueObjects/cvStudies.object"
 
 describe("Cv Study", () => {
     it("should not create when description is empty", () => {
