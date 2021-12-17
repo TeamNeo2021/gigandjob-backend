@@ -7,7 +7,7 @@ export class EmployerRegistered implements IDomainEvent {
   public Description: string;
   public State: number;
   public Location: string;
-  public Rif: string;
+  public Rif: EmployerRifVO;
   public Phone: string;
   public Mail: string;
   public ComDesignation: string;
@@ -17,7 +17,7 @@ export class EmployerRegistered implements IDomainEvent {
     Description: string,
     State: number,
     Location: string,
-    Rif: string,
+    Rif: EmployerRifVO,
     Phone: string,
     Mail: string,
     ComDesignation: string,

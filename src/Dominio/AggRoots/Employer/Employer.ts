@@ -14,7 +14,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _Description: string;
   private _State: EmployerStateVo;
   private Location: string;
-  private Rif: string;
+  private Rif: EmployerRifVO;
   private Phone: string;
   private Mail: string;
   private ComDesignation: string;
@@ -45,7 +45,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     Description: string,
     State: number,
     Location: string,
-    Rif: string,
+    Rif: EmployerRifVO,
     Phone: string,
     Mail: string,
     ComDesignation: string,
@@ -85,5 +85,12 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
   public set State(value: EmployerStateVo) {
     this._State = value;
+  }
+
+  public get EmployerRif() : EmployerRifVO {
+    return this.Rif;
+  }
+  public set EmployerRif(rif : EmployerRifVO) {
+    this.Rif = rif;
   }
 }
