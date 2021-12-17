@@ -10,11 +10,12 @@ import { RatingVO } from './ValueObjects/OfferRatingVO';
 //import { OfferCreatedHandler } from '../../DomainEvents/OffererRegisteredHandler';
 //import { OfferRegistered } from '../../DomainEvents/OffererRegistered';
 import { Sectors } from './ValueObjects/offerSectorVo';
+import { OfferStateVo } from './ValueObjects/OfferStateVo';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
     private OfferId: OfferIdVO;
-    //private State: OfferStateVo;
+    private State: OfferStateVo;
     //private PublicationDate: PublicationDateVo;
     private Rating: RatingVO;
     private Direction: DirectionVO;
@@ -69,10 +70,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   
     //Getters y setters
 
-    /*public get _State(): OfferStateVo {
+    public get _State(): OfferStateVo {
       return this.State;
     }
     public set _State(value: OfferStateVo) {
       this.State = value;
-    }*/
+    }
   }
