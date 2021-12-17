@@ -1,3 +1,5 @@
+import { InvalidCandidateBirthDate } from "./Errors/invalidCandidateBirthDate.error";
+
 export class CandidateBirthDateVo{
     private _birthDate: Date;
 
@@ -8,15 +10,15 @@ export class CandidateBirthDateVo{
     }
 
     get birthDate(): Date{
-        return this.birthDate;
+        return this._birthDate;
     }
 
-    protected birthDateValidate(birthDate: Date): boolean{
+    protected birthDateValidate(birthDate: Date){
         const today = new Date();
         if (birthDate == null || birthDate == undefined){
-            throw new Error('Es necesario la fecha de nacimiento');
+            throw  InvalidCandidateBirthDate.emptyBirthDate();
         }else if (birthDate > today){
-            throw new Error('Usted no pueden nacer en el futuro. Por favor introduzca una fecha de nacimiento valida');
+            throw  InvalidCandidateBirthDate.birthDateAfterToday();
         }else{
             return true;
         }

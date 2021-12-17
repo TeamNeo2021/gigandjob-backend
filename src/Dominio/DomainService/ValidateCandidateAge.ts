@@ -1,4 +1,5 @@
 import { CandidateBirthDateVo } from "../AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
+import { InvalidCandidateBirthDate } from "../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateBirthDate.error";
 
 export class ValidateCandidateAge{
     validate(ageLimit: Number, candidateBirth: CandidateBirthDateVo):boolean{
@@ -7,7 +8,7 @@ export class ValidateCandidateAge{
         if(userAge > ageLimit){
             return true;
         }else{
-            throw new Error('User cannot be registered, age is under '+ageLimit+' years old');
+            throw  InvalidCandidateBirthDate.candidateUnderAge(ageLimit)
             return false;
         }
     }
