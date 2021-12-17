@@ -7,7 +7,7 @@ export class CandidateBirthDateVo{
         }
     }
 
-    get birthDate(): String{
+    get birthDate(): Date{
         return this.birthDate;
     }
 
