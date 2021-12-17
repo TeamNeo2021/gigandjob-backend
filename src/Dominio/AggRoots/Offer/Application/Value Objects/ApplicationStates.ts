@@ -1,5 +1,5 @@
 export class ApplicationState{
-   current: ApplicationStates
+   public current: ApplicationStates
 
    constructor(){
        this.current = ApplicationStates.Active;
