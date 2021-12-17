@@ -11,6 +11,9 @@ export class InvalidCvWorkExperienceError extends Error {
     static startDateIsNotBeforeToday(date: Date) {
         return new InvalidCvWorkExperienceError(`The cv work experience start date must be before today: ${date.toUTCString()}`)
     }
+    static finishDateIsNotBeforeToday(date: Date) {
+        return new InvalidCvWorkExperienceError(`The cv work experience finish date must be before today: ${date.toUTCString()}`)
+    }
     static startDateIsNotBeforeFinishDate(startDate: Date, finalDate: Date) {
         return new InvalidCvWorkExperienceError(
             `The cv work experience start date must be before final date studies: ${startDate.toUTCString()} < ${finalDate.toUTCString()} `

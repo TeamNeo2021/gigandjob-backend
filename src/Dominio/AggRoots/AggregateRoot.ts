@@ -4,10 +4,7 @@ import { IInternalEventHandler } from './IInternalEventHandler';
 
 export abstract class AggregateRoot implements IInternalEventHandler {
   public tid: string;
-  private readonly changes: Array<object>;
-  protected constructor() {
-    this.changes = new Array<object>();
-  }
+  protected readonly changes: IDomainEvent[] = [];
   protected abstract When(
     event: IDomainEvent,
     handler: IDomainEventHandler,
@@ -18,7 +15,7 @@ export abstract class AggregateRoot implements IInternalEventHandler {
     this.EnsureValidState();
     this.changes.push(event);
   }
-  public GetChanges() {
+  public GetChanges(): readonly object[] {
     return this.changes;
   }
   public ClearChanges(): void {

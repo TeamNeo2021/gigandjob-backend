@@ -14,6 +14,9 @@ export class InvalidCVStudiesError extends Error {
     static startDateIsNotBeforeToday(date: Date) {
         return new InvalidCVStudiesError(`The cv studies start date must be before today: ${date.toUTCString()}`)
     }
+    static finishDateIsNotBeforeToday(date: Date) {
+        return new InvalidCVStudiesError(`The cv studies finish date must be before today: ${date.toUTCString()}`)
+    }
     static startDateIsNotBeforeFinishDate(startDate: Date, finalDate: Date) {
         return new InvalidCVStudiesError(
             `The cv studies start date must be before final date studies: ${startDate.toUTCString()} < ${finalDate.toUTCString()} `

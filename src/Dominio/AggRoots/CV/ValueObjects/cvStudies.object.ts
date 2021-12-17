@@ -21,11 +21,12 @@ export class CvStudies {
         _degree: string
     ) {
         if (!_description || _description.trim() == "") throw InvalidCVStudiesError.emptyDescription()
-        else if (_description.length < 500) throw InvalidCVStudiesError.invalidDescriptionLength()
+        else if (_description.length >= 500) throw InvalidCVStudiesError.invalidDescriptionLength()
         else if (!_degree || _degree.trim() == "") throw InvalidCVStudiesError.emptyDegree()
         else if (!_institution || _institution.trim() == "") throw InvalidCVStudiesError.emptyInstitution()
-        else if (_startDate.getDate() > Date.now()) throw InvalidCVStudiesError.startDateIsNotBeforeToday(_startDate)
-        else if (_startDate.getDate() > _finishDate.getDate()) throw InvalidCVStudiesError.startDateIsNotBeforeFinishDate(_startDate, _finishDate)
+        else if (_startDate.getTime() > Date.now()) throw InvalidCVStudiesError.startDateIsNotBeforeToday(_startDate)
+        else if (_finishDate.getTime() > Date.now()) throw InvalidCVStudiesError.startDateIsNotBeforeToday(_startDate)
+        else if (_startDate.getTime() > _finishDate.getTime()) throw InvalidCVStudiesError.startDateIsNotBeforeFinishDate(_startDate, _finishDate)
 
         this._description = _description
         this._startDate = _startDate
