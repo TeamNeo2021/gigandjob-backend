@@ -3,21 +3,21 @@ import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
-import { CandidateIdVO } from "./ValueObjects/CandidateIdVo";
-import { CandidateLocationVO } from "./ValueObjects/CandidateLocationVO";
+import { CandidateIdVo } from "./ValueObjects/CandidateIdVo";
+import { CandidateLocationVo } from "./ValueObjects/CandidateLocationVO";
 import { CandidateMailVo } from "./ValueObjects/CandidateMailVo";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 
 export class Candidate extends Entity<String> {
-    private _id: CandidateIdVO;
+    private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
     private _phone: CandidatePhoneVo;
     private _mail: CandidateMailVo;
     private _birthDate: CandidateBirthDateVo;
     private _description: CandidateDescriptionVo;
-    private _location: CandidateLocationVO;
+    private _location: CandidateLocationVo;
 
     
 
@@ -27,7 +27,7 @@ export class Candidate extends Entity<String> {
 
     //getters and setters
 
-    public get Id(): CandidateIdVO {
+    public get Id(): CandidateIdVo {
         return this._id;
     } 
     public get state(): CandidateStateVo {
@@ -58,10 +58,10 @@ export class Candidate extends Entity<String> {
         return this._description;
     }
 
-    public get location(): CandidateLocationVO {
+    public get location(): CandidateLocationVo {
         return this._location;
     }
-    public set location(value: CandidateLocationVO) {
+    public set location(value: CandidateLocationVo) {
         this._location = value;
     }
  

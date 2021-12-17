@@ -1,4 +1,4 @@
-export class CandidateLocationVO {
+export class CandidateLocationVo {
     private _latitude: Number;
    
     private _longitude: Number;
