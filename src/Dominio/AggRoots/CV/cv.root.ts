@@ -71,7 +71,17 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
         )
         return cv
     }
-
+    /**
+     * Returns an Approved CV from this, a Submitted CV
+     * All of the properties from the Submitted CV are cloned to the Approved CV
+     * and the events as well
+     *
+     * Use the returned Cv instead of the old one
+     *
+     * @example
+     * const submittedCv: Cv<CvState.Submitted> = Cv.submitCv(...) // A submitted Cv, represented by the type Cv<CvState.Submitted>
+     * const approvedCv: Cv<CvState.Approved> = submittedCv.approved() // An approved Cv with the same properties and events as the submittedCv
+     * */
     approve(this: Cv<CvState.Submitted>) {
         let event = new CvApprovedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Approved, this.id)
@@ -81,6 +91,17 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
         return approvedCv
     }
 
+    /**
+     * Returns Rejected CV from this, a Submitted CV
+     * All of the properties from the Submitted CV are cloned to the Rejected CV
+     * and the events as well
+     *
+     * Use the returned Cv instead of the old one
+     *
+     * @example
+     * const submittedCv: Cv<CvState.Submitted> = Cv.submitCv(...) // A submitted Cv, represented by the type Cv<CvState.Submitted>
+     * const approvedCv: Cv<CvState.Rejected> = submittedCv.reject() // A rejected Cv with the same properties and events as the submittedCv
+     * */
     reject(this: Cv<CvState.Submitted>) {
         let event = new CvRejectedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Denied, this.id)
