@@ -7,7 +7,7 @@ import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered'
 
 export class Employer extends AggregateRoot implements IInternalEventHandler{
     private Name:string;
-    private Description:string;
+    private Description:EmployerDescriptionVO;
     private Location:string;
     private Rif:string;
     private Phone:string;
@@ -25,7 +25,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler{
     }
 
     public RegistrarEmpleado(Name:string,
-        Description:string,
+        Description:EmployerDescriptionVO,
         Location:string,
         Rif:string,
         Phone:string,
@@ -41,4 +41,15 @@ export class Employer extends AggregateRoot implements IInternalEventHandler{
             ComDesignation
         ), new EmployerRegisteredHandler);
     }
+
+    //get y set
+
+    public set description(description : EmployerDescriptionVO) {
+      this.Description = description;
+    }
+    
+    public get description() : EmployerDescriptionVO {
+      return this.Description;
+    }
+    
 }
