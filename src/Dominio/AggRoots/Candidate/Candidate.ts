@@ -4,6 +4,7 @@ import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
 import { CandidateIdVO } from "./ValueObjects/CandidateIdVo";
+import { CandidateLocationVO } from "./ValueObjects/CandidateLocationVO";
 import { CandidateMailVo } from "./ValueObjects/CandidateMailVo";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
@@ -16,7 +17,8 @@ export class Candidate extends Entity<String> {
     private _mail: CandidateMailVo;
     private _birthDate: CandidateBirthDateVo;
     private _description: CandidateDescriptionVo;
- 
+    private _location: CandidateLocationVO;
+
     
 
     protected when(event: IDomainEvent) {
@@ -55,4 +57,12 @@ export class Candidate extends Entity<String> {
     public get description(): CandidateDescriptionVo{
         return this._description;
     }
+
+    public get location(): CandidateLocationVO {
+        return this._location;
+    }
+    public set location(value: CandidateLocationVO) {
+        this._location = value;
+    }
+ 
 }
