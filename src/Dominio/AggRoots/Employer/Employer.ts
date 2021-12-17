@@ -41,5 +41,4 @@ export class Employer extends AggregateRoot implements IInternalEventHandler{
             ComDesignation
         ), new EmployerRegisteredHandler);
     }
-    
 }
