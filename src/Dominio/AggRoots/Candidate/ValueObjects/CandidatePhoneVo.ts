@@ -1,3 +1,5 @@
+import { InvalidCandidatePhoneNumber } from "./Errors/invalidCandidatePhoneNumber.error";
+
 export class CandidatePhoneVo{
     private _phone: String;
 
@@ -11,12 +13,14 @@ export class CandidatePhoneVo{
         return this._phone;
     }
 
+    //chamo te falta validar el numero de caracteres que puede tener ese numero de telefono ---Moncada
+
     protected phoneValidate(phone: String): boolean{
        if (phone === null || phone === '' || phone === undefined){
-            throw new Error('Debe colocar un numero telefonico');
+            throw  InvalidCandidatePhoneNumber.emptyPhoneNumber();
        } 
        if (isNaN(Number(phone))){
-            throw new Error('Solo se admiten numeros');
+        throw  InvalidCandidatePhoneNumber.invalidPhoneNumber();
        }else{
            return true;      
        }

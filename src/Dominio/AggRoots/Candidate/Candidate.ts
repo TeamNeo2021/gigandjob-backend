@@ -5,16 +5,16 @@ import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
 import { CandidateIdVo } from "./ValueObjects/CandidateIdVo";
 import { CandidateLocationVo } from "./ValueObjects/CandidateLocationVO";
-import { CandidateMailVo } from "./ValueObjects/CandidateMailVo";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 
 export class Candidate extends Entity<String> {
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
     private _phone: CandidatePhoneVo;
-    private _mail: CandidateMailVo;
+    private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
     private _description: CandidateDescriptionVo;
     private _location: CandidateLocationVo;
@@ -46,8 +46,8 @@ export class Candidate extends Entity<String> {
         return this._phone;
     }
 
-    public get mail(): CandidateMailVo{
-        return this._mail;
+    public get email(): CandidateEmailVo{
+        return this._email;
     }
 
     public get birthDay(): CandidateBirthDateVo{
