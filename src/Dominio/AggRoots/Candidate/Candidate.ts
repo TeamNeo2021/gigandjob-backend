@@ -1,13 +1,21 @@
 import { Entity } from "src/Dominio/Core/Entity";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
+import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
+import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
 import { CandidateIdVO } from "./ValueObjects/CandidateIdVo";
+import { CandidateMailVo } from "./ValueObjects/CandidateMailVo";
+import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 
 export class Candidate extends Entity<String> {
     private _id: CandidateIdVO;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
+    private _phone: CandidatePhoneVo;
+    private _mail: CandidateMailVo;
+    private _birthDate: CandidateBirthDateVo;
+    private _description: CandidateDescriptionVo;
  
     
 
@@ -31,5 +39,20 @@ export class Candidate extends Entity<String> {
     }
     public set name(value: CandidateFullNameVo) {
         this._name = value;
+    }
+    public get phone(): CandidatePhoneVo{
+        return this._phone;
+    }
+
+    public get mail(): CandidateMailVo{
+        return this._mail;
+    }
+
+    public get birthDay(): CandidateBirthDateVo{
+        return this._birthDate;
+    }
+
+    public get description(): CandidateDescriptionVo{
+        return this._description;
     }
 }
