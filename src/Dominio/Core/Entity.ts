@@ -36,3 +36,5 @@ export abstract class Entity<TId> implements IInternalEventHandler{
     
 }
 
+
+

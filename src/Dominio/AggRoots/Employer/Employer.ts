@@ -8,7 +8,8 @@ import { EmployerNameVo } from './ValueObjects/EmployerNameVo';
 import { EmployerStateVo } from './ValueObjects/EmployerStateVo';
 import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
 
-export class Employer extends AggregateRoot implements IInternalEventHandler {
+export class Employer extends AggregateRoot {
+ 
   private EmployerId: EmployerIdVO;
   private _Name: EmployerNameVo;
   private _Description: string;
@@ -18,14 +19,12 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   private Phone: string;
   private Mail: string;
   private ComDesignation: string;
-  constructor() {
-    super();
+  constructor(applier: any) {
+    super(applier);
     //Por ahora ya que no se han implementdo los value objects
     this.EmployerId = new EmployerIdVO(Date().toString());
   }
-  protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-    handler.handle(event, this);
-  }
+ 
   protected EnsureValidState(): void {
     const valid = this.EmployerId != null && this._Name != null; /*&&
       
@@ -85,5 +84,10 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
   public set State(value: EmployerStateVo) {
     this._State = value;
+  }
+
+
+  protected when(event: IDomainEvent, handler: IDomainEventHandler) {
+    throw new Error('Method not implemented.');
   }
 }

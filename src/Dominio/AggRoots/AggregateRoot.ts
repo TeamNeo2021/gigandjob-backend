@@ -1,20 +1,21 @@
+import { Entity } from '../Core/Entity';
 import { IDomainEvent } from '../DomainEvents/IDomainEvent';
 import { IDomainEventHandler } from '../DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from './IInternalEventHandler';
 
-export abstract class AggregateRoot implements IInternalEventHandler {
-  public tid: string;
+export abstract class AggregateRoot extends Entity<String>   {
+ 
   private readonly changes: Array<object>;
-  protected constructor() {
+  protected constructor(applier: any) {
+    super(applier);
     this.changes = new Array<object>();
   }
-  protected abstract When(
-    event: IDomainEvent,
-    handler: IDomainEventHandler,
-  ): void;
+
+
   protected abstract EnsureValidState(): void;
+
   protected Apply(event: IDomainEvent, handler: IDomainEventHandler): void {
-    this.When(event, handler);
+    this.when(event, handler);
     this.EnsureValidState();
     this.changes.push(event);
   }
@@ -31,7 +32,5 @@ export abstract class AggregateRoot implements IInternalEventHandler {
   ): void {
     entity.Handle(event, handler);
   }
-  public Handle(event: IDomainEvent, handler: IDomainEventHandler): void {
-    this.When(event, handler);
-  }
+
 }

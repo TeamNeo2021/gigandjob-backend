@@ -9,14 +9,15 @@ import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
 
 
 export class Meeting extends AggregateRoot{
+ 
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
     private _date: MeetingDateVO;
     private _location: MeetingLocationVO;
     
-    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string) {
-       super(); 
+    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string, applier: any) {
+       super(applier); 
        this._id = new MeetingIDVO(id);
        this._state = state;
        this._description = description;
@@ -63,5 +64,9 @@ export class Meeting extends AggregateRoot{
 
     set location(location: MeetingLocationVO){
         this._location = location;
+    }
+
+    protected when(event: IDomainEvent, handler: IDomainEventHandler) {
+        throw new Error('Method not implemented.');
     }
 }
