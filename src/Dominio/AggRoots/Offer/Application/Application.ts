@@ -1,3 +1,4 @@
+import { Entity } from "src/Dominio/Core/Entity";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
@@ -6,18 +7,19 @@ import { ApplicationId } from "./Value Objects/ApplicationId";
 import { ApplicationState, ApplicationStates } from "./Value Objects/ApplicationStates";
 import { ApplicationTime } from "./Value Objects/ApplicationTime";
 
-export class Application{
+export class Application extends Entity<ApplicationId>{
     private id: ApplicationId;
     private state: ApplicationState;
     private previous_state: ApplicationState;
     private budget: ApplicationBudget;
     private description: ApplicationDescription;
     private time: ApplicationTime;
+    
 
-    constructor(parameters) {
-        //super(); 
+    constructor(applier: any) {
+        super(applier); 
      }
-     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
+     protected when(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler.handle(event, this);
      }
      protected EnsureValidState(): void {
@@ -45,5 +47,9 @@ export class Application{
             throw new Error("Invalid state for application");
         }
         
+     }
+
+     public prueba(event: IDomainEvent, handler: IDomainEventHandler){
+         this.apply(event,handler);
      }
 }

@@ -1,7 +1,8 @@
 export class MeetingIDVO {
-    value: string;
+    // value: string;
   
-    constructor(value: string) {
-      this.value = value;
-    }
+    // constructor(value: string) {
+    //   this.value = value;
+    // }
+    constructor(){}
   }
