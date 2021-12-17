@@ -1,11 +1,11 @@
+import { CvApprovedDomainEvent } from "src/Dominio/DomainEvents/CvEvents/cvApproved.event";
+import { CvRejectedDomainEvent } from "src/Dominio/DomainEvents/CvEvents/cvRejected.event";
+import { CvSubmittedDomainEvent } from "src/Dominio/DomainEvents/CvEvents/cvSubmitted.event";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
 import { AggregateRoot } from "../AggregateRoot";
 import { InvalidCVStudiesError } from "./Errors/invalidCvStudies.error";
 import { InvalidCvWorkExperienceError } from "./Errors/invalidCvWorkExperience.error";
-import { CvApprovedDomainEvent } from "./Events/cvApproved.event";
-import { CvRejectedDomainEvent } from "./Events/cvRejected.event";
-import { CvSubmittedDomainEvent } from "./Events/cvSubmitted.event";
 import { CvCandidate } from "./ValueObjects/cvCandidate.object";
 import { CvDescription } from "./ValueObjects/cvDescription.object";
 import { CvId } from "./ValueObjects/cvId.object";
