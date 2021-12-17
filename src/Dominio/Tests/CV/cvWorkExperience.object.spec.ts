@@ -1,5 +1,5 @@
-import { InvalidCvWorkExperienceError } from "../AggRoots/CV/Errors/invalidCvWorkExperience.error"
-import { CvWorkExperience } from "../AggRoots/CV/ValueObjects/cvWorkExperience.object"
+import { InvalidCvWorkExperienceError } from "../../AggRoots/CV/Errors/invalidCvWorkExperience.error"
+import { CvWorkExperience } from "../../AggRoots/CV/ValueObjects/cvWorkExperience.object"
 
 describe("CV Work Experience", () => {
     it("should not create when job is empty", () => {

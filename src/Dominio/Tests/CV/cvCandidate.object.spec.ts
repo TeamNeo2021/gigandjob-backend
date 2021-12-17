@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
-import { InvalidCvCandidate } from "../AggRoots/CV/Errors/invalidCvCandidate.error"
-import { CvCandidate } from "../AggRoots/CV/ValueObjects/cvCandidate.object"
+import { InvalidCvCandidate } from "../../AggRoots/CV/Errors/invalidCvCandidate.error"
+import { CvCandidate } from "../../AggRoots/CV/ValueObjects/cvCandidate.object"
 
 describe("Cv candidate", () => {
    it("should not create when id is empty", () => {

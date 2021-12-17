@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
-import { InvalidCVIdError } from "../AggRoots/CV/Errors/invalidCvId.error"
-import { CvId } from "../AggRoots/CV/ValueObjects/cvId.object"
+import { InvalidCVIdError } from "../../AggRoots/CV/Errors/invalidCvId.error"
+import { CvId } from "../../AggRoots/CV/ValueObjects/cvId.object"
 
 describe("CV identity", () => {
     it("should fail when empty id is used", () => {

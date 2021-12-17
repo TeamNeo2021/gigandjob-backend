@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto"
-import { Cv } from "../AggRoots/CV/cv.root"
-import { CvCandidate } from "../AggRoots/CV/ValueObjects/cvCandidate.object"
-import { CvDescription } from "../AggRoots/CV/ValueObjects/cvDescription.object"
-import { CvPhoto } from "../AggRoots/CV/ValueObjects/cvPhoto.object"
-import { CvStudies } from "../AggRoots/CV/ValueObjects/cvStudies.object"
-import { CvWorkExperience } from "../AggRoots/CV/ValueObjects/cvWorkExperience.object"
-import { CvApprovedDomainEvent } from "../DomainEvents/CvEvents/cvApproved.event"
-import { CvRejectedDomainEvent } from "../DomainEvents/CvEvents/cvRejected.event"
-import { CvSubmittedDomainEvent } from "../DomainEvents/CvEvents/cvSubmitted.event"
+import { Cv } from "../../AggRoots/CV/cv.root"
+import { CvCandidate } from "../../AggRoots/CV/ValueObjects/cvCandidate.object"
+import { CvDescription } from "../../AggRoots/CV/ValueObjects/cvDescription.object"
+import { CvPhoto } from "../../AggRoots/CV/ValueObjects/cvPhoto.object"
+import { CvStudies } from "../../AggRoots/CV/ValueObjects/cvStudies.object"
+import { CvWorkExperience } from "../../AggRoots/CV/ValueObjects/cvWorkExperience.object"
+import { CvApprovedDomainEvent } from "../../DomainEvents/CvEvents/cvApproved.event"
+import { CvRejectedDomainEvent } from "../../DomainEvents/CvEvents/cvRejected.event"
+import { CvSubmittedDomainEvent } from "../../DomainEvents/CvEvents/cvSubmitted.event"
 
 const dummyCv = () => Cv.submitCv(
     new CvDescription("Some valid description"),

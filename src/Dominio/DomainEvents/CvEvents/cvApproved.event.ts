@@ -1,5 +1,5 @@
+import { CvId } from "src/Dominio/AggRoots/CV/ValueObjects/cvId.object";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
-import { CvId } from "../ValueObjects/cvId.object";
 
 export class CvApprovedDomainEvent implements IDomainEvent {
     dateTimeOcurred: Date;
