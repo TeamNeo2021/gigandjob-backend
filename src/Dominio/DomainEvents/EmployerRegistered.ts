@@ -4,7 +4,7 @@ export class EmployerRegistered implements IDomainEvent {
   public dateTimeOcurred: Date;
 
   public Name: string;
-  public Description: EmployerDescriptionVO;
+  public Description: string;
   public Location: string;
   public Rif: string;
   public Phone: string;
@@ -13,7 +13,7 @@ export class EmployerRegistered implements IDomainEvent {
 
   constructor(
     Name: string,
-    Description: EmployerDescriptionVO,
+    Description: string,
     Location: string,
     Rif: string,
     Phone: string,
