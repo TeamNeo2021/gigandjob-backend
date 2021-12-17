@@ -14,7 +14,7 @@ export class CandidateFullNameVo {
             this._names = names;
             this._lastNames = lastNames;
         }else{
-            throw new Error('Names cannot be empty');
+            throw new Error('Names invalid');
         }
         
     }
