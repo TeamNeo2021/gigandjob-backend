@@ -4,12 +4,12 @@ import { IDomainEvent } from "../IDomainEvent";
 
 export class MeetingScheduled implements IDomainEvent {
     public dateTimeOcurred: Date;
-    public meeting: MeetingIDVO;
+    public meetingId: MeetingIDVO;
     public appointment: MeetingDateVO;
 
-    constructor(meeting: MeetingIDVO, appointment: MeetingDateVO) {
+    constructor(meetingId: MeetingIDVO, appointment: MeetingDateVO) {
         this.dateTimeOcurred = new Date(Date.now());
-        this.meeting = meeting;
+        this.meetingId = meetingId;
         this.appointment = appointment;
     }
 }
