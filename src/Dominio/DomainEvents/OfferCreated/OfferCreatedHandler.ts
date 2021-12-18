@@ -14,7 +14,7 @@ import { OfferCreated } from './OfferCreated';
 export class OfferCreatedHandler implements IDomainEventHandler {
   handle(event: OfferCreated, entity: Offer): void {
     entity._State = new OfferStateVO(event.State);
-    //entity._PublicationDate = new PublicationDateVO(event.PublicationDate);
+    entity._PublicationDate = new PublicationDateVO(event.PublicationDate);
     entity._Rating = new RatingVO(event.Rating);
     entity._Direction = new DirectionVO(event.Direction);
     entity._Sector = new SectorVO(event.Sector);
