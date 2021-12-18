@@ -1,4 +1,4 @@
-export class CandidateIdVO {
+export class CandidateIdVo {
     private _value: string;
 
     constructor(value: string) {

@@ -6,6 +6,8 @@ import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
 import { MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
+import { Employer } from '../Employer/Employer';
+import { Candidate } from '../Candidate/Candidate';
 
 
 export class Meeting extends AggregateRoot{
@@ -14,14 +16,23 @@ export class Meeting extends AggregateRoot{
     private _description: MeetingDescriptionVO;
     private _date: MeetingDateVO;
     private _location: MeetingLocationVO;
+
+    // revisar - convertir a VO
+    public empoyer: Employer;
+    public candidate: Candidate;
     
-    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string) {
+    constructor(state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string,
+                employer: Employer, candidate: Candidate) {
        super(); 
-       this._id = new MeetingIDVO(id);
+       this._id = new MeetingIDVO();
        this._state = state;
        this._description = description;
        this._date = new MeetingDateVO(date);
        this._location = new MeetingLocationVO();
+
+       // revisar
+       this.empoyer = employer;
+       this.candidate = candidate;
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
