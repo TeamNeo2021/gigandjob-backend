@@ -12,7 +12,9 @@ import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/Candi
 import { InvalidCandidateLocationError } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateLocation.error"
 
 
-//A7/D5 Validar que el nombre completo, teléfono, cédula. correo eléctronico y fecha de nacimiento, no esten vacíos
+    /**
+     * Unit tests related to Candidate Value Objects and the register of a new Candidate
+     * */
 describe("register a new Candidate", ()=>{
     
     it("should fail when empty name is entered", ()=>{ //Validate names are not empty
