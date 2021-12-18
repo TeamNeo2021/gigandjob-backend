@@ -18,13 +18,12 @@ export class CandidateModified implements IDomainEvent {
 
 
     constructor(
-        public readonly id: CandidateIdVo,
-        public readonly name: CandidateFullNameVo,
-        public readonly phone: CandidatePhoneVo,
-        public readonly mail: CandidateEmailVo,
-        public readonly birthDate: CandidateBirthDateVo,
-        public readonly description: CandidateDescriptionVo,
-        public readonly location: CandidateLocationVo
+        name: CandidateFullNameVo,
+        phone: CandidatePhoneVo,
+        mail: CandidateEmailVo,
+        birthDate: CandidateBirthDateVo,
+        description: CandidateDescriptionVo,
+        location: CandidateLocationVo
 
     ){
         this._name = name;
@@ -32,6 +31,7 @@ export class CandidateModified implements IDomainEvent {
         this._mail = mail;
         this._birthDate = birthDate;
         this._description = description;
+        this._location = location;
         this.dateTimeOcurred = new Date();
     }
 
