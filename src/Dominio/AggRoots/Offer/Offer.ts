@@ -9,7 +9,7 @@ import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
 import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
-import { Sectors } from './ValueObjects/OfferSectorVO';
+import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO } from './ValueObjects/OfferStateVO';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -19,7 +19,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     private PublicationDate: PublicationDateVO;
     private Rating: RatingVO;
     private Direction: DirectionVO;
-    private Sector: Sectors;
+    private Sector: SectorVO;
     //Sectors es el VO de sector en la entidad de offer
     private Budget: BudgetVO;
     private Description: DescriptionVO;
@@ -44,7 +44,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
       //Implementacion de crearoferta con domain event
       public CrearOferta(
-          OfferId: OfferIdVO,
+        /*
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
@@ -52,7 +52,17 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           Sector: Sectors,
           //Sectors es el VO de sector en la entidad de offer
           Budget: BudgetVO,
-          Description: DescriptionVO
+          Description: DescriptionVO*/
+
+          State: number,
+          PublicationDate: Date,
+          Rating: number,
+          Direction: string,
+          Sector: number,
+          //Sectors es el VO de sector en la entidad de offer
+          Budget: number,
+          Description: string
+
       ) {
         console.log('RE');
         this.Apply(
@@ -100,10 +110,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
 
     //Sectors es el VO de sector en la entidad de offer
-    public get _Sector(): Sectors {
+    public get _Sector(): SectorVO {
       return this.Sector;
     }
-    public set _Sector(value: Sectors) {
+    public set _Sector(value: SectorVO) {
       this.Sector = value;
     }
 
