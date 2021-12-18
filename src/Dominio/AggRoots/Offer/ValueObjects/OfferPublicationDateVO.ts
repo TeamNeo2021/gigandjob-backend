@@ -1,16 +1,11 @@
 class PublicationDateVO{
 
-    private readonly day:String;
-    private readonly month:String;
-    private readonly year:String;
+    private readonly value:Date;
 
-    constructor(Day:String,Month:String,Year:String ){
-        if((Day ==" ")||(Month== " ")||(Year== " ")){
-            throw new Error("Error: Dia, Mes o año estan vacios ");
-            
+    constructor(value:Date){
+        if(value===null){
+            throw new Error("Error: La fecha esta vacia ");
         }
-        this.day=Day;
-        this.month=Month;
-        this.year=Year;
+        this.value=value;
     }    
 }
