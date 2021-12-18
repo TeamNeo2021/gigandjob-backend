@@ -1,4 +1,4 @@
-class publicationDate{
+class PublicationDateVO{
 
     private readonly day:String;
     private readonly month:String;
