@@ -10,7 +10,7 @@ import { RatingVO } from './ValueObjects/OfferRatingVO';
 import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
-import { OfferStateVO } from './ValueObjects/OfferStateVO';
+import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -54,43 +54,27 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         handler.handle(event, this);
       }
 
+      /* if (this.previous_state.current == ApplicationStates.Inactive){
+            throw new Error("Invalid change of application state");
+        } */
 
       protected EnsureValidState(): void {
-        const valid = this.OfferId != null; /*&&
-          
-          Comentaré esto por ahora ya que no se han implementado los demás value objects
-          Aqui iria ej: this.Rating != null*/
+        const valid = this.OfferId != null &&
+        (
+          this.State != null ||
+          this.State.state == OfferStatesEnum.Closed || 
+          this.State.state == OfferStatesEnum.Suspended
+        ) &&
+        this.PublicationDate != null &&
+        this.Rating != null &&
+        this.Sector != null &&
+        this.Budget != null &&
+        this.Description != null 
+
         if (!valid) {
           throw new Error('Verificacion de estado fallido');
         }
       }
-
-     /* protected EnsureValidState(): void {
-        let valid =
-            this.id != null &&
-            this.budget != null &&
-            this.description != null &&
-            this.time != null;
-            switch (this.state.current) {
-                case ApplicationStates.Active: 
-                    if (this.previous_state.current == ApplicationStates.Inactive){
-                        throw new Error("Invalid change of application state");
-                    }
-                    break;
-                case ApplicationStates.Inactive: 
-                    if (this.previous_state.current == ApplicationStates.Inactive){
-                        throw new Error("Invalid change of application state");
-                    }
-                    break;
-                default:
-                    break;
-            };
-
-        if (!valid){
-            throw new Error("Invalid state for application");
-        }
-        
-     }*/
 
       //Implementacion de crearOferta con domain event
       public CrearOferta(
