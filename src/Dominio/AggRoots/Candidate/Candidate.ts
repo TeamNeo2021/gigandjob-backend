@@ -8,8 +8,11 @@ import { CandidateLocationVo } from "./ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
+import {AggregateRoot} from '../AggregateRoot'
+import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
 
-export class Candidate extends Entity<String> {
+export class Candidate extends AggregateRoot {
+ 
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
@@ -19,11 +22,29 @@ export class Candidate extends Entity<String> {
     private _description: CandidateDescriptionVo;
     private _location: CandidateLocationVo;
 
+    constructor(
+        id: CandidateIdVo,
+        state: CandidateStateVo,
+        name: CandidateFullNameVo,
+        phone: CandidatePhoneVo,
+        email: CandidateEmailVo,
+        birthDate: CandidateBirthDateVo,
+        //description: CandidateDescriptionVo,
+        location: CandidateLocationVo
+    ){ 
+        super();
+        this._id = id;
+        this._state = state;
+        this._name = name;
+        this._phone = phone;
+        this._birthDate = birthDate;
+        //this._description = description;
+        this._location = location;
+
+    }
+
     
 
-    protected when(event: IDomainEvent) {
-        throw new Error("Method not implemented.");
-    }
 
     //getters and setters
 
@@ -63,6 +84,13 @@ export class Candidate extends Entity<String> {
     }
     public set location(value: CandidateLocationVo) {
         this._location = value;
+    }
+
+    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
+        throw new Error("Method not implemented.");
+    }
+    protected EnsureValidState(): void {
+        throw new Error("Method not implemented.");
     }
  
 }
