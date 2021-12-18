@@ -1,3 +1,4 @@
+import { Application } from 'src/Dominio/AggRoots/Offer/Application/Application';
 import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { BudgetVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
 import { DescriptionVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
@@ -20,6 +21,7 @@ export class OfferCreatedHandler implements IDomainEventHandler {
     entity._Sector = new SectorVO(event.Sector);
     entity._Budget = new BudgetVO(event.Budget);
     entity._Description = new DescriptionVO(event.Description);
-
+    //entity._application = new Application[](event.application);
+    entity._application = (event.application);
   }
 }

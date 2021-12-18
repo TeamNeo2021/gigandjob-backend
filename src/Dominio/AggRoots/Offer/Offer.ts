@@ -11,6 +11,7 @@ import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreate
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO } from './ValueObjects/OfferStateVO';
+import { Application } from './Application/Application';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -23,26 +24,75 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     //Sectors es el VO de sector en la entidad de offer
     private Budget: BudgetVO;
     private Description: DescriptionVO;
+    private application: Application[];
 
-    constructor() {
+    constructor(
+      offerId: OfferIdVO,
+      state: OfferStateVO,
+      publicationDate: PublicationDateVO,
+      rating: RatingVO,
+      sector: SectorVO,
+      budget: BudgetVO,
+      description: DescriptionVO,
+      app: Application[]
+
+    ) {
       super();
-      //Por ahora ya que no se han implementdo los value objects
+      //Por ahora ya que el id no lo he podido resolver
+      //this.OfferId = offerId();
       this.OfferId = new OfferIdVO(Date().toString());
+      this.State = state;
+      this.PublicationDate =publicationDate;
+      this.Rating = rating;
+      this.Sector = sector;
+      this.Budget = budget;
+      this.Description = description;
+      this.application = app;
+
     }
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler.handle(event, this);
       }
+
+
       protected EnsureValidState(): void {
         const valid = this.OfferId != null; /*&&
           
           Comentaré esto por ahora ya que no se han implementado los demás value objects
           Aqui iria ej: this.Rating != null*/
         if (!valid) {
-          throw new Error('Verificacion de estado ha fallado, estado inválido');
+          throw new Error('Verificacion de estado fallido');
         }
       }
 
-      //Implementacion de crearoferta con domain event
+     /* protected EnsureValidState(): void {
+        let valid =
+            this.id != null &&
+            this.budget != null &&
+            this.description != null &&
+            this.time != null;
+            switch (this.state.current) {
+                case ApplicationStates.Active: 
+                    if (this.previous_state.current == ApplicationStates.Inactive){
+                        throw new Error("Invalid change of application state");
+                    }
+                    break;
+                case ApplicationStates.Inactive: 
+                    if (this.previous_state.current == ApplicationStates.Inactive){
+                        throw new Error("Invalid change of application state");
+                    }
+                    break;
+                default:
+                    break;
+            };
+
+        if (!valid){
+            throw new Error("Invalid state for application");
+        }
+        
+     }*/
+
+      //Implementacion de crearOferta con domain event
       public CrearOferta(
         /*
           State: OfferStateVO,
@@ -61,7 +111,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           Sector: number,
           //Sectors es el VO de sector en la entidad de offer
           Budget: number,
-          Description: string
+          Description: string,
+          application: Application[]
 
       ) {
         console.log('RE');
@@ -74,6 +125,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
+            application
           ),
           new OfferCreatedHandler(),
         );
@@ -129,5 +181,12 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     public set _Description(value: DescriptionVO) {
       this.Description = value;
+    }
+
+    public get _application(): Application[] {
+      return this.application;
+    }
+    public set _application(value: Application[]) {
+      this.application = value;
     }
   }
