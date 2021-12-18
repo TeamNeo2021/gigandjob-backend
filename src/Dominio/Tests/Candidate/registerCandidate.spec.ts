@@ -8,6 +8,8 @@ import { CandidateFullNameVo } from "../../AggRoots/Candidate/ValueObjects/Candi
 import { EmptyCandidateName } from "../../AggRoots/Candidate/ValueObjects/Errors/emptyCandidateName.error"
 import { InvalidCandidateBirthDate } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateBirthDate.error"
 import { ValidateCandidateAge } from "../../DomainService/ValidateCandidateAge"
+import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/CandidateLocationVO"
+import { InvalidCandidateLocationError } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateLocation.error"
 
 
 //A7/D5 Validar que el nombre completo, teléfono, cédula. correo eléctronico y fecha de nacimiento, no esten vacíos
@@ -52,6 +54,20 @@ describe("register a new Candidate", ()=>{
              new CandidateBirthDateVo( new Date("2005-01-16"))
         )
               ).toThrowError(InvalidCandidateBirthDate)
+    }),
+
+    //Validate location
+    it("should fail when latitude is smaller than -90",()=>{
+        expect(()=> new CandidateLocationVo(-100,56)).toThrowError(InvalidCandidateLocationError)
+    }),
+    it("should fail when latitude is bigger than 90",()=>{
+        expect(()=> new CandidateLocationVo(100,56)).toThrowError(InvalidCandidateLocationError)
+    }),
+    it("should fail when longitude is smller than -180",()=>{
+        expect(()=> new CandidateLocationVo(24,-200)).toThrowError(InvalidCandidateLocationError)
+    }),
+    it("should fail when longitude is bigger than 180",()=>{
+        expect(()=> new CandidateLocationVo(24,200)).toThrowError(InvalidCandidateLocationError)
     })
     
 })
