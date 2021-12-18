@@ -6,9 +6,13 @@ import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
 import { MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
+import { Candidate } from '../Candidate/Candidate';
+import { Employer } from '../Employer/Employer';
 
 
 export class Meeting extends AggregateRoot{
+    private _candidate: Candidate;
+    private _employer: Employer;
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
@@ -21,7 +25,8 @@ export class Meeting extends AggregateRoot{
        this._state = state;
        this._description = description;
        this._date = new MeetingDateVO(date);
-       this._location = new MeetingLocationVO();
+       //this._location = new MeetingLocationVO();
+       this._location = location;
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
