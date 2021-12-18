@@ -1,4 +1,6 @@
 import { Entity } from "src/Dominio/Core/Entity";
+import { CvAspirantApproved } from "src/Dominio/DomainEvents/CvAspirantApproved";
+import { CvAspirantApprovedHandler } from "src/Dominio/DomainEvents/CvAspirantApprovedHandler";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
@@ -16,11 +18,13 @@ export class Candidate extends AggregateRoot {
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
+
     private _phone: CandidatePhoneVo;
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
     private _description: CandidateDescriptionVo;
     private _location: CandidateLocationVo;
+    private _Cv:String;//Cambiar string por CV, tambien lo mismo con su get y set
 
     constructor(
         id: CandidateIdVo,
@@ -41,9 +45,19 @@ export class Candidate extends AggregateRoot {
         //this._description = description;
         this._location = location;
 
+
     }
 
-    
+
+    //comandos
+
+    public approveCVAspirant(Cv:String){
+        console.log("CV aprobado");
+        this.Apply(
+            new CvAspirantApproved(Cv),
+            new CvAspirantApprovedHandler()
+        );
+    }
 
 
     //getters and setters
@@ -92,5 +106,12 @@ export class Candidate extends AggregateRoot {
     protected EnsureValidState(): void {
         throw new Error("Method not implemented.");
     }
- 
+    
+    public get Cv() : String {
+        return this.Cv;
+    }
+    
+    public set Cv(Cv : String) {
+        this.Cv = Cv;
+    }
 }
