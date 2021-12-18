@@ -1,4 +1,4 @@
-export class OfferStateVo{
+export class OfferStateVO{
     state: OfferStatesEnum;    
 
     constructor(currentState: OfferStatesEnum){

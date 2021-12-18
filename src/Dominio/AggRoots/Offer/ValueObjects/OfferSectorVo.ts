@@ -1,4 +1,4 @@
-export class offerSectorVo {
+export class OfferSectorVO {
   value: Sectors;
   constructor(value: Sectors) {
     this.value = value;
