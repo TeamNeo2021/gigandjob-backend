@@ -1,4 +1,6 @@
-export class CandidateLocationVO {
+import { InvalidCandidateLocationError } from "./Errors/invalidCandidateLocation.error";
+
+export class CandidateLocationVo {
     private _latitude: Number;
    
     private _longitude: Number;
@@ -38,15 +40,13 @@ export class CandidateLocationVO {
             return true
         }else{
              // throw new Error('coordinate cannot be null');
-           console.log('coordinate cannot be null');
-           return false;
+           throw InvalidCandidateLocationError.coordinateNull()
         }
     }
 
     checkLatitude(coord:Number){
         if(coord< -90 || coord>90){
-           // throw new Error('Latitude invalid, range from -90 to 90');
-           console.log('Latitude invalid, range from -90 to 90');
+            throw InvalidCandidateLocationError.latitudeOutOfRange()
             return false;
         }else{
             return true
@@ -54,8 +54,7 @@ export class CandidateLocationVO {
 
     }checkLongitude(coord:Number){
         if(coord< -180 || coord>180){
-           // throw new Error('Longitude invalid, range from -180 to 180');
-           console.log('Longitude invalid, range from -180 to 180');
+            throw InvalidCandidateLocationError.longitudeOutOfRange()
             return false;
         }else{
             return true
