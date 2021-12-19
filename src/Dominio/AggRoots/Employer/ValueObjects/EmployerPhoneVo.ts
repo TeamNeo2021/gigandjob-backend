@@ -1,4 +1,4 @@
-class EmployerPhoneVo {
+export class EmployerPhoneVo {
 
     value :String;
 
