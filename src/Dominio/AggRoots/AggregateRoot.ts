@@ -10,7 +10,7 @@ export abstract class AggregateRoot implements IInternalEventHandler {
     handler: IDomainEventHandler,
   ): void;
   protected abstract EnsureValidState(): void;
-  protected Apply(event: IDomainEvent, handler: IDomainEventHandler): void {
+  public Apply(event: IDomainEvent, handler: IDomainEventHandler): void {
     this.When(event, handler);
     this.EnsureValidState();
     this.changes.push(event);
