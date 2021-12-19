@@ -12,6 +12,8 @@ import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
+import { OfferModifiedHandler } from 'src/Dominio/DomainEvents/OfferModified/OfferModifiedHadler';
+import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -74,6 +76,32 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         if (!valid) {
           throw new Error('Verificacion de estado fallido');
         }
+      }
+
+      public OfferModified(        
+        state: OfferStateVO,
+        publicationDate: PublicationDateVO,
+        rating: RatingVO,
+        direction: DirectionVO,
+        sector: SectorVO,
+        budget: BudgetVO,        
+        description: DescriptionVO,
+        application: Application[],        
+      ) {
+        console.log('Offer Modified');
+        this.Apply(
+          new OfferModified(
+            state,
+            publicationDate,
+            rating,
+            direction,
+            sector,
+            budget,
+            description,
+            application,
+          ),
+          new OfferModifiedHandler(),
+        );
       }
 
       //Implementacion de crearOferta con domain event
