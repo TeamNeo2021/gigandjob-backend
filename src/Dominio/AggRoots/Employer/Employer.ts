@@ -89,6 +89,32 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     );
   }
   
+  public EmployerModified(    
+    name: EmployerNameVo,
+    description: EmployerDescriptionVO,
+    state: EmployerStateVo,
+    location: EmployerLocationVO,
+    rif: EmployerRifVO,
+    phone: EmployerPhoneVo,
+    mail: EmployerMailVo,
+    comDesignation: EmployerComercialDesignationVo,
+  ) {
+    console.log('Employer Modified');
+    this.Apply(
+      new EmployerModified(
+        name,
+        description,
+        state,
+        location,
+        rif,
+        phone,
+        mail,
+        comDesignation,
+      ),
+      new EmployerModifiedHandler(),
+    );
+  }
+
   //Getters y setters
   public get name(): EmployerNameVo {
     return this._name;
