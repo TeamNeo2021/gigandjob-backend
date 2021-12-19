@@ -49,7 +49,11 @@ export class Application extends Entity<ApplicationId>{
         
      }
 
-     public prueba(event: IDomainEvent, handler: IDomainEventHandler){
-         this.apply(event,handler);
-     }
+    public getState():ApplicationState{
+        return this.state;
+    }
+
+    public getPreviousState():ApplicationState{
+        return this.previous_state;
+    }
 }
