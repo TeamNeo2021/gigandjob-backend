@@ -7,27 +7,50 @@ import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered';
 import { EmployerNameVo } from './ValueObjects/EmployerNameVo';
 import { EmployerStateVo } from './ValueObjects/EmployerStateVo';
 import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
+import { EmployerPhoneVo } from './ValueObjects/EmployerPhoneVo';
+import { EmployerMailVo } from './ValueObjects/EmployerMailVo';
+import { EmployerComercialDesignationVo } from './ValueObjects/EmployerComercialDesignationVo';
+import { EmployerModified } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModified';
+import { EmployerModifiedHandler } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModifiedHandler';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
-  private EmployerId: EmployerIdVO;
-  private _Name: EmployerNameVo;
-  private _Description: string;
-  private _State: EmployerStateVo;
-  private Location: string;
-  private Rif: EmployerRifVO;
-  private Phone: string;
-  private Mail: string;
-  private ComDesignation: string;
-  constructor() {
+  private _employerId: EmployerIdVO;
+  private _name: EmployerNameVo;
+  private _description: EmployerDescriptionVO;
+  private _state: EmployerStateVo;
+  private _location: EmployerLocationVO;
+  private _rif: EmployerRifVO;
+  private _phone: EmployerPhoneVo;
+  private _mail: EmployerMailVo;
+  private _comDesignation: EmployerComercialDesignationVo;
+  constructor(
+    employerId: EmployerIdVO,
+    name: EmployerNameVo,
+    description: EmployerDescriptionVO,
+    state: EmployerStateVo,
+    location: EmployerLocationVO,
+    rif: EmployerRifVO,
+    phone: EmployerPhoneVo,
+    mail: EmployerMailVo,
+    comDesignation: EmployerComercialDesignationVo,
+  ) {
     super();
-    //Por ahora ya que no se han implementdo los value objects
-    this.EmployerId = new EmployerIdVO(Date().toString());
+    
+    this._employerId = employerId;
+    this._name = name;
+    this._description = description;
+    this._state = state;
+    this._location = location;
+    this._rif = rif;
+    this._phone = phone;
+    this._mail = mail;
+    this._comDesignation = comDesignation;    
   }
   protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
     handler.handle(event, this);
   }
   protected EnsureValidState(): void {
-    const valid = this.EmployerId != null && this._Name != null; /*&&
+    const valid = this._employerId != null && this._name != null; /*&&
       
       Comentaré esto por ahora ya que no se han implementado los demás value objects
       this.Rif != null &&
@@ -42,7 +65,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
 
   public RegistrarEmpleado(
     Name: string,
-    Description: string,
+    Description: EmployerDescriptionVO,
     State: number,
     Location: string,
     Rif: EmployerRifVO,
@@ -65,32 +88,56 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
       new EmployerRegisteredHandler(),
     );
   }
-
+  
   //Getters y setters
-  public get Name(): EmployerNameVo {
-    return this._Name;
+  public get name(): EmployerNameVo {
+    return this._name;
   }
-  public set Name(value: EmployerNameVo) {
-    this._Name = value;
-  }
-
-  public get Description(): string {
-    return this._Description;
-  }
-  public set Description(value: string) {
-    this._Description = value;
-  }
-  public get State(): EmployerStateVo {
-    return this._State;
-  }
-  public set State(value: EmployerStateVo) {
-    this._State = value;
+  public set name(value: EmployerNameVo) {
+    this._name = value;
   }
 
-  public get EmployerRif() : EmployerRifVO {
-    return this.Rif;
+  public get description(): EmployerDescriptionVO {
+    return this._description;
   }
-  public set EmployerRif(rif : EmployerRifVO) {
-    this.Rif = rif;
+  public set description(value: EmployerDescriptionVO) {
+    this._description = value;
+  }
+  public get state(): EmployerStateVo {
+    return this._state;
+  }
+  public set state(value: EmployerStateVo) {
+    this._state = value;
+  }
+  public get location(): EmployerLocationVO {
+    return this._location;
+  }
+  public set location(value: EmployerLocationVO) {
+    this._location = value;
+  }
+  
+  public get rif() : EmployerRifVO {
+    return this._rif;
+  }
+  public set rif(rif : EmployerRifVO) {
+    this._rif = rif;
+  }
+  public get phone(): EmployerPhoneVo {
+    return this._phone;
+  }
+  public set phone(value: EmployerPhoneVo) {
+    this._phone = value;
+  }
+  public get mail(): EmployerMailVo {
+    return this._mail;
+  }
+  public set mail(value: EmployerMailVo) {
+    this._mail = value;
+  }
+  public get comDesignation(): EmployerComercialDesignationVo {
+    return this._comDesignation;
+  }
+  public set comDesignation(value: EmployerComercialDesignationVo) {
+    this._comDesignation = value;
   }
 }

@@ -9,33 +9,33 @@ import { EmployerPhoneVo } from "src/Dominio/AggRoots/Employer/ValueObjects/Empl
 export class EmployerModified implements IDomainEvent {
     
     public dateTimeOcurred: Date;
-    public Name: EmployerNameVo;
-    public Description: EmployerDescriptionVO;
-    public State: EmployerStateVo;
-    public Location: EmployerLocationVO;
-    public Rif: EmployerRifVO;
-    public Phone: EmployerPhoneVo;
-    public Mail: EmployerMailVo;
-    public ComDesignation: EmployerComercialDesignationVo;    
+    public name: EmployerNameVo;
+    public description: EmployerDescriptionVO;
+    public state: EmployerStateVo;
+    public location: EmployerLocationVO;
+    public rif: EmployerRifVO;
+    public phone: EmployerPhoneVo;
+    public mail: EmployerMailVo;
+    public comDesignation: EmployerComercialDesignationVo;    
     
     constructor(
-        Name: EmployerNameVo,
-        Description: EmployerDescriptionVO,
-        State: EmployerStateVo,
-        Location: EmployerLocationVO,
-        Rif: EmployerRifVO,
-        Phone: EmployerPhoneVo,
-        Mail: EmployerMailVo,
-        ComDesignation: EmployerComercialDesignationVo,
+        name: EmployerNameVo,
+        description: EmployerDescriptionVO,
+        state: EmployerStateVo,
+        location: EmployerLocationVO,
+        rif: EmployerRifVO,
+        phone: EmployerPhoneVo,
+        mail: EmployerMailVo,
+        comDesignation: EmployerComercialDesignationVo,
     ) {
         this.dateTimeOcurred = new Date(Date.now());
-        this.Name = Name;
-        this.State = State;
-        this.Description = Description;
-        this.Location = Location;
-        this.Rif = Rif;
-        this.Phone = Phone;
-        this.Mail = Mail;
-        this.ComDesignation = ComDesignation;
+        this.name = name;
+        this.state = state;
+        this.description = description;
+        this.location = location;
+        this.rif = rif;
+        this.phone = phone;
+        this.mail = mail;
+        this.comDesignation = comDesignation;
     }
 }
