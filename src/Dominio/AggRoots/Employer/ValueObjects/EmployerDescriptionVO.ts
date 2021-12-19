@@ -1,4 +1,4 @@
-class EmployerDescriptionVO {
+export class EmployerDescriptionVO {
     
     private readonly value_employer_description: String;
     

@@ -1,4 +1,4 @@
-class PublicationDateVO{
+export class PublicationDateVO{
 
     private readonly value:Date;
 
