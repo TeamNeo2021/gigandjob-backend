@@ -3,6 +3,7 @@ import { EmployerNameVo } from "src/Dominio/AggRoots/Employer/ValueObjects/Emplo
 import { EmployerStateVo } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
 import { IDomainEvent } from "../IDomainEvent";
 import { EmployerComercialDesignationVo } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
+import { EmployerPhoneVo } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
 
 
 export class EmployerModified implements IDomainEvent {
