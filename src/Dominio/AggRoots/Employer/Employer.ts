@@ -50,16 +50,19 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     handler.handle(event, this);
   }
   protected EnsureValidState(): void {
-    const valid = this._employerId != null && this._name != null; /*&&
-      
-      Comentaré esto por ahora ya que no se han implementado los demás value objects
-      this.Rif != null &&
-      this.Location != null &&
-      this.Phone != null &&
-      this.Mail != null &&
-      this.ComDesignation != null;*/
+    const valid = 
+      this._employerId != null && 
+      this._name != null &&
+      this._description != null &&
+      this._state != null &&
+      this._rif != null &&
+      this._location != null &&
+      this._phone != null &&
+      this._mail != null &&
+      this._comDesignation != null;
+
     if (!valid) {
-      throw new Error('Verificacion de estado ha fallado, estado inválido');
+      throw new Error('state Verification has failed , invalid state');
     }
   }
 
