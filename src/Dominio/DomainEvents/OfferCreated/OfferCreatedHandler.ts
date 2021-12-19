@@ -3,6 +3,7 @@ import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { BudgetVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
 import { DescriptionVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
 import { DirectionVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { PublicationDateVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
 import { SectorVO} from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVO';
 import { OfferStateVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVO';

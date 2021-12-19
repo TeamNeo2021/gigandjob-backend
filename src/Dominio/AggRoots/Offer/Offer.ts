@@ -14,6 +14,7 @@ import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
 import { OfferModifiedHandler } from 'src/Dominio/DomainEvents/OfferModified/OfferModifiedHadler';
+import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 

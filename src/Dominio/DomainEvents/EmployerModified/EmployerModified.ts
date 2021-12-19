@@ -4,6 +4,9 @@ import { EmployerStateVo } from "src/Dominio/AggRoots/Employer/ValueObjects/Empl
 import { IDomainEvent } from "../IDomainEvent";
 import { EmployerComercialDesignationVo } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
 import { EmployerPhoneVo } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
+import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
+import { EmployerLocationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO";
+import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO";
 
 
 export class EmployerModified implements IDomainEvent {

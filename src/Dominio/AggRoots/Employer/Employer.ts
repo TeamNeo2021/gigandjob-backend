@@ -12,6 +12,9 @@ import { EmployerMailVo } from './ValueObjects/EmployerMailVo';
 import { EmployerComercialDesignationVo } from './ValueObjects/EmployerComercialDesignationVo';
 import { EmployerModified } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModified';
 import { EmployerModifiedHandler } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModifiedHandler';
+import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
+import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
+import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _employerId: EmployerIdVO;
