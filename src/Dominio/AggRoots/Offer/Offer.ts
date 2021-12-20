@@ -93,7 +93,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       }
 
       //Modificar oferta
-      public ModifyOffer(        
+      public ModifyOffer(       
+        //Arreglar para adjuntar lo del before_state 
         state: OfferStateVO,
         publicationDate: PublicationDateVO,
         rating: RatingVO,
@@ -121,6 +122,9 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
       //Implementacion de crearOferta con domain event
       public CreateOffer(
+
+        //Arreglar para adjuntar lo del before_state
+
         /*
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
