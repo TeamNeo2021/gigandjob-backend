@@ -1,4 +1,4 @@
-import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate"
+//import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate"
 
   
   

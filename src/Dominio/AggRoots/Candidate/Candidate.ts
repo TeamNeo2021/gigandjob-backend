@@ -23,7 +23,7 @@ export class Candidate extends AggregateRoot {
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
-
+    
     private _phone: CandidatePhoneVo;
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
@@ -53,7 +53,7 @@ export class Candidate extends AggregateRoot {
 
     }
 
-
+    
     //comandos
 
     public approveCVAspirant(Cv:String){
@@ -106,10 +106,11 @@ export class Candidate extends AggregateRoot {
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        throw new Error("Method not implemented.");
+        handler.handle(event,this)
     }
     protected EnsureValidState(): void {
-        throw new Error("Method not implemented.");
+        console.log('hola ya me asegure')
+        //throw new Error("Method not implemented.");
     }
     
     public get Cv() : String {

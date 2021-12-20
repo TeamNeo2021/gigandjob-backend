@@ -10,7 +10,11 @@ import { RatingVO } from './ValueObjects/OfferRatingVO';
 import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
-import { OfferStateVO } from './ValueObjects/OfferStateVO';
+import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
+import { Application } from './Application/Application';
+import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
+import { OfferModifiedHandler } from 'src/Dominio/DomainEvents/OfferModified/OfferModifiedHadler';
+import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -23,26 +27,86 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     //Sectors es el VO de sector en la entidad de offer
     private Budget: BudgetVO;
     private Description: DescriptionVO;
+    private application: Application[];
 
-    constructor() {
+    constructor(
+      offerId: OfferIdVO,
+      state: OfferStateVO,
+      publicationDate: PublicationDateVO,
+      rating: RatingVO,
+      sector: SectorVO,
+      budget: BudgetVO,
+      description: DescriptionVO,
+      app: Application[]
+
+    ) {
       super();
-      //Por ahora ya que no se han implementdo los value objects
+      //Por ahora ya que el id no lo he podido resolver
+      //this.OfferId = offerId();
       this.OfferId = new OfferIdVO(Date().toString());
+      this.State = state;
+      this.PublicationDate =publicationDate;
+      this.Rating = rating;
+      this.Sector = sector;
+      this.Budget = budget;
+      this.Description = description;
+      this.application = app;
+
     }
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler.handle(event, this);
       }
+
+      /* if (this.previous_state.current == ApplicationStates.Inactive){
+            throw new Error("Invalid change of application state");
+        } */
+
       protected EnsureValidState(): void {
-        const valid = this.OfferId != null; /*&&
-          
-          Comentaré esto por ahora ya que no se han implementado los demás value objects
-          Aqui iria ej: this.Rating != null*/
+        const valid = this.OfferId != null &&
+        (
+          this.State != null ||
+          this.State.state == OfferStatesEnum.Closed || 
+          this.State.state == OfferStatesEnum.Suspended
+        ) &&
+        this.PublicationDate != null &&
+        this.Rating != null &&
+        this.Sector != null &&
+        this.Budget != null &&
+        this.Description != null 
+
         if (!valid) {
-          throw new Error('Verificacion de estado ha fallado, estado inválido');
+          throw new Error('Verificacion de estado fallido');
         }
       }
 
-      //Implementacion de crearoferta con domain event
+      //Modificar oferta
+      public OfferModified(        
+        state: OfferStateVO,
+        publicationDate: PublicationDateVO,
+        rating: RatingVO,
+        direction: DirectionVO,
+        sector: SectorVO,
+        budget: BudgetVO,        
+        description: DescriptionVO,
+        application: Application[],        
+      ) {
+        console.log('Offer Modified');
+        this.Apply(
+          new OfferModified(
+            state,
+            publicationDate,
+            rating,
+            direction,
+            sector,
+            budget,
+            description,
+            application,
+          ),
+          new OfferModifiedHandler(),
+        );
+      }
+
+      //Implementacion de crearOferta con domain event
       public CrearOferta(
         /*
           State: OfferStateVO,
@@ -61,7 +125,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           Sector: number,
           //Sectors es el VO de sector en la entidad de offer
           Budget: number,
-          Description: string
+          Description: string,
+          application: Application[]
 
       ) {
         console.log('RE');
@@ -74,6 +139,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
+            application
           ),
           new OfferCreatedHandler(),
         );
@@ -129,5 +195,12 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     public set _Description(value: DescriptionVO) {
       this.Description = value;
+    }
+
+    public get _application(): Application[] {
+      return this.application;
+    }
+    public set _application(value: Application[]) {
+      this.application = value;
     }
   }

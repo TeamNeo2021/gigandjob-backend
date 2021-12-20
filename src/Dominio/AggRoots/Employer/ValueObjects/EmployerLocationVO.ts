@@ -1,4 +1,4 @@
-class EmployerLocationVO {
+export class EmployerLocationVO {
 
     private readonly value_employer_location: String;
 

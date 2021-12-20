@@ -1,4 +1,4 @@
-class EmployerRifVO {
+export class EmployerRifVO {
 
     private readonly value_employer_rif:String;
 
