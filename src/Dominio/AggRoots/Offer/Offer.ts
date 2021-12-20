@@ -20,6 +20,9 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
+    private Before_State: OfferStateVO;
+    //Necesitamos un estado de visible o no? debido a las denuncias
+    //private Visible: OfferStateVO;
     private PublicationDate: PublicationDateVO;
     private Rating: RatingVO;
     private Direction: DirectionVO;
@@ -57,22 +60,32 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         handler.handle(event, this);
       }
 
-      /* if (this.previous_state.current == ApplicationStates.Inactive){
-            throw new Error("Invalid change of application state");
-        } */
-
       protected EnsureValidState(): void {
-        const valid = this.OfferId != null &&
-        (
-          this.State != null ||
-          this.State.state == OfferStatesEnum.Closed || 
-          this.State.state == OfferStatesEnum.Suspended
-        ) &&
+        const valid = this.OfferId != null        
         this.PublicationDate != null &&
         this.Rating != null &&
         this.Sector != null &&
         this.Budget != null &&
-        this.Description != null 
+        this.Description != null;
+        switch (this.State.state) {
+          case OfferStatesEnum.Active:
+              if ((this.Before_State.state == OfferStatesEnum.Closed)&&(this.application == null)){
+                  throw new Error("No se puede cerrar sin una Aplicación");
+              }
+              break;
+          case OfferStatesEnum.Suspended:
+            if (this.Before_State.state == OfferStatesEnum.Closed){
+                throw new Error("No se puede cerrar la oferta ya que está suspendida");
+            }
+            break;    
+            case OfferStatesEnum.Closed:
+              if ((this.Before_State.state == OfferStatesEnum.Active) || (this.Before_State.state == OfferStatesEnum.Suspended)){
+                  throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
+              }
+              break; 
+          default:
+              break;
+      }
 
         if (!valid) {
           throw new Error('Verificacion de estado fallido');
@@ -80,7 +93,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       }
 
       //Modificar oferta
-      public OfferModified(        
+      public ModifyOffer(        
         state: OfferStateVO,
         publicationDate: PublicationDateVO,
         rating: RatingVO,
@@ -90,7 +103,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         description: DescriptionVO,
         application: Application[],        
       ) {
-        console.log('Offer Modified');
+        console.log('Oferta Modificada');
         this.Apply(
           new OfferModified(
             state,
@@ -107,7 +120,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       }
 
       //Implementacion de crearOferta con domain event
-      public CrearOferta(
+      public CreateOffer(
         /*
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
@@ -129,7 +142,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           application: Application[]
 
       ) {
-        console.log('RE');
+        console.log('Oferta Creada');
         this.Apply(
           new OfferCreated(
             State,
@@ -152,6 +165,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     public set _State(value: OfferStateVO) {
       this.State = value;
+    }
+
+    public get _Before_State(): OfferStateVO {
+      return this.Before_State;
+    }
+    public set _Before_State(value: OfferStateVO) {
+      this.Before_State = value;
     }
 
     public get _PublicationDate(): PublicationDateVO {
