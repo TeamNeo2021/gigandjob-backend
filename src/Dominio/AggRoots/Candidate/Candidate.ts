@@ -48,7 +48,7 @@ export class Candidate extends AggregateRoot {
 
     }
 
-
+    
     //comandos
 
     public approveCVAspirant(Cv:String){

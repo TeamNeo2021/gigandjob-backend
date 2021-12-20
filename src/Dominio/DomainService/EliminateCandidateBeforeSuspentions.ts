@@ -6,38 +6,53 @@ import { CandidateEliminatedHandler } from "../DomainEvents/Candidate/CandidateE
 import { CandidateSuspended } from "../DomainEvents/Candidate/CandidateSuspended";
 
 export class EliminateCandidateBeforeSuspentions implements IObserver{
-    candidate: Candidate;
-    
+    private readonly candidate: Candidate;
+
+    //Number of times it can be suspended before elimination
+    private suspentionTolerance: number = 3;
+
     constructor(candidate: Candidate){
         this.candidate = candidate;
     }
 
     public update(): void{
+        
         this.CheckForSuspentions();
     }
 
     private CheckForSuspentions(): void{
 
         //This are the events that the candidate holds
-        let changes = this.candidate.GetChanges();
+        const changes = this.candidate.GetChanges();
 
+       //last event 
+        const last_change = changes[changes.length-1]
 
+        
+        //If it is not Candidate Suspended Event, then ignore
+        if (!(last_change instanceof CandidateSuspended)){
+            return;
+        }
         //This are the suspention events, starting empty
         let suspentions = [];
 
-
-        //Lets check for the typeof the events
+        
+        //Lets check for the class of the events
         for (let change of changes){
-            if (typeof change == typeof CandidateSuspended){
-                suspentions.push()
+            if (change instanceof CandidateSuspended){
+                suspentions.push(change)
             }
         }
-
+       
         //If there are more than 3 suspentions, apply the 
         //CandidateEliminated event 
-        if (suspentions.length >= 3){
+        if (suspentions.length >= this.suspentionTolerance){
+            
             this.candidate.Apply(new CandidateEliminated(), 
             new CandidateEliminatedHandler())
+            console.log('candidate ' + 
+                         this.candidate.Id.value 
+                         + ' eliminated')
         }
     }
 }
