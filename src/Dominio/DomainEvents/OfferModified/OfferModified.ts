@@ -1,11 +1,11 @@
-import { Application } from "src/Dominio/AggRoots/Offer/Application/Application";
-import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
-import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
-import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
-import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
-import { OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
+import { Application } from "../../AggRoots/Offer/Application/Application";
+import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
+import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
+import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { PublicationDateVO } from "../../AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
+import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
+import { SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVO";
+import { OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
 import { IDomainEvent } from "../IDomainEvent";
 
 export class OfferModified implements IDomainEvent {
@@ -18,9 +18,7 @@ export class OfferModified implements IDomainEvent {
     public direction: DirectionVO;
     public sector: SectorVO;    
     public budget: BudgetVO;
-    public description: DescriptionVO;
-    public application: Application[];   
-        
+    public description: DescriptionVO;     
     
     constructor(
         state: OfferStateVO,
@@ -29,8 +27,7 @@ export class OfferModified implements IDomainEvent {
         direction: DirectionVO,
         sector: SectorVO,    
         budget: BudgetVO,
-        description: DescriptionVO,
-        application: Application[],
+        description: DescriptionVO,        
     ) {
         this.dateTimeOcurred = new Date(Date.now());
         this.state = state;
@@ -39,7 +36,6 @@ export class OfferModified implements IDomainEvent {
         this.direction = direction;
         this.sector = sector;    
         this.budget = budget;
-        this.description = description;
-        this.application = application;        
+        this.description = description;                
     }
 }
