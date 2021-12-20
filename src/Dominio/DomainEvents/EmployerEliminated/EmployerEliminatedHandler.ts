@@ -4,8 +4,8 @@ import { EmployerEliminated } from "./EmployerEliminated";
 
 export class EmployerEliminatedHandler implements IDomainEventHandler {
   handle(event: EmployerEliminated, aggregate: Employer): void{
-    if(aggregate.State == event.state){
-      aggregate.State = event.state;
+    if(aggregate.state == event.state){
+      aggregate.state = event.state;
     }
       
     else{
