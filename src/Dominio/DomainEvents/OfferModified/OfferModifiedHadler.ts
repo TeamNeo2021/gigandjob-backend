@@ -1,4 +1,4 @@
-import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
+import { Offer } from "../../AggRoots/Offer/Offer";
 import { IDomainEventHandler } from "../IDomainEventHandler";
 import { OfferModified } from "./OfferModified";
 

@@ -1,10 +1,10 @@
-import { Application } from "src/Dominio/AggRoots/Offer/Application/Application";
-import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
-import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
-import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVO";
-import { OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVO";
+import { Application } from "../../AggRoots/Offer/Application/Application";
+import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
+import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
+import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
+import { SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVO";
+import { OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
 import { IDomainEvent } from "../IDomainEvent";
 
 export class OfferCreated implements IDomainEvent {
