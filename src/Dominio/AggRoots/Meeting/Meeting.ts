@@ -26,7 +26,7 @@ export class Meeting extends AggregateRoot{
     constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string,
          employer: Employer, candidate: Candidate) {
        super(); 
-       this._id = new MeetingIDVO(id);
+       this._id = new MeetingIDVO();
        this._state = state;
        this._description = description;
        this._date = new MeetingDateVO(date);

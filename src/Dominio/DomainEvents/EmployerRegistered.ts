@@ -1,23 +1,25 @@
+import { EmployerDescriptionVO } from '../AggRoots/Employer/ValueObjects/EmployerDescriptionVO';
+import { EmployerRifVO } from '../AggRoots/Employer/ValueObjects/EmployerRifVO';
 import { IDomainEvent } from './IDomainEvent';
 
 export class EmployerRegistered implements IDomainEvent {
   public dateTimeOcurred: Date;
 
   public Name: string;
-  public Description: string;
+  public Description: EmployerDescriptionVO;
   public State: number;
   public Location: string;
-  public Rif: string;
+  public Rif: EmployerRifVO;
   public Phone: string;
   public Mail: string;
   public ComDesignation: string;
 
   constructor(
     Name: string,
-    Description: string,
+    Description: EmployerDescriptionVO,
     State: number,
     Location: string,
-    Rif: string,
+    Rif: EmployerRifVO,
     Phone: string,
     Mail: string,
     ComDesignation: string,

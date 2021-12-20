@@ -14,4 +14,5 @@ export enum CandidateStatesEnum{
     Approbed,
     Unapproved,
     inReview,
+    Eliminated
 }

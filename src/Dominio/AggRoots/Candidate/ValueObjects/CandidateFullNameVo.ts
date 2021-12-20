@@ -1,3 +1,4 @@
+import { EmptyCandidateName } from "./Errors/emptyCandidateName.error";
 import { CandidateNameValidator } from "./Validations/CandidateNameValidator";
 
 export class CandidateFullNameVo {
@@ -9,12 +10,14 @@ export class CandidateFullNameVo {
     constructor(
         names: String,
          lastNames: String,
-         private validator: CandidateNameValidator ) {
-        if(this.validator.checkNull(names) && validator.checkNull(lastNames)){
+       //  private validator: CandidateNameValidator //implementacion de patron decorador @deprecated
+         
+         ) { 
+        if(this.checkNull(names) && this.checkNull(lastNames)){
             this._names = names;
             this._lastNames = lastNames;
         }else{
-            throw new Error('Names cannot be empty');
+            throw new Error('Names invalid');
         }
         
     }
@@ -37,6 +40,18 @@ export class CandidateFullNameVo {
     }
     public set lastNames(value: String) {
         this._lastNames = value;
+    }
+
+    
+    checkNull(name:String){
+        if(name == ''){
+           throw new EmptyCandidateName();
+           console.log('Candidate name cannot be empty');
+            return false;
+        }else{
+            return true
+        }
+
     }
 
 }
