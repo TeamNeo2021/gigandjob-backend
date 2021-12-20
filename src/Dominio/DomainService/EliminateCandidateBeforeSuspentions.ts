@@ -1,8 +1,8 @@
 import { Candidate } from "../AggRoots/Candidate/Candidate";
 import { IObservable } from "../Core/IObservable";
 import { IObserver } from "../Core/IObserver";
-import { CandidateEliminated } from "../DomainEvents/Candidate/CandidateEliminated";
-import { CandidateEliminatedHandler } from "../DomainEvents/Candidate/CandidateEliminatedHandler";
+import { CandidateStateModified } from "../DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModifiedHandler } from "../DomainEvents/Candidate/CandidateStateModifiedHandler";
 import { CandidateSuspended } from "../DomainEvents/Candidate/CandidateSuspended";
 
 export class EliminateCandidateBeforeSuspentions implements IObserver{
@@ -30,7 +30,8 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
 
         
         //If it is not Candidate Suspended Event, then ignore
-        if (!(last_change instanceof CandidateSuspended)){
+        if (!(last_change instanceof CandidateStateModified 
+            && last_change.new_current == 'Suspended')){
             return;
         }
         //This are the suspention events, starting empty
@@ -39,7 +40,7 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
         
         //Lets check for the class of the events
         for (let change of changes){
-            if (change instanceof CandidateSuspended){
+            if (last_change.new_current == 'Suspended'){
                 suspentions.push(change)
             }
         }
@@ -48,8 +49,11 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
         //CandidateEliminated event 
         if (suspentions.length >= this.suspentionTolerance){
             
-            this.candidate.Apply(new CandidateEliminated(), 
-            new CandidateEliminatedHandler())
+            this.candidate.Apply(
+            new CandidateStateModified(
+                        'Eliminated'
+                        ,this.candidate.state.isApproved.toString()), 
+            new CandidateStateModifiedHandler())
             console.log('candidate ' + 
                          this.candidate.Id.value 
                          + ' eliminated')
