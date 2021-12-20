@@ -21,6 +21,7 @@ export class Application extends Entity<ApplicationId>{
     constructor(applier: any) {
         super(applier); 
      }
+
      protected when(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler.handle(event, this);
      }
@@ -55,11 +56,16 @@ export class Application extends Entity<ApplicationId>{
         return this.state.current;
     }
 
+    public set setState(_state: ApplicationStates){
+        this.state.current = _state;
+    }
+
     public getPreviousState():ApplicationStates{
         return this.previous_state.current;
     }
 
-    public getCandidateId():string{
-        return this.candidateId.value;
+    public getCandidateId(): CandidateIdVo{
+        return this.candidateId;
+
     }
 }
