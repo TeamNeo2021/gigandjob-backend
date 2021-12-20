@@ -6,11 +6,13 @@ import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
 import { MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
-import { Employer } from '../Employer/Employer';
 import { Candidate } from '../Candidate/Candidate';
+import { Employer } from '../Employer/Employer';
 
 
 export class Meeting extends AggregateRoot{
+    private _candidate: Candidate;
+    private _employer: Employer;
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
@@ -18,20 +20,21 @@ export class Meeting extends AggregateRoot{
     private _location: MeetingLocationVO;
 
     // revisar - convertir a VO
-    public empoyer: Employer;
+    public employer: Employer;
     public candidate: Candidate;
     
-    constructor(state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string,
-                employer: Employer, candidate: Candidate) {
+    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string,
+         employer: Employer, candidate: Candidate) {
        super(); 
        this._id = new MeetingIDVO();
        this._state = state;
        this._description = description;
        this._date = new MeetingDateVO(date);
-       this._location = new MeetingLocationVO();
+       //this._location = new MeetingLocationVO();
+       this._location = location;
 
        // revisar
-       this.empoyer = employer;
+       this.employer = employer;
        this.candidate = candidate;
     }
 
