@@ -115,6 +115,4 @@ export class Candidate extends AggregateRoot {
     public set Cv(Cv : String) {
         this.Cv = Cv;
     }
-
-
 }

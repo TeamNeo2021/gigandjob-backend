@@ -68,4 +68,8 @@ export class Application extends Entity<ApplicationId>{
         return this.candidateId;
 
     }
+
+    public get getBudget(): ApplicationBudget{
+        return this.budget;
+    }
 }
