@@ -18,6 +18,10 @@ export class Meeting extends AggregateRoot{
     private _description: MeetingDescriptionVO;
     private _date: MeetingDateVO;
     private _location: MeetingLocationVO;
+
+    // revisar - convertir a VO
+    public empoyer: Employer;
+    public candidate: Candidate;
     
     constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string) {
        super(); 
