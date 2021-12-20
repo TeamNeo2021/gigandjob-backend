@@ -1,5 +1,5 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
+import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
+import { IDomainEventHandler } from '../../DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
@@ -12,8 +12,8 @@ import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
-import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
-import { OfferModifiedHandler } from 'src/Dominio/DomainEvents/OfferModified/OfferModifiedHadler';
+import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
+import { OfferModifiedHandler } from '../../DomainEvents/OfferModified/OfferModifiedHadler';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
