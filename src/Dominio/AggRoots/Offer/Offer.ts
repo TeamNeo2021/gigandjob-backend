@@ -113,8 +113,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             direction,
             sector,
             budget,
-            description,
-            application,
+            description,            
           ),
           new OfferModifiedHandler(),
         );

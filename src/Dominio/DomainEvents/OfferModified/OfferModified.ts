@@ -18,9 +18,7 @@ export class OfferModified implements IDomainEvent {
     public direction: DirectionVO;
     public sector: SectorVO;    
     public budget: BudgetVO;
-    public description: DescriptionVO;
-    public application: Application[];   
-        
+    public description: DescriptionVO;     
     
     constructor(
         state: OfferStateVO,
@@ -29,8 +27,7 @@ export class OfferModified implements IDomainEvent {
         direction: DirectionVO,
         sector: SectorVO,    
         budget: BudgetVO,
-        description: DescriptionVO,
-        application: Application[],
+        description: DescriptionVO,        
     ) {
         this.dateTimeOcurred = new Date(Date.now());
         this.state = state;
@@ -39,7 +36,6 @@ export class OfferModified implements IDomainEvent {
         this.direction = direction;
         this.sector = sector;    
         this.budget = budget;
-        this.description = description;
-        this.application = application;        
+        this.description = description;                
     }
 }
