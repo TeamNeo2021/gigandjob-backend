@@ -1,3 +1,4 @@
+import { Application } from "src/Dominio/AggRoots/Offer/Application/Application";
 import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
 import { DirectionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
@@ -17,7 +18,8 @@ export class OfferModified implements IDomainEvent {
     public direction: DirectionVO;
     public sector: SectorVO;    
     public budget: BudgetVO;
-    public description: DescriptionVO;   
+    public description: DescriptionVO;
+    public application: Application[];   
         
     
     constructor(
@@ -27,7 +29,8 @@ export class OfferModified implements IDomainEvent {
         direction: DirectionVO,
         sector: SectorVO,    
         budget: BudgetVO,
-        description: DescriptionVO,        
+        description: DescriptionVO,
+        application: Application[],
     ) {
         this.dateTimeOcurred = new Date(Date.now());
         this.state = state;
@@ -36,6 +39,7 @@ export class OfferModified implements IDomainEvent {
         this.direction = direction;
         this.sector = sector;    
         this.budget = budget;
-        this.description = description;        
+        this.description = description;
+        this.application = application;        
     }
 }

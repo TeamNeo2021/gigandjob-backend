@@ -10,6 +10,7 @@ export class OfferModifiedHandler implements IDomainEventHandler {
         entity._Direction = event.direction;
         entity._Sector = event.sector;
         entity._Budget = event.budget;
-        entity._Description = event.description;        
+        entity._Description = event.description;
+        entity._application = event.application;
     }
   }
