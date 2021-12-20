@@ -1,6 +1,7 @@
 import { Entity } from "src/Dominio/Core/Entity";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
+import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
 import { ApplicationDescription } from "./Value Objects/ApplicationDescription";
 import { ApplicationId } from "./Value Objects/ApplicationId";
@@ -9,6 +10,7 @@ import { ApplicationTime } from "./Value Objects/ApplicationTime";
 
 export class Application extends Entity<ApplicationId>{
     private id: ApplicationId;
+    private candidateId: CandidateIdVo;
     private state: ApplicationState;
     private previous_state: ApplicationState;
     private budget: ApplicationBudget;
@@ -49,11 +51,15 @@ export class Application extends Entity<ApplicationId>{
         
      }
 
-    public getState():ApplicationState{
-        return this.state;
+    public getState():ApplicationStates{
+        return this.state.current;
     }
 
-    public getPreviousState():ApplicationState{
-        return this.previous_state;
+    public getPreviousState():ApplicationStates{
+        return this.previous_state.current;
+    }
+
+    public getCandidateId():string{
+        return this.candidateId.value;
     }
 }

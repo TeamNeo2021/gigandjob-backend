@@ -18,7 +18,7 @@ export class Candidate extends AggregateRoot {
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
-
+    
     private _phone: CandidatePhoneVo;
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
