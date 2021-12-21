@@ -96,13 +96,13 @@ export class Candidate extends AggregateRoot {
         this._location = value;
     }
        
-    public get Cv() : String {
+    /*public get Cv() : String {
         return this._Cv;
     }
     
     public set Cv(Cv : String) {
         this._Cv = Cv;
-    }
+    }*/
 
 
     protected EnsureValidState(): void {

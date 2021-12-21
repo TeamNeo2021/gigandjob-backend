@@ -19,7 +19,7 @@ export class CandidateStateVo{
         
         return new CandidateStateVo(
             CandidateStatesEnum[current],
-            CandidateStatesEnum[isApprovedd]);
+            /*CandidateStatesEnum[isApprovedd]*/);
     }
 }
 
