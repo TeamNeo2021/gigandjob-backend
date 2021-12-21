@@ -48,14 +48,14 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
         //CandidateEliminated event 
         if (suspentions.length >= this.suspentionTolerance){
             
-            this.candidate.Apply(
+            /*this.candidate.Apply(
             new CandidateStateModified(
                         'Eliminated'
                         ,this.candidate.state.isApproved.toString()), 
             new CandidateStateModifiedHandler())
             console.log('candidate ' + 
                          this.candidate.Id.value 
-                         + ' eliminated')
+                         + ' eliminated')*/
         }
     }
 }

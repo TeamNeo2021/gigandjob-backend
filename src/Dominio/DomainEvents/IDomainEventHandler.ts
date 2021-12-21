@@ -4,6 +4,6 @@ import { IDomainEvent } from './IDomainEvent';
 
 
 export interface IDomainEventHandler {
-  handle(event: IDomainEvent, aggregate: Object): void;
+  handle(event: IDomainEvent, aggregate?: Object): void;
 }
 

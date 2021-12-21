@@ -10,9 +10,30 @@ import { InvalidCandidateBirthDate } from "../../AggRoots/Candidate/ValueObjects
 import { ValidateCandidateAge } from "../../DomainService/ValidateCandidateAge"
 import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/CandidateLocationVO"
 import { InvalidCandidateLocationError } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateLocation.error"
+import { Candidate } from "../../AggRoots/Candidate/Candidate"
+import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo"
+import { CandidateStatesEnum, CandidateStateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateStateVo"
+import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered"
+
+const registeringCandidateEvent = ()=>{
 
 
-//A7/D5 Validar que el nombre completo, teléfono, cédula. correo eléctronico y fecha de nacimiento, no esten vacíos
+const exampleCandidate = new Candidate(
+    new CandidateIdVo(),
+    new CandidateStateVo(CandidateStatesEnum.Active),
+    new CandidateFullNameVo('Peter', 'Parker'),
+    new CandidatePhoneVo('0414', '4407938'),
+    new CandidateEmailVo('spidey@gmail.com'),
+    new CandidateBirthDateVo(new Date('2000-01-16')),
+    new CandidateLocationVo(20, 90)
+);
+
+ return exampleCandidate.registerCandidate();
+
+}
+    /**
+     * Unit tests related to Candidate Value Objects and the register of a new Candidate
+     * */
 describe("register a new Candidate", ()=>{
     
     it("should fail when empty name is entered", ()=>{ //Validate names are not empty
@@ -21,13 +42,13 @@ describe("register a new Candidate", ()=>{
     
     //validate Phone Number
     it("should fail when an empty phone number is entered",()=>{
-        expect(()=> new CandidatePhoneVo('51','')).toThrowError(InvalidCandidatePhoneNumber)
+        expect(()=> new CandidatePhoneVo('0414','')).toThrowError(InvalidCandidatePhoneNumber)
     }),
     it("should fail if phone lenght is shorter",()=>{
-        expect(()=> new CandidatePhoneVo('57','123456')).toThrowError(InvalidCandidatePhoneNumber)
+        expect(()=> new CandidatePhoneVo('0414','123456')).toThrowError(InvalidCandidatePhoneNumber)
     }),
     it("should fail if phone lenght is longer",()=>{
-        expect(()=> new CandidatePhoneVo('57','12345678')).toThrowError(InvalidCandidatePhoneNumber)
+        expect(()=> new CandidatePhoneVo('0414','12345678')).toThrowError(InvalidCandidatePhoneNumber)
     }),
     it("should fail if area code is empty",()=>{
         expect(()=> new CandidatePhoneVo('','12345678')).toThrowError(InvalidCandidatePhoneNumber)
@@ -39,7 +60,7 @@ describe("register a new Candidate", ()=>{
         expect(()=> new CandidatePhoneVo('','')).toThrowError(InvalidCandidatePhoneNumber)
     }),
     it("should succeed when a valid phone number is entered",()=>{
-        expect(()=> new CandidatePhoneVo('58','4407938')) //caso exito
+        expect(()=> new CandidatePhoneVo('0414','4407938')) //caso exito
     }),
     //Validate identification empty
     //Validate email empty
@@ -68,6 +89,11 @@ describe("register a new Candidate", ()=>{
     }),
     it("should fail when longitude is bigger than 180",()=>{
         expect(()=> new CandidateLocationVo(24,200)).toThrowError(InvalidCandidateLocationError)
+    }),
+    it("should suceed when registering a valid Candidate",()=>{
+        const candidate = registeringCandidateEvent();
+        expect(candidate.GetChanges()[0]).toBeInstanceOf(CandidateRegisteredDomainEvent);
     })
+
     
 })

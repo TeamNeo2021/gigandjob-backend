@@ -2,11 +2,9 @@ import { throwError } from "rxjs";
 
 export class CandidateStateVo{
     state: CandidateStatesEnum;
-    isApproved: CandidateStatesEnum;
 
-    constructor(currentState: CandidateStatesEnum, isApproved: CandidateStatesEnum){
+    constructor(currentState: CandidateStatesEnum){
         this.state = currentState;
-        this.isApproved = isApproved;
     }
 
     public static fromString(current: string, isApprovedd: string): CandidateStateVo {
@@ -21,15 +19,11 @@ export class CandidateStateVo{
         
         return new CandidateStateVo(
             CandidateStatesEnum[current],
-            CandidateStatesEnum[isApprovedd]);
+            /*CandidateStatesEnum[isApprovedd]*/);
     }
 }
 
 export enum CandidateStatesEnum{
     Active,
     Suspended,
-    Approbed,
-    Unapproved,
-    inReview,
-    Eliminated
 }

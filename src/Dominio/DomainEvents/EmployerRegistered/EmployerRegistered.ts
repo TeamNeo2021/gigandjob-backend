@@ -1,6 +1,6 @@
-import { EmployerDescriptionVO } from '../AggRoots/Employer/ValueObjects/EmployerDescriptionVO';
-import { EmployerRifVO } from '../AggRoots/Employer/ValueObjects/EmployerRifVO';
-import { IDomainEvent } from './IDomainEvent';
+import { EmployerDescriptionVO } from '../../AggRoots/Employer/ValueObjects/EmployerDescriptionVO';
+import { EmployerRifVO } from '../../AggRoots/Employer/ValueObjects/EmployerRifVO';
+import { IDomainEvent } from '../IDomainEvent';
 
 export class EmployerRegistered implements IDomainEvent {
   public dateTimeOcurred: Date;

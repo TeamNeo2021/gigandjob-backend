@@ -10,4 +10,5 @@ export enum OfferStatesEnum{
     Active,
     Suspended,
     Closed,
+    Eliminated,
 }
