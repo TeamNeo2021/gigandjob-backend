@@ -4,12 +4,11 @@ import { IDomainEvent } from "../IDomainEvent";
 export class CandidateStateModified implements IDomainEvent{
     dateTimeOcurred: Date;
 
-    new_current_state: CandidateStatesEnum;
-    
+    new_current: string;
 
 
-    constructor(new_state: CandidateStatesEnum){
+    constructor(new_state: string){
         this.dateTimeOcurred = new Date();
-        this.new_current_state = new_state;
+        this.new_current = new_state;       
     }
 }

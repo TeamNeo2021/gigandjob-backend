@@ -1,9 +1,8 @@
 import { Candidate } from "../AggRoots/Candidate/Candidate";
-import { IObservable } from "../Core/IObservable";
 import { IObserver } from "../Core/IObserver";
 import { CandidateStateModified } from "../DomainEvents/Candidate/CandidateStateModified";
 import { CandidateStateModifiedHandler } from "../DomainEvents/Candidate/CandidateStateModifiedHandler";
-import { CandidateSuspended } from "../DomainEvents/Candidate/CandidateSuspended";
+
 
 export class EliminateCandidateBeforeSuspentions implements IObserver{
     private readonly candidate: Candidate;
@@ -51,8 +50,7 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
             
             this.candidate.Apply(
             new CandidateStateModified(
-                        'Eliminated'
-                        ,this.candidate.state.isApproved.toString()), 
+                        'Eliminated'), 
             new CandidateStateModifiedHandler())
             console.log('candidate ' + 
                          this.candidate.Id.value 

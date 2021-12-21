@@ -24,6 +24,7 @@ import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/Candida
 import { CandidateStateModified } from "src/Dominio/DomainEvents/Candidate/CandidateStateModified";
 import { CandidateStateModifiedHandler } from "src/Dominio/DomainEvents/Candidate/CandidateStateModifiedHandler";
 
+
 export class Candidate extends AggregateRoot {
  
     private _id: CandidateIdVo;
@@ -128,18 +129,7 @@ export class Candidate extends AggregateRoot {
     }
 
     
-    /**
-     * Use it in case of violating terms & conditions
-     * Changes the state of an active Candidate to 'Suspended'
-     * */
-
-     public suspend(){ 
-        let event = new SuspendedCandidateDomainEvent(this._id)
-        const currentState = new CandidateStateVo(CandidateStatesEnum.Suspended);
-        this._state = currentState;
-        this.Apply(event, undefined)
-        this.changes.push(event);
-    }
+   
 
     public registerCandidate(
         
@@ -149,116 +139,6 @@ export class Candidate extends AggregateRoot {
         return this;
     }
     
-    /**
-     * Use it to reactivate a suspended candidate
-     * Changes the state of an suspended Candidate to 'Active'
-     * */
-
-     public activate(){ 
-            let event = new ActivateCandidateDomainEvent(this._id)
-          const currentState = new CandidateStateVo(CandidateStatesEnum.Active);
-          this._state = currentState;
-          this.Apply(event, undefined)
-          this.changes.push(event);
-      }
-
-      public changeState(new_state: CandidateStatesEnum){
-        let event = new CandidateStateModified(new_state)
-        this.Apply(event, new CandidateStateModifiedHandler())
-        this.changes.push(event);
-
-      }
-
-
-      
-    //comandos
-
-    public approveCVAspirant(Cv:String){
-        console.log("CV aprobado");
-        this.Apply(
-            new CvAspirantApproved(Cv),
-            new CvAspirantApprovedHandler()
-        );
-    }
-
-
-
-      /**
-     * Use it to submit the CV from a candidate to review it
-     *  returns CandidateCvSubmittedDomainEvent
-     * */
-     private submitCv(
-          candidate_cv: Cv
-      ){
-        console.log('User finished and uploaded cv: CandidateCvSubmittedDomainService');
-          console.log('CV: ', candidate_cv);
-       }
-
-        /**
-     * Use it to change candidate's data
-     *   returns CandidateProfileModifiedDomainEvent
-     * */
-       private  modifyProfile(
-          user: Candidate
-      ){ 
-        console.log('new User Data', user);
-        console.log('User modified its profile: CandidateProfileModifiedDomainService');
-      }
-
-       /**
-     * takes the id from a given offer and creates a new Application for it
-     * returns AppliedOfferDomainEvent
-     * */
-      private applyOffer(
-          offer_id: OfferIdVO
-      ){
-            console.log('User applies to an offer, offer ID: ', offer_id);
-            console.log('Creates a new application')
-       }
-
-        /**
-     * removes the Application of candidate from a given offer
-     * returns ApplicationRemovedDomainEvent
-     * */
-       private removeApplicationFromOffer(
-        offer_id: OfferIdVO,
-        application_id: ApplicationId
-      ){
-        console.log('User remove the application from an offer, offer ID: ', offer_id, 'application id:',application_id);
-        console.log('The application has been removed');
-      }
-
-      /**
-       * Candidate accepts the interview, meeeting is confirmed and both Emplyer and Candidate are notified
-     * returns MeeetingAcceptedDomainEvent
-     * */
-      private acceptInterview(
-          interview_id: MeetingIDVO
-      ){ 
-        console.log('User accepts the interview, id interview ', interview_id);
-        console.log('The employer will be notified');
-      }
-
-      
-      /**
-       * Candidate reject the interview, meeeting is NOT confirmed and both Emplyer and Candidate are notified
-     * returns MeeetingRejectedDomainEvent
-     * */
-      private rejectInterview(
-          interview_id: MeetingIDVO
-      ){ 
-        console.log('User rejects the interview, id interview ', interview_id);
-        console.log('The employer will be notified');
-      }
-
-      /**
-       * Candidate cancels the interview for a given reason, meeeting is canceled and both Emplyer and Candidate are notified
-     * returns MeeetingCanceledDomainEvent
-     * */
-      private  cancelInterview(
-        interview_id: MeetingIDVO
-    ){ 
-      console.log('User cancels the interview, id interview ', interview_id);
-      console.log('The employer will be notified');
-    }
 }
+
+
