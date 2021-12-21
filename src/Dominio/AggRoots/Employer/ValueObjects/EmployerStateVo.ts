@@ -8,4 +8,5 @@ export class EmployerStateVo {
 export enum EmployerStates {
   Active,
   Suspended,
+  Eliminated,
 }
