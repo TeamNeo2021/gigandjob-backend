@@ -67,24 +67,35 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         this.Sector != null &&
         this.Budget != null &&
         this.Description != null;
-        switch (this.State.state) {
-          case OfferStatesEnum.Active:
-              if ((this.Before_State.state == OfferStatesEnum.Closed)&&(this.application == null)){
-                  throw new Error("No se puede cerrar sin una Aplicación");
+        
+        const changes = this.GetChanges();
+
+       //last event 
+        const last_change = changes[changes.length-1]
+
+        
+        //If it is not Candidate Suspended Event, then ignore
+        if (last_change instanceof OfferModified){           
+        
+          switch (last_change.state.state) {
+            case OfferStatesEnum.Active:
+                if ((this.State.state = OfferStatesEnum.Closed)&&(this.application == null)){
+                    throw new Error("No se puede cerrar sin una Aplicación");
+                }
+                break;
+            case OfferStatesEnum.Suspended:
+              if (this.Before_State.state == OfferStatesEnum.Closed){
+                  throw new Error("No se puede cerrar la oferta ya que está suspendida");
               }
-              break;
-          case OfferStatesEnum.Suspended:
-            if (this.Before_State.state == OfferStatesEnum.Closed){
-                throw new Error("No se puede cerrar la oferta ya que está suspendida");
-            }
-            break;    
-            case OfferStatesEnum.Closed:
-              if ((this.Before_State.state == OfferStatesEnum.Active) || (this.Before_State.state == OfferStatesEnum.Suspended)){
-                  throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
-              }
-              break; 
-          default:
-              break;
+              break;    
+              case OfferStatesEnum.Closed:
+                if ((this.Before_State.state == OfferStatesEnum.Active) || (this.Before_State.state == OfferStatesEnum.Suspended)){
+                    throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
+                }
+                break; 
+            default:
+                break;
+        }
       }
 
         if (!valid) {
