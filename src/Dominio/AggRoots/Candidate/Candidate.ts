@@ -8,7 +8,8 @@ import {AggregateRoot} from '../AggregateRoot'
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
-import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+import { CandidateStateModified } from "src/Dominio/DomainEvents/Candidate/CandidateStateModified";
 
 
 
@@ -112,16 +113,30 @@ export class Candidate extends AggregateRoot {
     }
    
     protected When(event: any): void {
-        //handler?.handle(event,this)
+        switch (event.constructor) {
+            case CandidateStateModified:
+                this._state = CandidateStateVo.fromString(event.new_current)
+                console.log('new state '
+                            +event.new_current 
+                            +' applied to candidate '
+                            +this._id)
+                break;
+            
+            default:
+                break;
+        }
     }
 
 
-    public registerCandidate(
-        
-    ){
+    public registerCandidate(){
         console.log('Registering Candidate #: ', this._id,'\nName: ', this._name.fullName);
         this.Apply(new CandidateRegisteredDomainEvent(this));
         return this;
+    }
+
+    public eliminateThisCandidate(){
+        console.log('Eliminating Candidate #: ', this._id,'\nName: ', this._name.fullName);
+        this.Apply(new CandidateStateModified('Eliminate'))
     }
     
 }

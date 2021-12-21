@@ -1,12 +1,11 @@
 import { Entity } from "../../../Core/Entity";
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
-import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
 import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
 import { ApplicationDescription } from "./Value Objects/ApplicationDescription";
 import { ApplicationId } from "./Value Objects/ApplicationId";
 import { ApplicationState, ApplicationStates } from "./Value Objects/ApplicationStates";
 import { ApplicationTime } from "./Value Objects/ApplicationTime";
+
 
 export class Application extends Entity<ApplicationId>{
     private readonly id: ApplicationId;
@@ -36,8 +35,8 @@ export class Application extends Entity<ApplicationId>{
         this.time = time;
     }
 
-     protected when(event: IDomainEvent): void {
-        //handler.handle(event);
+     protected when(event: any): void {
+       
      }
      protected EnsureValidState(): void {
         let valid =
@@ -70,9 +69,6 @@ export class Application extends Entity<ApplicationId>{
         return this.state.current;
     }
 
-    public set setState(_state: ApplicationStates){
-        this.state.current = _state;
-    }
 
     public getPreviousState():ApplicationStates{
         return this.previous_state.current;
