@@ -7,7 +7,7 @@ export class EmployerDescriptionVO {
             throw new Error("ERROR: La descripcion esta vacia");
         }
         if(value_employer_description.length>500){
-            throw new Error("ERROR: La descripcion no puede tener mas de 2000 caracteres");
+            throw new Error("ERROR: La descripcion no puede tener mas de 500 caracteres");
         }
         this.value_employer_description=value_employer_description;
     }
