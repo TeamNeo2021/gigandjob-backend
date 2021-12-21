@@ -1,5 +1,4 @@
 import { IInternalEventHandler } from "../AggRoots/IInternalEventHandler";
-import { EmployerRegisteredHandler } from "../DomainEvents/EmployerRegisteredHandler";
 import { IDomainEvent } from "../DomainEvents/IDomainEvent";
 import { IDomainEventHandler } from "../DomainEvents/IDomainEventHandler";
 

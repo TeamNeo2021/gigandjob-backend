@@ -2,14 +2,14 @@ import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
-import { EmployerRegisteredHandler } from '../../DomainEvents/EmployerRegisteredHandler';
-import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered';
-import { EmployerNameVo } from './ValueObjects/EmployerNameVo';
-import { EmployerStateVo } from './ValueObjects/EmployerStateVo';
+import { EmployerRegisteredHandler } from '../../DomainEvents/EmployerRegistered/EmployerRegisteredHandler';
+import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered/EmployerRegistered';
+import { EmployerNameVO } from './ValueObjects/EmployerNameVO';
+import { EmployerStateVO } from './ValueObjects/EmployerStateVO';
 import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
-import { EmployerPhoneVo } from './ValueObjects/EmployerPhoneVo';
-import { EmployerMailVo } from './ValueObjects/EmployerMailVo';
-import { EmployerComercialDesignationVo } from './ValueObjects/EmployerComercialDesignationVo';
+import { EmployerPhoneVO } from './ValueObjects/EmployerPhoneVO';
+import { EmployerMailVO } from './ValueObjects/EmployerMailVO';
+import { EmployerComercialDesignationVO } from './ValueObjects/EmployerComercialDesignationVO';
 import { EmployerModified } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModified';
 import { EmployerModifiedHandler } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModifiedHandler';
 import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
@@ -18,24 +18,24 @@ import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _employerId: EmployerIdVO;
-  private _name: EmployerNameVo;
+  private _name: EmployerNameVO;
   private _description: EmployerDescriptionVO;
-  private _state: EmployerStateVo;
+  private _state: EmployerStateVO;
   private _location: EmployerLocationVO;
   private _rif: EmployerRifVO;
-  private _phone: EmployerPhoneVo;
-  private _mail: EmployerMailVo;
-  private _comDesignation: EmployerComercialDesignationVo;
+  private _phone: EmployerPhoneVO;
+  private _mail: EmployerMailVO;
+  private _comDesignation: EmployerComercialDesignationVO;
   constructor(
     employerId: EmployerIdVO,
-    name: EmployerNameVo,
+    name: EmployerNameVO,
     description: EmployerDescriptionVO,
-    state: EmployerStateVo,
+    state: EmployerStateVO,
     location: EmployerLocationVO,
     rif: EmployerRifVO,
-    phone: EmployerPhoneVo,
-    mail: EmployerMailVo,
-    comDesignation: EmployerComercialDesignationVo,
+    phone: EmployerPhoneVO,
+    mail: EmployerMailVO,
+    comDesignation: EmployerComercialDesignationVO,
   ) {
     super();
     
@@ -96,14 +96,14 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
   
   public EmployerModified(    
-    name: EmployerNameVo,
+    name: EmployerNameVO,
     description: EmployerDescriptionVO,
-    state: EmployerStateVo,
+    state: EmployerStateVO,
     location: EmployerLocationVO,
     rif: EmployerRifVO,
-    phone: EmployerPhoneVo,
-    mail: EmployerMailVo,
-    comDesignation: EmployerComercialDesignationVo,
+    phone: EmployerPhoneVO,
+    mail: EmployerMailVO,
+    comDesignation: EmployerComercialDesignationVO,
   ) {
     console.log('Employer Modified');
     this.Apply(
@@ -122,10 +122,10 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
 
   //Getters y setters
-  public get name(): EmployerNameVo {
+  public get name(): EmployerNameVO {
     return this._name;
   }
-  public set name(value: EmployerNameVo) {
+  public set name(value: EmployerNameVO) {
     this._name = value;
   }
 
@@ -135,10 +135,10 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   public set description(value: EmployerDescriptionVO) {
     this._description = value;
   }
-  public get state(): EmployerStateVo {
+  public get state(): EmployerStateVO {
     return this._state;
   }
-  public set state(value: EmployerStateVo) {
+  public set state(value: EmployerStateVO) {
     this._state = value;
   }
   public get location(): EmployerLocationVO {
@@ -154,22 +154,22 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   public set rif(rif : EmployerRifVO) {
     this._rif = rif;
   }
-  public get phone(): EmployerPhoneVo {
+  public get phone(): EmployerPhoneVO {
     return this._phone;
   }
-  public set phone(value: EmployerPhoneVo) {
+  public set phone(value: EmployerPhoneVO) {
     this._phone = value;
   }
-  public get mail(): EmployerMailVo {
+  public get mail(): EmployerMailVO {
     return this._mail;
   }
-  public set mail(value: EmployerMailVo) {
+  public set mail(value: EmployerMailVO) {
     this._mail = value;
   }
-  public get comDesignation(): EmployerComercialDesignationVo {
+  public get comDesignation(): EmployerComercialDesignationVO {
     return this._comDesignation;
   }
-  public set comDesignation(value: EmployerComercialDesignationVo) {
+  public set comDesignation(value: EmployerComercialDesignationVO) {
     this._comDesignation = value;
   }
 }

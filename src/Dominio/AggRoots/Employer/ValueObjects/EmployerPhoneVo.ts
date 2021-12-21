@@ -1,6 +1,6 @@
-export class EmployerPhoneVo {
+export class EmployerPhoneVO {
 
-    value :String;
+    value_employer_phone :String;
 
     constructor(value: String) {
         
@@ -14,6 +14,6 @@ export class EmployerPhoneVo {
             throw new Error('ERROR: El teléfono no debe tener mas de 15 digitos');
         }
 
-        this.value=value;
+        this.value_employer_phone=value;
     }
 }
