@@ -18,10 +18,6 @@ export class Meeting extends AggregateRoot{
     private _description: MeetingDescriptionVO;
     private _date: MeetingDateVO;
     private _location: MeetingLocationVO;
-
-    // revisar - convertir a VO
-    public employerID: EmployerIdVO;
-    public candidateID: CandidateIdVo;
     
     constructor(id: MeetingIDVO , state: MeetingStateVO, description: MeetingDescriptionVO, date: MeetingDateVO, location: MeetingLocationVO,
          employerID: EmployerIdVO, candidateID: CandidateIdVo) {
@@ -64,6 +60,14 @@ export class Meeting extends AggregateRoot{
         return this._location
     }
 
+    get candidateID(): CandidateIdVo{
+        return this._candidateID;
+    }
+
+    get employerID(): EmployerIdVO{
+        return this._employerID;
+    }
+
     set state(state: MeetingStateVO){
         this._state = state;
     }
@@ -74,5 +78,13 @@ export class Meeting extends AggregateRoot{
 
     set location(location: MeetingLocationVO){
         this._location = location;
+    }
+
+    set candidateID(candidateID: CandidateIdVo){
+        this._candidateID = candidateID;
+    }
+
+    set employerID(employerID: EmployerIdVO){
+        this._employerID = employerID;
     }
 }
