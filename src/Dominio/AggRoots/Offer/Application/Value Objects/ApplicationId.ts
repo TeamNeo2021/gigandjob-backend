@@ -1,10 +1,13 @@
 export class ApplicationId{
-    private readonly value: string;
+    private readonly _value: string;
 
-    constructor(v:string){
-        if (v == null){
-            throw new TypeError('Application ID cannot be empty');            
-        }
-        this.value=v;
+    constructor(value: string){
+        this._value = value;
+    }
+
+    public get value(): string{
+        return this.value
     }
 }
+
+

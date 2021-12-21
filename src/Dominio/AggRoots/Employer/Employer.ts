@@ -15,6 +15,8 @@ import { EmployerModifiedHandler } from 'src/Dominio/DomainEvents/EmployerModifi
 import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
 import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
 import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
+import { EmployerEliminated } from 'src/Dominio/DomainEvents/EmployerEliminated/EmployerEliminated';
+import { ApplicationId } from '../Offer/Application/Value Objects/ApplicationId';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _employerId: EmployerIdVO;
@@ -49,8 +51,10 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     this._mail = mail;
     this._comDesignation = comDesignation;    
   }
-  protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-    handler.handle(event, this);
+  protected When(event:any, handler: IDomainEventHandler): void {
+    
+    handler.handle(event, this)
+
   }
   protected EnsureValidState(): void {
     const valid = 
@@ -173,3 +177,4 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     this._comDesignation = value;
   }
 }
+
