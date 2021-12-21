@@ -1,7 +1,7 @@
 import { Entity } from "src/Dominio/Core/Entity";
-import { CvAspirantApproved } from "src/Dominio/DomainEvents/CvAspirantApproved";
-import { CvAspirantApprovedHandler } from "src/Dominio/DomainEvents/CvAspirantApprovedHandler";
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
+import { CvAspirantApproved } from "../../DomainEvents/CvAspirantApproved";
+import { CvAspirantApprovedHandler } from "../../DomainEvents/CvAspirantApprovedHandler";
+import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
@@ -11,7 +11,8 @@ import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import {AggregateRoot} from '../AggregateRoot'
-import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
+import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
+import { Cv } from "../CV/cv.root";
 
 export class Candidate extends AggregateRoot {
  
@@ -24,7 +25,7 @@ export class Candidate extends AggregateRoot {
     private _birthDate: CandidateBirthDateVo;
     private _description: CandidateDescriptionVo;
     private _location: CandidateLocationVo;
-    private _Cv:String;//Cambiar string por CV, tambien lo mismo con su get y set
+    private _Cv:Cv;
 
     constructor(
         id: CandidateIdVo,
@@ -33,8 +34,8 @@ export class Candidate extends AggregateRoot {
         phone: CandidatePhoneVo,
         email: CandidateEmailVo,
         birthDate: CandidateBirthDateVo,
-        //description: CandidateDescriptionVo,
-        location: CandidateLocationVo
+        location: CandidateLocationVo,
+        CV:Cv
     ){ 
         super();
         this._id = id;
@@ -44,6 +45,7 @@ export class Candidate extends AggregateRoot {
         this._birthDate = birthDate;
         //this._description = description;
         this._location = location;
+        this._Cv=CV;
 
 
     }
@@ -51,7 +53,7 @@ export class Candidate extends AggregateRoot {
 
     //comandos
 
-    public approveCVAspirant(Cv:String){
+    public approveCVAspirant(Cv:Cv){
         console.log("CV aprobado");
         this.Apply(
             new CvAspirantApproved(Cv),
@@ -108,12 +110,12 @@ export class Candidate extends AggregateRoot {
         //throw new Error("Method not implemented.");
     }
     
-    public get Cv() : String {
-        return this.Cv;
+    public get CV() : Cv {
+        return this._Cv;
     }
     
-    public set Cv(Cv : String) {
-        this.Cv = Cv;
+    public set Cv(Cv : Cv) {
+        this._Cv=Cv;
     }
 
 

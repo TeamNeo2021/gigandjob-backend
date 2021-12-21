@@ -13,7 +13,7 @@ import { CvPhoto } from "./ValueObjects/cvPhoto.object";
 import { CvStudies } from "./ValueObjects/cvStudies.object";
 import { CvWorkExperience } from "./ValueObjects/cvWorkExperience.object";
 
-enum CvState {
+export enum CvState {
     Approved = 0,
     Denied = 1,
     Submitted = 2
