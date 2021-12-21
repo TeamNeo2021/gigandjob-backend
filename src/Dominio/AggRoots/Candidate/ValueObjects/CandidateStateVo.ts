@@ -1,5 +1,3 @@
-import { throwError } from "rxjs";
-
 export class CandidateStateVo{
     state: CandidateStatesEnum;
 
@@ -7,19 +5,15 @@ export class CandidateStateVo{
         this.state = currentState;
     }
 
-    public static fromString(current: string, isApprovedd: string): CandidateStateVo {
+    public static fromString(current: string): CandidateStateVo {
         
 
         if (!(current in CandidateStatesEnum)){
             throw new Error("State "+ current +" does not exist");
         }
-        if (!(isApprovedd in CandidateStatesEnum)){
-            throw new Error("State "+ isApprovedd +" does not exist");
-        }
         
-        return new CandidateStateVo(
-            CandidateStatesEnum[current],
-            /*CandidateStatesEnum[isApprovedd]*/);
+        
+        return new CandidateStateVo(CandidateStatesEnum[current]);
     }
 }
 

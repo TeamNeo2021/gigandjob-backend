@@ -8,9 +8,9 @@ export class CandidateStateModifiedHandler implements IDomainEventHandler{
 
     handle(event: CandidateStateModified, aggregate: Candidate): void {
         aggregate.state = CandidateStateVo.fromString(
-            event.new_current,
-            event.new_isApprobed);
+            event.new_current);
         
     }
 
 }
+

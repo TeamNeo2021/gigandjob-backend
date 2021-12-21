@@ -21,6 +21,7 @@ import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
 import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegisteredHandler";
+import { EliminateCandidateBeforeSuspentions } from "src/Dominio/DomainService/EliminateCandidateBeforeSuspentions";
 
 export class Candidate extends AggregateRoot {
  
@@ -253,3 +254,5 @@ export class Candidate extends AggregateRoot {
       console.log('The employer will be notified');
     }
 }
+
+
