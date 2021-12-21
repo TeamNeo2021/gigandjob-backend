@@ -11,8 +11,8 @@ import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 
 
 export class Meeting extends AggregateRoot{
-    private _candidateID: CandidateIdVo;
-    private _employerID: EmployerIdVO;
+    private _candidate: CandidateIdVo;
+    private _employer: EmployerIdVO;
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
@@ -27,8 +27,8 @@ export class Meeting extends AggregateRoot{
        this._description = description;
        this._date = date;
        this._location = location;
-       this._employerID = employerID;
-       this._candidateID = candidateID;
+       this._employer = employerID;
+       this._candidate = candidateID;
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
@@ -60,12 +60,12 @@ export class Meeting extends AggregateRoot{
         return this._location
     }
 
-    get candidateID(): CandidateIdVo{
-        return this._candidateID;
+    get candidate(): CandidateIdVo{
+        return this.candidate;
     }
 
-    get employerID(): EmployerIdVO{
-        return this._employerID;
+    get employer(): EmployerIdVO{
+        return this.employer;
     }
 
     set state(state: MeetingStateVO){
@@ -80,11 +80,11 @@ export class Meeting extends AggregateRoot{
         this._location = location;
     }
 
-    set candidateID(candidateID: CandidateIdVo){
-        this._candidateID = candidateID;
+    set candidate(candidate: CandidateIdVo){
+        this.candidate = candidate;
     }
 
-    set employerID(employerID: EmployerIdVO){
-        this._employerID = employerID;
+    set employer(employer: EmployerIdVO){
+        this.employer = employer;
     }
 }
