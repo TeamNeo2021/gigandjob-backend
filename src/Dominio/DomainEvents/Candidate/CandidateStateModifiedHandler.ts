@@ -1,6 +1,5 @@
 import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate";
-import { CandidateStatesEnum, CandidateStateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
-
+import { CandidateStateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
 import { IDomainEventHandler } from "../IDomainEventHandler";
 import { CandidateStateModified } from "./CandidateStateModified";
 
