@@ -133,27 +133,22 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       //Implementacion de crearOferta con domain event
       public CreateOffer(
 
-        //Arreglar para adjuntar lo del before_state
-
-        /*
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
-          Sector: Sectors,
-          //Sectors es el VO de sector en la entidad de offer
+          Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO*/
+          Description: DescriptionVO
 
-          State: number,
+         /* State: number,
           PublicationDate: Date,
           Rating: number,
           Direction: string,
           Sector: number,
-          //Sectors es el VO de sector en la entidad de offer
           Budget: number,
-          Description: string,
-          application: Application[]
+          Description: string,*/
+
 
       ) {
         console.log('Oferta Creada');
@@ -166,7 +161,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
-            application
           ),
           new OfferCreatedHandler(),
         );
