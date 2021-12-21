@@ -1,7 +1,7 @@
-import { Entity } from "src/Dominio/Core/Entity";
-import { CvAspirantApproved } from "src/Dominio/DomainEvents/CvAspirantApproved";
-import { CvAspirantApprovedHandler } from "src/Dominio/DomainEvents/CvAspirantApprovedHandler";
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
+import { Entity } from "../../Core/Entity";
+import { CvAspirantApproved } from "../../DomainEvents/CvAspirantApproved";
+import { CvAspirantApprovedHandler } from "../../DomainEvents/CvAspirantApprovedHandler";
+import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
@@ -11,12 +11,16 @@ import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import {AggregateRoot} from '../AggregateRoot'
-import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
-import { ActivateCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/ActivateCandidate.event";
-import { SuspendedCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/SuspendedCandidate.event";
+import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
+import { ActivateCandidateDomainEvent } from "../../DomainEvents/Candidate/ActivateCandidate.event";
+import { SuspendedCandidateDomainEvent } from "../../DomainEvents/Candidate/SuspendedCandidate.event";
 import { OfferIdVO } from "../Offer/ValueObjects/OfferIdVO";
 import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
 import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
+import { Cv } from "../CV/cv.root";
+import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
+import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
+import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegisteredHandler";
 
 export class Candidate extends AggregateRoot {
  
@@ -27,7 +31,6 @@ export class Candidate extends AggregateRoot {
     private _phone: CandidatePhoneVo;
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
-    private _description: CandidateDescriptionVo;
     private _location: CandidateLocationVo;
     private _Cv:String;//Cambiar string por CV, tambien lo mismo con su get y set
 
@@ -38,7 +41,6 @@ export class Candidate extends AggregateRoot {
         phone: CandidatePhoneVo,
         email: CandidateEmailVo,
         birthDate: CandidateBirthDateVo,
-        //description: CandidateDescriptionVo,
         location: CandidateLocationVo
     ){ 
         super();
@@ -47,24 +49,13 @@ export class Candidate extends AggregateRoot {
         this._name = name;
         this._phone = phone;
         this._birthDate = birthDate;
-        //this._description = description;
+        this._email = email;
         this._location = location;
 
 
     }
 
     
-    //comandos
-
-    public approveCVAspirant(Cv:String){
-        console.log("CV aprobado");
-        this.Apply(
-            new CvAspirantApproved(Cv),
-            new CvAspirantApprovedHandler()
-        );
-    }
-
-
     //getters and setters
 
     public get Id(): CandidateIdVo {
@@ -86,6 +77,10 @@ export class Candidate extends AggregateRoot {
         return this._phone;
     }
 
+    public set phone(value: CandidatePhoneVo) { 
+        this._phone = value;
+    }
+
     public get email(): CandidateEmailVo{
         return this._email;
     }
@@ -94,31 +89,40 @@ export class Candidate extends AggregateRoot {
         return this._birthDate;
     }
 
-    public get description(): CandidateDescriptionVo{
-        return this._description;
-    }
-
     public get location(): CandidateLocationVo {
         return this._location;
     }
     public set location(value: CandidateLocationVo) {
         this._location = value;
     }
-
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event,this)
-    }
-    protected EnsureValidState(): void {
-        console.log('hola ya me asegure')
-        //throw new Error("Method not implemented.");
-    }
-    
+       
     public get Cv() : String {
-        return this.Cv;
+        return this._Cv;
     }
     
     public set Cv(Cv : String) {
-        this.Cv = Cv;
+        this._Cv = Cv;
+    }
+
+
+    protected EnsureValidState(): void {
+    
+        const valid =   (
+        this._id != undefined 
+        && this._state != undefined 
+        && this._name != undefined
+        && this._phone != undefined
+        && this._email != undefined
+        && this._birthDate != undefined);
+
+        if(!valid){
+            throw InvalidCandidateState.invalidCandidate;
+        }
+
+    }
+   
+    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
+        handler?.handle(event,this)
     }
 
     
@@ -135,6 +139,13 @@ export class Candidate extends AggregateRoot {
         this.changes.push(event);
     }
 
+    public registerCandidate(
+        
+    ){
+        console.log('Registering Candidate #: ', this._id,'\nName: ', this._name.fullName);
+        this.Apply(new CandidateRegisteredDomainEvent(this), new CandidateRegisteredHandler() );
+        return this;
+    }
     
     /**
      * Use it to reactivate a suspended candidate
@@ -148,6 +159,20 @@ export class Candidate extends AggregateRoot {
           this.Apply(event, undefined)
           this.changes.push(event);
       }
+
+
+      
+    //comandos
+
+    public approveCVAspirant(Cv:String){
+        console.log("CV aprobado");
+        this.Apply(
+            new CvAspirantApproved(Cv),
+            new CvAspirantApprovedHandler()
+        );
+    }
+
+
 
       /**
      * Use it to submit the CV from a candidate to review it
