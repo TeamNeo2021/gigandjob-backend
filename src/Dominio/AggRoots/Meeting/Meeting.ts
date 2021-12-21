@@ -23,10 +23,10 @@ export class Meeting extends AggregateRoot{
     public employer: Employer;
     public candidate: Candidate;
     
-    constructor(id: string, state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: string,
-         employer: Employer, candidate: Candidate) {
+    constructor(id: MeetingIDVO , state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: MeetingLocationVO,
+         /*employer: Employer, candidate: Candidate*/) {
        super(); 
-       this._id = new MeetingIDVO();
+       this._id = id;
        this._state = state;
        this._description = description;
        this._date = new MeetingDateVO(date);
@@ -34,8 +34,8 @@ export class Meeting extends AggregateRoot{
        this._location = location;
 
        // revisar
-       this.employer = employer;
-       this.candidate = candidate;
+       //this.employer = employer;
+       //this.candidate = candidate;
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {

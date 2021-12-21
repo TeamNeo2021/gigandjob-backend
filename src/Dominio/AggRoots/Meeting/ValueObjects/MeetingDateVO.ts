@@ -1,12 +1,17 @@
+import { InvalidMeetingDate } from "../Errors/InvalidMeetingDate.error";
+
 export class MeetingDateVO {
     value: Date;
     constructor(value: Date) {
         let today = new Date();
-        if (value >= today){
+        if (Date == null || Date == undefined){
+            throw  new InvalidMeetingDate();
+        }
+        else if (value >= today){
             this.value = value
         }
         else {
-            throw new Error("The date entered cannot be earlier than the current date");
+            throw InvalidMeetingDate.MeetingDateExpired();
         }
     }
 }
