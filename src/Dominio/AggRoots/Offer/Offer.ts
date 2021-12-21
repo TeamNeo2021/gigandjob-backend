@@ -21,13 +21,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
     private Before_State: OfferStateVO;
-    //Necesitamos un estado de visible o no? debido a las denuncias
-    //private Visible: OfferStateVO;
     private PublicationDate: PublicationDateVO;
     private Rating: RatingVO;
     private Direction: DirectionVO;
     private Sector: SectorVO;
-    //Sectors es el VO de sector en la entidad de offer
     private Budget: BudgetVO;
     private Description: DescriptionVO;
     private application: Application[];
@@ -67,37 +64,50 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         this.Sector != null &&
         this.Budget != null &&
         this.Description != null;
-        
         const changes = this.GetChanges();
 
-       //last event 
-        const last_change = changes[changes.length-1]
-
-        
-        //If it is not Candidate Suspended Event, then ignore
+        //Create offer
+            
+          if (((this.State.state == OfferStatesEnum.Suspended) || 
+              (this.State.state == OfferStatesEnum.Closed) || 
+              (this.State.state == OfferStatesEnum.Eliminated))&&(changes.length==0))
+              {
+            throw new Error("La oferta recién creada solo puede ser activa");
+              } 
+       //Modify offer 
+      else{
+        const last_change = changes[changes.length-1]      
         if (last_change instanceof OfferModified){           
         
           switch (last_change.state.state) {
             case OfferStatesEnum.Active:
-                if ((this.State.state = OfferStatesEnum.Closed)&&(this.application == null)){
+                if ((this.State.state == OfferStatesEnum.Closed)&&(this.application == null)){
                     throw new Error("No se puede cerrar sin una Aplicación");
                 }
                 break;
             case OfferStatesEnum.Suspended:
-              if (this.Before_State.state == OfferStatesEnum.Closed){
+              if (this.State.state == OfferStatesEnum.Closed){
                   throw new Error("No se puede cerrar la oferta ya que está suspendida");
               }
               break;    
               case OfferStatesEnum.Closed:
-                if ((this.Before_State.state == OfferStatesEnum.Active) || (this.Before_State.state == OfferStatesEnum.Suspended)){
+                if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)){
                     throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
                 }
-                break; 
+                break;
+                case OfferStatesEnum.Eliminated:
+                  if ((this.State.state == OfferStatesEnum.Active) ||
+                   (this.State.state == OfferStatesEnum.Suspended)|| 
+                   (this.State.state == OfferStatesEnum.Closed)){
+                      throw new Error("Ya la oferta está eliminada, no puede cambiar su estado, jamás");
+                  }
+                  break; 
             default:
                 break;
-        }
+        } 
       }
 
+    }
         if (!valid) {
           throw new Error('Verificacion de estado fallido');
         }
@@ -133,27 +143,22 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       //Implementacion de crearOferta con domain event
       public CreateOffer(
 
-        //Arreglar para adjuntar lo del before_state
-
-        /*
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
-          Sector: Sectors,
-          //Sectors es el VO de sector en la entidad de offer
+          Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO*/
+          Description: DescriptionVO
 
-          State: number,
+         /* State: number,
           PublicationDate: Date,
           Rating: number,
           Direction: string,
           Sector: number,
-          //Sectors es el VO de sector en la entidad de offer
           Budget: number,
-          Description: string,
-          application: Application[]
+          Description: string,*/
+
 
       ) {
         console.log('Oferta Creada');
@@ -166,7 +171,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
-            application
           ),
           new OfferCreatedHandler(),
         );
@@ -209,7 +213,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.Direction = value;
     }
 
-    //Sectors es el VO de sector en la entidad de offer
     public get _Sector(): SectorVO {
       return this.Sector;
     }

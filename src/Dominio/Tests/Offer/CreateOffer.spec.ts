@@ -11,7 +11,7 @@ describe("Debería crear una nueva oferta", ()=>{
 
     //Validemos nuestro estado
     /*it("Deberia fallar si el estado es nulo", ()=>{ //Validate state is not empty
-        expect(()=>new OfferStateVO(OfferStatesEnum.Active)).toEqual(OfferStatesEnum.Active)//toThrowError("Estado nulo")
+        expect(()=>new OfferStateVO(null)).toEqual(OfferStatesEnum.Active)toThrowError("Estado nulo")
     })*/
 
     //Validemos nuestra fecha de publicación
@@ -48,7 +48,6 @@ describe("Debería crear una nueva oferta", ()=>{
     }),
 
     it("Deberia fallar si la descripción es mayor a 2000 caracteres", ()=>{ //Validar que no es mayor a 2000 caracteres
-        //creditos a Michael Nelo
         let description = new Array(2001).fill(".").join("")
         expect(()=>new DescriptionVO(description)).toThrowError(Error)
     })
