@@ -1,4 +1,4 @@
-import { Entity } from "src/Dominio/Core/Entity";
+import { Entity } from "../../../Core/Entity";
 import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
 import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
 import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
@@ -9,7 +9,7 @@ import { ApplicationState, ApplicationStates } from "./Value Objects/Application
 import { ApplicationTime } from "./Value Objects/ApplicationTime";
 
 export class Application extends Entity<ApplicationId>{
-    private id: ApplicationId;
+    private readonly id: ApplicationId;
     private candidateId: CandidateIdVo;
     private state: ApplicationState;
     private previous_state: ApplicationState;
@@ -18,9 +18,23 @@ export class Application extends Entity<ApplicationId>{
     private time: ApplicationTime;
     
 
-    constructor(applier: any) {
+    constructor(applier: any,
+        id:ApplicationId, 
+        candidateId:CandidateIdVo,
+        state: ApplicationState,
+        budget: ApplicationBudget,
+        description: ApplicationDescription,
+        time: ApplicationTime) 
+    {
+        
         super(applier); 
-     }
+        this.id = id;
+        this.candidateId = candidateId;
+        this.state = state;
+        this.budget = budget;
+        this.description = description; 
+        this.time = time;
+    }
 
      protected when(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler.handle(event, this);
