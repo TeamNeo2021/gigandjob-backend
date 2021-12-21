@@ -1,6 +1,7 @@
 import { Candidate } from "../AggRoots/Candidate/Candidate";
 import { IObserver } from "../Core/IObserver";
 import { CandidateStateModified } from "../DomainEvents/Candidate/CandidateStateModified";
+
 import { CandidateStateModifiedHandler } from "../DomainEvents/Candidate/CandidateStateModifiedHandler";
 
 

@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
+/*import { Test, TestingModule } from '@nestjs/testing';
 import { Employer } from '../Employer';
 import { EmployerStateVO, EmployerStates } from './EmployerStateVO';
 
-/*describe('Metodos de employer', () => {
+describe('Metodos de employer', () => {
   let _Employer: Employer;
 
   beforeEach(async () => {

@@ -4,10 +4,9 @@ import { Meeting } from "../AggRoots/Meeting/Meeting"
 
 export class ValidateCandidateSuspended{
     validate(candidate: Candidate): boolean{
-        if (candidate.state === new CandidateStateVo(CandidateStatesEnum.Suspended, CandidateStatesEnum.Unapproved) ||
-            candidate.state === new CandidateStateVo(CandidateStatesEnum.Suspended, CandidateStatesEnum.Approbed)){
+        if (candidate.state === new CandidateStateVo(CandidateStatesEnum.Suspended)){
             return false
-        }
+        }else
         return true
     }
 }

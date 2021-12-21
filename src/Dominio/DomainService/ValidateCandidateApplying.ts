@@ -3,7 +3,7 @@ import { CandidateStateVo, CandidateStatesEnum } from "../AggRoots/Candidate/Val
 
 export class ValidateApplying{
     validate(candidate: Candidate): boolean{
-        if (candidate.state === new CandidateStateVo(CandidateStatesEnum.Active, CandidateStatesEnum.Approbed)){
+        if (candidate.state === new CandidateStateVo(CandidateStatesEnum.Active)){
             return true;
         }else{
             return false;

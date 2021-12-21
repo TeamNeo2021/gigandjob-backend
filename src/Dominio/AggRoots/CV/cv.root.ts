@@ -13,13 +13,19 @@ import { CvPhoto } from "./ValueObjects/cvPhoto.object";
 import { CvStudies } from "./ValueObjects/cvStudies.object";
 import { CvWorkExperience } from "./ValueObjects/cvWorkExperience.object";
 
-enum CvState {
+export enum CvState {
     Approved = 0,
     Denied = 1,
     Submitted = 2
 }
 
 export class Cv<State extends CvState = CvState> extends AggregateRoot {
+    public get state(): State {
+        return this._state;
+    }
+    public set state(value: State) {
+        this._state = value;
+    }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
         handler?.handle(event, this)
@@ -45,7 +51,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
         public studies: CvStudies[],
         public photo: CvPhoto,
         public candidate: CvCandidate,
-        public state: State,
+        private _state: State,
         public id: CvId = new CvId(),
     ) { super() }
 

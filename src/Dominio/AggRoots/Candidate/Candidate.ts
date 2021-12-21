@@ -1,28 +1,19 @@
-import { Entity } from "../../Core/Entity";
-import { CvAspirantApproved } from "../../DomainEvents/CvAspirantApproved";
-import { CvAspirantApprovedHandler } from "../../DomainEvents/CvAspirantApprovedHandler";
+
 import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
-import { CandidateDescriptionVo } from "./ValueObjects/CandidateDescriptionVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
 import { CandidateIdVo } from "./ValueObjects/CandidateIdVo";
 import { CandidateLocationVo } from "./ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
-import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import {AggregateRoot} from '../AggregateRoot'
 import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
-import { ActivateCandidateDomainEvent } from "../../DomainEvents/Candidate/ActivateCandidate.event";
-import { SuspendedCandidateDomainEvent } from "../../DomainEvents/Candidate/SuspendedCandidate.event";
-import { OfferIdVO } from "../Offer/ValueObjects/OfferIdVO";
-import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
-import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
 import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegisteredHandler";
-import { CandidateStateModified } from "src/Dominio/DomainEvents/Candidate/CandidateStateModified";
-import { CandidateStateModifiedHandler } from "src/Dominio/DomainEvents/Candidate/CandidateStateModifiedHandler";
+import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+
 
 
 export class Candidate extends AggregateRoot {
@@ -128,8 +119,6 @@ export class Candidate extends AggregateRoot {
         handler?.handle(event,this)
     }
 
-    
-   
 
     public registerCandidate(
         
