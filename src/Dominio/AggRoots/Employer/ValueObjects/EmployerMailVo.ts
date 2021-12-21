@@ -1,5 +1,5 @@
-export class EmployerMailVo {
-    value: string;
+export class EmployerMailVO {
+    value_employer_mail: string;
     regex = RegExp(/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i);
     
     constructor(value: string) {
@@ -11,7 +11,7 @@ export class EmployerMailVo {
         throw new Error('ERROR: no es un email valido');
       }
       
-      this.value = value;
+      this.value_employer_mail = value;
     }
 }
 
