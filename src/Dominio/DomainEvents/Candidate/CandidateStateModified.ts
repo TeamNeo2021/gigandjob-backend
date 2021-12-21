@@ -1,15 +1,15 @@
+import { CandidateStatesEnum } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
 import { IDomainEvent } from "../IDomainEvent";
 
 export class CandidateStateModified implements IDomainEvent{
     dateTimeOcurred: Date;
 
-    new_current: string;
-    new_isApprobed: string;
+    new_current_state: CandidateStatesEnum;
+    
 
 
-    constructor(new_state: string, new_isApprobed: string){
+    constructor(new_state: CandidateStatesEnum){
         this.dateTimeOcurred = new Date();
-        this.new_current = new_state;
-        this.new_isApprobed = new_isApprobed
+        this.new_current_state = new_state;
     }
 }

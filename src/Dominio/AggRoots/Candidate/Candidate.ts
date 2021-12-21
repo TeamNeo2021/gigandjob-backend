@@ -21,6 +21,8 @@ import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
 import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegisteredHandler";
+import { CandidateStateModified } from "src/Dominio/DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModifiedHandler } from "src/Dominio/DomainEvents/Candidate/CandidateStateModifiedHandler";
 
 export class Candidate extends AggregateRoot {
  
@@ -96,11 +98,11 @@ export class Candidate extends AggregateRoot {
         this._location = value;
     }
        
-    public get Cv() : String {
+    public get Cv() : Cv {
         return this._Cv;
     }
     
-    public set Cv(Cv : String) {
+    public set Cv(Cv : Cv) {
         this._Cv = Cv;
     }
 
@@ -158,6 +160,13 @@ export class Candidate extends AggregateRoot {
           this._state = currentState;
           this.Apply(event, undefined)
           this.changes.push(event);
+      }
+
+      public changeState(new_state: CandidateStatesEnum){
+        let event = new CandidateStateModified(new_state)
+        this.Apply(event, new CandidateStateModifiedHandler())
+        this.changes.push(event);
+
       }
 
 
