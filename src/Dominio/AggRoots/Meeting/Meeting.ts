@@ -6,13 +6,13 @@ import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
 import { MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
-import { Candidate } from '../Candidate/Candidate';
-import { Employer } from '../Employer/Employer';
+import { EmployerIdVO } from '../Employer/ValueObjects/EmployerIdVO';
+import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 
 
 export class Meeting extends AggregateRoot{
-    private _candidate: Candidate;
-    private _employer: Employer;
+    private _candidateID: CandidateIdVo;
+    private _employerID: EmployerIdVO;
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
@@ -20,22 +20,19 @@ export class Meeting extends AggregateRoot{
     private _location: MeetingLocationVO;
 
     // revisar - convertir a VO
-    public employer: Employer;
-    public candidate: Candidate;
+    public employerID: EmployerIdVO;
+    public candidateID: CandidateIdVo;
     
-    constructor(id: MeetingIDVO , state: MeetingStateVO, description: MeetingDescriptionVO, date: Date, location: MeetingLocationVO,
-         /*employer: Employer, candidate: Candidate*/) {
+    constructor(id: MeetingIDVO , state: MeetingStateVO, description: MeetingDescriptionVO, date: MeetingDateVO, location: MeetingLocationVO,
+         employerID: EmployerIdVO, candidateID: CandidateIdVo) {
        super(); 
        this._id = id;
        this._state = state;
        this._description = description;
-       this._date = new MeetingDateVO(date);
-       //this._location = new MeetingLocationVO();
+       this._date = date;
        this._location = location;
-
-       // revisar
-       //this.employer = employer;
-       //this.candidate = candidate;
+       this._employerID = employerID;
+       this._candidateID = candidateID;
     }
 
     protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
