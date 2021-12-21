@@ -3,11 +3,15 @@ import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandle
 import { AggregateRoot } from '../AggregateRoot';
 import { MeetingIDVO } from './ValueObjects/MeetingIDVO';
 import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
-import { MeetingStateVO } from './ValueObjects/MeetingStateVO';
+import { MeetingStates, MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
 import { EmployerIdVO } from '../Employer/ValueObjects/EmployerIdVO';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
+import { MeetingCanceled } from 'src/Dominio/DomainEvents/MeetingCanceled/MeetingCanceled';
+import { MeetingCanceledHandler } from 'src/Dominio/DomainEvents/MeetingCanceled/MeetingCanceledHandler';
+import { MeetingScheduled } from 'src/Dominio/DomainEvents/MeetingScheduled/MeetingScheduled';
+import { MeetingScheduledHandler } from 'src/Dominio/DomainEvents/MeetingScheduled/MeetingScheduledHandler';
 
 
 export class Meeting extends AggregateRoot{
@@ -40,6 +44,17 @@ export class Meeting extends AggregateRoot{
         throw new Error("Method not implemented.");
     }
 
+    public Cancel(meetingId: MeetingIDVO, state: MeetingStateVO){
+        console.log('Meeting canceled');
+        this.Apply(new MeetingCanceled(meetingId, state),new MeetingCanceledHandler())
+    }
+
+    public Schedule(meetingId: MeetingIDVO, date: Date){
+        console.log('Scheduled Meeting');
+        this.Apply(new MeetingScheduled(meetingId, new MeetingDateVO(date)), new MeetingScheduledHandler())
+    }
+
+    // getters y setters
     get id(): MeetingIDVO{
         return this._id
     }
@@ -61,11 +76,11 @@ export class Meeting extends AggregateRoot{
     }
 
     get candidate(): CandidateIdVo{
-        return this.candidate;
+        return this._candidate;
     }
 
     get employer(): EmployerIdVO{
-        return this.employer;
+        return this._employer;
     }
 
     set state(state: MeetingStateVO){
@@ -81,10 +96,10 @@ export class Meeting extends AggregateRoot{
     }
 
     set candidate(candidate: CandidateIdVo){
-        this.candidate = candidate;
+        this._candidate = candidate;
     }
 
     set employer(employer: EmployerIdVO){
-        this.employer = employer;
+        this._employer = employer;
     }
 }
