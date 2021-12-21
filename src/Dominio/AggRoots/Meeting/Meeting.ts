@@ -1,5 +1,3 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { MeetingIDVO } from './ValueObjects/MeetingIDVO';
 import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
@@ -38,8 +36,8 @@ export class Meeting extends AggregateRoot{
        this.candidate = candidate;
     }
 
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+    protected When(event: any): void {
+        //handler.handle(event, this);
     }
 
     protected EnsureValidState(): void {

@@ -1,8 +1,6 @@
 import { CvRejectedDomainEvent } from "../../DomainEvents/CvEvents/cvRejected.event";
 import { CvApprovedDomainEvent } from "../../DomainEvents/CvEvents/cvApproved.event";
 import { CvSubmittedDomainEvent } from "../../DomainEvents/CvEvents/cvSubmitted.event";
-import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
-import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
 import { AggregateRoot } from "../AggregateRoot";
 import { InvalidCVStudiesError } from "./Errors/invalidCvStudies.error";
 import { InvalidCvWorkExperienceError } from "./Errors/invalidCvWorkExperience.error";
@@ -27,8 +25,8 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
         this._state = value;
     }
 
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler?.handle(event, this)
+    protected When(event: any): void {
+        //handler?.handle(event, this)
     }
 
     protected EnsureValidState(): void {
@@ -72,8 +70,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
                 photo,
                 candidate,
                 description
-            ),
-            undefined
+            )
         )
         return cv
     }
@@ -91,7 +88,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
     approve(this: Cv<CvState.Submitted>) {
         let event = new CvApprovedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Approved, this.id)
-        this.Apply(event, undefined)
+        this.Apply(event)
         approvedCv.changes.push(...this.changes)
 
         return approvedCv
@@ -111,7 +108,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
     reject(this: Cv<CvState.Submitted>) {
         let event = new CvRejectedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Denied, this.id)
-        this.Apply(event, undefined)
+        this.Apply(event)
         approvedCv.changes.push(...this.changes)
 
         return approvedCv

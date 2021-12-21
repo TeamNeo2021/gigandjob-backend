@@ -1,5 +1,3 @@
-
-import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
 import { CandidateBirthDateVo } from "./ValueObjects/CandidateBirthDateVo";
 import { CandidateFullNameVo } from "./ValueObjects/CandidateFullNameVo";
 import { CandidateIdVo } from "./ValueObjects/CandidateIdVo";
@@ -7,11 +5,9 @@ import { CandidateLocationVo } from "./ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "./ValueObjects/CandidatePhoneVo";
 import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import {AggregateRoot} from '../AggregateRoot'
-import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
-import { CandidateRegisteredHandler } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegisteredHandler";
 import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 
 
@@ -115,8 +111,8 @@ export class Candidate extends AggregateRoot {
 
     }
    
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler?.handle(event,this)
+    protected When(event: any): void {
+        //handler?.handle(event,this)
     }
 
 
@@ -124,7 +120,7 @@ export class Candidate extends AggregateRoot {
         
     ){
         console.log('Registering Candidate #: ', this._id,'\nName: ', this._name.fullName);
-        this.Apply(new CandidateRegisteredDomainEvent(this), new CandidateRegisteredHandler() );
+        this.Apply(new CandidateRegisteredDomainEvent(this));
         return this;
     }
     

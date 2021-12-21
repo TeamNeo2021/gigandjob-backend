@@ -1,5 +1,3 @@
-import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from '../../DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
@@ -7,13 +5,11 @@ import { BudgetVO } from './ValueObjects/OfferBudgetVO';
 import { DirectionVO } from './ValueObjects/OfferDirectionVO';
 import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
-import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
-import { OfferModifiedHandler } from '../../DomainEvents/OfferModified/OfferModifiedHadler';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { threadId } from 'worker_threads';
 
@@ -54,8 +50,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.application = [];
 
     }
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+    protected When(event: any): void {
+        //handler.handle(event, this);
     }
 
     protected EnsureValidState(): void {
@@ -146,8 +142,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             sector,
             budget,
             description,            
-          ),
-          new OfferModifiedHandler(),
+          )
         );
       }
 
@@ -182,8 +177,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
-          ),
-          new OfferCreatedHandler(),
+          )
         );
       }
   

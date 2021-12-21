@@ -36,8 +36,8 @@ export class Application extends Entity<ApplicationId>{
         this.time = time;
     }
 
-     protected when(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+     protected when(event: IDomainEvent): void {
+        //handler.handle(event);
      }
      protected EnsureValidState(): void {
         let valid =

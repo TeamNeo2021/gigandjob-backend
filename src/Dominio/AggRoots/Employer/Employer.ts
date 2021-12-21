@@ -1,8 +1,5 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
-import { EmployerRegisteredHandler } from '../../DomainEvents/EmployerRegistered/EmployerRegisteredHandler';
 import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered/EmployerRegistered';
 import { EmployerNameVO } from './ValueObjects/EmployerNameVO';
 import { EmployerStateVO } from './ValueObjects/EmployerStateVO';
@@ -11,12 +8,10 @@ import { EmployerPhoneVO } from './ValueObjects/EmployerPhoneVO';
 import { EmployerMailVO } from './ValueObjects/EmployerMailVO';
 import { EmployerComercialDesignationVO } from './ValueObjects/EmployerComercialDesignationVO';
 import { EmployerModified } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModified';
-import { EmployerModifiedHandler } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModifiedHandler';
 import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
 import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
 import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
-import { EmployerEliminated } from 'src/Dominio/DomainEvents/EmployerEliminated/EmployerEliminated';
-import { ApplicationId } from '../Offer/Application/Value Objects/ApplicationId';
+
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _employerId: EmployerIdVO;
@@ -51,9 +46,9 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     this._mail = mail;
     this._comDesignation = comDesignation;    
   }
-  protected When(event:any, handler: IDomainEventHandler): void {
+  protected When(event:any): void {
     
-    handler.handle(event, this)
+    //handler.handle(event, this)
 
   }
   protected EnsureValidState(): void {
@@ -94,8 +89,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
         Phone,
         Mail,
         ComDesignation,
-      ),
-      new EmployerRegisteredHandler(),
+      )
     );
   }
   
@@ -120,8 +114,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
         phone,
         mail,
         comDesignation,
-      ),
-      new EmployerModifiedHandler(),
+      )
     );
   }
 
