@@ -1,6 +1,4 @@
 import { IInternalEventHandler } from "../AggRoots/IInternalEventHandler";
-import { IDomainEvent } from "../DomainEvents/IDomainEvent";
-import { IDomainEventHandler } from "../DomainEvents/IDomainEventHandler";
 
 export abstract class Entity<TId> implements IInternalEventHandler{
 

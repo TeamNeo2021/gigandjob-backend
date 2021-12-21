@@ -2,7 +2,6 @@ import { Candidate } from "../AggRoots/Candidate/Candidate";
 import { IObserver } from "../Core/IObserver";
 import { CandidateStateModified } from "../DomainEvents/Candidate/CandidateStateModified";
 
-import { CandidateStateModifiedHandler } from "../DomainEvents/Candidate/CandidateStateModifiedHandler";
 
 
 export class EliminateCandidateBeforeSuspentions implements IObserver{
@@ -49,13 +48,7 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
         //CandidateEliminated event 
         if (suspentions.length >= this.suspentionTolerance){
             
-            this.candidate.Apply(
-            new CandidateStateModified(
-                        'Eliminated'), 
-            new CandidateStateModifiedHandler())
-            console.log('candidate ' + 
-                         this.candidate.Id.value 
-                         + ' eliminated')
+            this.candidate.eliminateThisCandidate();
         }
     }
 }
