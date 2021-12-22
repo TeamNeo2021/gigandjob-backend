@@ -113,4 +113,38 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
 
         return approvedCv
     }
+
+    /**
+     * Type guard to assert when a Cv with unknown status (Cv<CvState> or Cv) is Submitted
+     * */
+    isSubmitted(this: Cv): this is Cv<CvState.Submitted> {
+        if (this.state == CvState.Submitted) {
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Type guard to assert when a Cv with unknown status (Cv<CvState> or Cv) is Approved
+     * */
+    isApproved(this: Cv): this is Cv<CvState.Approved> {
+        if (this.state == CvState.Approved) {
+            return true
+        }
+
+        return false
+    }
+
+
+    /**
+     * Type guard to assert when a Cv with unknown status (Cv<CvState> or Cv) is Denied
+     * */
+    isDenied(this: Cv): this is Cv<CvState.Denied> {
+        if (this.state == CvState.Denied) {
+            return true
+        }
+
+        return false
+    }
 }
