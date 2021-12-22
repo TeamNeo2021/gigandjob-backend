@@ -12,9 +12,9 @@ export class OfferIdVO {
 
     constructor(_value: string = randomUUID()) {
       if (!_value || _value.trim() == "") 
-      throw new Error(`ERROR: La dirección está vacía  (id: ${_value})`); 
+      throw new Error(`ERROR: El valor del id es invalido  (id: ${_value})`); 
       if (!_value.match(UUID_FORMAT) || _value.match(UUID_FORMAT).length == 0) 
-      throw new Error(`ERROR: La dirección está vacía  (id: ${_value})`);  
+      throw new Error(`ERROR: El valor del id es invalido  (id: ${_value})`);  
       this.value = _value
 
     }
