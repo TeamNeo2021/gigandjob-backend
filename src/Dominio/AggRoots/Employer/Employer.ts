@@ -100,8 +100,9 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
          
     const changes = this.GetChanges();
     const last_change = changes[changes.length-1]      
-    //Modify Employer
+
     switch(last_change.constructor){           
+      //Modify Employer
       case EmployerModified:
         const eventEmployerModified: EmployerModified = last_change as EmployerModified
         //se verefica el estado del ultimo evento si este fue un empleador modificado
@@ -115,30 +116,13 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
           default:
             break;
         }
-        case EmployerModified:
-        const eventEmployerEliminated: EmployerEliminated = last_change as EmployerEliminated
-        //se verefica el estado del ultimo evento si este fue un empleador modificado
-        switch (eventEmployerEliminated.state.value_state) {
-          case EmployerStates.Eliminated:
-            //si el estado anterior es eliminado y el nuevo es activo o suspendido
-            if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
-              throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
-            }
-            break;
-          default:
-            break;
-        }
+        //Eliminate Employer
+        case EmployerEliminated:              
+          throw new Error("No se puede cambiar el estado de un Empleador Eliminado");           
         default:
           break;
     }
-    //Eliminate Employer
-    if (last_change instanceof EmployerEliminated){           
-      //si el estado anterior es eliminado y el nuevo es activo o suspendido
-      if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
-            throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
-      }
-          
-    }
+
     //algunos de los VO es nulo
     if (!valid) {
       throw new Error('Verificacion de estado fallido');
