@@ -39,10 +39,48 @@ export class Meeting extends AggregateRoot{
         handler.handle(event, this);
     }
 
-    protected EnsureValidState(): void {
+    /*protected EnsureValidState(): void {
         console.log("protected")
         throw new Error("Method not implemented.");
     }
+    */
+
+    protected EnsureValidState(): void {
+        const valid = this._id != null        
+        this._date != null &&
+        this._location != null &&
+        this._description != null &&
+        this.candidate != null &&
+        this.employer != null;
+        switch (this.state.current) {
+          case MeetingStates.Active:
+              if (this._id == null ||        
+                this._date == null ||
+                this.date.value < new Date(Date.now()) ||
+                this._location == null ||
+                this._description == null ||
+                this.candidate == null ||
+                this.employer == null){
+                  throw new Error("Invalid Active State");
+              }
+              break;
+          case MeetingStates.Suspended:
+            if (this._id == null ||        
+                this._date == null ||
+                this._location == null ||
+                this._description == null ||
+                this.candidate == null ||
+                this.employer == null){
+                  throw new Error("Invalid Suspended State");
+              }     
+          default:
+              break;
+      }
+
+        if (!valid) {
+          throw new Error('Verificacion de estado fallido');
+        }
+      }
 
     public Cancel(meetingId: MeetingIDVO, state: MeetingStateVO){
         console.log('Meeting canceled');
