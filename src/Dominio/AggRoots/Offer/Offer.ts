@@ -37,8 +37,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       description: DescriptionVO,
     ) {
       super();
-      //this.OfferId = offerId();
-      this.OfferId = new OfferIdVO(Date().toString());
+      this.OfferId = offerId;      
       this.State = state;
       this.PublicationDate =publicationDate;
       this.Rating = rating;
