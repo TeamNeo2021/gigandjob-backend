@@ -170,16 +170,15 @@ export class Offer extends AggregateRoot{
       }
 
       //Implementacion de crearOferta con domain event
-      static CreateOffer(
-          id: OfferIdVO = new OfferIdVO(),
+      static CreateOffer(          
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
           Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO
-
+          Description: DescriptionVO,
+          id: OfferIdVO = new OfferIdVO(),
       ) {
         console.log('Crear Oferta');
         let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
