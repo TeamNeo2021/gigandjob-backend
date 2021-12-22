@@ -12,6 +12,13 @@ import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { threadId } from 'worker_threads';
+import { CandidateApplied } from 'src/Dominio/DomainEvents/Candidate/CandidateApplied';
+import { ApplicationId } from './Application/Value Objects/ApplicationId';
+import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
+import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
+import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
+import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
+import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -25,6 +32,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     private Budget: BudgetVO;
     private Description: DescriptionVO;
     private application: Application[];
+
+    
 
     constructor(
       offerId: OfferIdVO,
@@ -51,7 +60,24 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
     }
     protected When(event: any): void {
-        //handler.handle(event, this);
+        switch (event.constructor) {
+          case CandidateApplied:
+            var _application = new Application(
+              this.Apply,
+              new ApplicationId(event.candidateId), 
+              new CandidateIdVo(),//Aggregate trespassing
+              new ApplicationState(),
+              new ApplicationBudget(event.budget),
+              new ApplicationDescription(event.description),
+              new ApplicationTime(event.time)
+            )
+            this.ApplyToEntity(_application, event);
+            this.application.push(_application)
+            break;
+        
+          default:
+            break;
+        }
     }
 
     protected EnsureValidState(): void {
@@ -244,5 +270,19 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     public set _application(value: Application[]) {
       this.application = value;
+    }
+
+    public createApplication(
+      candidateId: string,
+      budget: number,
+      description: string,
+      time: number): void {
+
+        this.Apply(new CandidateApplied(
+          candidateId,
+          this.OfferId._value,
+          budget,
+          description,
+          time));
     }
   }
