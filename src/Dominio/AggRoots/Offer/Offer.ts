@@ -1,5 +1,3 @@
-import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from '../../DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
@@ -7,13 +5,11 @@ import { BudgetVO } from './ValueObjects/OfferBudgetVO';
 import { DirectionVO } from './ValueObjects/OfferDirectionVO';
 import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
-import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
-import { OfferModifiedHandler } from '../../DomainEvents/OfferModified/OfferModifiedHadler';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { threadId } from 'worker_threads';
 
@@ -41,13 +37,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       description: DescriptionVO,
     ) {
       super();
-<<<<<<< Updated upstream
-      //Por ahora ya que el id no lo he podido resolver
-      //this.OfferId = offerId();
-      this.OfferId = new OfferIdVO(Date().toString());
-=======
       this.OfferId = offerId;      
->>>>>>> Stashed changes
       this.State = state;
       this.PublicationDate =publicationDate;
       this.Rating = rating;
@@ -58,8 +48,31 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.application = [];
 
     }
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+    protected When(event: any): void {
+        //handler.handle(event, this);
+
+        switch(event.constructor){
+          case OfferCreated:
+            this._State = (event.State);
+            this._PublicationDate = (event.PublicationDate);
+            this._Rating = (event.Rating);
+            this._Direction = (event.Direction);
+            this._Sector = (event.Sector);
+            this._Budget = (event.Budget);
+            this._Description = (event.Description);
+            break;
+          case OfferModified:
+            this._State = (event.State);
+            this._PublicationDate = (event.PublicationDate);
+            this._Rating = (event.Rating);
+            this._Direction = (event.Direction);
+            this._Sector = (event.Sector);
+            this._Budget = (event.Budget);
+            this._Description = (event.Description);
+            break;
+          default:
+            break;
+        }
     }
 
     protected EnsureValidState(): void {
@@ -150,8 +163,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             sector,
             budget,
             description,            
-          ),
-          new OfferModifiedHandler(),
+          )
         );
       }
 
@@ -186,8 +198,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
-          ),
-          new OfferCreatedHandler(),
+          )
         );
       }
   
