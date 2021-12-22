@@ -41,9 +41,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       description: DescriptionVO,
     ) {
       super();
+<<<<<<< Updated upstream
       //Por ahora ya que el id no lo he podido resolver
       //this.OfferId = offerId();
       this.OfferId = new OfferIdVO(Date().toString());
+=======
+      this.OfferId = offerId;      
+>>>>>>> Stashed changes
       this.State = state;
       this.PublicationDate =publicationDate;
       this.Rating = rating;

@@ -9,9 +9,10 @@ import { Sectors, SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSector
 import { OfferStatesEnum, OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
 import { OfferModified } from "../../DomainEvents/OfferModified/OfferModified";
 import { OfferCreated } from "../../DomainEvents/OfferCreated/OfferCreated";
+import { randomUUID } from "crypto";
 
     const exampleOffer = new Offer(
-        new OfferIdVO(Date().toString()),
+        new OfferIdVO(randomUUID()),
         new OfferStateVO(OfferStatesEnum.Active),
         new PublicationDateVO(new Date('1999-05-13')),
         new RatingVO(5),
