@@ -9,7 +9,9 @@ import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
-import { CandidateStateModified } from "src/Dominio/DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
+import { CvAspirantApproved } from "../../DomainEvents/Candidate/CvAspirantApproved";
+import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
 
 
 
@@ -32,7 +34,7 @@ export class Candidate extends AggregateRoot {
         phone: CandidatePhoneVo,
         email: CandidateEmailVo,
         birthDate: CandidateBirthDateVo,
-        location: CandidateLocationVo
+        location: CandidateLocationVo,
     ){ 
         super();
         this._id = id;
@@ -42,8 +44,6 @@ export class Candidate extends AggregateRoot {
         this._birthDate = birthDate;
         this._email = email;
         this._location = location;
-
-
     }
 
     
@@ -112,16 +112,26 @@ export class Candidate extends AggregateRoot {
 
     }
    
-    protected When(event: any): void {
+    protected When(event: IDomainEvent): void {
         switch (event.constructor) {
             case CandidateStateModified:
-                this._state = CandidateStateVo.fromString(event.new_current)
+                const eventCandidateStateModified:CandidateStateModified=event as CandidateStateModified;
+                this._state = CandidateStateVo.fromString(eventCandidateStateModified.new_current)
                 console.log('new state '
-                            +event.new_current 
+                            +eventCandidateStateModified.new_current 
                             +' applied to candidate '
                             +this._id)
                 break;
-            
+            case CvAspirantApproved:
+                const eventCvApproved:CvAspirantApproved=event as CvAspirantApproved;
+                const sumb3=Cv.submitCv(eventCvApproved.Candidate._Cv.description,
+                    eventCvApproved.Candidate._Cv.workExperiences,
+                    eventCvApproved.Candidate._Cv.studies,
+                    eventCvApproved.Candidate._Cv.photo,
+                    eventCvApproved.Candidate._Cv.candidate,
+                    eventCvApproved.Candidate._Cv.id);
+                    this._Cv=sumb3.approve();
+                    console.log('new state Cv '+this._Cv.state.toString()+' applied to candidate '+this._id.value)
             default:
                 break;
         }
@@ -138,7 +148,13 @@ export class Candidate extends AggregateRoot {
         console.log('Eliminating Candidate #: ', this._id,'\nName: ', this._name.fullName);
         this.Apply(new CandidateStateModified('Eliminate'))
     }
-    
+
+    public ApprovedCvCandidate(){
+        console.log('The candidate"s CV: ', this._id,'\nName: ', this._name.fullName);
+        this.Apply(new CvAspirantApproved(this));
+        return this;
+    }
+
 }
 
 
