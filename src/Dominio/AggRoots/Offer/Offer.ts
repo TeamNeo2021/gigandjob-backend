@@ -37,7 +37,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       description: DescriptionVO,
     ) {
       super();
-      //Por ahora ya que el id no lo he podido resolver
       //this.OfferId = offerId();
       this.OfferId = new OfferIdVO(Date().toString());
       this.State = state;
@@ -52,6 +51,29 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     protected When(event: any): void {
         //handler.handle(event, this);
+
+        switch(event.constructor){
+          case OfferCreated:
+            this._State = (event.State);
+            this._PublicationDate = (event.PublicationDate);
+            this._Rating = (event.Rating);
+            this._Direction = (event.Direction);
+            this._Sector = (event.Sector);
+            this._Budget = (event.Budget);
+            this._Description = (event.Description);
+            break;
+          case OfferModified:
+            this._State = (event.State);
+            this._PublicationDate = (event.PublicationDate);
+            this._Rating = (event.Rating);
+            this._Direction = (event.Direction);
+            this._Sector = (event.Sector);
+            this._Budget = (event.Budget);
+            this._Description = (event.Description);
+            break;
+          default:
+            break;
+        }
     }
 
     protected EnsureValidState(): void {
