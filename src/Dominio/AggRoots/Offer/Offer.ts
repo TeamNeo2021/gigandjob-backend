@@ -1,4 +1,3 @@
-import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
 import { BudgetVO } from './ValueObjects/OfferBudgetVO';
@@ -19,8 +18,10 @@ import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget
 import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
 import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 
-export class Offer extends AggregateRoot implements IInternalEventHandler {
+
+export class Offer extends AggregateRoot{
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
@@ -46,9 +47,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       description: DescriptionVO,
     ) {
       super();
-      //Por ahora ya que el id no lo he podido resolver
-      //this.OfferId = offerId();
-      this.OfferId = new OfferIdVO(Date().toString());
+      this.OfferId = offerId;      
       this.State = state;
       this.PublicationDate =publicationDate;
       this.Rating = rating;
@@ -59,9 +58,32 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.application = [];
 
     }
-    protected When(event: any): void {
-        switch (event.constructor) {
-          case CandidateApplied:
+
+    protected When(event: IDomainEvent): void {     
+
+      switch(event.constructor){
+        case OfferCreated:
+          const eventOfferCreated:OfferCreated=event as OfferCreated;
+          this._State = (eventOfferCreated.State);
+          this._PublicationDate = (eventOfferCreated.PublicationDate);
+          this._Rating = (eventOfferCreated.Rating);
+          this._Direction = (eventOfferCreated.Direction);
+          this._Sector = (eventOfferCreated.Sector);
+          this._Budget = (eventOfferCreated.Budget);
+          this._Description = (eventOfferCreated.Description);
+          break;
+        case OfferModified:
+          const eventOfferModified:OfferModified=event as OfferModified;
+          this._State = (eventOfferModified.state);
+          this._PublicationDate = (eventOfferModified.publicationDate);
+          this._Rating = (eventOfferModified.rating);
+          this._Direction = (eventOfferModified.direction);
+          this._Sector = (eventOfferModified.sector);
+          this._Budget = (eventOfferModified.budget);
+          this._Description = (eventOfferModified.description);
+          break;
+        case CandidateApplied:
+            const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
             var _application = new Application(
               this.Apply,
               new ApplicationId(event.candidateId), 
@@ -74,10 +96,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             this.ApplyToEntity(_application, event);
             this.application.push(_application)
             break;
-        
-          default:
-            break;
-        }
+        default:
+          break;
+      }
+
     }
 
     protected EnsureValidState(): void {
@@ -103,7 +125,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       else{
         const last_change = changes[changes.length-1]      
         if (last_change instanceof OfferModified){           
-          //se verifira el estado del ultimo evento si este fue una oferta modificada
+          //se verifica el estado del ultimo evento si este fue una oferta modificada
           switch (last_change.state.state) {
             case OfferStatesEnum.Active:
               //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
@@ -170,31 +192,24 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             description,            
           )
         );
+        return this;
       }
 
       //Implementacion de crearOferta con domain event
-      public CreateOffer(
-
+      static CreateOffer(          
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
           Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO
-
-         /* State: number,
-          PublicationDate: Date,
-          Rating: number,
-          Direction: string,
-          Sector: number,
-          Budget: number,
-          Description: string,*/
-
-
+          Description: DescriptionVO,
+          id: OfferIdVO = new OfferIdVO(),
       ) {
         console.log('Crear Oferta');
-        this.Apply(
+        let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
+        offer.Apply(
+        //this.Apply(
           new OfferCreated(
             State,
             PublicationDate,
@@ -205,6 +220,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Description,
           )
         );
+        return offer;
       }
   
     //Getters y setters

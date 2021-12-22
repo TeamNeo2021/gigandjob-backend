@@ -8,7 +8,7 @@ export class ValidateCandidateApplicationBlocked{
     validate(candidate: Candidate, apply: Application[]){
         for (let applys of apply){
             if (applys.getCandidateId() === candidate.Id && candidate.state.state === CandidateStatesEnum.Suspended){
-                applys.setState = ApplicationStates.Inactive;
+                applys.setState(ApplicationStates.Inactive);
             }
         }        
     }    

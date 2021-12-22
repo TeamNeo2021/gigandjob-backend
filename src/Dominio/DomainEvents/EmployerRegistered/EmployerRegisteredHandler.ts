@@ -12,9 +12,9 @@ import {
 
 export class EmployerRegisteredHandler implements IDomainEventHandler {
   handle(event: EmployerRegistered, entity: Employer): void {
-    entity.name = new EmployerNameVO(event.Name);
-    entity.description = event.Description;
-    entity.state = new EmployerStateVO(event.State);
+    entity.name = event.name;
+    entity.description = event.description;
+    entity.state = event.state;
   }
 }
 

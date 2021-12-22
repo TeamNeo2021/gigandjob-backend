@@ -79,6 +79,9 @@ export class Application extends Entity<ApplicationId>{
     public getState():ApplicationStates{
         return this.state.current;
     }
+    public setState(state: ApplicationStates){
+         this.state.current = state;
+    }
 
 
     public getPreviousState():ApplicationStates{
