@@ -28,7 +28,7 @@ const exampleOffer = Offer.CreateOffer(
     
     describe("modificar una oferta", ()=>{
     
-        it("no debe modificar la oferta cuando se modifica el estado de activo a cerrada sin aplicaciones",()=>{        
+        it("no debe modificar la oferta cuando se cambia el estado de activo a cerrada sin aplicaciones",()=>{        
             expect(()=> exampleOffer.ModifyOffer(
                     new OfferStateVO(OfferStatesEnum.Closed),
                     new PublicationDateVO(new Date('2000-01-31')),
@@ -39,7 +39,7 @@ const exampleOffer = Offer.CreateOffer(
                     new DescriptionVO("descripcion de prueba"),)
             ).toThrowError(Error);            
         }),
-        it("debe modificar la oferta cuando se modifica el estado de activa a suspendida",()=>{        
+        it("debe modificar la oferta cuando se cambia el estado de activa a suspendida",()=>{        
             exampleOffer.ModifyOffer(
                 new OfferStateVO(OfferStatesEnum.Suspended),
                 new PublicationDateVO(new Date('2000-01-31')),
@@ -51,7 +51,7 @@ const exampleOffer = Offer.CreateOffer(
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
             expect(exampleOffer.GetChanges()[1]).toBeInstanceOf(OfferModified);
         }),
-        it("no debe modificar la oferta cuando se modifica el estado de suspendida a cerrada",()=>{        
+        it("no debe modificar la oferta cuando se cambia el estado de suspendida a cerrada",()=>{        
             expect(()=> exampleOffer.ModifyOffer(
                     new OfferStateVO(OfferStatesEnum.Closed),
                     new PublicationDateVO(new Date('2000-01-31')),
@@ -62,7 +62,7 @@ const exampleOffer = Offer.CreateOffer(
                     new DescriptionVO("descripcion de prueba"),)
             ).toThrowError(Error);
         }),
-        it("debe modificar la oferta cuando se modifica el estado de suspendida a activa",()=>{        
+        it("debe modificar la oferta cuando se cambia el estado de suspendida a activa",()=>{        
             exampleOffer.ModifyOffer(
                 new OfferStateVO(OfferStatesEnum.Active),
                 new PublicationDateVO(new Date('2000-01-31')),
