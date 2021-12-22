@@ -254,11 +254,7 @@ export class Candidate extends AggregateRoot {
 
     public approveCVAspirant(){
         console.log(' Cv approved Candidate id#: ', this._id, '\nName: ', this._name.fullName);
-        //let event = this.Cv.approve(); //Esto esta dando error por un tema del CV y el tipo parametrizado
-        this.Apply(
-           event
-        );
-        return event;
+    
     }
 
 
@@ -273,8 +269,7 @@ export class Candidate extends AggregateRoot {
       ){
         console.log('User finished and uploaded cv: CandidateCvSubmittedDomainService');
           console.log('CV: ', candidate_cv);
-          //let event= this._Cv.submitCV();  El metodo submitCv de CV es static se debe arreglar
-          //return event;
+        
        }
 
         /**
