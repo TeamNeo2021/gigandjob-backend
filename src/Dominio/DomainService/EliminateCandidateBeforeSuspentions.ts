@@ -51,8 +51,7 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
             
             this.candidate.Apply(
             new CandidateStateModified(
-                        'Eliminated'), 
-            new CandidateStateModifiedHandler())
+                        'Eliminated'))
             console.log('candidate ' + 
                          this.candidate.Id.value 
                          + ' eliminated')

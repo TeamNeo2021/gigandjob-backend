@@ -8,7 +8,8 @@ import {AggregateRoot} from '../AggregateRoot'
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
 import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
-import { CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
+import { InvalidCandidateAction } from "./ValueObjects/Errors/invalidCandidateAction.error";
 
 
 
@@ -94,10 +95,13 @@ export class Candidate extends AggregateRoot {
         this._Cv = Cv;
     }
 
-
+ /**
+     * Checks if the Candidate state is valid and throws error when not
+     * @returns Void or InvalidCandidateState
+     */
     protected EnsureValidState(): void {
     
-        const valid =   (
+        const notEmptyValues =   (
         this._id != undefined 
         && this._state != undefined 
         && this._name != undefined
@@ -105,17 +109,83 @@ export class Candidate extends AggregateRoot {
         && this._email != undefined
         && this._birthDate != undefined);
 
+        const valid = notEmptyValues //&& anotherValidation && etc
+
         if(!valid){
             throw InvalidCandidateState.invalidCandidate;
         }
 
     }
-   
+
+    /**
+     * -Candidate cannot be created with a Suspended value.
+     * Validates the state given in the constructor is valid when is being registered
+     * it will return true only when the candidate is being instantiated with an Active State
+     * @returns Boolean
+     */
+    isStateValidOnRegister(){
+       
+         if( this._state.state != CandidateStatesEnum.Active){
+           
+            return false;
+         }else{
+            
+             return true;
+         }
+
+    }
+
+    /**
+     * Candidate cannot be created twice.
+     * Checks if CandidateRegister Domain Event is more thn once on the event list
+     * @returns Boolean
+     */
+    isCandidateAlreadyRegistered(){
+        console.log('# EVENTOS: ',this.GetChanges().length, 'lISTA: ', this.GetChanges())
+        let counter = 0;
+        this.GetChanges().forEach(event => {
+           if(  event instanceof CandidateRegisteredDomainEvent){
+               counter++;
+           }
+        });
+        if(counter >= 1){
+           
+            return true;
+        }else{
+         
+            return false;
+        }
+    }
+
+    
+      /**
+    * @extends AggregateRoot.When
+     * Checks the type of the Domain Event to proceed 
+     * @returns Void
+     */
     protected When(event: any): void {
-        //handler?.handle(event,this)
+        switch(event){
+            case event as CandidateRegisteredDomainEvent:
+                if(!this.isStateValidOnRegister()){
+                    console.log('register with state not active: name: ', this._name.fullName);
+                    throw InvalidCandidateState.candidateStateWhenRegistering()
+                }
+                if(this.isCandidateAlreadyRegistered()){
+                    console.log('already registered ', this._name.fullName)
+                    throw InvalidCandidateAction.alreadyRegistered()
+                }
+                break;
+                default:
+                    console.log('The event was not identified by Candidate')
+                break;
+        }
     }
 
 
+       /**
+     * Register a new Candidate 
+     * @returns Candidate
+     */
     public registerCandidate(
         
     ){

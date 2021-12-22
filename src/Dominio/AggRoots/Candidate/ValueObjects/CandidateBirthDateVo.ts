@@ -1,3 +1,4 @@
+import { constants } from "../../../Core/Constants";
 import { InvalidCandidateBirthDate } from "./Errors/invalidCandidateBirthDate.error";
 
 export class CandidateBirthDateVo{
@@ -19,8 +20,21 @@ export class CandidateBirthDateVo{
             throw  InvalidCandidateBirthDate.emptyBirthDate();
         }else if (birthDate > today){
             throw  InvalidCandidateBirthDate.birthDateAfterToday();
-        }else{
+        }else if(!this.isOlderThan(constants.MIN_AGE, birthDate)){
+            throw  InvalidCandidateBirthDate.candidateUnderAge(constants.MIN_AGE);
+        }
+        else{
             return true;
+        }
+    }
+
+    isOlderThan(ageLimit: Number, birthDate: Date):boolean{
+        const today = new Date();
+        const userAge = today.getFullYear() - birthDate.getFullYear();
+        if(userAge > ageLimit){
+            return true;
+        }else{
+            return false;
         }
     }
 }
