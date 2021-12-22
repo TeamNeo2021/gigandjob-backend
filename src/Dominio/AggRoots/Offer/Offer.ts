@@ -10,7 +10,16 @@ import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
+import { threadId } from 'worker_threads';
+import { CandidateApplied } from '../../DomainEvents/Candidate/CandidateApplied';
+import { ApplicationId } from './Application/Value Objects/ApplicationId';
+import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
+import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
+import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
+import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
+import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+
 
 export class Offer extends AggregateRoot{
 
@@ -24,6 +33,8 @@ export class Offer extends AggregateRoot{
     private Budget: BudgetVO;
     private Description: DescriptionVO;
     private application: Application[];
+
+    
 
     constructor(
       offerId: OfferIdVO,
@@ -47,6 +58,7 @@ export class Offer extends AggregateRoot{
       this.application = [];
 
     }
+
     protected When(event: IDomainEvent): void {     
 
       switch(event.constructor){
@@ -70,9 +82,24 @@ export class Offer extends AggregateRoot{
           this._Budget = (eventOfferModified.budget);
           this._Description = (eventOfferModified.description);
           break;
+        case CandidateApplied:
+            const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
+            var _application = new Application(
+              this.Apply,
+              new ApplicationId(eventCandidateApplied.candidateId), 
+              new CandidateIdVo(),//Aggregate trespassing
+              new ApplicationState(),
+              new ApplicationBudget(eventCandidateApplied.budget),
+              new ApplicationDescription(eventCandidateApplied.description),
+              new ApplicationTime(eventCandidateApplied.time)
+            )
+            this.ApplyToEntity(_application, event);
+            this.application.push(_application)
+            break;
         default:
           break;
       }
+
     }
 
     protected EnsureValidState(): void {
@@ -259,5 +286,19 @@ export class Offer extends AggregateRoot{
     }
     public set _application(value: Application[]) {
       this.application = value;
+    }
+
+    public createApplication(
+      candidateId: string,
+      budget: number,
+      description: string,
+      time: number): void {
+
+        this.Apply(new CandidateApplied(
+          candidateId,
+          this.OfferId._value,
+          budget,
+          description,
+          time));
     }
   }
