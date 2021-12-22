@@ -11,9 +11,8 @@ import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
-import { threadId } from 'worker_threads';
 
-export class Offer extends AggregateRoot implements IInternalEventHandler {
+export class Offer extends AggregateRoot{
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
@@ -165,6 +164,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             description,            
           )
         );
+        return this;
       }
 
       //Implementacion de crearOferta con domain event
@@ -200,6 +200,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Description,
           )
         );
+        return this;
       }
   
     //Getters y setters

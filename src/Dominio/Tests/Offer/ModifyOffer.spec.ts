@@ -49,15 +49,8 @@ const exampleOffer = new Offer(
     describe("crear una oferta", ()=>{
     
         it("debe crear la oferta cuando se crea con un estado activa",()=>{        
-            exampleOffer.CreateOffer(
-                new OfferStateVO(OfferStatesEnum.Active),
-                new PublicationDateVO(new Date('200-01-31')),
-                new RatingVO(7),
-                new DirectionVO("AV Romulo Gallegos"),
-                new SectorVO(Sectors.Technology),
-                new BudgetVO(1500),
-                new DescriptionVO("descripcion de prueba"),);
-            expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
+            const offer = registeringOfferEvent();
+            expect(offer .GetChanges()[0]).toBeInstanceOf(OfferCreated);
         })
     });
     
@@ -86,6 +79,7 @@ const exampleOffer = new Offer(
                 new DescriptionVO("descripcion de prueba"),);
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
             expect(exampleOffer.GetChanges()[1]).toBeInstanceOf(OfferModified);
+            console.log(exampleOffer._application.length);
         }),
         it("no debe modificar la oferta cuando se modifica el estado de suspendida a cerrada",()=>{        
             expect(()=> exampleOffer.ModifyOffer(
@@ -97,6 +91,7 @@ const exampleOffer = new Offer(
                     new BudgetVO(2000),
                     new DescriptionVO("descripcion de prueba"),)
             ).toThrowError(Error);
+            console.log(exampleOffer._application.length);
         }),
         it("debe modificar la oferta cuando se modifica el estado de suspendida a activa",()=>{        
             exampleOffer.ModifyOffer(
@@ -109,7 +104,8 @@ const exampleOffer = new Offer(
                 new DescriptionVO("descripcion de prueba"),);
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated)
             expect(exampleOffer.GetChanges()[1]).toBeInstanceOf(OfferModified)
-            expect(exampleOffer.GetChanges()[2]).toBeInstanceOf(OfferModified)       
+            expect(exampleOffer.GetChanges()[2]).toBeInstanceOf(OfferModified)
+            console.log(exampleOffer._application.length);       
         })
     })
     
