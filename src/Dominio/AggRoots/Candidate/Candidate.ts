@@ -11,6 +11,15 @@ import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/Can
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
 import { InvalidCandidateAction } from "./ValueObjects/Errors/invalidCandidateAction.error";
+import { SuspendedCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/SuspendedCandidate.event";
+import { ActivateCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/ActivateCandidate.event";
+import { CvAspirantApproved } from "src/Dominio/DomainEvents/CvAspirantApproved";
+import { CvSubmittedDomainEvent } from "src/Dominio/DomainEvents/CvEvents/cvSubmitted.event";
+import { CandidateModified } from "src/Dominio/DomainEvents/Candidate/CandidateModified";
+import { OfferIdVO } from "../Offer/ValueObjects/OfferIdVO";
+import { CandidateApplied } from "src/Dominio/DomainEvents/Candidate/CandidateApplied";
+import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
+import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
 
 
 
@@ -208,6 +217,145 @@ export class Candidate extends AggregateRoot {
     public eliminateThisCandidate() {
         console.log('Eliminating Candidate #: ', this._id, '\nName: ', this._name.fullName);
         this.Apply(new CandidateStateModified('Eliminate'))
+    }
+
+    
+    
+    /**
+     * Use it in case of violating terms & conditions
+     * Changes the state of an active Candidate to 'Suspended'
+     * */
+
+     public suspend(){ 
+        console.log(' Candidate suspended #: ', this._id, '\nName: ', this._name.fullName);
+        let event = new SuspendedCandidateDomainEvent(this._id)
+        this.Apply(event)
+        return event;
+    }
+
+    /**
+     * Use it to reactivate a suspended candidate
+     * Changes the state of an suspended Candidate to 'Active'
+     * */
+
+     public activate(){ 
+        console.log(' Candidate activated #: ', this._id, '\nName: ', this._name.fullName);
+        let event = new ActivateCandidateDomainEvent(this._id)
+          this.Apply(event)
+          return event;
+      
+      }
+
+
+      
+       /**
+     * Access point to approve a CV
+     * */
+
+    public approveCVAspirant(){
+        console.log(' Cv approved Candidate id#: ', this._id, '\nName: ', this._name.fullName);
+        //let event = this.Cv.approve(); //Esto esta dando error por un tema del CV y el tipo parametrizado
+        this.Apply(
+           event
+        );
+        return event;
+    }
+
+
+
+      /**
+     * CV Acess point
+     * Use it to submit the CV from a candidate to review it
+     *  @returns CandidateCvSubmittedDomainEvent
+     * */
+     private submitCv(
+          candidate_cv: Cv
+      ){
+        console.log('User finished and uploaded cv: CandidateCvSubmittedDomainService');
+          console.log('CV: ', candidate_cv);
+          //let event= this._Cv.submitCV();  El metodo submitCv de CV es static se debe arreglar
+          //return event;
+       }
+
+        /**
+     * Use it to change candidate's data
+     *   @returns CandidateProfileModifiedDomainEvent
+     * */
+       private  modifyProfile(
+        name: CandidateFullNameVo,
+        phone: CandidatePhoneVo,
+        email: CandidateEmailVo,
+        birthDate: CandidateBirthDateVo,
+        location: CandidateLocationVo
+      ){ 
+        console.log(' Candidate mofified #: ', this._id);
+        let event = new CandidateModified(
+            name, phone, email, birthDate, location
+        )
+        this.Apply(event)
+        return event;
+      }
+
+       /**
+     * takes the id from a given offer and creates a new Application for it
+     * @returns AppliedOfferDomainEvent
+     * */
+      private applyToOffer(
+          offer_id: OfferIdVO
+      ){
+            console.log('Candidate applies to an offer, offer ID: ', offer_id);
+            console.log(' Candidate id#: ', this._id, '\nName: ', this._name.fullName);
+            //Domain service CandidateAppliesOffer
+       }
+
+        /**
+     * removes the Application of candidate from a given offer
+     * @returns ApplicationRemovedDomainEvent
+     * */
+       private removeApplicationFromOffer(
+        offer_id: OfferIdVO,
+        application_id: ApplicationId
+      ){
+        console.log('User remove the application from an offer, offer ID: ', offer_id, 'application id:',application_id);
+        console.log('The application has been removed');
+        //Domain service RemoveApplicationFromOffer
+      }
+
+      /**
+       * Candidate accepts the interview, meeeting is confirmed and both Emplyer and Candidate are notified
+     * @returns MeeetingAcceptedDomainEvent
+     * */
+      private acceptInterview(
+          interview_id: MeetingIDVO
+      ){ 
+        console.log('Candidate id#',this._id,' accepts the interview, id interview ', interview_id);
+        console.log('The employer will be notified');
+        //Domain Service Accepts Interview
+      }
+
+      
+      /**
+       * Candidate reject the interview, meeeting is NOT confirmed and both Emplyer and Candidate are notified
+     * returns MeeetingRejectedDomainEvent
+     * */
+      private rejectInterview(
+          interview_id: MeetingIDVO
+      ){ 
+        console.log('Candidate id#',this._id,' rejects the interview, id interview ', interview_id);
+        console.log('The employer will be notified');
+        //Domain Service Rejects Interview
+      }
+
+      /**
+       * Candidate cancels the interview for a given reason, meeeting is canceled and both Emplyer and Candidate are notified
+     * returns MeeetingCanceledDomainEvent
+     * */
+      private  cancelInterview(
+        interview_id: MeetingIDVO
+    ){ 
+        console.log('Candidate id#',this._id,' cancels the interview, id interview ', interview_id);
+        console.log('The employer will be notified');
+        //Domain Service Cancels Interview
     }
 
 }
