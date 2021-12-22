@@ -43,14 +43,19 @@ const exampleEmployer = Employer.RegisterEmployer(
                 new EmployerComercialDesignationVO("Informatica24.c.a"),);
             expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
             expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
-        }),
-        it("debe modificar el empleador cuando se cambia el estado de activo a cerrado",()=>{        
+        })
+    })
+    describe("Eliminar un empleador", ()=>{    
+        it("debe eliminar el empleador independientemente del estado anterior",()=>{        
             exampleEmployer.EliminateEmployer(
                 new EmployerStateVO(EmployerStates.Eliminated),);
             expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
             expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
             expect(exampleEmployer.GetChanges()[2]).toBeInstanceOf(EmployerEliminated);
-        }),
+        })
+    })
+    
+    describe("modificar un empleador", ()=>{
         it("no debe modificar el empleador cuando se cambia el estado de eliminado a activo",()=>{        
             expect(()=> exampleEmployer.ModifyEmployer(
                 new EmployerNameVO("Soluciones de Prueba"),

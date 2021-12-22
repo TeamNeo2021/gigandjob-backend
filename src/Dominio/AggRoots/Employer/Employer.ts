@@ -7,13 +7,12 @@ import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
 import { EmployerPhoneVO } from './ValueObjects/EmployerPhoneVO';
 import { EmployerMailVO } from './ValueObjects/EmployerMailVO';
 import { EmployerComercialDesignationVO } from './ValueObjects/EmployerComercialDesignationVO';
-import { EmployerModified } from 'src/Dominio/DomainEvents/EmployerModified/EmployerModified';
+import { EmployerModified } from '../../DomainEvents/EmployerModified/EmployerModified';
 import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
 import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
 import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
-import { EmployerEliminated } from 'src/Dominio/DomainEvents/EmployerEliminated/EmployerEliminated';
+import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
+import { EmployerEliminated } from '../../DomainEvents/EmployerEliminated/EmployerEliminated';
 
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
@@ -100,27 +99,41 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
          
     const changes = this.GetChanges();
     const last_change = changes[changes.length-1]      
-
-    switch(last_change.constructor){           
-      //Modify Employer
-      case EmployerModified:
-        const eventEmployerModified: EmployerModified = last_change as EmployerModified
-        //se verefica el estado del ultimo evento si este fue un empleador modificado
-        switch (eventEmployerModified.state.value_state) {
-          case EmployerStates.Eliminated:
-            //si el estado anterior es eliminado y el nuevo es activo o suspendido
-            if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
-              throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
-            }
-            break;
-          default:
-            break;
-        }
+    if(last_change){      
+      switch(last_change.constructor){           
+        //Modify Employer
+        case EmployerModified:          
+          const eventEmployerModified: EmployerModified = last_change as EmployerModified
+          //se verefica el estado del ultimo evento si este fue un empleador modificado
+          switch (eventEmployerModified.state.value_state) {
+            case EmployerStates.Eliminated:
+              //si el estado anterior es eliminado y el nuevo es activo o suspendido
+              if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
+                throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
+              }
+              break;
+            default:
+              break;
+          }
         //Eliminate Employer
         case EmployerEliminated:              
-          throw new Error("No se puede cambiar el estado de un Empleador Eliminado");           
+          const eventEmployerEliminated: EmployerEliminated = last_change as EmployerEliminated
+          //se verefica el estado del ultimo evento si este fue un empleador eliminado
+          switch (eventEmployerEliminated.state.value_state) {
+            case EmployerStates.Eliminated:
+              //si el estado anterior es eliminado y el nuevo es activo o suspendido
+              if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
+                throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
+              }
+              break;
+            default:
+              break;
+          }
+          
+          break;           
         default:
           break;
+      }
     }
 
     //algunos de los VO es nulo
