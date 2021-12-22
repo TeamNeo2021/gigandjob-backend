@@ -1,8 +1,6 @@
 import { CvRejectedDomainEvent } from "../../DomainEvents/CvEvents/cvRejected.event";
 import { CvApprovedDomainEvent } from "../../DomainEvents/CvEvents/cvApproved.event";
 import { CvSubmittedDomainEvent } from "../../DomainEvents/CvEvents/cvSubmitted.event";
-import { IDomainEvent } from "../../DomainEvents/IDomainEvent";
-import { IDomainEventHandler } from "../../DomainEvents/IDomainEventHandler";
 import { AggregateRoot } from "../AggregateRoot";
 import { InvalidCVStudiesError } from "./Errors/invalidCvStudies.error";
 import { InvalidCvWorkExperienceError } from "./Errors/invalidCvWorkExperience.error";
@@ -13,16 +11,22 @@ import { CvPhoto } from "./ValueObjects/cvPhoto.object";
 import { CvStudies } from "./ValueObjects/cvStudies.object";
 import { CvWorkExperience } from "./ValueObjects/cvWorkExperience.object";
 
-enum CvState {
+export enum CvState {
     Approved = 0,
     Denied = 1,
     Submitted = 2
 }
 
 export class Cv<State extends CvState = CvState> extends AggregateRoot {
+    public get state(): State {
+        return this._state;
+    }
+    public set state(value: State) {
+        this._state = value;
+    }
 
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler?.handle(event, this)
+    protected When(event: any): void {
+        //handler?.handle(event, this)
     }
 
     protected EnsureValidState(): void {
@@ -45,7 +49,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
         public studies: CvStudies[],
         public photo: CvPhoto,
         public candidate: CvCandidate,
-        public state: State,
+        private _state: State,
         public id: CvId = new CvId(),
     ) { super() }
 
@@ -66,8 +70,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
                 photo,
                 candidate,
                 description
-            ),
-            undefined
+            )
         )
         return cv
     }
@@ -85,7 +88,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
     approve(this: Cv<CvState.Submitted>) {
         let event = new CvApprovedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Approved, this.id)
-        this.Apply(event, undefined)
+        this.Apply(event)
         approvedCv.changes.push(...this.changes)
 
         return approvedCv
@@ -105,7 +108,7 @@ export class Cv<State extends CvState = CvState> extends AggregateRoot {
     reject(this: Cv<CvState.Submitted>) {
         let event = new CvRejectedDomainEvent(this.id)
         let approvedCv = new Cv(this.description, this.workExperiences, this.studies, this.photo, this.candidate, CvState.Denied, this.id)
-        this.Apply(event, undefined)
+        this.Apply(event)
         approvedCv.changes.push(...this.changes)
 
         return approvedCv

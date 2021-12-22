@@ -5,7 +5,7 @@ import { IDomainEventHandler } from './IDomainEventHandler';
 
 
 export class CvAspirantApprovedHandler implements IDomainEventHandler {
-    handle(event: CvAspirantApproved, enity: Candidate): void {
-        enity.Cv=event.CvAspirantApproved;
+    handle(event: CvAspirantApproved, entity: Candidate): void {
+        entity.Cv=event.CvAspirantApproved;
     }
 }
