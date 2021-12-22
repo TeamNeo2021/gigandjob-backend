@@ -11,7 +11,7 @@ import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { threadId } from 'worker_threads';
-import { CandidateApplied } from 'src/Dominio/DomainEvents/Candidate/CandidateApplied';
+import { CandidateApplied } from '../../DomainEvents/Candidate/CandidateApplied';
 import { ApplicationId } from './Application/Value Objects/ApplicationId';
 import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
 import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
@@ -86,12 +86,12 @@ export class Offer extends AggregateRoot{
             const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
             var _application = new Application(
               this.Apply,
-              new ApplicationId(event.candidateId), 
+              new ApplicationId(eventCandidateApplied.candidateId), 
               new CandidateIdVo(),//Aggregate trespassing
               new ApplicationState(),
-              new ApplicationBudget(event.budget),
-              new ApplicationDescription(event.description),
-              new ApplicationTime(event.time)
+              new ApplicationBudget(eventCandidateApplied.budget),
+              new ApplicationDescription(eventCandidateApplied.description),
+              new ApplicationTime(eventCandidateApplied.time)
             )
             this.ApplyToEntity(_application, event);
             this.application.push(_application)
