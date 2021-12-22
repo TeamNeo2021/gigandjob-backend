@@ -170,8 +170,8 @@ export class Offer extends AggregateRoot{
       }
 
       //Implementacion de crearOferta con domain event
-      public CreateOffer(
-
+      static CreateOffer(
+          id: OfferIdVO = new OfferIdVO(),
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
@@ -180,18 +180,11 @@ export class Offer extends AggregateRoot{
           Budget: BudgetVO,
           Description: DescriptionVO
 
-         /* State: number,
-          PublicationDate: Date,
-          Rating: number,
-          Direction: string,
-          Sector: number,
-          Budget: number,
-          Description: string,*/
-
-
       ) {
         console.log('Crear Oferta');
-        this.Apply(
+        let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
+        offer.Apply(
+        //this.Apply(
           new OfferCreated(
             State,
             PublicationDate,
@@ -202,7 +195,7 @@ export class Offer extends AggregateRoot{
             Description,
           )
         );
-        return this;
+        return offer;
       }
   
     //Getters y setters
