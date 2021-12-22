@@ -11,28 +11,19 @@ import { OfferModified } from "../../DomainEvents/OfferModified/OfferModified";
 import { OfferCreated } from "../../DomainEvents/OfferCreated/OfferCreated";
 import { randomUUID } from "crypto";
 
-    const exampleOffer = new Offer(
-        new OfferIdVO(randomUUID()),
-        new OfferStateVO(OfferStatesEnum.Active),
-        new PublicationDateVO(new Date('1999-05-13')),
-        new RatingVO(5),
-        new DirectionVO("AV Casanova"),
-        new SectorVO(Sectors.Technology),
-        new BudgetVO(1000),
-        new DescriptionVO("descripcion de prueba")
-    );
+const exampleOffer = Offer.CreateOffer(
+    new OfferStateVO(OfferStatesEnum.Active),
+    new PublicationDateVO(new Date('200-01-31')),
+    new RatingVO(7),
+    new DirectionVO("AV Romulo Gallegos"),
+    new SectorVO(Sectors.Technology),
+    new BudgetVO(1500),
+    new DescriptionVO("descripcion de prueba"),);;
+
     
     describe("crear una oferta", ()=>{
     
-        it("debe crear la oferta cuando se crea con un estado activa",()=>{        
-            exampleOffer.CreateOffer(
-                new OfferStateVO(OfferStatesEnum.Active),
-                new PublicationDateVO(new Date('200-01-31')),
-                new RatingVO(7),
-                new DirectionVO("AV Romulo Gallegos"),
-                new SectorVO(Sectors.Technology),
-                new BudgetVO(1500),
-                new DescriptionVO("descripcion de prueba"),);
+        it("debe crear la oferta cuando se crea con un estado activa",()=>{           
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
         })
     });
@@ -76,7 +67,7 @@ import { randomUUID } from "crypto";
         }),
         it("debe modificar la oferta cuando se modifica el estado de suspendida a activa",()=>{        
             exampleOffer.ModifyOffer(
-                new OfferStateVO(OfferStatesEnum.Suspended),
+                new OfferStateVO(OfferStatesEnum.Active),
                 new PublicationDateVO(new Date('200-01-31')),
                 new RatingVO(7),
                 new DirectionVO("AV Romulo Gallegos"),

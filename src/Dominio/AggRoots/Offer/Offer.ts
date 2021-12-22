@@ -11,9 +11,9 @@ import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
-import { threadId } from 'worker_threads';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 
-export class Offer extends AggregateRoot implements IInternalEventHandler {
+export class Offer extends AggregateRoot{
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
@@ -48,32 +48,33 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.application = [];
 
     }
-    protected When(event: any): void {
-        //handler.handle(event, this);
+    protected When(event: IDomainEvent): void {     
 
-        switch(event.constructor){
-          case OfferCreated:
-            this._State = (event.State);
-            this._PublicationDate = (event.PublicationDate);
-            this._Rating = (event.Rating);
-            this._Direction = (event.Direction);
-            this._Sector = (event.Sector);
-            this._Budget = (event.Budget);
-            this._Description = (event.Description);
-            break;
-          case OfferModified:
-            this._State = (event.State);
-            this._PublicationDate = (event.PublicationDate);
-            this._Rating = (event.Rating);
-            this._Direction = (event.Direction);
-            this._Sector = (event.Sector);
-            this._Budget = (event.Budget);
-            this._Description = (event.Description);
-            break;
-          default:
-            break;
-        }
-    }
+      switch(event.constructor){
+        case OfferCreated:
+          const eventOfferCreated:OfferCreated=event as OfferCreated;
+          this._State = (eventOfferCreated.State);
+          this._PublicationDate = (eventOfferCreated.PublicationDate);
+          this._Rating = (eventOfferCreated.Rating);
+          this._Direction = (eventOfferCreated.Direction);
+          this._Sector = (eventOfferCreated.Sector);
+          this._Budget = (eventOfferCreated.Budget);
+          this._Description = (eventOfferCreated.Description);
+          break;
+        case OfferModified:
+          const eventOfferModified:OfferModified=event as OfferModified;
+          this._State = (eventOfferModified.state);
+          this._PublicationDate = (eventOfferModified.publicationDate);
+          this._Rating = (eventOfferModified.rating);
+          this._Direction = (eventOfferModified.direction);
+          this._Sector = (eventOfferModified.sector);
+          this._Budget = (eventOfferModified.budget);
+          this._Description = (eventOfferModified.description);
+          break;
+        default:
+          break;
+      }
+  }
 
     protected EnsureValidState(): void {
         const valid = this.OfferId != null        
@@ -165,31 +166,24 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             description,            
           )
         );
+        return this;
       }
 
       //Implementacion de crearOferta con domain event
-      public CreateOffer(
-
+      static CreateOffer(          
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
           Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO
-
-         /* State: number,
-          PublicationDate: Date,
-          Rating: number,
-          Direction: string,
-          Sector: number,
-          Budget: number,
-          Description: string,*/
-
-
+          Description: DescriptionVO,
+          id: OfferIdVO = new OfferIdVO(),
       ) {
         console.log('Crear Oferta');
-        this.Apply(
+        let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
+        offer.Apply(
+        //this.Apply(
           new OfferCreated(
             State,
             PublicationDate,
@@ -200,6 +194,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Description,
           )
         );
+        return offer;
       }
   
     //Getters y setters
