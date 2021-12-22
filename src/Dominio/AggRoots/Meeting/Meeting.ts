@@ -6,9 +6,9 @@ import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
 import { EmployerIdVO } from '../Employer/ValueObjects/EmployerIdVO';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
-import { MeetingCanceledEvent } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingCanceled.event';
-import { MeetingScheduledEvent } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingScheduled.event';
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+import { MeetingCanceledEvent } from '../../DomainEvents/MeetingEvents/MeetingCanceled.event';
+import { MeetingScheduledEvent } from '../../DomainEvents/MeetingEvents/MeetingScheduled.event';
+import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
 import { InvalidMeetingDate } from './Errors/InvalidMeetingDate.error';
 
 
@@ -19,7 +19,7 @@ export class Meeting extends AggregateRoot{
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
     private _date: MeetingDateVO;
-    private _location: MeetingLocationVO;
+    private _location: MeetingLocationVO; 
     
     constructor(id: MeetingIDVO , state: MeetingStateVO, description: MeetingDescriptionVO, date: MeetingDateVO, location: MeetingLocationVO,
          employerID: EmployerIdVO, candidateID: CandidateIdVo) {
@@ -37,16 +37,22 @@ export class Meeting extends AggregateRoot{
         switch(event.constructor){
             case MeetingCanceledEvent:
                 let today = new MeetingDateVO(new Date());
-                let meetingCanceledEvent: MeetingCanceledEvent = event as MeetingCanceledEvent;
-                if (this.date > today){
-                    this.state = meetingCanceledEvent.state;
+                const meetingCanceledEvent: MeetingCanceledEvent = event as MeetingCanceledEvent;
+                this.state = (meetingCanceledEvent.state);
+                if (today.LessThan(this.date)){
+                    this.state = (meetingCanceledEvent.state);
                 } else {
                     throw InvalidMeetingDate.MeetingDateExpired() ;
                 }
                 break;
             case MeetingScheduledEvent:
-                let meetingScheduledEvent: MeetingScheduledEvent = event as MeetingScheduledEvent;
-                this.date = meetingScheduledEvent.appointment;
+                const meetingScheduledEvent: MeetingScheduledEvent = event as MeetingScheduledEvent;
+                this.state = (meetingScheduledEvent.state);
+                this.date = (meetingScheduledEvent.date);
+                this.description = (meetingScheduledEvent.description);
+                this.location = (meetingScheduledEvent.location);
+                this.employer = (meetingScheduledEvent.employer);
+                this.candidate = (meetingScheduledEvent.candidate)
                 break;
         }
     }
@@ -93,9 +99,20 @@ export class Meeting extends AggregateRoot{
         this.Apply(event)
     }
 
-    public ScheduleOn(date: Date){
-        let event = new MeetingScheduledEvent(this.id, new MeetingDateVO(date))
-        this.Apply(event)
+    static ScheduleOn(    
+        date: MeetingDateVO,
+        employer: EmployerIdVO,
+        candidate: CandidateIdVo,
+        description: MeetingDescriptionVO,
+        location: MeetingLocationVO
+        ){
+            let activate = new MeetingStateVO(MeetingStates.Active)
+            let id = new MeetingIDVO();
+            let meeting = new Meeting(id, activate, description, date, location, employer, candidate);
+            meeting.Apply(
+                new MeetingScheduledEvent(id, date, employer, candidate, description, location, activate)
+            );
+            return meeting
     }
 
     // getters y setters
@@ -133,5 +150,21 @@ export class Meeting extends AggregateRoot{
 
     private set date(date: MeetingDateVO){
         this._date = date;
+    }
+    
+    private set location(location: MeetingLocationVO){
+        this._location = location;
+    }
+
+    private set description(description: MeetingDescriptionVO){
+        this._description = description;
+    }
+
+    private set employer(employer: EmployerIdVO){
+        this._employer = employer
+    }
+
+    private set candidate(candidate: CandidateIdVo){
+        this._candidate = candidate
     }
 }

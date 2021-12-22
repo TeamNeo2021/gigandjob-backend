@@ -14,4 +14,11 @@ export class MeetingDateVO {
             throw InvalidMeetingDate.MeetingDateExpired();
         }
     }
+
+    public LessThan(date: MeetingDateVO): boolean{
+        if (this.value < date.value){
+            return true
+        }
+        return false
+    }
 }

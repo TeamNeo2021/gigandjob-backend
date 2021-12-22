@@ -1,5 +1,5 @@
-import { MeetingIDVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingIDVO";
-import { MeetingStates, MeetingStateVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO";
+import { MeetingIDVO } from "../../AggRoots/Meeting/ValueObjects/MeetingIDVO";
+import { MeetingStates, MeetingStateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingStateVO";
 import { IDomainEvent } from "../IDomainEvent";
 
 export class MeetingCanceledEvent implements IDomainEvent {
