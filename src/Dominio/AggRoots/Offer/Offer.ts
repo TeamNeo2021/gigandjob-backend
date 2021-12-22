@@ -1,4 +1,3 @@
-import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
 import { BudgetVO } from './ValueObjects/OfferBudgetVO';
@@ -74,7 +73,7 @@ export class Offer extends AggregateRoot{
         default:
           break;
       }
-  }
+    }
 
     protected EnsureValidState(): void {
         const valid = this.OfferId != null        
@@ -99,7 +98,7 @@ export class Offer extends AggregateRoot{
       else{
         const last_change = changes[changes.length-1]      
         if (last_change instanceof OfferModified){           
-          //se verifira el estado del ultimo evento si este fue una oferta modificada
+          //se verifica el estado del ultimo evento si este fue una oferta modificada
           switch (last_change.state.state) {
             case OfferStatesEnum.Active:
               //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
