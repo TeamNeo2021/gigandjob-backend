@@ -92,7 +92,7 @@ export class Meeting extends AggregateRoot{
         if (!valid) {
           throw new Error('Verificacion de estado fallido');
         }
-      }
+    }
 
     public Cancel(){
         let event = new MeetingCanceledEvent(this.id)
@@ -104,13 +104,13 @@ export class Meeting extends AggregateRoot{
         employer: EmployerIdVO,
         candidate: CandidateIdVo,
         description: MeetingDescriptionVO,
-        location: MeetingLocationVO
+        location: MeetingLocationVO,
+        state: MeetingStateVO = new MeetingStateVO(MeetingStates.Active),
         ){
-            let activate = new MeetingStateVO(MeetingStates.Active)
             let id = new MeetingIDVO();
-            let meeting = new Meeting(id, activate, description, date, location, employer, candidate);
+            let meeting = new Meeting(id, state, description, date, location, employer, candidate);
             meeting.Apply(
-                new MeetingScheduledEvent(id, date, employer, candidate, description, location, activate)
+                new MeetingScheduledEvent(id, date, employer, candidate, description, location, state)
             );
             return meeting
     }
