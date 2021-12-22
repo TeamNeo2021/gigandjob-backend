@@ -19,9 +19,10 @@ import { ApplicationDescription } from './Application/Value Objects/ApplicationD
 import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+import { IInternalEventHandler } from '../IInternalEventHandler';
 
 
-export class Offer extends AggregateRoot{
+export class Offer extends AggregateRoot implements IInternalEventHandler{
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
