@@ -1,19 +1,27 @@
-import { ApplicationBudget } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationBudget";
-import { ApplicationId } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationId";
-import { ApplicationDescription } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationDescription";
-import { ApplicationTime } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationTime";
 import { IDomainEvent } from "../IDomainEvent";
-import { ApplicationState } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates";
+
 
 export class CandidateApplied implements IDomainEvent{
     dateTimeOcurred: Date;
+
+    candidateId: string;
+    offerId: string;
+    budget: number;
+    description: string;
+    time: number;
+
     constructor(
-        id: ApplicationId,
-        budget: ApplicationBudget,
-        state: ApplicationState,
-        description: ApplicationDescription,
-        time: ApplicationTime,
+        candidateId: string,
+        offerId: string,
+        budget: number,
+        description: string,
+        time: number,
     ){
         this.dateTimeOcurred = new Date();
+        this.candidateId = candidateId,
+        this.offerId = offerId;
+        this.budget = budget;
+        this.description = description;
+        this.time = time;
     }
 }

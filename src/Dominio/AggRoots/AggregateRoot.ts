@@ -8,13 +8,10 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
   public tid: string;
   public observers: IObserver[] = [];
   protected readonly changes: IDomainEvent[] = [];
-  protected abstract When(
-    event: IDomainEvent,
-    handler: IDomainEventHandler,
-  ): void;
+  protected abstract When(event: any): void;
   protected abstract EnsureValidState(): void;
-  public Apply(event: IDomainEvent, handler: IDomainEventHandler): void {
-    this.When(event, handler);
+  protected Apply(event: any): void {
+    this.When(event);
     this.EnsureValidState();
     this.changes.push(event);
     this.notifyAll();
@@ -28,13 +25,12 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
   }
   protected ApplyToEntity(
     entity: IInternalEventHandler,
-    event: IDomainEvent,
-    handler: IDomainEventHandler,
+    event: any
   ): void {
-    entity.Handle(event, handler);
+    entity.Handle(event);
   }
-  public Handle(event: IDomainEvent, handler: IDomainEventHandler): void {
-    this.When(event, handler);
+  public Handle(event: any): void {
+    this.When(event);
   }
 
 

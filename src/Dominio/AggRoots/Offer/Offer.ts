@@ -1,110 +1,187 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
-import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
 import { BudgetVO } from './ValueObjects/OfferBudgetVO';
 import { DirectionVO } from './ValueObjects/OfferDirectionVO';
 import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
-import { OfferCreatedHandler } from '../../DomainEvents/OfferCreated/OfferCreatedHandler';
 import { OfferCreated } from '../../DomainEvents/OfferCreated/OfferCreated';
 import { SectorVO } from './ValueObjects/OfferSectorVO';
 import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
 import { Application } from './Application/Application';
-import { OfferModified } from 'src/Dominio/DomainEvents/OfferModified/OfferModified';
-import { OfferModifiedHandler } from 'src/Dominio/DomainEvents/OfferModified/OfferModifiedHadler';
+import { OfferModified } from '../../DomainEvents/OfferModified/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
+import { threadId } from 'worker_threads';
+import { CandidateApplied } from '../../DomainEvents/Candidate/CandidateApplied';
+import { ApplicationId } from './Application/Value Objects/ApplicationId';
+import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
+import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
+import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
+import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
+import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+import { IInternalEventHandler } from '../IInternalEventHandler';
 
-export class Offer extends AggregateRoot implements IInternalEventHandler {
+
+export class Offer extends AggregateRoot implements IInternalEventHandler{
 
     private OfferId: OfferIdVO;
     private State: OfferStateVO;
     private Before_State: OfferStateVO;
-    //Necesitamos un estado de visible o no? debido a las denuncias
-    //private Visible: OfferStateVO;
     private PublicationDate: PublicationDateVO;
     private Rating: RatingVO;
     private Direction: DirectionVO;
     private Sector: SectorVO;
-    //Sectors es el VO de sector en la entidad de offer
     private Budget: BudgetVO;
     private Description: DescriptionVO;
     private application: Application[];
+
+    
 
     constructor(
       offerId: OfferIdVO,
       state: OfferStateVO,
       publicationDate: PublicationDateVO,
       rating: RatingVO,
+      direction: DirectionVO,
       sector: SectorVO,
       budget: BudgetVO,
       description: DescriptionVO,
-      app: Application[]
-
     ) {
       super();
-      //Por ahora ya que el id no lo he podido resolver
-      //this.OfferId = offerId();
-      this.OfferId = new OfferIdVO(Date().toString());
+      this.OfferId = offerId;      
       this.State = state;
       this.PublicationDate =publicationDate;
       this.Rating = rating;
+      this.Direction = direction;
       this.Sector = sector;
       this.Budget = budget;
       this.Description = description;
-      this.application = app;
+      this.application = [];
 
     }
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+
+    protected When(event: IDomainEvent): void {     
+
+      switch(event.constructor){
+        case OfferCreated:
+          const eventOfferCreated:OfferCreated=event as OfferCreated;
+          this._State = (eventOfferCreated.State);
+          this._PublicationDate = (eventOfferCreated.PublicationDate);
+          this._Rating = (eventOfferCreated.Rating);
+          this._Direction = (eventOfferCreated.Direction);
+          this._Sector = (eventOfferCreated.Sector);
+          this._Budget = (eventOfferCreated.Budget);
+          this._Description = (eventOfferCreated.Description);
+          break;
+        case OfferModified:
+          const eventOfferModified:OfferModified=event as OfferModified;
+          this._State = (eventOfferModified.state);
+          this._PublicationDate = (eventOfferModified.publicationDate);
+          this._Rating = (eventOfferModified.rating);
+          this._Direction = (eventOfferModified.direction);
+          this._Sector = (eventOfferModified.sector);
+          this._Budget = (eventOfferModified.budget);
+          this._Description = (eventOfferModified.description);
+          break;
+        case CandidateApplied:
+            const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
+            var _application = new Application(
+              this.Apply,
+              new ApplicationId(eventCandidateApplied.candidateId), 
+              new CandidateIdVo(),//Aggregate trespassing
+              new ApplicationState(),
+              new ApplicationBudget(eventCandidateApplied.budget),
+              new ApplicationDescription(eventCandidateApplied.description),
+              new ApplicationTime(eventCandidateApplied.time)
+            )
+            this.ApplyToEntity(_application, event);
+            this.application.push(_application)
+            break;
+        default:
+          break;
       }
 
-      protected EnsureValidState(): void {
+    }
+
+    protected EnsureValidState(): void {
         const valid = this.OfferId != null        
         this.PublicationDate != null &&
         this.Rating != null &&
+        this.Direction!= null &&
         this.Sector != null &&
         this.Budget != null &&
         this.Description != null;
-        switch (this.State.state) {
-          case OfferStatesEnum.Active:
-              if ((this.Before_State.state == OfferStatesEnum.Closed)&&(this.application == null)){
+        const changes = this.GetChanges();
+
+        //Create offer
+            
+          if (((this.State.state == OfferStatesEnum.Suspended) || 
+              (this.State.state == OfferStatesEnum.Closed) || 
+              (this.State.state == OfferStatesEnum.Eliminated))&&
+              (changes.length == 0))
+              {
+            throw new Error("La oferta recién creada solo puede ser activa");
+              } 
+       //Modify offer 
+      else{
+        const last_change = changes[changes.length-1]      
+        if (last_change instanceof OfferModified){           
+          //se verifica el estado del ultimo evento si este fue una oferta modificada
+          switch (last_change.state.state) {
+            case OfferStatesEnum.Active:
+              //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
+              if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
                   throw new Error("No se puede cerrar sin una Aplicación");
               }
               break;
-          case OfferStatesEnum.Suspended:
-            if (this.Before_State.state == OfferStatesEnum.Closed){
-                throw new Error("No se puede cerrar la oferta ya que está suspendida");
-            }
-            break;    
+            case OfferStatesEnum.Suspended:
+              //si el estado anterior es suspendida y el nuevo es cerrada
+              if (this.State.state == OfferStatesEnum.Closed){
+                  throw new Error("No se puede cerrar la oferta ya que está suspendida");
+              }
+              break;    
             case OfferStatesEnum.Closed:
-              if ((this.Before_State.state == OfferStatesEnum.Active) || (this.Before_State.state == OfferStatesEnum.Suspended)){
-                  throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
+              //si el estado anterior es cerrada y el nuevo es activa o suspendida
+              if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)){
+                throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
+              }
+              break;
+            case OfferStatesEnum.Eliminated:
+              //si el estado anterior es eliminada no puede cambiar su estado de nuevo
+              if ((this.State.state == OfferStatesEnum.Active) ||
+                  (this.State.state == OfferStatesEnum.Suspended)|| 
+                  (this.State.state == OfferStatesEnum.Closed)){
+                  throw new Error("Ya la oferta está eliminada, no puede cambiar su estado, jamás");
               }
               break; 
-          default:
+            default:
               break;
+          } 
+        }else {     
+          //si el evento anterior es oferta creada y el nuevo estado es cerrada sin aplicaciones
+          if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
+            throw new Error("No se puede cerrar sin una Aplicación");
+          }
+        } 
       }
-
-        if (!valid) {
-          throw new Error('Verificacion de estado fallido');
-        }
+      //algunos de los VO es nulo
+      if (!valid) {
+        throw new Error('Verificacion de estado fallido');
       }
+    }
 
       //Modificar oferta
       public ModifyOffer(       
-        //Arreglar para adjuntar lo del before_state 
+        
         state: OfferStateVO,
         publicationDate: PublicationDateVO,
         rating: RatingVO,
         direction: DirectionVO,
         sector: SectorVO,
         budget: BudgetVO,        
-        description: DescriptionVO,
-        application: Application[],        
+        description: DescriptionVO,        
       ) {
-        console.log('Oferta Modificada');
+        console.log('Modificar Oferta');
         this.Apply(
           new OfferModified(
             state,
@@ -113,41 +190,27 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             direction,
             sector,
             budget,
-            description,
-            application,
-          ),
-          new OfferModifiedHandler(),
+            description,            
+          )
         );
+        return this;
       }
 
       //Implementacion de crearOferta con domain event
-      public CreateOffer(
-
-        //Arreglar para adjuntar lo del before_state
-
-        /*
+      static CreateOffer(          
           State: OfferStateVO,
           PublicationDate: PublicationDateVO,
           Rating: RatingVO,
           Direction: DirectionVO,
-          Sector: Sectors,
-          //Sectors es el VO de sector en la entidad de offer
+          Sector: SectorVO,
           Budget: BudgetVO,
-          Description: DescriptionVO*/
-
-          State: number,
-          PublicationDate: Date,
-          Rating: number,
-          Direction: string,
-          Sector: number,
-          //Sectors es el VO de sector en la entidad de offer
-          Budget: number,
-          Description: string,
-          application: Application[]
-
+          Description: DescriptionVO,
+          id: OfferIdVO = new OfferIdVO(),
       ) {
-        console.log('Oferta Creada');
-        this.Apply(
+        console.log('Crear Oferta');
+        let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
+        offer.Apply(
+        //this.Apply(
           new OfferCreated(
             State,
             PublicationDate,
@@ -156,10 +219,9 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             Sector,
             Budget,
             Description,
-            application
-          ),
-          new OfferCreatedHandler(),
+          )
         );
+        return offer;
       }
   
     //Getters y setters
@@ -199,7 +261,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       this.Direction = value;
     }
 
-    //Sectors es el VO de sector en la entidad de offer
     public get _Sector(): SectorVO {
       return this.Sector;
     }
@@ -226,5 +287,19 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     }
     public set _application(value: Application[]) {
       this.application = value;
+    }
+
+    public createApplication(
+      candidateId: string,
+      budget: number,
+      description: string,
+      time: number): void {
+
+        this.Apply(new CandidateApplied(
+          candidateId,
+          this.OfferId._value,
+          budget,
+          description,
+          time));
     }
   }

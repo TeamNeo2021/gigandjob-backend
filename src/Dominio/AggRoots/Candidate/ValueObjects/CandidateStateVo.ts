@@ -1,18 +1,24 @@
 export class CandidateStateVo{
     state: CandidateStatesEnum;
-    isApproved: CandidateStatesEnum;
 
-    constructor(currentState: CandidateStatesEnum, isApproved: CandidateStatesEnum){
+    constructor(currentState: CandidateStatesEnum){
         this.state = currentState;
-        this.isApproved = isApproved;
+    }
+
+    public static fromString(current: string): CandidateStateVo {
+        
+
+        if (!(current in CandidateStatesEnum)){
+            throw new Error("State "+ current +" does not exist");
+        }
+        
+        
+        return new CandidateStateVo(CandidateStatesEnum[current]);
     }
 }
+
 
 export enum CandidateStatesEnum{
     Active,
     Suspended,
-    Approbed,
-    Unapproved,
-    inReview,
-    Eliminated
 }

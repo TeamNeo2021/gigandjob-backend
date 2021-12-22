@@ -1,4 +1,4 @@
-export class EmployerComercialDesignationVo {
+export class EmployerComercialDesignationVO {
     value: string;
     constructor(value: string) {
       if (value == '') {

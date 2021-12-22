@@ -9,4 +9,5 @@ export class MeetingStateVO {
 export enum MeetingStates {
     Active,
     Suspended,
+    Canceled
   }

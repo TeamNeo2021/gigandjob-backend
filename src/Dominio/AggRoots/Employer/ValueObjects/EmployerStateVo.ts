@@ -1,7 +1,8 @@
-export class EmployerStateVo {
-  current: EmployerStates;
+export class EmployerStateVO {
+  value_state: EmployerStates;
+  
   constructor(current: EmployerStates) {
-    this.current = current;
+    this.value_state = current;
   }
 }
 

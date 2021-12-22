@@ -1,5 +1,3 @@
-import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
-import { IDomainEventHandler } from 'src/Dominio/DomainEvents/IDomainEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
 import { MeetingIDVO } from './ValueObjects/MeetingIDVO';
 import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
@@ -8,10 +6,10 @@ import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
 import { EmployerIdVO } from '../Employer/ValueObjects/EmployerIdVO';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
-import { MeetingCanceled } from 'src/Dominio/DomainEvents/MeetingCanceled/MeetingCanceled';
-import { MeetingCanceledHandler } from 'src/Dominio/DomainEvents/MeetingCanceled/MeetingCanceledHandler';
-import { MeetingScheduled } from 'src/Dominio/DomainEvents/MeetingScheduled/MeetingScheduled';
-import { MeetingScheduledHandler } from 'src/Dominio/DomainEvents/MeetingScheduled/MeetingScheduledHandler';
+import { MeetingCanceledEvent } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingCanceled.event';
+import { MeetingScheduledEvent } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingScheduled.event';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
+import { InvalidMeetingDate } from './Errors/InvalidMeetingDate.error';
 
 
 export class Meeting extends AggregateRoot{
@@ -35,15 +33,23 @@ export class Meeting extends AggregateRoot{
        this._candidate = candidateID;
     }
 
-    protected When(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+    protected When(event: IDomainEvent): void {
+        switch(event.constructor){
+            case MeetingCanceledEvent:
+                let today = new MeetingDateVO(new Date());
+                let meetingCanceledEvent: MeetingCanceledEvent = event as MeetingCanceledEvent;
+                if (this.date > today){
+                    this.state = meetingCanceledEvent.state;
+                } else {
+                    throw InvalidMeetingDate.MeetingDateExpired() ;
+                }
+                break;
+            case MeetingScheduledEvent:
+                let meetingScheduledEvent: MeetingScheduledEvent = event as MeetingScheduledEvent;
+                this.date = meetingScheduledEvent.appointment;
+                break;
+        }
     }
-
-    /*protected EnsureValidState(): void {
-        console.log("protected")
-        throw new Error("Method not implemented.");
-    }
-    */
 
     protected EnsureValidState(): void {
         const valid = this._id != null        
@@ -82,14 +88,14 @@ export class Meeting extends AggregateRoot{
         }
       }
 
-    public Cancel(meetingId: MeetingIDVO, state: MeetingStateVO){
-        console.log('Meeting canceled');
-        this.Apply(new MeetingCanceled(meetingId, state),new MeetingCanceledHandler())
+    public Cancel(){
+        let event = new MeetingCanceledEvent(this.id)
+        this.Apply(event)
     }
 
-    public Schedule(meetingId: MeetingIDVO, date: Date){
-        console.log('Scheduled Meeting');
-        this.Apply(new MeetingScheduled(meetingId, new MeetingDateVO(date)), new MeetingScheduledHandler())
+    public ScheduleOn(date: Date){
+        let event = new MeetingScheduledEvent(this.id, new MeetingDateVO(date))
+        this.Apply(event)
     }
 
     // getters y setters
@@ -121,23 +127,11 @@ export class Meeting extends AggregateRoot{
         return this._employer;
     }
 
-    set state(state: MeetingStateVO){
+    private set state(state: MeetingStateVO){
         this._state = state;
     }
 
-    set date(date: MeetingDateVO){
+    private set date(date: MeetingDateVO){
         this._date = date;
-    }
-
-    set location(location: MeetingLocationVO){
-        this._location = location;
-    }
-
-    set candidate(candidate: CandidateIdVo){
-        this._candidate = candidate;
-    }
-
-    set employer(employer: EmployerIdVO){
-        this._employer = employer;
     }
 }

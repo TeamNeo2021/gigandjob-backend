@@ -1,6 +1,5 @@
-import { Entity } from "src/Dominio/Core/Entity";
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
-import { IDomainEventHandler } from "src/Dominio/DomainEvents/IDomainEventHandler";
+import { CandidateApplied } from "../../../DomainEvents/Candidate/CandidateApplied";
+import { Entity } from "../../../Core/Entity";
 import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
 import { ApplicationDescription } from "./Value Objects/ApplicationDescription";
@@ -8,8 +7,9 @@ import { ApplicationId } from "./Value Objects/ApplicationId";
 import { ApplicationState, ApplicationStates } from "./Value Objects/ApplicationStates";
 import { ApplicationTime } from "./Value Objects/ApplicationTime";
 
+
 export class Application extends Entity<ApplicationId>{
-    private id: ApplicationId;
+    private readonly id: ApplicationId;
     private candidateId: CandidateIdVo;
     private state: ApplicationState;
     private previous_state: ApplicationState;
@@ -18,12 +18,36 @@ export class Application extends Entity<ApplicationId>{
     private time: ApplicationTime;
     
 
-    constructor(applier: any) {
+    constructor(applier: any,
+        id:ApplicationId, 
+        candidateId:CandidateIdVo,
+        state: ApplicationState,
+        budget: ApplicationBudget,
+        description: ApplicationDescription,
+        time: ApplicationTime) 
+    {
+        
         super(applier); 
-     }
+        this.id = id;
+        this.candidateId = candidateId;
+        this.state = state;
+        this.budget = budget;
+        this.description = description; 
+        this.time = time;
+    }
 
-     protected when(event: IDomainEvent, handler: IDomainEventHandler): void {
-        handler.handle(event, this);
+     protected when(event: any): void {
+       switch (event.constructor) {
+           case CandidateApplied:
+               console.log('application '
+                           + this.id 
+                           + ' created from candidate '
+                           +event.candidateId)   
+               break;
+       
+           default:
+               break;
+       }
      }
      protected EnsureValidState(): void {
         let valid =
@@ -55,10 +79,10 @@ export class Application extends Entity<ApplicationId>{
     public getState():ApplicationStates{
         return this.state.current;
     }
-
-    public set setState(_state: ApplicationStates){
-        this.state.current = _state;
+    public setState(state: ApplicationStates){
+         this.state.current = state;
     }
+
 
     public getPreviousState():ApplicationStates{
         return this.previous_state.current;
@@ -67,5 +91,9 @@ export class Application extends Entity<ApplicationId>{
     public getCandidateId(): CandidateIdVo{
         return this.candidateId;
 
+    }
+
+    public get getBudget(): ApplicationBudget{
+        return this.budget;
     }
 }
