@@ -21,7 +21,7 @@ export class AppController {
   getHello(): string {
 
     var _meeting = new Meeting( new MeetingIDVO() , new MeetingStateVO(MeetingStates.Active), 
-    new MeetingDescriptionVO("Toma papá"), new MeetingDateVO (new Date("2021-12-24")), 
+    new MeetingDescriptionVO("Toma papá"), new MeetingDateVO (new Date(Date.now()+1000)), 
     new MeetingLocationVO("Elm Street"), new EmployerIdVO("69"),new CandidateIdVo("69"));
     console.log(_meeting);
 
