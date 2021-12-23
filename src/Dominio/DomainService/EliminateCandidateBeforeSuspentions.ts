@@ -29,8 +29,8 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
 
         
         //If it is not Candidate Suspended Event, then ignore
-        if (!(last_change instanceof CandidateStateModified 
-            && last_change.new_current == 'Suspended')){
+        if (!(last_change instanceof CandidateStateModified) 
+            || !(last_change.new_current == 'Suspended')){
             return;
         }
         //This are the suspention events, starting empty
@@ -39,11 +39,12 @@ export class EliminateCandidateBeforeSuspentions implements IObserver{
         
         //Lets check for the class of the events
         for (let change of changes){
-            if (last_change.new_current == 'Suspended'){
+            if (change instanceof CandidateStateModified &&
+                change.new_current == 'Suspended'){
                 suspentions.push(change)
             }
         }
-       
+      
         //If there are more than 3 suspentions, apply the 
         //CandidateEliminated event 
         if (suspentions.length >= this.suspentionTolerance){

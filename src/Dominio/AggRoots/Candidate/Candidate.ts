@@ -165,9 +165,9 @@ export class Candidate extends AggregateRoot {
    * @returns Void
    */
     protected When(event: any): void {
-        switch (event) {
+        switch (event.constructor) {
 
-            case event as CandidateRegisteredDomainEvent:
+            case CandidateRegisteredDomainEvent:
                 if (!this.isStateValidOnRegister()) {
                     console.log('register with state not active: name: ', this._name.fullName);
                     throw InvalidCandidateState.candidateStateWhenRegistering()
@@ -177,12 +177,12 @@ export class Candidate extends AggregateRoot {
                     throw InvalidCandidateAction.alreadyRegistered()
                 }
                 break;
-            case event as CandidateStateModified:
+            case CandidateStateModified:
                 this._state = CandidateStateVo.fromString(event.new_current)
                 console.log('new state '
                     + event.new_current
                     + ' applied to candidate '
-                    + this._id)
+                    + this._id.value)
                 break;
 
             default:
@@ -205,9 +205,45 @@ export class Candidate extends AggregateRoot {
     }
 
     public eliminateThisCandidate() {
-        console.log('Eliminating Candidate #: ', this._id, '\nName: ', this._name.fullName);
-        this.Apply(new CandidateStateModified('Eliminate'))
+        if (this.isEliminated()){
+            throw InvalidCandidateAction.alreadyEliminated();          
+        }
+        console.log('Eliminating Candidate #: ', this._id.value, '\nName: ', this._name.fullName);
+        this.Apply(new CandidateStateModified('Eliminated'))
     }
+    public suspendThisCandidate() {
+        if (this.isSuspended()){
+            throw InvalidCandidateAction.alreadySuspended();          
+        }
+        console.log('Suspending Candidate #: ', this._id.value, '\nName: ', this._name.fullName);
+        this.Apply(new CandidateStateModified('Suspended'))
+    }
+    public reactivateThisCandidate(){
+        if (!(this.isSuspended())){
+            throw InvalidCandidateAction.notSuspended();          
+        }
+        if (this.isActive()){
+            throw InvalidCandidateAction.alreadyActive();
+        }
+        if (this.isEliminated()){
+            throw InvalidCandidateAction.alreadyEliminated();
+        }
+        console.log('Reactivating Candidate #: ', this._id.value, '\nName: ', this._name.fullName);
+        this.Apply(new CandidateStateModified('Active'))
+    }
+
+
+    //The following may be useless, but is for support ubiquitous language
+    private isEliminated(): boolean{
+        return this._state.state == CandidateStatesEnum.Eliminated;
+    }
+    private isSuspended(): boolean{
+        return this._state.state == CandidateStatesEnum.Suspended;
+    }
+    private isActive(): boolean{
+        return this._state.state == CandidateStatesEnum.Active;
+    }
+    
 
     
     

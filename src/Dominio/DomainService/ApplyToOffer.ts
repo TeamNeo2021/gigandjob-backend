@@ -9,7 +9,6 @@ export class ApplyToOffer{
     //these parameters are necessary to call the methods
     private readonly candidate: Candidate;
     private readonly offer: Offer;
-    private candidateId: string;
     private budget: number;
     private description: string;
     private time: number;
