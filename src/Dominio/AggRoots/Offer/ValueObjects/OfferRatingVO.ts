@@ -1,12 +1,14 @@
+import { InvalidOfferRating } from "../Errors/InvalidOfferRating.error";
+
 export class RatingVO {
     private readonly value: number;
   
     constructor(value: number) {
         if (value == null) {
-            throw new Error('ERROR: El rating está vacío');
+            throw InvalidOfferRating.EmptyRating();
         }
         if (value < 0) {
-            throw new Error('ERROR: El presupuesto no debe ser menor a 0');
+            throw InvalidOfferRating.NegativeRating();
         }
       this.value = value;
     }

@@ -19,6 +19,7 @@ import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
 import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 import { IInternalEventHandler } from '../IInternalEventHandler';
+import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler{
@@ -119,7 +120,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler{
               (this.State.state == OfferStatesEnum.Eliminated))&&
               (changes.length == 0))
               {
-            throw new Error("La oferta recién creada solo puede ser activa");
+            throw InvalidOfferState.BadCreatedOffer();
               } 
        //Modify offer 
       else{
@@ -130,19 +131,19 @@ export class Offer extends AggregateRoot implements IInternalEventHandler{
             case OfferStatesEnum.Active:
               //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
               if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
-                  throw new Error("No se puede cerrar sin una Aplicación");
+                  throw InvalidOfferState.BadClosedOffer();
               }
               break;
             case OfferStatesEnum.Suspended:
               //si el estado anterior es suspendida y el nuevo es cerrada
               if (this.State.state == OfferStatesEnum.Closed){
-                  throw new Error("No se puede cerrar la oferta ya que está suspendida");
+                  throw InvalidOfferState.ClosedFromSuspended();
               }
               break;    
             case OfferStatesEnum.Closed:
               //si el estado anterior es cerrada y el nuevo es activa o suspendida
               if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)){
-                throw new Error("Ya la oferta está concretada, no se puede abrir o suspender");
+                throw InvalidOfferState.ChangingClosedState();
               }
               break;
             case OfferStatesEnum.Eliminated:
@@ -150,7 +151,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler{
               if ((this.State.state == OfferStatesEnum.Active) ||
                   (this.State.state == OfferStatesEnum.Suspended)|| 
                   (this.State.state == OfferStatesEnum.Closed)){
-                  throw new Error("Ya la oferta está eliminada, no puede cambiar su estado, jamás");
+                  throw InvalidOfferState.ChangingEliminatadState();
               }
               break; 
             default:
@@ -159,13 +160,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler{
         }else {     
           //si el evento anterior es oferta creada y el nuevo estado es cerrada sin aplicaciones
           if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
-            throw new Error("No se puede cerrar sin una Aplicación");
+            throw InvalidOfferState.BadClosedOffer();
           }
         } 
       }
       //algunos de los VO es nulo
       if (!valid) {
-        throw new Error('Verificacion de estado fallido');
+        throw InvalidOfferState.FailedVerification();
       }
     }
 
