@@ -1,3 +1,5 @@
+import { MeetingStates, MeetingStateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingStateVO";
+import { MeetingModifyEvent } from "../../DomainEvents/MeetingEvents/MeetingModify.event";
 import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo";
 import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
 import { Meeting } from "../../AggRoots/Meeting/Meeting";
@@ -21,10 +23,24 @@ describe("Agedar una reunion", ()=>{
     })
 });
 
+describe('Modificar una reunion',()=>{
+    it('Debe cambiar todos los valores posibles',()=>{
+        meetingExample.Modify(
+            new MeetingDescriptionVO('Meeting description modify'),
+            new MeetingLocationVO('Meeting location modify'),
+        );
+        expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
+        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifyEvent);
+    })
+})
+
 describe("Cancelar una reunion", ()=>{
     it('Debe cambiar el estado de la reunion a Cancel',()=>{
         meetingExample.Cancel();
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
-        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingCanceledEvent);
+        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifyEvent);
+        expect(meetingExample.GetChanges()[2]).toBeInstanceOf(MeetingCanceledEvent);
     })
 });
+
+

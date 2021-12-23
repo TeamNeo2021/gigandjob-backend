@@ -10,6 +10,7 @@ import { MeetingCanceledEvent } from '../../DomainEvents/MeetingEvents/MeetingCa
 import { MeetingScheduledEvent } from '../../DomainEvents/MeetingEvents/MeetingScheduled.event';
 import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
 import { InvalidMeetingDate } from './Errors/InvalidMeetingDate.error';
+import { MeetingModifyEvent } from '../../DomainEvents/MeetingEvents/MeetingModify.event';
 
 
 export class Meeting extends AggregateRoot{
@@ -54,6 +55,11 @@ export class Meeting extends AggregateRoot{
                 this.employer = (meetingScheduledEvent.employer);
                 this.candidate = (meetingScheduledEvent.candidate)
                 break;
+            case MeetingModifyEvent:
+                const meetingModifyEvent: MeetingModifyEvent = event as MeetingModifyEvent;
+                this.description = (meetingModifyEvent.description)?(meetingModifyEvent.description):this.description;
+                this.location = (meetingModifyEvent.location)?(meetingModifyEvent.location):this.location;
+                break;       
         }
     }
 
@@ -113,6 +119,15 @@ export class Meeting extends AggregateRoot{
                 new MeetingScheduledEvent(id, date, employer, candidate, description, location, state)
             );
             return meeting
+    }
+
+    public Modify(
+        description?: MeetingDescriptionVO,
+        location?: MeetingLocationVO,
+        ){
+            this.Apply(
+                new MeetingModifyEvent(this.id,description,location)
+            );
     }
 
     // getters y setters
