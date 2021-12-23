@@ -13,6 +13,7 @@ import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
 import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
 import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
 import { EmployerEliminated } from '../../DomainEvents/EmployerEvents/EmployerEliminated';
+import { InvalidEmployerState } from './Errors/invalidEmployerState.error';
 
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
@@ -109,7 +110,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
             case EmployerStates.Eliminated:
               //si el estado anterior es eliminado y el nuevo es activo o suspendido
               if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
-                throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
+                throw InvalidEmployerState.ChangingEliminatadState();
               }
               break;
             default:
@@ -123,7 +124,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
             case EmployerStates.Eliminated:
               //si el estado anterior es eliminado y el nuevo es activo o suspendido
               if ((this._state.value_state == EmployerStates.Active)||(this._state.value_state == EmployerStates.Suspended)){
-                throw new Error("No se puede cambiar el estado de un Empleador Eliminado");
+                throw InvalidEmployerState.ChangingEliminatadState();
               }
               break;
             default:
@@ -138,7 +139,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
 
     //algunos de los VO es nulo
     if (!valid) {
-      throw new Error('Verificacion de estado fallido');
+      throw InvalidEmployerState.FailedVerification();
     }
   }
 
