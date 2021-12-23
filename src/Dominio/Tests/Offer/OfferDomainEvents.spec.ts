@@ -8,6 +8,7 @@ import { Sectors, SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSector
 import { OfferStatesEnum, OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
 import { OfferModified } from "../../DomainEvents/OfferEvents/OfferModified";
 import { OfferCreated } from "../../DomainEvents/OfferEvents/OfferCreated";
+import { InvalidOfferState } from "../../AggRoots/Offer/Errors/InvalidOfferState.error";
 
 const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),
@@ -16,11 +17,21 @@ const exampleOffer = Offer.CreateOffer(
     new DirectionVO("AV Francisco de Miranda"),
     new SectorVO(Sectors.Technology),
     new BudgetVO(1500),
-    new DescriptionVO("descripcion de prueba"),);;
+    new DescriptionVO("descripcion de prueba"),);
 
     
     describe("crear una oferta", ()=>{
     
+        it("debe crear la oferta cuando se crea con un estado activa",()=>{           
+            expect(()=> Offer.CreateOffer(
+                new OfferStateVO(OfferStatesEnum.Suspended),
+                new PublicationDateVO(new Date('1999-05-13')),
+                new RatingVO(5),
+                new DirectionVO("AV Francisco de Miranda"),
+                new SectorVO(Sectors.Technology),
+                new BudgetVO(1500),
+                new DescriptionVO("descripcion de prueba"),)).toThrowError(InvalidOfferState);
+        }),
         it("debe crear la oferta cuando se crea con un estado activa",()=>{           
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
         })
@@ -37,7 +48,7 @@ const exampleOffer = Offer.CreateOffer(
                     new SectorVO(Sectors.Technology),
                     new BudgetVO(2000),
                     new DescriptionVO("descripcion de prueba"),)
-            ).toThrowError(Error);            
+            ).toThrowError(InvalidOfferState);            
         }),
         it("debe modificar la oferta cuando se cambia el estado de activa a suspendida",()=>{        
             exampleOffer.ModifyOffer(
@@ -60,7 +71,7 @@ const exampleOffer = Offer.CreateOffer(
                     new SectorVO(Sectors.Technology),
                     new BudgetVO(2000),
                     new DescriptionVO("descripcion de prueba"),)
-            ).toThrowError(Error);
+            ).toThrowError(InvalidOfferState);
         }),
         it("debe modificar la oferta cuando se cambia el estado de suspendida a activa",()=>{        
             exampleOffer.ModifyOffer(
