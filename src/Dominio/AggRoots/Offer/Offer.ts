@@ -5,8 +5,8 @@ import { DirectionVO } from './ValueObjects/OfferDirectionVO';
 import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
 import { OfferCreated } from '../../DomainEvents/OfferEvents/OfferCreated';
-import { SectorVO } from './ValueObjects/OfferSectorVO';
-import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVO';
+import { SectorVO } from './ValueObjects/OfferSectorVo';
+import { OfferStateVO, OfferStatesEnum } from './ValueObjects/OfferStateVo';
 import { Application } from './Application/Application';
 import { OfferModified } from '../../DomainEvents/OfferEvents/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
@@ -22,284 +22,283 @@ import { IInternalEventHandler } from '../IInternalEventHandler';
 import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 
 
-export class Offer extends AggregateRoot implements IInternalEventHandler{
+export class Offer extends AggregateRoot implements IInternalEventHandler {
 
-    private OfferId: OfferIdVO;
-    private State: OfferStateVO;
-    private Before_State: OfferStateVO;
-    private PublicationDate: PublicationDateVO;
-    private Rating: RatingVO;
-    private Direction: DirectionVO;
-    private Sector: SectorVO;
-    private Budget: BudgetVO;
-    private Description: DescriptionVO;
-    private application: Application[];
+  private OfferId: OfferIdVO;
+  private State: OfferStateVO;
+  private Before_State: OfferStateVO;
+  private PublicationDate: PublicationDateVO;
+  private Rating: RatingVO;
+  private Direction: DirectionVO;
+  private Sector: SectorVO;
+  private Budget: BudgetVO;
+  private Description: DescriptionVO;
+  private application: Application[];
 
-    
 
-    constructor(
-      offerId: OfferIdVO,
-      state: OfferStateVO,
-      publicationDate: PublicationDateVO,
-      rating: RatingVO,
-      direction: DirectionVO,
-      sector: SectorVO,
-      budget: BudgetVO,
-      description: DescriptionVO,
-    ) {
-      super();
-      this.OfferId = offerId;      
-      this.State = state;
-      this.PublicationDate =publicationDate;
-      this.Rating = rating;
-      this.Direction = direction;
-      this.Sector = sector;
-      this.Budget = budget;
-      this.Description = description;
-      this.application = [];
 
+  constructor(
+    offerId: OfferIdVO,
+    state: OfferStateVO,
+    publicationDate: PublicationDateVO,
+    rating: RatingVO,
+    direction: DirectionVO,
+    sector: SectorVO,
+    budget: BudgetVO,
+    description: DescriptionVO,
+  ) {
+    super();
+    this.OfferId = offerId;
+    this.State = state;
+    this.PublicationDate = publicationDate;
+    this.Rating = rating;
+    this.Direction = direction;
+    this.Sector = sector;
+    this.Budget = budget;
+    this.Description = description;
+    this.application = [];
+
+  }
+
+  protected When(event: IDomainEvent): void {
+
+    switch (event.constructor) {
+      case OfferCreated:
+        const eventOfferCreated: OfferCreated = event as OfferCreated;
+        this._State = (eventOfferCreated.State);
+        this._PublicationDate = (eventOfferCreated.PublicationDate);
+        this._Rating = (eventOfferCreated.Rating);
+        this._Direction = (eventOfferCreated.Direction);
+        this._Sector = (eventOfferCreated.Sector);
+        this._Budget = (eventOfferCreated.Budget);
+        this._Description = (eventOfferCreated.Description);
+        break;
+      case OfferModified:
+        const eventOfferModified: OfferModified = event as OfferModified;
+        this._State = (eventOfferModified.state);
+        this._PublicationDate = (eventOfferModified.publicationDate);
+        this._Rating = (eventOfferModified.rating);
+        this._Direction = (eventOfferModified.direction);
+        this._Sector = (eventOfferModified.sector);
+        this._Budget = (eventOfferModified.budget);
+        this._Description = (eventOfferModified.description);
+        break;
+      case CandidateApplied:
+        const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
+        var _application = new Application(
+          this.Apply,
+          new ApplicationId(eventCandidateApplied.candidateId),
+          new CandidateIdVo(),//Aggregate trespassing
+          new ApplicationState(),
+          new ApplicationBudget(eventCandidateApplied.budget),
+          new ApplicationDescription(eventCandidateApplied.description),
+          new ApplicationTime(eventCandidateApplied.time)
+        )
+        this.ApplyToEntity(_application, event);
+        this.application.push(_application)
+        break;
+      default:
+        break;
     }
 
-    protected When(event: IDomainEvent): void {     
+  }
 
-      switch(event.constructor){
-        case OfferCreated:
-          const eventOfferCreated:OfferCreated=event as OfferCreated;
-          this._State = (eventOfferCreated.State);
-          this._PublicationDate = (eventOfferCreated.PublicationDate);
-          this._Rating = (eventOfferCreated.Rating);
-          this._Direction = (eventOfferCreated.Direction);
-          this._Sector = (eventOfferCreated.Sector);
-          this._Budget = (eventOfferCreated.Budget);
-          this._Description = (eventOfferCreated.Description);
-          break;
-        case OfferModified:
-          const eventOfferModified:OfferModified=event as OfferModified;
-          this._State = (eventOfferModified.state);
-          this._PublicationDate = (eventOfferModified.publicationDate);
-          this._Rating = (eventOfferModified.rating);
-          this._Direction = (eventOfferModified.direction);
-          this._Sector = (eventOfferModified.sector);
-          this._Budget = (eventOfferModified.budget);
-          this._Description = (eventOfferModified.description);
-          break;
-        case CandidateApplied:
-            const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
-            var _application = new Application(
-              this.Apply,
-              new ApplicationId(eventCandidateApplied.candidateId), 
-              new CandidateIdVo(),//Aggregate trespassing
-              new ApplicationState(),
-              new ApplicationBudget(eventCandidateApplied.budget),
-              new ApplicationDescription(eventCandidateApplied.description),
-              new ApplicationTime(eventCandidateApplied.time)
-            )
-            this.ApplyToEntity(_application, event);
-            this.application.push(_application)
+  protected EnsureValidState(): void {
+    const valid = this.OfferId != null
+    this.PublicationDate != null &&
+      this.Rating != null &&
+      this.Direction != null &&
+      this.Sector != null &&
+      this.Budget != null &&
+      this.Description != null;
+    const changes = this.GetChanges();
+
+    //Create offer
+
+    if (((this.State.state == OfferStatesEnum.Suspended) ||
+      (this.State.state == OfferStatesEnum.Closed) ||
+      (this.State.state == OfferStatesEnum.Eliminated)) &&
+      (changes.length == 0)) {
+      throw InvalidOfferState.BadCreatedOffer();
+    }
+    //Modify offer
+    else {
+      const last_change = changes[changes.length - 1]
+      if (last_change instanceof OfferModified) {
+        //se verifica el estado del ultimo evento si este fue una oferta modificada
+        switch (last_change.state.state) {
+          case OfferStatesEnum.Active:
+            //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
+            if ((this.State.state == OfferStatesEnum.Closed) && (this.application.length == 0)) {
+              throw InvalidOfferState.BadClosedOffer();
+            }
             break;
-        default:
-          break;
-      }
-
-    }
-
-    protected EnsureValidState(): void {
-        const valid = this.OfferId != null        
-        this.PublicationDate != null &&
-        this.Rating != null &&
-        this.Direction!= null &&
-        this.Sector != null &&
-        this.Budget != null &&
-        this.Description != null;
-        const changes = this.GetChanges();
-
-        //Create offer
-            
-          if (((this.State.state == OfferStatesEnum.Suspended) || 
-              (this.State.state == OfferStatesEnum.Closed) || 
-              (this.State.state == OfferStatesEnum.Eliminated))&&
-              (changes.length == 0))
-              {
-            throw InvalidOfferState.BadCreatedOffer();
-              } 
-       //Modify offer 
-      else{
-        const last_change = changes[changes.length-1]      
-        if (last_change instanceof OfferModified){           
-          //se verifica el estado del ultimo evento si este fue una oferta modificada
-          switch (last_change.state.state) {
-            case OfferStatesEnum.Active:
-              //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
-              if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
-                  throw InvalidOfferState.BadClosedOffer();
-              }
-              break;
-            case OfferStatesEnum.Suspended:
-              //si el estado anterior es suspendida y el nuevo es cerrada
-              if (this.State.state == OfferStatesEnum.Closed){
-                  throw InvalidOfferState.ClosedFromSuspended();
-              }
-              break;    
-            case OfferStatesEnum.Closed:
-              //si el estado anterior es cerrada y el nuevo es activa o suspendida
-              if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)){
-                throw InvalidOfferState.ChangingClosedState();
-              }
-              break;
-            case OfferStatesEnum.Eliminated:
-              //si el estado anterior es eliminada no puede cambiar su estado de nuevo
-              if ((this.State.state == OfferStatesEnum.Active) ||
-                  (this.State.state == OfferStatesEnum.Suspended)|| 
-                  (this.State.state == OfferStatesEnum.Closed)){
-                  throw InvalidOfferState.ChangingEliminatadState();
-              }
-              break; 
-            default:
-              break;
-          } 
-        }else {     
-          //si el evento anterior es oferta creada y el nuevo estado es cerrada sin aplicaciones
-          if ((this.State.state == OfferStatesEnum.Closed)&&(this.application.length == 0)){
-            throw InvalidOfferState.BadClosedOffer();
-          }
-        } 
-      }
-      //algunos de los VO es nulo
-      if (!valid) {
-        throw InvalidOfferState.FailedVerification();
+          case OfferStatesEnum.Suspended:
+            //si el estado anterior es suspendida y el nuevo es cerrada
+            if (this.State.state == OfferStatesEnum.Closed) {
+              throw InvalidOfferState.ClosedFromSuspended();
+            }
+            break;
+          case OfferStatesEnum.Closed:
+            //si el estado anterior es cerrada y el nuevo es activa o suspendida
+            if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)) {
+              throw InvalidOfferState.ChangingClosedState();
+            }
+            break;
+          case OfferStatesEnum.Eliminated:
+            //si el estado anterior es eliminada no puede cambiar su estado de nuevo
+            if ((this.State.state == OfferStatesEnum.Active) ||
+              (this.State.state == OfferStatesEnum.Suspended) ||
+              (this.State.state == OfferStatesEnum.Closed)) {
+              throw InvalidOfferState.ChangingEliminatadState();
+            }
+            break;
+          default:
+            break;
+        }
+      } else {
+        //si el evento anterior es oferta creada y el nuevo estado es cerrada sin aplicaciones
+        if ((this.State.state == OfferStatesEnum.Closed) && (this.application.length == 0)) {
+          throw InvalidOfferState.BadClosedOffer();
+        }
       }
     }
-
-      //Modificar oferta
-      public ModifyOffer(       
-        
-        state: OfferStateVO,
-        publicationDate: PublicationDateVO,
-        rating: RatingVO,
-        direction: DirectionVO,
-        sector: SectorVO,
-        budget: BudgetVO,        
-        description: DescriptionVO,        
-      ) {
-        console.log('Modificar Oferta');
-        this.Apply(
-          new OfferModified(
-            state,
-            publicationDate,
-            rating,
-            direction,
-            sector,
-            budget,
-            description,            
-          )
-        );
-        return this;
-      }
-
-      //Implementacion de crearOferta con domain event
-      static CreateOffer(          
-          State: OfferStateVO,
-          PublicationDate: PublicationDateVO,
-          Rating: RatingVO,
-          Direction: DirectionVO,
-          Sector: SectorVO,
-          Budget: BudgetVO,
-          Description: DescriptionVO,
-          id: OfferIdVO = new OfferIdVO(),
-      ) {
-        console.log('Crear Oferta');
-        let offer = new Offer(id, State,PublicationDate,Rating,Direction,Sector,Budget,Description,)
-        offer.Apply(
-        //this.Apply(
-          new OfferCreated(
-            State,
-            PublicationDate,
-            Rating,
-            Direction,
-            Sector,
-            Budget,
-            Description,
-          )
-        );
-        return offer;
-      }
-  
-    //Getters y setters
-
-    public get _State(): OfferStateVO {
-      return this.State;
-    }
-    public set _State(value: OfferStateVO) {
-      this.State = value;
-    }
-
-    public get _Before_State(): OfferStateVO {
-      return this.Before_State;
-    }
-    public set _Before_State(value: OfferStateVO) {
-      this.Before_State = value;
-    }
-
-    public get _PublicationDate(): PublicationDateVO {
-      return this.PublicationDate;
-    }
-    public set _PublicationDate(value: PublicationDateVO) {
-      this.PublicationDate = value;
-    }
-
-    public get _Rating(): RatingVO {
-      return this.Rating;
-    }
-    public set _Rating(value: RatingVO) {
-      this.Rating = value;
-    }
-
-    public get _Direction(): DirectionVO {
-      return this.Direction;
-    }
-    public set _Direction(value: DirectionVO) {
-      this.Direction = value;
-    }
-
-    public get _Sector(): SectorVO {
-      return this.Sector;
-    }
-    public set _Sector(value: SectorVO) {
-      this.Sector = value;
-    }
-
-    public get _Budget(): BudgetVO {
-      return this.Budget;
-    }
-    public set _Budget(value: BudgetVO) {
-      this.Budget = value;
-    }
-
-    public get _Description(): DescriptionVO {
-      return this.Description;
-    }
-    public set _Description(value: DescriptionVO) {
-      this.Description = value;
-    }
-
-    public get _application(): Application[] {
-      return this.application;
-    }
-    public set _application(value: Application[]) {
-      this.application = value;
-    }
-
-    public createApplication(
-      candidateId: string,
-      budget: number,
-      description: string,
-      time: number): void {
-
-        this.Apply(new CandidateApplied(
-          candidateId,
-          this.OfferId._value,
-          budget,
-          description,
-          time));
+    //algunos de los VO es nulo
+    if (!valid) {
+      throw InvalidOfferState.FailedVerification();
     }
   }
+
+  //Modificar oferta
+  public ModifyOffer(
+
+    state: OfferStateVO,
+    publicationDate: PublicationDateVO,
+    rating: RatingVO,
+    direction: DirectionVO,
+    sector: SectorVO,
+    budget: BudgetVO,
+    description: DescriptionVO,
+  ) {
+    console.log('Modificar Oferta');
+    this.Apply(
+      new OfferModified(
+        state,
+        publicationDate,
+        rating,
+        direction,
+        sector,
+        budget,
+        description,
+      )
+    );
+    return this;
+  }
+
+  //Implementacion de crearOferta con domain event
+  static CreateOffer(
+    State: OfferStateVO,
+    PublicationDate: PublicationDateVO,
+    Rating: RatingVO,
+    Direction: DirectionVO,
+    Sector: SectorVO,
+    Budget: BudgetVO,
+    Description: DescriptionVO,
+    id: OfferIdVO = new OfferIdVO(),
+  ) {
+    console.log('Crear Oferta');
+    let offer = new Offer(id, State, PublicationDate, Rating, Direction, Sector, Budget, Description,)
+    offer.Apply(
+      //this.Apply(
+      new OfferCreated(
+        State,
+        PublicationDate,
+        Rating,
+        Direction,
+        Sector,
+        Budget,
+        Description,
+      )
+    );
+    return offer;
+  }
+
+  //Getters y setters
+
+  public get _State(): OfferStateVO {
+    return this.State;
+  }
+  public set _State(value: OfferStateVO) {
+    this.State = value;
+  }
+
+  public get _Before_State(): OfferStateVO {
+    return this.Before_State;
+  }
+  public set _Before_State(value: OfferStateVO) {
+    this.Before_State = value;
+  }
+
+  public get _PublicationDate(): PublicationDateVO {
+    return this.PublicationDate;
+  }
+  public set _PublicationDate(value: PublicationDateVO) {
+    this.PublicationDate = value;
+  }
+
+  public get _Rating(): RatingVO {
+    return this.Rating;
+  }
+  public set _Rating(value: RatingVO) {
+    this.Rating = value;
+  }
+
+  public get _Direction(): DirectionVO {
+    return this.Direction;
+  }
+  public set _Direction(value: DirectionVO) {
+    this.Direction = value;
+  }
+
+  public get _Sector(): SectorVO {
+    return this.Sector;
+  }
+  public set _Sector(value: SectorVO) {
+    this.Sector = value;
+  }
+
+  public get _Budget(): BudgetVO {
+    return this.Budget;
+  }
+  public set _Budget(value: BudgetVO) {
+    this.Budget = value;
+  }
+
+  public get _Description(): DescriptionVO {
+    return this.Description;
+  }
+  public set _Description(value: DescriptionVO) {
+    this.Description = value;
+  }
+
+  public get _application(): Application[] {
+    return this.application;
+  }
+  public set _application(value: Application[]) {
+    this.application = value;
+  }
+
+  public createApplication(
+    candidateId: string,
+    budget: number,
+    description: string,
+    time: number): void {
+
+    this.Apply(new CandidateApplied(
+      candidateId,
+      this.OfferId._value,
+      budget,
+      description,
+      time));
+  }
+}

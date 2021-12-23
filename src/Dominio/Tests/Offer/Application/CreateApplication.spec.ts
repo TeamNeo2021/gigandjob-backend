@@ -21,12 +21,12 @@ import { DirectionVO } from "../../../AggRoots/Offer/ValueObjects/OfferDirection
 import { OfferIdVO } from "../../../AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "../../../AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "../../../AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { Sectors, SectorVO } from "../../../AggRoots/Offer/ValueObjects/OfferSectorVO";
-import { OfferStatesEnum, OfferStateVO } from "../../../AggRoots/Offer/ValueObjects/OfferStateVO";
 import { ApplyToOffer } from "../../../DomainService/ApplyToOffer";
+import { OfferStatesEnum, OfferStateVO } from "../../../AggRoots/Offer/ValueObjects/OfferStateVo";
+import { Sectors, SectorVO } from "../../../AggRoots/Offer/ValueObjects/OfferSectorVo";
 
 
-const exampleApplier: Function = ()=>{};
+const exampleApplier: Function = () => { };
 const exampleBudget: number = 500;
 const exampleDescription: string = 'Hi im a perfect description';
 const exampleTimeInDays: number = 10;
@@ -77,21 +77,21 @@ const Service = new ApplyToOffer(
 describe('Creating application', () => {
 
     it('should succeed when entering valid data', () => {
-        expect(() => {  
-            Service.createApplication();    
+        expect(() => {
+            Service.createApplication();
         }).not.toThrow(Error);
     })
-    it('should add a new application to the application`s array in offer',()=>{
+    it('should add a new application to the application`s array in offer', () => {
         Service.createApplication();
         let applications = exampleOffer._application;
-        let last = applications.length-1
+        let last = applications.length - 1
         expect(applications[last]).toBeInstanceOf(Application)
     });
     it('should add a new CandidateApplied event to the offer', () => {
         Service.createApplication();
         let events = exampleOffer.GetChanges();
-        let last = events.length-1
+        let last = events.length - 1
         expect(events[last]).toBeInstanceOf(CandidateApplied)
     });
-    
+
 })

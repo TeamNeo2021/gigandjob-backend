@@ -3,8 +3,8 @@ import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
 import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVO";
-import { OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
+import { SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVo";
+import { OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVo";
 import { IDomainEvent } from "../IDomainEvent";
 
 export class OfferCreated implements IDomainEvent {
@@ -16,7 +16,7 @@ export class OfferCreated implements IDomainEvent {
     public Direction: DirectionVO;
     public Sector: SectorVO;
     public Budget: BudgetVO;
-    public Description: DescriptionVO;   
+    public Description: DescriptionVO;
 
     constructor(
         State: OfferStateVO,
@@ -26,7 +26,7 @@ export class OfferCreated implements IDomainEvent {
         Sector: SectorVO,
         Budget: BudgetVO,
         Description: DescriptionVO,
-    ){
+    ) {
         this.dateTimeOcurred = new Date(Date.now());
         this.State = State;
         this.PublicationDate = PublicationDate;

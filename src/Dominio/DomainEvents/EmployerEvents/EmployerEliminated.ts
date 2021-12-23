@@ -1,5 +1,5 @@
-import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIDVO";
-import { EmployerStateVO } from "../../AggRoots/Employer/ValueObjects/EmployerStateVO";
+import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
+import { EmployerStateVO } from "../../AggRoots/Employer/ValueObjects/EmployerStateVo";
 import { IDomainEvent } from "../IDomainEvent";
 
 

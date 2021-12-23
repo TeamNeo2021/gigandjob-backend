@@ -1,16 +1,16 @@
-import { EmployerMailVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVO";
-import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVO";
-import { EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVO";
+import { EmployerMailVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo";
+import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo";
+import { EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
 import { IDomainEvent } from "../IDomainEvent";
-import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVO";
-import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVO";
+import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
+import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
 import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
 import { EmployerLocationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO";
 import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO";
 
 
 export class EmployerModified implements IDomainEvent {
-    
+
     public dateTimeOcurred: Date;
     public name: EmployerNameVO;
     public description: EmployerDescriptionVO;
@@ -19,8 +19,8 @@ export class EmployerModified implements IDomainEvent {
     public rif: EmployerRifVO;
     public phone: EmployerPhoneVO;
     public mail: EmployerMailVO;
-    public comDesignation: EmployerComercialDesignationVO;    
-    
+    public comDesignation: EmployerComercialDesignationVO;
+
     constructor(
         name: EmployerNameVO,
         description: EmployerDescriptionVO,
