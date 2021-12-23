@@ -1,5 +1,5 @@
 import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate";
-import { IDomainEvent } from "../../IDomainEvent";
+import { IDomainEvent } from "../IDomainEvent";
 
 export class CandidateRegisteredDomainEvent implements IDomainEvent{
     dateTimeOcurred: Date;
