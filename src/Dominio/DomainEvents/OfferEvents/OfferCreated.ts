@@ -1,5 +1,4 @@
 import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
-import { Application } from "../../AggRoots/Offer/Application/Application";
 import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
 import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
@@ -17,16 +16,7 @@ export class OfferCreated implements IDomainEvent {
     public Direction: DirectionVO;
     public Sector: SectorVO;
     public Budget: BudgetVO;
-    public Description: DescriptionVO;
-
-   /* public State: number;
-    public PublicationDate: Date;
-    public Rating: number;
-    public Direction: string;
-    public Sector: number;
-    //Sectors es el VO de sector en la entidad de offer
-    public Budget: number;
-    public Description: string;*/
+    public Description: DescriptionVO;   
 
     constructor(
         State: OfferStateVO,

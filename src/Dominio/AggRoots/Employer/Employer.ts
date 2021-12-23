@@ -1,18 +1,18 @@
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { AggregateRoot } from '../AggregateRoot';
-import { EmployerRegistered } from '../../DomainEvents/EmployerRegistered/EmployerRegistered';
+import { EmployerRegistered } from '../../DomainEvents/EmployerEvents/EmployerRegistered';
 import { EmployerNameVO } from './ValueObjects/EmployerNameVO';
 import { EmployerStates, EmployerStateVO } from './ValueObjects/EmployerStateVO';
 import { EmployerIdVO } from './ValueObjects/EmployerIdVO';
 import { EmployerPhoneVO } from './ValueObjects/EmployerPhoneVO';
 import { EmployerMailVO } from './ValueObjects/EmployerMailVO';
 import { EmployerComercialDesignationVO } from './ValueObjects/EmployerComercialDesignationVO';
-import { EmployerModified } from '../../DomainEvents/EmployerModified/EmployerModified';
+import { EmployerModified } from '../../DomainEvents/EmployerEvents/EmployerModified';
 import { EmployerDescriptionVO } from './ValueObjects/EmployerDescriptionVO';
 import { EmployerLocationVO } from './ValueObjects/EmployerLocationVO';
 import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
 import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
-import { EmployerEliminated } from '../../DomainEvents/EmployerEliminated/EmployerEliminated';
+import { EmployerEliminated } from '../../DomainEvents/EmployerEvents/EmployerEliminated';
 
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {

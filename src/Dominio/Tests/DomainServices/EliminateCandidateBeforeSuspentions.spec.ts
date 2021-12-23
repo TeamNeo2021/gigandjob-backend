@@ -1,4 +1,4 @@
-import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModified } from "../../DomainEvents/CandidateEvents/CandidateStateModified";
 import { Candidate } from "../../AggRoots/Candidate/Candidate";
 import { CandidateBirthDateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
 import { CandidateEmailVo } from "../../AggRoots/Candidate/ValueObjects/CandidateEmailVo";

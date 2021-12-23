@@ -1,4 +1,4 @@
-import { CandidateApplied } from "../../../DomainEvents/Candidate/CandidateApplied";
+import { CandidateApplied } from "../../../DomainEvents/CandidateEvents/CandidateApplied";
 import { Entity } from "../../../Core/Entity";
 import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";

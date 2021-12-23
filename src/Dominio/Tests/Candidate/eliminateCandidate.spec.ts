@@ -7,7 +7,7 @@ import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateId
 import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "../../AggRoots/Candidate/ValueObjects/CandidatePhoneVo";
 import { CandidateStatesEnum, CandidateStateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateStateVo";
-import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModified } from "../../DomainEvents/CandidateEvents/CandidateStateModified";
 
 function create_exampleCandidate(): Candidate{
     
