@@ -1,4 +1,3 @@
-import { MeetingStates, MeetingStateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingStateVO";
 import { MeetingModifyEvent } from "../../DomainEvents/MeetingEvents/MeetingModify.event";
 import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo";
 import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
@@ -17,7 +16,7 @@ const meetingExample = Meeting.ScheduleOn(
     new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
 );
 
-describe("Agedar una reunion", ()=>{
+describe("Agendar una reunion", ()=>{
     it('Se debe crear una entidad meeting con la informacion asignada con un estado activivo',()=>{
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
     })
