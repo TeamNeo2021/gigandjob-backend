@@ -3,7 +3,7 @@ import { InvalidOfferDescription } from "../Errors/InvalidOfferDescription.error
 export class DescriptionVO {
     private readonly value: string;
     constructor(value: string) {
-      if (value == '') {
+      if (!value || value.trim() == "") {
         throw InvalidOfferDescription.EmptyDescription();
       }
       if (value.length > 2000) {
