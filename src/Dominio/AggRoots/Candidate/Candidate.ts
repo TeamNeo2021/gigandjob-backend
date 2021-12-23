@@ -7,7 +7,7 @@ import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import { AggregateRoot } from '../AggregateRoot'
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
-import { CandidateRegisteredDomainEvent } from "../../DomainEvents/CandidateEvents/CandidateRegistered/CandidateRegistered";
+import { CandidateRegisteredDomainEvent } from "../../DomainEvents/CandidateEvents/CandidateRegistered";
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateStateModified } from "../../DomainEvents/CandidateEvents/CandidateStateModified";
 import { InvalidCandidateAction } from "./ValueObjects/Errors/invalidCandidateAction.error";
