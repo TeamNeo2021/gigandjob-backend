@@ -7,7 +7,7 @@ import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/Candi
 import { Candidate } from "../../AggRoots/Candidate/Candidate"
 import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo"
 import { CandidateStatesEnum, CandidateStateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateStateVo"
-import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered"
+import { CandidateRegisteredDomainEvent } from "../../DomainEvents/CandidateEvents/CandidateRegistered"
 import { InvalidCandidateState } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateState.error"
 import { InvalidCandidateAction } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidateAction.error"
 

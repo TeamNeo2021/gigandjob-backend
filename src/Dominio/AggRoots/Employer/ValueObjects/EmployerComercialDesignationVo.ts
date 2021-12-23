@@ -1,12 +1,14 @@
+import { InvalidEmployerComercialDesignation } from "../Errors/InvalidEmployerComercialDesignation.error";
+
 export class EmployerComercialDesignationVO {
-    value: string;
+    value_comercial_designation: string;
     constructor(value: string) {
-      if (value == '') {
-        throw new Error('ERROR: la denominación comercial está vacía');
+      if (!value || value.trim() == "") {
+        throw InvalidEmployerComercialDesignation.EmptyComercialDesignation()
       }
-      if (value.length > 50) {
-        throw new Error('ERROR: La denominación comercial no debe ser mayor a 50 caracteres');
+      if (value.length > 100) {
+        throw InvalidEmployerComercialDesignation.TooBigComercialDesignation();
       }
-      this.value = value;
+      this.value_comercial_designation = value;
     }
   }

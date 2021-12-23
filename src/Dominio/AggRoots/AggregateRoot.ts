@@ -25,8 +25,7 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
   }
   protected ApplyToEntity(
     entity: IInternalEventHandler,
-    event: IDomainEvent,
-    handler: IDomainEventHandler,
+    event: any
   ): void {
     entity.Handle(event);
   }

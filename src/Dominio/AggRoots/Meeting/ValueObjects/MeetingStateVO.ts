@@ -1,7 +1,7 @@
 export class MeetingStateVO {
     current: MeetingStates;
-    constructor() {
-        this.current = MeetingStates.Active;
+    constructor(currentState: MeetingStates) {
+        this.current = currentState;
     }
 
 }
@@ -9,4 +9,5 @@ export class MeetingStateVO {
 export enum MeetingStates {
     Active,
     Suspended,
+    Canceled
   }

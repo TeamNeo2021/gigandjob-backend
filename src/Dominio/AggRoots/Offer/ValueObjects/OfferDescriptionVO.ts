@@ -1,11 +1,13 @@
+import { InvalidOfferDescription } from "../Errors/InvalidOfferDescription.error";
+
 export class DescriptionVO {
     private readonly value: string;
     constructor(value: string) {
-      if (value == '') {
-        throw new Error('ERROR: El nombre está vacío');
+      if (!value || value.trim() == "") {
+        throw InvalidOfferDescription.EmptyDescription();
       }
       if (value.length > 2000) {
-        throw new Error('ERROR: El nombre no debe ser mayor a 2000 caracteres');
+        throw InvalidOfferDescription.TooBigDescription();
       }
       this.value = value;
     }

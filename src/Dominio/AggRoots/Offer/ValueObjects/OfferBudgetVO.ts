@@ -1,12 +1,14 @@
+import { InvalidOfferBudget } from "../Errors/InvalidOfferBudget.error";
+
 export class BudgetVO {
     private readonly value: number;
   
     constructor(value: number) {
         if (value == null) {
-            throw new Error('ERROR: El presupuesto está vacío');
+            throw InvalidOfferBudget.EmptyBugdget();
         }
         if (value < 0) {
-            throw new Error('ERROR: El presupuesto no debe ser menor a 0');
+            throw InvalidOfferBudget.NegativeBugdget();
         }
       this.value = value;
     }

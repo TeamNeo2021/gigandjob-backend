@@ -1,4 +1,4 @@
-import { CandidatePhoneVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidatePhoneVo"
+import { CandidatePhoneVo } from "../../AggRoots/Candidate/ValueObjects/CandidatePhoneVo"
 import { InvalidCandidatePhoneNumber } from "../../AggRoots/Candidate/ValueObjects/Errors/invalidCandidatePhoneNumber.error"
 
 describe("create a new Candidate Phone Number", ()=>{

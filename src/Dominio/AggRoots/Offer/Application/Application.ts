@@ -1,3 +1,4 @@
+import { CandidateApplied } from "../../../DomainEvents/CandidateEvents/CandidateApplied";
 import { Entity } from "../../../Core/Entity";
 import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
 import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
@@ -36,7 +37,17 @@ export class Application extends Entity<ApplicationId>{
     }
 
      protected when(event: any): void {
+       switch (event.constructor) {
+           case CandidateApplied:
+               console.log('application '
+                           + this.id 
+                           + ' created from candidate '
+                           +event.candidateId)   
+               break;
        
+           default:
+               break;
+       }
      }
      protected EnsureValidState(): void {
         let valid =
@@ -67,6 +78,9 @@ export class Application extends Entity<ApplicationId>{
 
     public getState():ApplicationStates{
         return this.state.current;
+    }
+    public setState(state: ApplicationStates){
+         this.state.current = state;
     }
 
 

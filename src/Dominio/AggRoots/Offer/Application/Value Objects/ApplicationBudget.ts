@@ -8,6 +8,6 @@ export class ApplicationBudget{
         if (v <= 0){
             throw new RangeError('Application Budget cannot be less than 0');            
         }
-        this.value=v;
+        this.value = Number(Math.round(v).toFixed(2));
     }
 }

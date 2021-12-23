@@ -21,4 +21,5 @@ export class CandidateStateVo{
 export enum CandidateStatesEnum{
     Active,
     Suspended,
+    Eliminated
 }

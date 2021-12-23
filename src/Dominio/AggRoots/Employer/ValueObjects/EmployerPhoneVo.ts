@@ -1,17 +1,19 @@
+import { InvalidEmployerPhone } from "../Errors/InvalidEmployerPhone.error";
+
 export class EmployerPhoneVO {
 
     value_employer_phone :String;
 
     constructor(value: String) {
         
-        if(value==''){
-            throw new Error('ERROR: El teléfono está vacío');
+        if(!value || value.trim() == ""){
+            throw InvalidEmployerPhone.EmptyPhone();
         }
         if(value[0]!="+"){
-            throw new Error('ERROR: El teléfono debe comenzar con el signo +');
+            throw InvalidEmployerPhone.InvalidFormatPhone();
         }
         if(value.length-1 > 15){
-            throw new Error('ERROR: El teléfono no debe tener mas de 15 digitos');
+            throw InvalidEmployerPhone.TooBigPhone();
         }
 
         this.value_employer_phone=value;
