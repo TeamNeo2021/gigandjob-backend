@@ -41,7 +41,7 @@ const exampleOffer = new Offer(
     new DirectionVO('direction'),
     new SectorVO(Sectors.Laws),
     new BudgetVO(400),
-    new DescriptionVO(' ')
+    new DescriptionVO('Oferta de prueba')
 
 )
 
