@@ -6,8 +6,8 @@ import { PublicationDateVO } from "../../AggRoots/Offer/ValueObjects/OfferPublic
 import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
 import { Sectors, SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVO";
 import { OfferStatesEnum, OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVO";
-import { OfferModified } from "../../DomainEvents/OfferModified/OfferModified";
-import { OfferCreated } from "../../DomainEvents/OfferCreated/OfferCreated";
+import { OfferModified } from "../../DomainEvents/OfferEvents/OfferModified";
+import { OfferCreated } from "../../DomainEvents/OfferEvents/OfferCreated";
 
 const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),

@@ -7,16 +7,16 @@ import { CandidateEmailVo } from "./ValueObjects/CandidateEmailVo";
 import { AggregateRoot } from '../AggregateRoot'
 import { Cv } from "../CV/cv.root";
 import { InvalidCandidateState } from "./ValueObjects/Errors/invalidCandidateState.error";
-import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/CandidateRegistered/CandidateRegistered";
+import { CandidateRegisteredDomainEvent } from "../../DomainEvents/CandidateEvents/CandidateRegistered/CandidateRegistered";
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
-import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
+import { CandidateStateModified } from "../../DomainEvents/CandidateEvents/CandidateStateModified";
 import { InvalidCandidateAction } from "./ValueObjects/Errors/invalidCandidateAction.error";
-import { SuspendedCandidateDomainEvent } from "../../DomainEvents/Candidate/SuspendedCandidate.event";
-import { ActivateCandidateDomainEvent } from "../../DomainEvents/Candidate/ActivateCandidate.event";
+import { SuspendedCandidateDomainEvent } from "../../DomainEvents/CandidateEvents/SuspendedCandidate.event";
+import { ActivateCandidateDomainEvent } from "../../DomainEvents/CandidateEvents/ActivateCandidate.event";
 import { CvSubmittedDomainEvent } from "../../DomainEvents/CvEvents/cvSubmitted.event";
-import { CandidateModified } from "../../DomainEvents/Candidate/CandidateModified";
+import { CandidateModified } from "../../DomainEvents/CandidateEvents/CandidateModified";
 import { OfferIdVO } from "../Offer/ValueObjects/OfferIdVO";
-import { CandidateApplied } from "../../DomainEvents/Candidate/CandidateApplied";
+import { CandidateApplied } from "../../DomainEvents/CandidateEvents/CandidateApplied";
 import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
 import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
 

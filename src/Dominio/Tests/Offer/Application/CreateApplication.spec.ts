@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { CandidateApplied } from "../../../DomainEvents/Candidate/CandidateApplied";
+import { CandidateApplied } from "../../../DomainEvents/CandidateEvents/CandidateApplied";
 import { Candidate } from "../../../AggRoots/Candidate/Candidate";
 import { CandidateBirthDateVo } from "../../../AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
 import { CandidateEmailVo } from "../../../AggRoots/Candidate/ValueObjects/CandidateEmailVo";

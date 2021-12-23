@@ -6,10 +6,10 @@ import { EmployerNameVO } from "../../AggRoots/Employer/ValueObjects/EmployerNam
 import { EmployerPhoneVO } from "../../AggRoots/Employer/ValueObjects/EmployerPhoneVO";
 import { EmployerRifVO } from "../../AggRoots/Employer/ValueObjects/EmployerRifVO";
 import { EmployerStates, EmployerStateVO } from "../../AggRoots/Employer/ValueObjects/EmployerStateVO";
-import { EmployerEliminated } from "../../DomainEvents/EmployerEliminated/EmployerEliminated";
-import { EmployerRegistered } from "../../DomainEvents/EmployerRegistered/EmployerRegistered";
+import { EmployerEliminated } from "../../DomainEvents/EmployerEvents/EmployerEliminated";
+import { EmployerRegistered } from "../../DomainEvents/EmployerEvents/EmployerRegistered";
 import { Employer } from "../../AggRoots/Employer/Employer";
-import { EmployerModified } from "../../DomainEvents/EmployerModified/EmployerModified";
+import { EmployerModified } from "../../DomainEvents/EmployerEvents/EmployerModified";
 
 const exampleEmployer = Employer.RegisterEmployer(
     new EmployerNameVO("Soluciones de Prueba"),

@@ -1,4 +1,3 @@
-import { Application } from "../../AggRoots/Offer/Application/Application";
 import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
 import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
