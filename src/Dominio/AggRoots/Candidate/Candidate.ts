@@ -11,13 +11,12 @@ import { CandidateRegisteredDomainEvent } from "../../DomainEvents/Candidate/Can
 import { CandidateStatesEnum, CandidateStateVo } from "./ValueObjects/CandidateStateVo";
 import { CandidateStateModified } from "../../DomainEvents/Candidate/CandidateStateModified";
 import { InvalidCandidateAction } from "./ValueObjects/Errors/invalidCandidateAction.error";
-import { SuspendedCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/SuspendedCandidate.event";
-import { ActivateCandidateDomainEvent } from "src/Dominio/DomainEvents/Candidate/ActivateCandidate.event";
-import { CvAspirantApproved } from "src/Dominio/DomainEvents/CvAspirantApproved";
-import { CvSubmittedDomainEvent } from "src/Dominio/DomainEvents/CvEvents/cvSubmitted.event";
-import { CandidateModified } from "src/Dominio/DomainEvents/Candidate/CandidateModified";
+import { SuspendedCandidateDomainEvent } from "../../DomainEvents/Candidate/SuspendedCandidate.event";
+import { ActivateCandidateDomainEvent } from "../../DomainEvents/Candidate/ActivateCandidate.event";
+import { CvSubmittedDomainEvent } from "../../DomainEvents/CvEvents/cvSubmitted.event";
+import { CandidateModified } from "../../DomainEvents/Candidate/CandidateModified";
 import { OfferIdVO } from "../Offer/ValueObjects/OfferIdVO";
-import { CandidateApplied } from "src/Dominio/DomainEvents/Candidate/CandidateApplied";
+import { CandidateApplied } from "../../DomainEvents/Candidate/CandidateApplied";
 import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
 import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
 
@@ -34,7 +33,6 @@ export class Candidate extends AggregateRoot {
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
     private _location: CandidateLocationVo;
-    private _Cv: Cv;
 
     constructor(
         id: CandidateIdVo,
@@ -96,14 +94,6 @@ export class Candidate extends AggregateRoot {
     }
     public set location(value: CandidateLocationVo) {
         this._location = value;
-    }
-
-    public get Cv(): Cv {
-        return this._Cv;
-    }
-
-    public set Cv(Cv: Cv) {
-        this._Cv = Cv;
     }
 
     /**
@@ -251,12 +241,6 @@ export class Candidate extends AggregateRoot {
        /**
      * Access point to approve a CV
      * */
-
-    public approveCVAspirant(){
-        console.log(' Cv approved Candidate id#: ', this._id, '\nName: ', this._name.fullName);
-    
-    }
-
 
 
       /**
