@@ -1,4 +1,3 @@
-import { MeetingStates, MeetingStateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingStateVO";
 import { MeetingModifyEvent } from "../../DomainEvents/MeetingEvents/MeetingModify.event";
 import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo";
 import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
