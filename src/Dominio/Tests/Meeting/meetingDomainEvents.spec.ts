@@ -16,7 +16,7 @@ const meetingExample = Meeting.ScheduleOn(
     new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
 );
 
-describe("Agedar una reunion", ()=>{
+describe("Agendar una reunion", ()=>{
     it('Se debe crear una entidad meeting con la informacion asignada con un estado activivo',()=>{
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
     })
