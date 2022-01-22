@@ -74,14 +74,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         this._Description = (eventOfferCreated.Description);
         break;
       case OfferModified:
-        const eventOfferModified: OfferModified = event as OfferModified;
-        this._State = (eventOfferModified.state);
-        this._PublicationDate = (eventOfferModified.publicationDate);
-        this._Rating = (eventOfferModified.rating);
-        this._Direction = (eventOfferModified.direction);
-        this._Sector = (eventOfferModified.sector);
-        this._Budget = (eventOfferModified.budget);
-        this._Description = (eventOfferModified.description);
+         
+         if (this.State.state == OfferStatesEnum.Closed) {
+          throw InvalidOfferState.ChangingClosedState();
+        }
+        else if (this.State.state == OfferStatesEnum.Eliminated) {
+          throw InvalidOfferState.ChangingEliminatadState();
+        }
         break;
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
@@ -114,55 +113,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     const changes = this.GetChanges();
 
     //Create offer
-
     if (((this.State.state == OfferStatesEnum.Suspended) ||
       (this.State.state == OfferStatesEnum.Closed) ||
       (this.State.state == OfferStatesEnum.Eliminated)) &&
       (changes.length == 0)) {
       throw InvalidOfferState.BadCreatedOffer();
-    }
-    //Modify offer
-    else {
-      const last_change = changes[changes.length - 1]
-      if (last_change instanceof OfferModified) {
-        //se verifica el estado del ultimo evento si este fue una oferta modificada
-        switch (last_change.state.state) {
-          case OfferStatesEnum.Active:
-            //si el estado anterior es activa y el nuevo es cerrada y no tiene aplicaciones
-            if ((this.State.state == OfferStatesEnum.Closed) && (this.application.length == 0)) {
-              throw InvalidOfferState.BadClosedOffer();
-            }
-            break;
-          case OfferStatesEnum.Suspended:
-            //si el estado anterior es suspendida y el nuevo es cerrada
-            if (this.State.state == OfferStatesEnum.Closed) {
-              throw InvalidOfferState.ClosedFromSuspended();
-            }
-            break;
-          case OfferStatesEnum.Closed:
-            //si el estado anterior es cerrada y el nuevo es activa o suspendida
-            if ((this.State.state == OfferStatesEnum.Active) || (this.State.state == OfferStatesEnum.Suspended)) {
-              throw InvalidOfferState.ChangingClosedState();
-            }
-            break;
-          case OfferStatesEnum.Eliminated:
-            //si el estado anterior es eliminada no puede cambiar su estado de nuevo
-            if ((this.State.state == OfferStatesEnum.Active) ||
-              (this.State.state == OfferStatesEnum.Suspended) ||
-              (this.State.state == OfferStatesEnum.Closed)) {
-              throw InvalidOfferState.ChangingEliminatadState();
-            }
-            break;
-          default:
-            break;
-        }
-      } else {
-        //si el evento anterior es oferta creada y el nuevo estado es cerrada sin aplicaciones
-        if ((this.State.state == OfferStatesEnum.Closed) && (this.application.length == 0)) {
-          throw InvalidOfferState.BadClosedOffer();
-        }
-      }
-    }
+    }      
+    
     //algunos de los VO es nulo
     if (!valid) {
       throw InvalidOfferState.FailedVerification();
@@ -170,9 +127,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
 
   //Modificar oferta
-  public ModifyOffer(
-
-    state: OfferStateVO,
+  public ModifyOffer(    
     publicationDate: PublicationDateVO,
     rating: RatingVO,
     direction: DirectionVO,
@@ -181,17 +136,14 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     description: DescriptionVO,
   ) {
     console.log('Modificar Oferta');
-    this.Apply(
-      new OfferModified(
-        state,
-        publicationDate,
-        rating,
-        direction,
-        sector,
-        budget,
-        description,
-      )
-    );
+    this.Apply(new OfferModified());
+    this.PublicationDate = publicationDate;
+    this.Rating = rating;
+    this.Direction = direction;
+    this.Sector = sector;
+    this.Budget = budget;
+    this.Description = description;
+
     return this;
   }
 
