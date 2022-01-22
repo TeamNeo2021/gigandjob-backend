@@ -4,18 +4,18 @@ import { MeetingLocationVO } from './ValueObjects/MeetingLocationVO';
 import { MeetingStates, MeetingStateVO } from './ValueObjects/MeetingStateVO';
 import { MeetingDescriptionVO } from './ValueObjects/MeetingDescriptionVO';
 import { MeetingDateVO } from './ValueObjects/MeetingDateVO';
-import { EmployerIdVO } from '../Employer/ValueObjects/EmployerIdVO';
-import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 import { MeetingCanceledEvent } from '../../DomainEvents/MeetingEvents/MeetingCanceled.event';
 import { MeetingScheduledEvent } from '../../DomainEvents/MeetingEvents/MeetingScheduled.event';
 import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
 import { InvalidMeetingDate } from './Errors/InvalidMeetingDate.error';
-import { MeetingModifyEvent } from '../../DomainEvents/MeetingEvents/MeetingModify.event';
+import { MeetingModifiedEvent } from '../../DomainEvents/MeetingEvents/MeetingModifed.event';
+import { Candidate } from '../Candidate/Candidate';
+import { Employer } from '../Employer/Employer';
 
 
 export class Meeting extends AggregateRoot {
-    private _candidate: CandidateIdVo;
-    private _employer: EmployerIdVO;
+    private _candidate: Candidate;
+    private _employer: Employer;
     private _id: MeetingIDVO;
     private _state: MeetingStateVO;
     private _description: MeetingDescriptionVO;
@@ -23,7 +23,7 @@ export class Meeting extends AggregateRoot {
     private _location: MeetingLocationVO;
 
     constructor(id: MeetingIDVO, state: MeetingStateVO, description: MeetingDescriptionVO, date: MeetingDateVO, location: MeetingLocationVO,
-        employerID: EmployerIdVO, candidateID: CandidateIdVo) {
+        employerID: Employer, candidateID: Candidate) {
         super();
         this._id = id;
         this._state = state;
@@ -38,27 +38,15 @@ export class Meeting extends AggregateRoot {
         switch (event.constructor) {
             case MeetingCanceledEvent:
                 let today = new MeetingDateVO(new Date());
-                const meetingCanceledEvent: MeetingCanceledEvent = event as MeetingCanceledEvent;
-                this.state = (meetingCanceledEvent.state);
-                if (today.LessThan(this.date)) {
-                    this.state = (meetingCanceledEvent.state);
-                } else {
+                if (!today.LessThan(this.date)) {
                     throw InvalidMeetingDate.MeetingDateExpired();
                 }
                 break;
+            
             case MeetingScheduledEvent:
-                const meetingScheduledEvent: MeetingScheduledEvent = event as MeetingScheduledEvent;
-                this.state = (meetingScheduledEvent.state);
-                this.date = (meetingScheduledEvent.date);
-                this.description = (meetingScheduledEvent.description);
-                this.location = (meetingScheduledEvent.location);
-                this.employer = (meetingScheduledEvent.employer);
-                this.candidate = (meetingScheduledEvent.candidate)
                 break;
-            case MeetingModifyEvent:
-                const meetingModifyEvent: MeetingModifyEvent = event as MeetingModifyEvent;
-                this.description = (meetingModifyEvent.description) ? (meetingModifyEvent.description) : this.description;
-                this.location = (meetingModifyEvent.location) ? (meetingModifyEvent.location) : this.location;
+            
+            case MeetingModifiedEvent:
                 break;
         }
     }
@@ -100,36 +88,44 @@ export class Meeting extends AggregateRoot {
         }
     }
 
-    
-
+    // methods
     public Cancel() {
-        let event = new MeetingCanceledEvent(this.id)
-        this.Apply(event)
+        console.log('Cancel meeting');
+        this.state = new MeetingStateVO(MeetingStates.Canceled);
+        this.Apply(new MeetingCanceledEvent())
+        return this
     }
 
     static ScheduleOn(
         date: MeetingDateVO,
-        employer: EmployerIdVO,
-        candidate: CandidateIdVo,
+        employer: Employer,
+        candidate: Candidate,
         description: MeetingDescriptionVO,
         location: MeetingLocationVO,
         state: MeetingStateVO = new MeetingStateVO(MeetingStates.Active),
     ) {
+        console.log('Schedule on meeting');
         let id = new MeetingIDVO();
         let meeting = new Meeting(id, state, description, date, location, employer, candidate);
-        meeting.Apply(
-            new MeetingScheduledEvent(id, date, employer, candidate, description, location, state)
-        );
+        meeting.Apply(new MeetingScheduledEvent());
         return meeting
     }
 
-    public Modify(
+    public Modified(
         description?: MeetingDescriptionVO,
         location?: MeetingLocationVO,
+        date?: MeetingDateVO,
     ) {
-        this.Apply(
-            new MeetingModifyEvent(this.id, description, location)
-        );
+        if (description){
+            this.description = description
+        }
+        if (location){
+            this.location = location
+        }
+        if (date){
+            this.date = date
+        }
+        this.Apply(new MeetingModifiedEvent());
     }
 
     // getters y setters
@@ -153,11 +149,11 @@ export class Meeting extends AggregateRoot {
         return this._location
     }
 
-    get candidate(): CandidateIdVo {
+    get candidate(): Candidate {
         return this._candidate;
     }
 
-    get employer(): EmployerIdVO {
+    get employer(): Employer {
         return this._employer;
     }
 
@@ -177,11 +173,11 @@ export class Meeting extends AggregateRoot {
         this._description = description;
     }
 
-    private set employer(employer: EmployerIdVO) {
+    private set employer(employer: Employer) {
         this._employer = employer
     }
 
-    private set candidate(candidate: CandidateIdVo) {
+    private set candidate(candidate: Candidate) {
         this._candidate = candidate
     }
 }

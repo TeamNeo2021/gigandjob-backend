@@ -1,17 +1,19 @@
-import { MeetingModifyEvent } from "../../DomainEvents/MeetingEvents/MeetingModify.event";
-import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateIdVo";
-import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
+import { MeetingModifiedEvent } from "../../DomainEvents/MeetingEvents/MeetingModifed.event";
 import { Meeting } from "../../AggRoots/Meeting/Meeting";
 import { MeetingDateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDateVO";
 import { MeetingDescriptionVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDescriptionVO";
 import { MeetingLocationVO } from "../../AggRoots/Meeting/ValueObjects/MeetingLocationVO";
 import { MeetingCanceledEvent } from "../../DomainEvents/MeetingEvents/MeetingCanceled.event";
 import { MeetingScheduledEvent } from "../../DomainEvents/MeetingEvents/MeetingScheduled.event";
+import { exampleEmployer } from "../Employer/employerDomainEvents.spec";
+import { create_exampleCandidate } from "../Candidate/eliminateCandidate.spec";
+
+const exampleCandidate = create_exampleCandidate();
 
 const meetingExample = Meeting.ScheduleOn(
     new MeetingDateVO(new Date(2022,11,31)),
-    new EmployerIdVO(),
-    new CandidateIdVo(),
+    exampleEmployer,
+    exampleCandidate,
     new MeetingDescriptionVO('Meeting test description'),
     new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
 );
@@ -24,12 +26,12 @@ describe("Agendar una reunion", ()=>{
 
 describe('Modificar una reunion',()=>{
     it('Debe cambiar todos los valores posibles',()=>{
-        meetingExample.Modify(
+        meetingExample.Modified(
             new MeetingDescriptionVO('Meeting description modify'),
             new MeetingLocationVO('Meeting location modify'),
         );
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
-        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifyEvent);
+        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifiedEvent);
     })
 })
 
@@ -37,7 +39,7 @@ describe("Cancelar una reunion", ()=>{
     it('Debe cambiar el estado de la reunion a Cancel',()=>{
         meetingExample.Cancel();
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
-        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifyEvent);
+        expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifiedEvent);
         expect(meetingExample.GetChanges()[2]).toBeInstanceOf(MeetingCanceledEvent);
     })
 });

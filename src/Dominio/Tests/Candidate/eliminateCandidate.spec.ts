@@ -9,7 +9,7 @@ import { CandidatePhoneVo } from "../../AggRoots/Candidate/ValueObjects/Candidat
 import { CandidateStatesEnum, CandidateStateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateStateVo";
 import { CandidateStateModified } from "../../DomainEvents/CandidateEvents/CandidateStateModified";
 
-function create_exampleCandidate(): Candidate{
+export function create_exampleCandidate(): Candidate{
     
     const exampleCandidate = new Candidate(
         new CandidateIdVo(),
