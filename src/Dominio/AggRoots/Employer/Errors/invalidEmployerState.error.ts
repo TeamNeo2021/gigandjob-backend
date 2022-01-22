@@ -1,6 +1,6 @@
 export class InvalidEmployerState extends Error { 
     
-    static ChangingEliminatadState() {
+    static ChangingEliminatedState() {
         return new InvalidEmployerState("ERROR: No se puede cambiar el estado de un Empleador Eliminado")
     }
     

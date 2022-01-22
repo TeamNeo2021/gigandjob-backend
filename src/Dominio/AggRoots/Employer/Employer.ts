@@ -66,15 +66,11 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
         this.comDesignation = (eventEmployerRegistered.comDesignation);
         break;
       case EmployerModified:
-        const eventEmployerModified: EmployerModified = event as EmployerModified;
-        this.name = (eventEmployerModified.name);
-        this.description = (eventEmployerModified.description);
-        this.state = (eventEmployerModified.state);
-        this.location = (eventEmployerModified.location);
-        this.rif = (eventEmployerModified.rif);
-        this.phone = (eventEmployerModified.phone);
-        this.mail = (eventEmployerModified.mail);
-        this.comDesignation = (eventEmployerModified.comDesignation);
+        //si el estado anterior es eliminado
+        if ((this._state.value_state == EmployerStates.Eliminated)) {
+          throw InvalidEmployerState.ChangingEliminatedState();
+        }
+        
         break;
       case EmployerEliminated:
         const eventEmployerEliminated: EmployerEliminated = event as EmployerEliminated;
@@ -101,21 +97,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     const changes = this.GetChanges();
     const last_change = changes[changes.length - 1]
     if (last_change) {
-      switch (last_change.constructor) {
-        //Modify Employer
-        case EmployerModified:
-          const eventEmployerModified: EmployerModified = last_change as EmployerModified
-          //se verefica el estado del ultimo evento si este fue un empleador modificado
-          switch (eventEmployerModified.state.value_state) {
-            case EmployerStates.Eliminated:
-              //si el estado anterior es eliminado y el nuevo es activo o suspendido
-              if ((this._state.value_state == EmployerStates.Active) || (this._state.value_state == EmployerStates.Suspended)) {
-                throw InvalidEmployerState.ChangingEliminatadState();
-              }
-              break;
-            default:
-              break;
-          }
+      switch (last_change.constructor) {        
         //Eliminate Employer
         case EmployerEliminated:
           const eventEmployerEliminated: EmployerEliminated = last_change as EmployerEliminated
@@ -124,7 +106,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
             case EmployerStates.Eliminated:
               //si el estado anterior es eliminado y el nuevo es activo o suspendido
               if ((this._state.value_state == EmployerStates.Active) || (this._state.value_state == EmployerStates.Suspended)) {
-                throw InvalidEmployerState.ChangingEliminatadState();
+                throw InvalidEmployerState.ChangingEliminatedState();
               }
               break;
             default:
@@ -173,8 +155,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
 
   public ModifyEmployer(
     name: EmployerNameVO,
-    description: EmployerDescriptionVO,
-    state: EmployerStateVO,
+    description: EmployerDescriptionVO,    
     location: EmployerLocationVO,
     rif: EmployerRifVO,
     phone: EmployerPhoneVO,
@@ -182,18 +163,16 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     comDesignation: EmployerComercialDesignationVO,
   ) {
     console.log('Modificar Empleador');
-    this.Apply(
-      new EmployerModified(
-        name,
-        description,
-        state,
-        location,
-        rif,
-        phone,
-        mail,
-        comDesignation,
-      )
-    );
+    this.Apply(new EmployerModified());
+    
+    this.name = name;
+    this.description = description;    
+    this.location = location;
+    this.rif = rif;
+    this.phone = phone;
+    this.mail = mail;
+    this.comDesignation = comDesignation;
+
     return this;
   }
 

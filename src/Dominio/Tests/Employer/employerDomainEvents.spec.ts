@@ -13,7 +13,7 @@ import { EmployerModified } from "../../DomainEvents/EmployerEvents/EmployerModi
 
 const exampleEmployer = Employer.RegisterEmployer(
     new EmployerNameVO("Soluciones de Prueba"),
-    new EmployerDescriptionVO("El trabajo es una prueba"),
+    new EmployerDescriptionVO("La descripcion es una prueba"),
     new EmployerStateVO(EmployerStates.Active),
     new EmployerLocationVO("Av los Cedros"),
     new EmployerRifVO("J-1236782"),
@@ -31,11 +31,10 @@ describe("crear un empleador", () => {
 
 describe("modificar un empleador", () => {
 
-    it("debe modificar el empleador cuando se cambia el estado de activo a suspendido", () => {
+    it("debe modificar el empleador cuando se cambia el estado es activo o suspendido", () => {
         exampleEmployer.ModifyEmployer(
             new EmployerNameVO("Soluciones de Prueba"),
-            new EmployerDescriptionVO("El trabajo es una prueba"),
-            new EmployerStateVO(EmployerStates.Suspended),
+            new EmployerDescriptionVO("La descripcion ha sido modificada"),
             new EmployerLocationVO("Av los Cedros"),
             new EmployerRifVO("J-1236782"),
             new EmployerPhoneVO("+584124578457"),
@@ -44,7 +43,8 @@ describe("modificar un empleador", () => {
         expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
         expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
     })
-})
+});
+
 describe("Eliminar un empleador", () => {
     it("debe eliminar el empleador independientemente del estado anterior", () => {
         exampleEmployer.EliminateEmployer(
@@ -53,31 +53,18 @@ describe("Eliminar un empleador", () => {
         expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
         expect(exampleEmployer.GetChanges()[2]).toBeInstanceOf(EmployerEliminated);
     })
-})
+});
 
 describe("modificar un empleador", () => {
-    it("no debe modificar el empleador cuando se cambia el estado de eliminado a activo", () => {
+    it("no debe modificar el empleador cuando su estado es eliminado", () => {
         expect(() => exampleEmployer.ModifyEmployer(
             new EmployerNameVO("Soluciones de Prueba"),
-            new EmployerDescriptionVO("El trabajo es una prueba"),
-            new EmployerStateVO(EmployerStates.Active),
+            new EmployerDescriptionVO("La descripcion vuelve a ser una prueba"),
             new EmployerLocationVO("Av los Cedros"),
             new EmployerRifVO("J-1236782"),
             new EmployerPhoneVO("+584124578457"),
             new EmployerMailVO("prueba@test.com"),
             new EmployerComercialDesignationVO("Informatica24.c.a"))
         ).toThrowError(Error);
-    }),
-        it("no debe modificar el empleador cuando se cambia el estado de eliminado a suspendido", () => {
-            expect(() => exampleEmployer.ModifyEmployer(
-                new EmployerNameVO("Soluciones de Prueba"),
-                new EmployerDescriptionVO("El trabajo es una prueba"),
-                new EmployerStateVO(EmployerStates.Suspended),
-                new EmployerLocationVO("Av los Cedros"),
-                new EmployerRifVO("J-1236782"),
-                new EmployerPhoneVO("+584124578457"),
-                new EmployerMailVO("prueba@test.com"),
-                new EmployerComercialDesignationVO("Informatica24.c.a"))
-            ).toThrowError(Error);
-        })
+    });        
 })
