@@ -8,8 +8,10 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
   public tid: string;
   public observers: IObserver[] = [];
   protected readonly changes: IDomainEvent[] = [];
+  
   protected abstract When(event: any): void;
   protected abstract EnsureValidState(): void;
+
   protected Apply(event: any): void {
     this.When(event);
     this.EnsureValidState();
@@ -17,22 +19,25 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
     this.notifyAll();
 
   }
+
   public GetChanges(): readonly object[] {
     return this.changes;
   }
+
   public ClearChanges(): void {
     this.changes.splice(0, this.changes.length);
   }
+
   protected ApplyToEntity(
     entity: IInternalEventHandler,
     event: any
   ): void {
     entity.Handle(event);
   }
+
   public Handle(event: any): void {
     this.When(event);
   }
-
 
   //IObservable methods
   public notifyAll(): void{
@@ -51,7 +56,6 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
       console.log('Added an observer.');
   }
   
-
   public removeObserver(observer: IObserver): void {
     const observerIndex = this.observers.indexOf(observer);
     if (observerIndex === -1) {

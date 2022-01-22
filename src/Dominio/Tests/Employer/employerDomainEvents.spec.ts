@@ -11,7 +11,7 @@ import { EmployerRegistered } from "../../DomainEvents/EmployerEvents/EmployerRe
 import { Employer } from "../../AggRoots/Employer/Employer";
 import { EmployerModified } from "../../DomainEvents/EmployerEvents/EmployerModified";
 
-const exampleEmployer = Employer.RegisterEmployer(
+export const exampleEmployer = Employer.RegisterEmployer(
     new EmployerNameVO("Soluciones de Prueba"),
     new EmployerDescriptionVO("La descripcion es una prueba"),
     new EmployerStateVO(EmployerStates.Active),
