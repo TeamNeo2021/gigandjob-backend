@@ -1,7 +1,7 @@
 import { EmployerCommand } from "src/Application/Commands/Employer/command.interface";
 import { DomainError } from "src/Application/Errors/domain.error";
 import { InfrastructureError } from "src/Application/Errors/infrastructure.error";
-import { CouldNotPublishEventsError } from "src/Application/Publisher/Employer/Errors/could-not-publish-events.error";
+import { CouldNotPublishEventsError } from "src/Application/Publisher/Errors/could-not-publish-events.error";
 import { EmployerPublisherEvent } from "src/Application/Publisher/Employer/event";
 import { EmployerPublisher } from "src/Application/Publisher/Employer/publisher.interface";
 import { EmployerQuery } from "src/Application/Queries/Employer/query.interface";
