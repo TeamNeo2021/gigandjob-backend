@@ -1,14 +1,9 @@
-import { IMeetingRepository } from "../../Application/Repositories/MeetingRepository.repo";
-import {
-    Injectable,
-    Inject,
-    Logger,
-    InternalServerErrorException,
-  } from '@nestjs/common';
-import { CollectionReference } from "@google-cloud/firestore";
 
 
-@Injectable()
+import { IMeetingRepository } from '../../Application/Repositories/MeetingRepository.repo';
+
+
+//@Injectable()
 export class MeeetingFirestoreRepository implements IMeetingRepository {
 
     repository :any;

@@ -1,4 +1,5 @@
-import { IApplicationService } from "../Core/IApplicationService";
+import { IApplicationService } from ".././Core/IApplicationService";
+
 
 class OfferService implements IApplicationService {
 
