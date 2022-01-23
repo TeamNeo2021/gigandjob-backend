@@ -13,18 +13,17 @@ import { InvalidCandidateAction } from "../../AggRoots/Candidate/ValueObjects/Er
 
 const succesfullCandidateRegistering = ()=>{
 
+    const exampleCandidate = new Candidate(
+        new CandidateIdVo(),
+        new CandidateStateVo(CandidateStatesEnum.Active),
+        new CandidateFullNameVo('Peter', 'Parker'),
+        new CandidatePhoneVo('0414', '4407938'),
+        new CandidateEmailVo('spidey@gmail.com'),
+        new CandidateBirthDateVo(new Date('2000-01-16')),
+        new CandidateLocationVo(20, 90)
+    );
 
-const exampleCandidate = new Candidate(
-    new CandidateIdVo(),
-    new CandidateStateVo(CandidateStatesEnum.Active),
-    new CandidateFullNameVo('Peter', 'Parker'),
-    new CandidatePhoneVo('0414', '4407938'),
-    new CandidateEmailVo('spidey@gmail.com'),
-    new CandidateBirthDateVo(new Date('2000-01-16')),
-    new CandidateLocationVo(20, 90)
-);
-
- return exampleCandidate.registerCandidate();
+    return exampleCandidate.registerCandidate();
 
 }
 
