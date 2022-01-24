@@ -7,5 +7,4 @@ export class CandidateRegisterDTO{
     public birthDate: string;
     public latitude: Number;
     public longitude: Number;
-
 } 
