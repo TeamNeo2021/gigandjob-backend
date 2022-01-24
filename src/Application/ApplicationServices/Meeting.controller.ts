@@ -1,18 +1,21 @@
-import { Controller, Put, Post, Delete, Param } from '@nestjs/common';
-import { IApplicationService } from '../Core/IApplicationService';
+import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
+import { MeetingService } from './Meeting.service';
 
 @Controller('meeting')
 export class MeetingController {
-    constructor(private readonly MeetingService: IApplicationService){}
+  constructor(private readonly meetingService: MeetingService) {}
   //dominio/meeting/accept
   @Put('accept')
-  acceptMeeting(request: AcceptMeeting): any {
-    request = new AcceptMeeting();
-    request.candidateId = @Param('candidateId');
-    request.meetingId = @Param('meetingId');
-    console.log(@Param('candidateId')+@Param('meetingId'))
-    this.MeetingService.Handle(request);
+  acceptMeeting(
+    request: AcceptMeeting,
+    @Body('candidateId') CI: string,
+    @Body('meetingId') MI: string,
+  ): any {
+    request = new AcceptMeeting(CI, MI);
+    console.log(Body);
+    console.log(request);
+    this.meetingService.Handle(request);
     return 'ok';
   }
 }

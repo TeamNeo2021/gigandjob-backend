@@ -4,8 +4,8 @@ import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 
 @Injectable()
 export class MeetingService implements IApplicationService {
-  Handle(command: any): void {
-    switch (command.type) {
+  Handle(command: Object): void {
+    switch (command.constructor) {
       case AcceptMeeting:
         console.log('oferta aceptada');
         break;
@@ -13,7 +13,9 @@ export class MeetingService implements IApplicationService {
 
       //     break;
       default:
-        throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+        throw new Error(
+          `OfferService: Command doesn't exist: ${command.constructor}`,
+        );
         break;
     }
   }
