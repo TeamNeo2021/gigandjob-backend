@@ -4,5 +4,5 @@ export interface CandidateTransactionService {
     get(id: string): Promise<Candidate>
     getSuspensionCount(id: string): Promise<number>
     getSuspensionLimit(): Promise<number>
-    // schedule
+    scheduleCandidateReactivation(id: string, at: Date): Promise<void>
 }

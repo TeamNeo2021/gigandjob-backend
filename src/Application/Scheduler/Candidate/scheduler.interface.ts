@@ -1,3 +1,3 @@
-export interface Scheduler {
-    // schedule(action: Schedulable)
+export interface CandidateScheduler {
+    scheduleCandidateReactivation(id: string, at: Date): Promise<void>
 }

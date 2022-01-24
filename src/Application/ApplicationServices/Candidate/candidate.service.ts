@@ -1,3 +1,4 @@
+import { ActivateCandidateCommand } from "src/Application/Commands/Candidate/activate-candidate.command";
 import { CandidateCommand } from "src/Application/Commands/Candidate/command.interface";
 import { CandidateConfiguration } from "src/Application/Configuration/Candidate/configuration.interface";
 import { DomainError } from "src/Application/Errors/domain.error";
@@ -8,6 +9,7 @@ import { CouldNotPublishEventsError } from "src/Application/Publisher/Errors/cou
 import { CandidateRepository } from "src/Application/Repositories/Candidate/repository.interface";
 import { CouldNotFindSuspensionCountError } from "src/Application/Repositories/Candidate/Suspensions/Errors/could-not-find-suspension-count.error";
 import { CandidateSuspensionRespository } from "src/Application/Repositories/Candidate/Suspensions/repository.interface";
+import { CandidateScheduler } from "src/Application/Scheduler/Candidate/scheduler.interface";
 import { CandidateApplicationService as Contract } from "./service.interface";
 import { CandidateTransactionService } from "./transaction.interface";
 
@@ -18,12 +20,16 @@ export class CandidateApplicationService implements Contract {
         repository: CandidateRepository, 
         suspensionRepository: CandidateSuspensionRespository,
         configuration: CandidateConfiguration,
+        scheduler: CandidateScheduler,
         private publisher: CandidatePublisher
     ) {
         this.candidateTransactionService = {
             get: (id: string) => repository.get(id),
             getSuspensionCount: (id: string) => suspensionRepository.getSuspensionCount(id),
-            getSuspensionLimit: () => configuration.getSuspensionLimit()
+            getSuspensionLimit: () => configuration.getSuspensionLimit(),
+            scheduleCandidateReactivation: async (id: string, at: Date) => {
+                await scheduler.scheduleCandidateReactivation(id, at)
+            }
         }
     }
 

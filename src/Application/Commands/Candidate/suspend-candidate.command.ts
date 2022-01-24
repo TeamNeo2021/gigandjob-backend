@@ -12,6 +12,7 @@ export class SuspendCandidateCommand implements CandidateCommand<void> {
             return CandidateCommandResult.nothing(candidate)
         } else {
             candidate.suspendThisCandidate()
+            await service.scheduleCandidateReactivation(candidate.Id.value, this.until)
             return CandidateCommandResult.nothing(candidate)
         }
         
