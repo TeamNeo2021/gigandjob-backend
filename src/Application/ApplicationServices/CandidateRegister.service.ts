@@ -8,12 +8,12 @@ import { CandidatePhoneVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/
 import { CandidateEmailVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateEmailVo";
 import { CandidateBirthDateVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
 import { CandidateLocationVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO";
-import { CandidateCommandRepository } from "../Repositories/CandidateCommandRepository.repo";
+import { ICandidateCommandRepository } from "../Repositories/CandidateCommandRepository.repo";
 
 export class CandidateRegisterService{
-    private commandRepository: CandidateCommandRepository;
+    private commandRepository: ICandidateCommandRepository;
 
-    constructor(commandRepository: CandidateCommandRepository){
+    constructor(commandRepository: ICandidateCommandRepository){
         this.commandRepository = commandRepository;
     }
 
