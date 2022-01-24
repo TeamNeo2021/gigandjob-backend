@@ -13,8 +13,6 @@ export class MeetingController {
     @Body('meetingId') MI: string,
   ): any {
     request = new AcceptMeeting(CI, MI);
-    console.log(Body);
-    console.log(request);
     this.meetingService.Handle(request);
     return 'ok';
   }

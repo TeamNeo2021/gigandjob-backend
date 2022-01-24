@@ -115,7 +115,7 @@ export class Meeting extends AggregateRoot {
     candidate: Candidate,
     description: MeetingDescriptionVO,
     location: MeetingLocationVO,
-    state: MeetingStateVO = new MeetingStateVO(MeetingStates.Active),
+    state: MeetingStateVO = new MeetingStateVO(MeetingStates.Pending),
   ) {
     console.log('Schedule on meeting');
     const id = new MeetingIDVO();
