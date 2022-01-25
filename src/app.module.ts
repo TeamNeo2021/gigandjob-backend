@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 //import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 //import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
@@ -22,7 +23,8 @@ import { RepositoryModule } from './Infrastructure/Repository.module';
       inject: [ConfigService],
     }),
   ],*/
-  controllers: [AppController, MeetingController],
-  providers: [AppService, MeetingService],
+  controllers: [AppController, MeetingController,OfferApi],
+  providers: [AppService, MeetingService,OfferService],
+
 })
 export class AppModule {}
