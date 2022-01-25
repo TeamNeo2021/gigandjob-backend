@@ -4,28 +4,39 @@ import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/Meeting
 import { IApplicationService } from '../Core/IApplicationService';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { RejectMeeting } from '../DTO/Meeting/rejectMeetingDTO';
+import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
 
 @Injectable()
 export class MeetingService implements IApplicationService {
+  private repository: IMeetingRepository;
+  constructor(repository: IMeetingRepository) {
+    this.repository = repository;
+  }
   Handle(command: Object): void {
     switch (command.constructor) {
       case AcceptMeeting:
         //agendar en calendario
-        //query meeting command.meetingId
-        let meeting = new Meeting();
-        meeting.state = MeetingStates.Active;
-        //query save meeting       
+        let dtoMeeting =  this.repository.getById(command.meetingId)
+        let meeting = new Meeting(dtoMeeting.id,
+          dtoMeeting.state,
+          dtoMeeting.description,
+          dtoMeeting.date,
+          dtoMeeting.location,
+          dtoMeeting.employer, //employerId
+          dtoMeeting.candidate); //candidateId
+        meeting.state = new MeetingStates.Active;
+        this.repository.modifyMeeting(meeting);     
         break;
       case RejectMeeting:
         //eliminar en calendario
         //query meeting command.meetingId
         let meeting = new Meeting();
-        meeting.state = MeetingStates.Canceled;
-        //query save meeting
+        meeting.state = MeetingStates.Rejected;
+        this.repository.modifyMeeting(meeting);   
         break;
       default:
         throw new Error(
-          `OfferService: Command doesn't exist: ${command.constructor}`,
+          `MeetingService: Command doesn't exist: ${command.constructor}`,
         );
         break;
     }

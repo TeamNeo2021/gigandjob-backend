@@ -6,11 +6,18 @@ import { IMeetingRepository } from '../../Application/Repositories/MeetingReposi
 //@Injectable()
 export class MeeetingFirestoreRepository implements IMeetingRepository {
 
-    repository :any;
+    /*repository :any;
     
     constructor(repository: any){
         this.repository = repository;
-    };
+    }*/
+
+    constructor(){}
+    
+    getById(id: string): MeetingDTO {
+        throw new Error('Method not implemented.');
+    }
+;
 
     scheduleMeeting(meeting: MeetingDTO): MeetingDTO {
         throw new Error("Method not implemented.");

@@ -1,7 +1,7 @@
 
 export interface IMeetingRepository {
 
-      repository;
+      //repository;
 
     scheduleMeeting(meeting: MeetingDTO): MeetingDTO;
 
@@ -16,5 +16,7 @@ export interface IMeetingRepository {
     cancelAllEmployerMeetings(employerId: String);
 
     cancelAllCandidateMeetings(candidateId: String);
+
+    getById(id:string): MeetingDTO;
 
 }

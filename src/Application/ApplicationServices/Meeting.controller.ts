@@ -1,11 +1,19 @@
 import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
+import { MeeetingFirestoreRepository } from 'src/Infrastructure/Firestore/MeetingFirestoreRepository.repo';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { RejectMeeting } from '../DTO/Meeting/rejectMeetingDTO';
 import { MeetingService } from './Meeting.service';
 
 @Controller('meeting')
 export class MeetingController {
-  constructor(private readonly meetingService: MeetingService) {}
+
+  private readonly meetingService: MeetingService;
+  private readonly repository: MeeetingFirestoreRepository
+  constructor(){
+    this.repository = new MeeetingFirestoreRepository()
+      this.meetingService = new MeetingService(this.repository)
+  }
+
   //dominio/meeting/accept
   @Put('accept')
   acceptMeeting(
