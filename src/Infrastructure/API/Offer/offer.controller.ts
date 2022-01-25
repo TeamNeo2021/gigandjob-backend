@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { OfferFirestoreRepository } from 'src/Infrastructure/Firestore/OfferFirestoreRepository.repo';
+import { OfferFirestoreRepository } from '../../../Infrastructure/Firestore/OfferFirestoreRepository.repo';
 import { OfferService } from '../../../Application/ApplicationServices/OfferService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 
