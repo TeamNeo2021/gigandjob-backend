@@ -51,7 +51,6 @@ export class MeetingService implements IApplicationService {
         this.repository.modifyMeeting(dtoMeeting);
         break;
       case RejectMeeting:
-        //eliminar en calendario
         //query meeting command.meetingId
         let meeting = new Meeting();
         meeting.state = MeetingStates.Rejected;
