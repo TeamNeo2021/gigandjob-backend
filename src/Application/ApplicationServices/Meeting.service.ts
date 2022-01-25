@@ -1,8 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { Candidate } from 'src/Dominio/AggRoots/Candidate/Candidate';
+import { CandidateIdVo } from 'src/Dominio/AggRoots/Candidate/ValueObjects/CandidateIdVo';
 import { Meeting } from 'src/Dominio/AggRoots/Meeting/Meeting';
-import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
+import { MeetingDateVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDateVO';
+import { MeetingDescriptionVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDescriptionVO';
+import { MeetingIDVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingIDVO';
+import { MeetingLocationVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingLocationVO';
+import {
+  MeetingStates,
+  MeetingStateVO,
+} from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { IApplicationService } from '../Core/IApplicationService';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
+import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
 import { RejectMeeting } from '../DTO/Meeting/rejectMeetingDTO';
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
 
@@ -12,27 +22,40 @@ export class MeetingService implements IApplicationService {
   constructor(repository: IMeetingRepository) {
     this.repository = repository;
   }
-  Handle(command: Object): void {
+  Handle(command: any): void {
     switch (command.constructor) {
       case AcceptMeeting:
         //agendar en calendario
-        let dtoMeeting =  this.repository.getById(command.meetingId)
-        let meeting = new Meeting(dtoMeeting.id,
-          dtoMeeting.state,
-          dtoMeeting.description,
-          dtoMeeting.date,
-          dtoMeeting.location,
-          dtoMeeting.employer, //employerId
-          dtoMeeting.candidate); //candidateId
-        meeting.state = new MeetingStates.Active;
-        this.repository.modifyMeeting(meeting);     
+        const dtoMeeting: MeetingDTO = this.repository.getById(
+          command.meetingId,
+        );
+        const Ameeting = new Meeting(
+          new MeetingIDVO(dtoMeeting.id),
+          new MeetingStateVO(dtoMeeting.state),
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          new Candidate(
+            dtoMeeting.candidate,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+          ),
+        );
+        Ameeting.Accept();
+        dtoMeeting.state = Ameeting.state.current;
+        this.repository.modifyMeeting(dtoMeeting);
         break;
       case RejectMeeting:
         //eliminar en calendario
         //query meeting command.meetingId
         let meeting = new Meeting();
         meeting.state = MeetingStates.Rejected;
-        this.repository.modifyMeeting(meeting);   
+        this.repository.modifyMeeting(meeting);
         break;
       default:
         throw new Error(

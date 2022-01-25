@@ -6,12 +6,11 @@ import { MeetingService } from './Meeting.service';
 
 @Controller('meeting')
 export class MeetingController {
-
   private readonly meetingService: MeetingService;
-  private readonly repository: MeeetingFirestoreRepository
-  constructor(){
-    this.repository = new MeeetingFirestoreRepository()
-      this.meetingService = new MeetingService(this.repository)
+  private readonly repository: MeeetingFirestoreRepository;
+  constructor() {
+    this.repository = new MeeetingFirestoreRepository();
+    this.meetingService = new MeetingService(this.repository);
   }
 
   //dominio/meeting/accept
@@ -38,5 +37,4 @@ export class MeetingController {
     this.meetingService.Handle(request);
     return 'ok';
   }
-
 }

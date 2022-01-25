@@ -1,6 +1,7 @@
-
-
 //IDK if we should implement especific DTOs for each entity so I will comment this.
+
+import { CandidateIdVo } from 'src/Dominio/AggRoots/Candidate/ValueObjects/CandidateIdVo';
+import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 
 // class MeetingCandidateDTO{
 //     public id: String;
@@ -26,14 +27,12 @@
 //   //  public comDesignation: EmployerComercialDesignationVO;
 // }
 
-class MeetingDTO{
-
-
-    public candidate: CandidateDTO;
-    public employer: EmployerDTO;
-    public id: String;
-    public state: String;
-    public description: String;
-    public date: Date;
-    public location: LocationDTO;
+export class MeetingDTO {
+  public id: String;
+  public state: MeetingStates;
+  public description: String;
+  public date: Date;
+  public location: LocationDTO;
+  public candidate: CandidateIdVo;
+  public employer: EmployerDTO;
 }
