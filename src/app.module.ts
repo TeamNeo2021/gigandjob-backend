@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { OfferService } from './Application/ApplicationServices/OfferService.service';
+import { OfferApi } from './Infrastructure/API/offer/offer.controller';
 import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
-import { RepositoryModule } from './Infrastructure/Repository.module';
+
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ FirestoreModule.forRoot({
   inject: [ConfigService],
 }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, OfferApi],
+  providers: [AppService, OfferService],
 })
 export class AppModule {}
