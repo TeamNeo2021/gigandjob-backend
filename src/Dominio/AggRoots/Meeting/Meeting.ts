@@ -12,172 +12,193 @@ import { MeetingModifiedEvent } from '../../DomainEvents/MeetingEvents/MeetingMo
 import { Candidate } from '../Candidate/Candidate';
 import { Employer } from '../Employer/Employer';
 
-
 export class Meeting extends AggregateRoot {
-    private _candidate: Candidate;
-    private _employer: Employer;
-    private _id: MeetingIDVO;
-    private _state: MeetingStateVO;
-    private _description: MeetingDescriptionVO;
-    private _date: MeetingDateVO;
-    private _location: MeetingLocationVO;
+  private _candidate: Candidate;
+  private _employer: Employer;
+  private _id: MeetingIDVO;
+  private _state: MeetingStateVO;
+  private _description: MeetingDescriptionVO;
+  private _date: MeetingDateVO;
+  private _location: MeetingLocationVO;
 
-    constructor(id: MeetingIDVO, state: MeetingStateVO, description: MeetingDescriptionVO, date: MeetingDateVO, location: MeetingLocationVO,
-        employerID: Employer, candidateID: Candidate) {
-        super();
-        this._id = id;
-        this._state = state;
-        this._description = description;
-        this._date = date;
-        this._location = location;
-        this._employer = employerID;
-        this._candidate = candidateID;
-    }
+  constructor(
+    id: MeetingIDVO,
+    state: MeetingStateVO,
+    description: MeetingDescriptionVO,
+    date: MeetingDateVO,
+    location: MeetingLocationVO,
+    employerID: Employer,
+    candidateID: Candidate,
+  ) {
+    super();
+    this._id = id;
+    this._state = state;
+    this._description = description;
+    this._date = date;
+    this._location = location;
+    this._employer = employerID;
+    this._candidate = candidateID;
+  }
 
-    protected When(event: IDomainEvent): void {
-        switch (event.constructor) {
-            case MeetingCanceledEvent:
-                let today = new MeetingDateVO(new Date());
-                if (!today.LessThan(this.date)) {
-                    throw InvalidMeetingDate.MeetingDateExpired();
-                }
-                break;
-            
-            case MeetingScheduledEvent:
-                break;
-            
-            case MeetingModifiedEvent:
-                break;
+  protected When(event: IDomainEvent): void {
+    switch (event.constructor) {
+      case MeetingCanceledEvent:
+        const today = new MeetingDateVO(new Date());
+        if (!today.LessThan(this.date)) {
+          throw InvalidMeetingDate.MeetingDateExpired();
         }
-    }
+        break;
 
-    protected EnsureValidState(): void {
-        const valid = this._id != null
-        this._date != null &&
-            this._location != null &&
-            this._description != null &&
-            this.candidate != null &&
-            this.employer != null;
-        switch (this.state.current) {
-            case MeetingStates.Active:
-                if (this._id == null ||
-                    this._date == null ||
-                    this.date.value < new Date(Date.now()) ||
-                    this._location == null ||
-                    this._description == null ||
-                    this.candidate == null ||
-                    this.employer == null) {
-                    throw new Error("Invalid Active State");
-                }
-                break;
-            case MeetingStates.Suspended:
-                if (this._id == null ||
-                    this._date == null ||
-                    this._location == null ||
-                    this._description == null ||
-                    this.candidate == null ||
-                    this.employer == null) {
-                    throw new Error("Invalid Suspended State");
-                }
-            default:
-                break;
+      case MeetingScheduledEvent:
+        break;
+
+      case MeetingModifiedEvent:
+        break;
+    }
+  }
+
+  protected EnsureValidState(): void {
+    const valid =
+      this._id != null &&
+      this._date != null &&
+      this._location != null &&
+      this._description != null &&
+      this.candidate != null &&
+      this.employer != null &&
+      this._description.value != '' &&
+      this._description.value.length < 250;
+    switch (this.state.current) {
+      case MeetingStates.Active:
+        if (
+          this._id == null ||
+          this._date == null ||
+          this.date.value < new Date(Date.now()) ||
+          this._location == null ||
+          this._description == null ||
+          this.candidate == null ||
+          this.employer == null
+        ) {
+          throw new Error('Invalid Active State');
         }
-
-        if (!valid) {
-            throw new Error('Invalid State');
+        break;
+      case MeetingStates.Suspended:
+        if (
+          this._id == null ||
+          this._date == null ||
+          this._location == null ||
+          this._description == null ||
+          this.candidate == null ||
+          this.employer == null
+        ) {
+          throw new Error('Invalid Suspended State');
         }
+      default:
+        break;
     }
 
-    // methods
-    public Cancel() {
-        console.log('Cancel meeting');
-        this.state = new MeetingStateVO(MeetingStates.Canceled);
-        this.Apply(new MeetingCanceledEvent())
-        return this
+    if (!valid) {
+      throw new Error('Invalid State');
     }
+  }
 
-    static ScheduleOn(
-        date: MeetingDateVO,
-        employer: Employer,
-        candidate: Candidate,
-        description: MeetingDescriptionVO,
-        location: MeetingLocationVO,
-        state: MeetingStateVO = new MeetingStateVO(MeetingStates.Active),
-    ) {
-        console.log('Schedule on meeting');
-        let id = new MeetingIDVO();
-        let meeting = new Meeting(id, state, description, date, location, employer, candidate);
-        meeting.Apply(new MeetingScheduledEvent());
-        return meeting
-    }
+  // methods
+  public Cancel() {
+    console.log('Cancel meeting');
+    this.state = new MeetingStateVO(MeetingStates.Canceled);
+    this.Apply(new MeetingCanceledEvent());
+    return this;
+  }
 
-    public Modified(
-        description?: MeetingDescriptionVO,
-        location?: MeetingLocationVO,
-        date?: MeetingDateVO,
-    ) {
-        if (description){
-            this.description = description
-        }
-        if (location){
-            this.location = location
-        }
-        if (date){
-            this.date = date
-        }
-        this.Apply(new MeetingModifiedEvent());
-    }
+  static ScheduleOn(
+    date: MeetingDateVO,
+    employer: Employer,
+    candidate: Candidate,
+    description: MeetingDescriptionVO,
+    location: MeetingLocationVO,
+    state: MeetingStateVO = new MeetingStateVO(MeetingStates.Pending),
+  ) {
+    console.log('Schedule on meeting');
+    const id = new MeetingIDVO();
+    const meeting = new Meeting(
+      id,
+      state,
+      description,
+      date,
+      location,
+      employer,
+      candidate,
+    );
+    meeting.Apply(new MeetingScheduledEvent());
+    return meeting;
+  }
 
-    // getters y setters
-    get id(): MeetingIDVO {
-        return this._id
+  public Modified(
+    description?: MeetingDescriptionVO,
+    location?: MeetingLocationVO,
+    date?: MeetingDateVO,
+  ) {
+    if (description) {
+      this.description = description;
     }
+    if (location) {
+      this.location = location;
+    }
+    if (date) {
+      this.date = date;
+    }
+    this.Apply(new MeetingModifiedEvent());
+  }
 
-    get state(): MeetingStateVO {
-        return this._state
-    }
+  // getters y setters
+  get id(): MeetingIDVO {
+    return this._id;
+  }
 
-    get description(): MeetingDescriptionVO {
-        return this._description
-    }
+  get state(): MeetingStateVO {
+    return this._state;
+  }
 
-    get date(): MeetingDateVO {
-        return this._date
-    }
+  get description(): MeetingDescriptionVO {
+    return this._description;
+  }
 
-    get location(): MeetingLocationVO {
-        return this._location
-    }
+  get date(): MeetingDateVO {
+    return this._date;
+  }
 
-    get candidate(): Candidate {
-        return this._candidate;
-    }
+  get location(): MeetingLocationVO {
+    return this._location;
+  }
 
-    get employer(): Employer {
-        return this._employer;
-    }
+  get candidate(): Candidate {
+    return this._candidate;
+  }
 
-    private set state(state: MeetingStateVO) {
-        this._state = state;
-    }
+  get employer(): Employer {
+    return this._employer;
+  }
 
-    private set date(date: MeetingDateVO) {
-        this._date = date;
-    }
+  private set state(state: MeetingStateVO) {
+    this._state = state;
+  }
 
-    private set location(location: MeetingLocationVO) {
-        this._location = location;
-    }
+  private set date(date: MeetingDateVO) {
+    this._date = date;
+  }
 
-    private set description(description: MeetingDescriptionVO) {
-        this._description = description;
-    }
+  private set location(location: MeetingLocationVO) {
+    this._location = location;
+  }
 
-    private set employer(employer: Employer) {
-        this._employer = employer
-    }
+  private set description(description: MeetingDescriptionVO) {
+    this._description = description;
+  }
 
-    private set candidate(candidate: Candidate) {
-        this._candidate = candidate
-    }
+  private set employer(employer: Employer) {
+    this._employer = employer;
+  }
+
+  private set candidate(candidate: Candidate) {
+    this._candidate = candidate;
+  }
 }
