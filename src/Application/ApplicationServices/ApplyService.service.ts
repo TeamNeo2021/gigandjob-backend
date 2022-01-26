@@ -35,6 +35,7 @@ export class OfferService implements IApplicationService {
           cmd.description,
           cmd.time,
         );
+        DSApplyToOfer.createApplication();
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.save(Candidate);
         break;
