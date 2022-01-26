@@ -17,9 +17,11 @@ export class OfferService implements IApplicationService {
   constructor(
     Offerrepo: IOfferRepository,
     CandidaterepoQ: ICandidateQuerryRepository,
+    CandidaterepoC: ICandidateCommandRepository,
   ) {
     this.Offerrepo = Offerrepo;
     this.CandidaterepoQ = CandidaterepoQ;
+    this.CandidaterepoC = CandidaterepoC;
   }
 
   Handle(command: any): void {
@@ -27,7 +29,9 @@ export class OfferService implements IApplicationService {
       case ApplyToOffer:
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         const Oferta: Offer = this.Offerrepo.load(new OfferIdVO(cmd.OfferId));
-        const Candidate: Candidate = this.CandidaterepoQ.getOne(cmd.OfferId);
+        const Candidate: Candidate = this.CandidaterepoQ.getOne(
+          cmd.CandidateId,
+        );
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
           Candidate,
           Oferta,
