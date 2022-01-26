@@ -203,6 +203,9 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
 
   //Getters y setters
+  public get _Id(): OfferIdVO {
+    return this.OfferId;
+  }
 
   public get _State(): OfferStateVO {
     return this.State;
