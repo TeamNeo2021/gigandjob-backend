@@ -4,7 +4,7 @@ export class InvalidEmployerState extends Error {
         return new InvalidEmployerState("ERROR: No se puede cambiar el estado de un Empleador Eliminado")
     }
 
-    static suspendingSuspendedState() {
+    static SuspendingSuspendedState() {
         return new InvalidEmployerState("ERROR: No se puede suspender un Empleador que ya ha sido Suspendido")
     }
     
