@@ -33,17 +33,9 @@ export class RequestCvApprovalService{
             Studies.push(dto.studies[i][0],dto.studies[i][1],dto.studies[i][2],dto.studies[i][3],dto.studies[i][4]);
         
         }
-         
 
         const submittedCv: Cv<CvState.Submitted> = Cv.submitCv(
-            /*dto.description,
-            dto.workExperiences,
-            dto.studies,
-            dto.photo,
-            dto.candidateID,
-            dto.cvID,*/
             new CvDescription(dto.description),
-            //new CvWorkExperience(dto.workExperienceDescription, dto.workExperienceStartDate, dto.workExperienceFinishDate, dto.workExperienceJob),
             Workxp,
             Studies,
             new CvPhoto(dto.photo),
