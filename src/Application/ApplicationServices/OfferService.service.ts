@@ -22,7 +22,7 @@ export class OfferService implements IApplicationService {
     async Handle(command: any): Promise<void> {
 
         switch (command.constructor) {
-            //todo definir como se van a tratar los comandos
+            
 
             case createOfferDTO: {
 
@@ -45,7 +45,7 @@ export class OfferService implements IApplicationService {
 
                 //This should never happen, but in case RandomUUID generates
                 //an used UUID, this will stop the creation
-                if (await this.repository.exists(new_offer._Id)){
+                if (this.repository.exists(new_offer._Id)){
                     throw new Error("This offer ID is already registered");
                 }
 
