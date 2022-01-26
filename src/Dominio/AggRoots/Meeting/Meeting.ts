@@ -12,6 +12,7 @@ import { MeetingModifiedEvent } from '../../DomainEvents/MeetingEvents/MeetingMo
 import { Candidate } from '../Candidate/Candidate';
 import { Employer } from '../Employer/Employer';
 import { MeetingAccepted } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingAccepted.event';
+import { MeetingRejected } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingRejected.event';
 
 export class Meeting extends AggregateRoot {
   private _candidate: Candidate;
@@ -156,6 +157,12 @@ export class Meeting extends AggregateRoot {
   public Accept() {
     console.log('Accept meeting');
     this.Apply(new MeetingAccepted(this.id.id, this.candidate.id));
+    return this;
+  }
+
+  public Reject() {
+    console.log('Reject meeting');
+    this.Apply(new MeetingRejected(this.id.id, this.candidate.id));
     return this;
   }
 
