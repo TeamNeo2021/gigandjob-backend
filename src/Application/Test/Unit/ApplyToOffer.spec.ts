@@ -33,7 +33,6 @@ import { ICandidateCommandRepository } from '../../Repositories/CandidateCommand
 import { ApplyService } from '../../ApplicationServices/ApplyService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
 
-const MCQrepo = new InMemoryCandidateCommandRepository();
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
 
@@ -70,7 +69,7 @@ function create_Service(
 
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
-    MCQrepo.save(exampleCandidate);
+    MCCrepo.save(exampleCandidate);
     await Orepo.save(exampleOffer);
     let ExCommand = new ApplyToOfferDTO(
       exampleOffer._Id.value,
@@ -79,17 +78,21 @@ describe('Create an aplication to an offer', () => {
       'prueba',
       3,
     );
-    exampleOffer._application[0];
     let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
-    expect(new_offer._application[0]).toBe(exampleCandidate);
-    //expect(()=> Orepo.load(exampleOffer._Id).application[0] == exampleCandidate);
-    //expect(Orepo.load(exampleOffer._Id).application[0].id).toBe(exampleCandidate.id);
-    //expect(()=> Orepo.load(exampleOffer._Id).application[0].id == exampleCandidate.id);
+    expect(
+      () => new_offer._application[0].getCandidateId() == exampleCandidate.Id,
+    );
   });
-  /*it('Should fail when using an Invalid command', () => {
+  it('Should fail when using an Invalid command', async () => {
     let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
-    expect(() => ApplyService.Handle(WrongCommand)).toThrowError(Error);
-  });*/
+    let error: any = undefined;
+    await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
+    expect(() => {
+      throw error;
+    }).toThrowError(
+      new Error(`ApplyService: Command doesn't exist: ${Object}`),
+    );
+  });
 });
