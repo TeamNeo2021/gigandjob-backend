@@ -21,7 +21,8 @@ import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 import { OfferSuspended } from '../../DomainEvents/OfferEvents/OfferSuspended';
-
+import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivated';
+import { OfferEliminited } from '../../DomainEvents/OfferEvents/OfferEliminited';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -99,6 +100,24 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         }
         break;
 
+        case OfferReactivated:
+          // si el estado anterior es eliminada
+          if (this.State.state == OfferStatesEnum.Eliminated) {
+            throw InvalidOfferState.ChangingEliminatadState();
+          }
+          // si el estado anterior no es suspendida
+          if (this.State.state != OfferStatesEnum.Suspended) {
+            throw InvalidOfferState.ReactivteNotSuspendedState();
+          }
+          break;
+
+        case OfferEliminited:
+          // si el estado anterior no es suspendida
+          if (this.State.state != OfferStatesEnum.Suspended) {
+            throw InvalidOfferState.EliminateNotSuspendedState();
+          }
+          break;
+
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
         var _application = new Application(
@@ -173,6 +192,28 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     
     return this;
   }
+
+  //Reactivar oferta
+  public ReactivateOffer() {
+    console.log('Reactivar Oferta');
+    this.Apply(new OfferReactivated());
+    
+    this._State = new OfferStateVO(OfferStatesEnum.Active);
+    
+    return this;
+  }
+
+  //Eliminar oferta
+  public EliminitedOffer() {
+    console.log('Eliminar Oferta');
+    this.Apply(new OfferEliminited());
+    
+    this._State = new OfferStateVO(OfferStatesEnum.Active);
+    
+    return this;
+  }
+
+
 
   //Implementacion de crearOferta con domain event
   static CreateOffer(
