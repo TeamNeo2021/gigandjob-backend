@@ -20,6 +20,7 @@ import { CandidateIdVo } from '../Candidate/ValueObjects/CandidateIdVo';
 import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 import { IInternalEventHandler } from '../IInternalEventHandler';
 import { InvalidOfferState } from './Errors/InvalidOfferState.error';
+import { OfferSuspended } from '../../DomainEvents/OfferEvents/OfferSuspended';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -82,6 +83,22 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           throw InvalidOfferState.ChangingEliminatadState();
         }
         break;
+      
+      case OfferSuspended:
+        // si el estado anterior es cerrada
+        if (this.State.state == OfferStatesEnum.Closed) {
+          throw InvalidOfferState.ChangingClosedState();
+        }
+        // si el estado anterior es eliminada
+        if (this.State.state == OfferStatesEnum.Eliminated) {
+          throw InvalidOfferState.ChangingEliminatadState();
+        }        
+        // si el estado anterior es suspendida
+        if (this.State.state == OfferStatesEnum.Suspended) {
+          throw InvalidOfferState.SuspendingSuspendedState();
+        }
+        break;
+
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied = event as CandidateApplied;
         var _application = new Application(
@@ -144,6 +161,16 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     this.Budget = budget;
     this.Description = description;
 
+    return this;
+  }
+
+  //Modificar oferta
+  public SuspendOffer() {
+    console.log('Suspender Oferta');
+    this.Apply(new OfferSuspended());
+    
+    this._State = new OfferStateVO(OfferStatesEnum.Suspended);
+    
     return this;
   }
 

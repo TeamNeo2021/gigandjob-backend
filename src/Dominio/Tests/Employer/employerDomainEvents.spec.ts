@@ -10,6 +10,7 @@ import { EmployerEliminated } from "../../DomainEvents/EmployerEvents/EmployerEl
 import { EmployerRegistered } from "../../DomainEvents/EmployerEvents/EmployerRegistered";
 import { Employer } from "../../AggRoots/Employer/Employer";
 import { EmployerModified } from "../../DomainEvents/EmployerEvents/EmployerModified";
+import { EmployerSuspended } from "../../DomainEvents/EmployerEvents/EmployerSuspended";
 
 export const exampleEmployer = Employer.RegisterEmployer(
     new EmployerNameVO("Soluciones de Prueba"),
@@ -45,13 +46,23 @@ describe("modificar un empleador", () => {
     })
 });
 
+describe("Suspender un empleador", () => {
+    it("debe suspender el empleador solamente si su estado es activo", () => {
+        exampleEmployer.SuspendEmployer();
+        expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
+        expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
+        expect(exampleEmployer.GetChanges()[2]).toBeInstanceOf(EmployerSuspended);
+    })
+});
+
 describe("Eliminar un empleador", () => {
     it("debe eliminar el empleador independientemente del estado anterior", () => {
         exampleEmployer.EliminateEmployer(
             new EmployerStateVO(EmployerStates.Eliminated));
         expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
         expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
-        expect(exampleEmployer.GetChanges()[2]).toBeInstanceOf(EmployerEliminated);
+        expect(exampleEmployer.GetChanges()[2]).toBeInstanceOf(EmployerSuspended);
+        expect(exampleEmployer.GetChanges()[3]).toBeInstanceOf(EmployerEliminated);
     })
 });
 
