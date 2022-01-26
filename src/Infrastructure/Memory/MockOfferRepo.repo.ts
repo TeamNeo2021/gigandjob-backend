@@ -5,11 +5,13 @@ import { OfferIdVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 export class MockOfferRepo implements IOfferRepository {
   private Offers: Offer[] = [];
 
-  save(offer: Offer): Promise<void> {
-    return this.Offers.push(offer);
+  async save(offer: Offer): Promise<void> {
+    this.Offers.push(offer);
   }
-  load(id: OfferIdVO): Promise<Offer> {
-    return this.Offers.find((offer) => offer.id == id);
+  async load(id: OfferIdVO): Promise<Offer> {
+    console.log('Me llegó este id:' + id);
+    console.log('Mi longitud es:' + this.Offers.length);
+    return this.Offers.find((offer) => offer._Id._value == id._value);
   }
   exists(id: OfferIdVO): Promise<boolean> {
     throw new Error('Method not implemented.');
