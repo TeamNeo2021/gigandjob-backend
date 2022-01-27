@@ -10,7 +10,7 @@ import { ICandidateCommandRepository } from '../Repositories/CandidateCommandRep
 import { ICandidateQuerryRepository } from '../Repositories/CandidateQuerryRepository.repo';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
-export class ApplyService implements IApplicationService {
+export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
   private readonly CandidaterepoQ: ICandidateQuerryRepository;
   private readonly CandidaterepoC: ICandidateCommandRepository;

@@ -30,7 +30,7 @@ import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueOb
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
 import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRepository.repo';
 import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
-import { ApplyService } from '../../ApplicationServices/ApplyService.service';
+import { OfferApplicationService } from '../../ApplicationServices/OfferApplicationService';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
 import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
 import { INotificationSender } from '../../Ports/INotificationSender';
@@ -101,8 +101,8 @@ function create_Service(
   repoCQ: ICandidateQuerryRepository,
   repoCC: ICandidateCommandRepository,
   Msender: INotificationSender,
-): ApplyService {
-  const service = new ApplyService(repoO, repoCQ, repoCC, Msender);
+): OfferApplicationService {
+  const service = new OfferApplicationService(repoO, repoCQ, repoCC, Msender);
   return service;
 }
 
