@@ -1,4 +1,3 @@
-import { ActivateCandidateCommand } from "src/Application/Commands/Candidate/activate-candidate.command";
 import { CandidateCommand } from "src/Application/Commands/Candidate/command.interface";
 import { CandidateConfiguration } from "src/Application/Configuration/Candidate/configuration.interface";
 import { DomainError } from "src/Application/Errors/domain.error";
