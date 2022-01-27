@@ -12,9 +12,4 @@ export interface ICandidateCommandRepository{
 
     reactive(id: string, candidate: Candidate): Candidate;
 
-    
-    // we must user CQRS, this will be delete
-    getOne(id: string): Candidate;
-    getAll(): Candidate[];
-
 }

@@ -21,7 +21,8 @@ describe("register a new Candidate in memory", ()=>{
 
     
     it("should suceed when registering a valid Candidate",()=>{
-        expect(registerService.RegisterCandidate(CandidateTestDTO)).toBeInstanceOf(Candidate);
+        registerService.Handle(CandidateTestDTO);
+        expect(memoryRepo.getAll()[0]).toBeInstanceOf(Candidate);
     })
 
     
