@@ -28,6 +28,10 @@ export class InvalidOfferState extends Error {
         return new InvalidOfferState("ERROR: Como la oferta no está suspendida no se puede reactivar")
     }
 
+    static ReactivteActiveState() {
+        return new InvalidOfferState("ERROR: Como la oferta ya esta activada no se puede reactivar")
+    }
+
     static EliminateNotSuspendedState() {
         return new InvalidOfferState("ERROR: Como la oferta no está suspendida no se puede eliminar");
     }
