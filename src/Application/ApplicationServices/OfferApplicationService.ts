@@ -1,5 +1,5 @@
 import { CandidateApplied } from 'src/Dominio/DomainEvents/CandidateEvents/CandidateApplied';
-import { Candidate } from '../../Dominio//AggRoots/Candidate/Candidate';
+import { Candidate } from '../../Dominio/AggRoots/Candidate/Candidate';
 import { Offer } from '../../Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
