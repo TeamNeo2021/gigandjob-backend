@@ -32,12 +32,29 @@ import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRe
 import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
 import { ApplyService } from '../../ApplicationServices/ApplyService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
+import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
+import { INotificationSender } from '../../Ports/INotificationSender';
+import { Employer } from '../../../Dominio/AggRoots/Employer/Employer';
+import { EmployerComercialDesignationVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo';
+import { EmployerDescriptionVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO';
+import { EmployerLocationVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO';
+import { EmployerMailVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo';
+import { EmployerNameVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo';
+import { EmployerPhoneVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo';
+import { EmployerRifVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO';
+import {
+  EmployerStateVO,
+  EmployerStates,
+} from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
+import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
+const Msender = new MockSenderAdapter();
 
 //const ExCommand = new ApplyToOfferDTO('1', '1', 100, 'prueba', 3);
 const WrongCommand = { Prueba: 1 };
+
 const exampleOffer = new Offer(
   new OfferIdVO(randomUUID()),
   new OfferStateVO(OfferStatesEnum.Active),
@@ -58,12 +75,34 @@ const exampleCandidate = new Candidate(
   new CandidateLocationVo(20, 90),
 );
 
+const exampleEmployer: Employer = Employer.RegisterEmployer(
+  new EmployerNameVO('Soluciones de Prueba'),
+  new EmployerDescriptionVO('La descripcion es una prueba'),
+  new EmployerStateVO(EmployerStates.Active),
+  new EmployerLocationVO('Av los Cedros'),
+  new EmployerRifVO('J-1236782'),
+  new EmployerPhoneVO('+584124578457'),
+  new EmployerMailVO('prueba@test.com'),
+  new EmployerComercialDesignationVO('Informatica24.c.a'),
+  new EmployerIdVO(randomUUID()),
+);
+
+const ExCommand = new ApplyToOfferDTO(
+  exampleOffer._Id.value,
+  exampleCandidate.id,
+  exampleEmployer.employerId._guid_value,
+  100,
+  'prueba',
+  3,
+);
+
 function create_Service(
   repoO: IOfferRepository,
   repoCQ: ICandidateQuerryRepository,
   repoCC: ICandidateCommandRepository,
+  Msender: INotificationSender,
 ): ApplyService {
-  const service = new ApplyService(repoO, repoCQ, repoCC);
+  const service = new ApplyService(repoO, repoCQ, repoCC, Msender);
   return service;
 }
 
@@ -71,14 +110,7 @@ describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     MCCrepo.save(exampleCandidate);
     await Orepo.save(exampleOffer);
-    let ExCommand = new ApplyToOfferDTO(
-      exampleOffer._Id.value,
-      exampleCandidate.id,
-      100,
-      'prueba',
-      3,
-    );
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
     expect(
@@ -86,13 +118,20 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {
       throw error;
     }).toThrowError(
       new Error(`ApplyService: Command doesn't exist: ${Object}`),
+    );
+  });
+  it('Should send a notification to the given employer', async () => {
+    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
+    await ApplyService.Handle(ExCommand);
+    expect(Msender.NotificatedIds[0]).toBe(
+      exampleEmployer.employerId._guid_value,
     );
   });
 });

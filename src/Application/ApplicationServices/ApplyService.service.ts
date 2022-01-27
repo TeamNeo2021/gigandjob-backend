@@ -34,7 +34,9 @@ export class ApplyService implements IApplicationService {
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         const Oferta: Offer = await this.Offerrepo.load(
           new OfferIdVO(cmd.OfferId),
-        );
+        ).catch((err) => {
+          throw err;
+        });
         console.log('Saque esta: ' + Oferta);
         const Candidate: Candidate = this.CandidaterepoQ.getOne(
           cmd.CandidateId,
@@ -48,16 +50,20 @@ export class ApplyService implements IApplicationService {
           cmd.time,
         );
         DSApplyToOfer.createApplication();
-        this.Sender.send(
-          cmd.EmployerId,
-          new CandidateApplied(
-            cmd.CandidateId,
-            cmd.OfferId,
-            cmd.budget,
-            cmd.description,
-            cmd.time,
-          ),
-        );
+        try {
+          this.Sender.send(
+            cmd.EmployerId,
+            new CandidateApplied(
+              cmd.CandidateId,
+              cmd.OfferId,
+              cmd.budget,
+              cmd.description,
+              cmd.time,
+            ),
+          );
+        } catch (error) {
+          throw error;
+        }
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.save(Candidate);
         break;
