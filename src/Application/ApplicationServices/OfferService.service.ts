@@ -71,7 +71,7 @@ export class OfferService implements IApplicationService {
                 
                 let cmd: EliminitedOfferDTO = <EliminitedOfferDTO> command;
                 let Offer_Eliminited= await this.repository.load(new OfferIdVO(cmd.id_offer));
-                Offer_Eliminited.EliminitedOffer();
+                Offer_Eliminited.EliminateOffer();
                 await this.repository.save(Offer_Eliminited);
                 break;
             }
