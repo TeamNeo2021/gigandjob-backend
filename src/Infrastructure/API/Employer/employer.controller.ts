@@ -15,7 +15,7 @@ type CreateEmployerData = {
 }
 
 
-@Controller('employer')
+@Controller('employers')
 export class EmployerController {
     constructor(@Inject('EmployerApplicationService') private employerService: EmployerApplicationService) {}
 
