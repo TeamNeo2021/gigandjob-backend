@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferApplicationService } from './Application/ApplicationServices/Offer/OfferApplicationService.service';
-import { OfferApi } from './Infrastructure/Controllers/Offer/offer.controller';
+import { OfferApi } from './Infrastructure/Controllers/Offer/OfferController.controller';
 //import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
 import { RepositoryModule } from './Infrastructure/Repository.module';
 
