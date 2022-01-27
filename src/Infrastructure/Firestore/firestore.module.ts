@@ -1,41 +1,47 @@
-/*import { Module, DynamicModule } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { Firestore, Settings } from '@google-cloud/firestore';
-import {
-  FirestoreDatabaseProvider,
-  FirestoreOptionsProvider,
-  FirestoreCollectionProviders,
-} from './firestore.providers';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { applyDecorators, SetMetadata } from "@nestjs/common";
 
+export function Collection(name: string) {
+    return applyDecorators(
+        SetMetadata('COLLECTION_NAME', name)
+    )
+}
 
 //REFERENCIA: https://ricardoromanj.com/posts/firestore-with-nestjs
 
-type FirestoreModuleOptions = {
-    imports: any[];
-    useFactory: (...args: any[]) => Settings;
-    inject: any[];
-  };
+const FirestoreOptionsProvider = 'firestoreOptions'
+const FirestoreDatabaseProvider = 'firestoreDb'
 
-  @Module({})
+type FirestoreModuleOptions = {
+  imports: any[]
+  useFactory: (...args: any[]) => Settings
+  inject: any[]
+  collections: any[]
+};
+
+@Module({})
 export class FirestoreModule {
   static forRoot(options: FirestoreModuleOptions): DynamicModule {
-	const optionsProvider = {
-        provide: FirestoreOptionsProvider,
-        useFactory: options.useFactory,
-        inject: options.inject,
-      };
+	  const optionsProvider = {
+      provide: FirestoreOptionsProvider,
+      useFactory: options.useFactory,
+      inject: options.inject,
+    };
 
-      const dbProvider = {
-        provide: FirestoreDatabaseProvider,
-        useFactory: (config) => new Firestore(config),
-        inject: [FirestoreOptionsProvider],
-      };
+    const dbProvider = {
+      provide: FirestoreDatabaseProvider,
+      useFactory: (config) => new Firestore(config),
+      inject: [FirestoreOptionsProvider],
+    };
 
-      const collectionProviders = FirestoreCollectionProviders.map(providerName => ({
-        provide: providerName,
-        useFactory: (db) => db.collection(providerName),
-        inject: [FirestoreDatabaseProvider],
-      }));
+    const collectionProviders = options.collections.flatMap(collectionName => {
+      return{
+          provide: collectionName,
+          useFactory: (db) => db.collection(collectionName),
+          inject: [FirestoreDatabaseProvider],
+      }
+    });
 
     return {
         global: true,
@@ -45,14 +51,4 @@ export class FirestoreModule {
         exports: [dbProvider, ...collectionProviders],
     };
   }
-
-  static instantiate(){
-      return FirestoreModule.forRoot({
-        imports: [ConfigModule],
-        useFactory: (configService: ConfigService) => ({
-          keyFilename: configService.get<string>('SA_KEY'),
-        }),
-        inject: [ConfigService],
-      });
-  }
-}*/
+}

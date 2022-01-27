@@ -26,14 +26,14 @@ export class CreateEmployerCommand implements EmployerCommand<void> {
 
     execute(_: EmployerTransactionService): Promise<EmployerCommandResult<void>> {
         const employer = Employer.RegisterEmployer(
-            new EmployerNameVO(this.name),
-            new EmployerDescriptionVO(this.description),
+            EmployerNameVO.Create(this.name),
+            EmployerDescriptionVO.Create(this.description),
             new EmployerStateVO(this.state),
-            new EmployerLocationVO(this.location),
-            new EmployerRifVO(this.rif),
-            new EmployerPhoneVO(this.phone),
-            new EmployerMailVO(this.mail),
-            new EmployerComercialDesignationVO(this.comDesignation)
+            EmployerLocationVO.Create(this.location),
+            EmployerRifVO.Create(this.rif),
+            EmployerPhoneVO.Create(this.phone),
+            EmployerMailVO.Create(this.mail),
+            EmployerComercialDesignationVO.Create(this.comDesignation)
         )
 
         return Promise.resolve(EmployerCommandResult.nothing(employer))

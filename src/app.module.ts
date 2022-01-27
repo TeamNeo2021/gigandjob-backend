@@ -1,32 +1,61 @@
 import { Module } from '@nestjs/common';
-//import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CqrsModule } from '@nestjs/cqrs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
 
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferService } from './Application/ApplicationServices/OfferService.service';
+import { EmployerController } from './Infrastructure/API/Employer/employer.controller';
 import { OfferApi } from './Infrastructure/API/Offer/offer.controller';
-//import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
-import { RepositoryModule } from './Infrastructure/Repository.module';
+import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
+import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
+import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
+import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
+
+const employerProvider = {
+  provide: 'EmployerApplicationService',
+  useFactory: (repo: EmployerRepositoryService, publisher: EmployerPublisherService) => {
+    return new EmployerApplicationService(repo, publisher)
+  },
+  inject: [EmployerRepositoryService, EmployerPublisherService]
+}
 
 @Module({
-  /*imports: [
+  imports: [
     //TODO: Arreglar una vez se haya conectado bien con firestore
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // new RepositoryModule(repository),
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         keyFilename: configService.get<string>('SA_KEY'),
       }),
       inject: [ConfigService],
+      collections: [
+        'employers'
+      ]
     }),
-  ],*/
-  controllers: [AppController, MeetingController,OfferApi],
-  providers: [AppService, MeetingService,OfferService],
+    CqrsModule
+  ],
+  controllers: [
+    AppController, 
+    MeetingController, 
+    OfferApi, 
+    EmployerController
+  ],
+  providers: [
+    AppService, 
+    MeetingService,
+    OfferService,
+    EmployerRepositoryService,
+    EmployerPublisherService,
+    EmployerEventHandler,
+    employerProvider,
+  ],
 
 })
 export class AppModule {}

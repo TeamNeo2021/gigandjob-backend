@@ -2,15 +2,23 @@ import { InvalidEmployerDescription } from "../Errors/InvalidEmployerDescription
 
 export class EmployerDescriptionVO {
     
-    private readonly value_employer_description: String;
+    public readonly value_employer_description: String;
     
-    constructor(value_employer_description:String) {
+    private constructor(value: string) {
+        this.value_employer_description = value
+    }
+
+    static Create(value_employer_description: string) {
         if(!value_employer_description || value_employer_description.trim() == ""){
             throw InvalidEmployerDescription.EmptyDescription();
         }
         if(value_employer_description.length>500){
             throw InvalidEmployerDescription.TooBigDescription();
         }
-        this.value_employer_description=value_employer_description;
+        return new EmployerDescriptionVO(value_employer_description)
+    }
+
+    static Unsafe(value_employer_description: string) {
+        return new EmployerDescriptionVO(value_employer_description)
     }
 }
