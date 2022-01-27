@@ -19,48 +19,18 @@ export class CandidateRegisterService implements IApplicationService{
     }
     
     Handle(command: any): void {
-        let dto: CandidateRegisterDTO;
-        
-        try {
-            dto = command;
-        } catch (error) {
-            throw new Error('No dto compatible');
-        }
 
         let candidate = new Candidate(
             new CandidateIdVo(),
             new CandidateStateVo(CandidateStatesEnum.Active),
-            new CandidateFullNameVo(dto.name, dto.lastname),
-            new CandidatePhoneVo(dto.phoneCode, dto.phoneNumber),
-            new CandidateEmailVo(dto.email),
-            new CandidateBirthDateVo(new Date(dto.birthDate)),
-            new CandidateLocationVo(dto.latitude, dto.longitude),
+            new CandidateFullNameVo(command.name, command.lastname),
+            new CandidatePhoneVo(command.phoneCode, command.phoneNumber),
+            new CandidateEmailVo(command.email),
+            new CandidateBirthDateVo(new Date(command.birthDate)),
+            new CandidateLocationVo(command.latitude, command.longitude),
         );
-
-        candidate = candidate.registerCandidate();
 
         this.commandRepository.save(candidate);
     }
-
-    /*
-    public RegisterCandidate(dto: CandidateRegisterDTO): Candidate{
-
-        let candidate = new Candidate(
-            new CandidateIdVo(),
-            new CandidateStateVo(CandidateStatesEnum.Active),
-            new CandidateFullNameVo(dto.name, dto.lastname),
-            new CandidatePhoneVo(dto.phoneCode, dto.phoneNumber),
-            new CandidateEmailVo(dto.email),
-            new CandidateBirthDateVo(new Date(dto.birthDate)),
-            new CandidateLocationVo(dto.latitude, dto.longitude),
-        );
-
-        candidate = candidate.registerCandidate();
-
-        this.commandRepository.save(candidate);
-
-        return candidate
-    }
-    */
-
+    
 }

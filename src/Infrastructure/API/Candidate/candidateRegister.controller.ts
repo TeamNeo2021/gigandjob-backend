@@ -1,24 +1,21 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { InMemoryCandidateCommandRepository } from '../.././Memory/InMemoryCandidateCommandRepository.repo';
 import { ICandidateCommandRepository } from '../../../Application/Repositories/CandidateCommandRepository.repo';
 import { ICandidateQuerryRepository } from '../../../Application/Repositories/CandidateQuerryRepository.repo';
 import { IApplicationService } from '../../../Application/Core/IApplicationService';
 import { CandidateRegisterService } from '../../../Application/ApplicationServices/CandidateRegister.service';
 
-
 @Controller('registerCandidate')
 export class CandidateApi {
-    private readonly services: IApplicationService[];
+    private readonly registerService: IApplicationService;
     private readonly commandRepository: ICandidateCommandRepository;
     private readonly querryRepository: ICandidateQuerryRepository;
 
     constructor(){
-        const command = new InMemoryCandidateCommandRepository();
-        const querry = new InMemoryCandidateCommandRepository();
+        this.commandRepository = new InMemoryCandidateCommandRepository();
+        this.querryRepository = new InMemoryCandidateCommandRepository();
 
-        this.services.push(new CandidateRegisterService(command));
-        this.commandRepository = command;
-        this.querryRepository = querry;
+        this.registerService = new CandidateRegisterService(this.commandRepository);
     }
 
     @Post()
@@ -29,9 +26,9 @@ export class CandidateApi {
         @Body('phoneCode') phoneCode: string,
         @Body('phoneNumber') phoneNumber: string,
         @Body('email') email: string,
-        @Body('Bday') Bday: string,
-        @Body('latitud') latd: Number,
-        @Body('longitude') long: Number
+        @Body('Bday') birthDate: string,
+        @Body('latitude') latitude: Number,
+        @Body('longitude') longitude: Number
     ): string {
         let request = {
             name,
@@ -39,12 +36,13 @@ export class CandidateApi {
             phoneCode,
             phoneNumber,
             email,
-            Bday,
-            latd,
-            long
+            birthDate,
+            latitude,
+            longitude
         }
-        this.services[0].Handle(request);
-        return 'Offer has been created'
+
+        this.registerService.Handle(request);
+        return 'Candidate has been registed'
     }
 }
 

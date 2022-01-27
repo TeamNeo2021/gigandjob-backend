@@ -5,7 +5,7 @@ export class InMemoryCandidateCommandRepository implements ICandidateCommandRepo
   private candidates: Candidate[] = [];
 
   save(candidate: Candidate): Candidate {
-    this.candidates.push(candidate);
+    this.candidates.push(candidate.registerCandidate());
     return candidate;
   }
 
