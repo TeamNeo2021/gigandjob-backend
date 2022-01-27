@@ -12,7 +12,7 @@ import { OfferStateVO } from "../../../../../Dominio/AggRoots/Offer/ValueObjects
 import { OfferStatesEnum } from "../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 import { randomUUID } from 'crypto';
 import {IOfferRepository} from "../../../../../Application/Repositories/OfferRepository.repo";
-import {OfferService} from "../../../../../Application/ApplicationServices/OfferService.service";
+import {OfferApplicationService} from "../../../../ApplicationServices/Offer/OfferApplicationService.service";
 import { OfferReactivated } from "../../../../../Dominio/DomainEvents/OfferEvents/OfferReactivated";
 import {ReactivateOfferDTO} from "../../../../DTO/Offer/ReactivateOfferDTO";
 
@@ -42,8 +42,8 @@ const exampleOffer2 = new Offer(
 
 const Orepo = new MockOfferRepo();
 
-  function create_Service(repoO: IOfferRepository): OfferService {
-    const service = new OfferService(repoO);
+  function create_Service(repoO: IOfferRepository): OfferApplicationService {
+    const service = new OfferApplicationService(repoO);
     return service;
   }
 

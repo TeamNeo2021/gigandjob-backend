@@ -1,18 +1,18 @@
 import { Body, Controller, HttpCode, Post,Put } from '@nestjs/common';
-import { OfferFirestoreRepository } from '../../../Infrastructure/Firestore/OfferFirestoreRepository.repo';
-import { OfferService } from '../../../Application/ApplicationServices/OfferService.service';
+import { OfferFirestoreRepository } from '../../Firestore/OfferFirestoreRepository.repo';
+import { OfferApplicationService } from '../../../Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
-import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
+import { EliminitedOfferDTO } from '../../../Application/DTO/Offer/EliminitedOfferDTO';
 
 
 @Controller('offer')
 export class OfferApi {
-    private readonly offerService: OfferService;
+    private readonly offerApplicationService: OfferApplicationService;
     private readonly repository: OfferFirestoreRepository;
     constructor(){
         this.repository = new OfferFirestoreRepository();
-        this.offerService = new OfferService(this.repository);
+        this.offerApplicationService = new OfferApplicationService(this.repository);
     }
 
     @Post()
@@ -29,19 +29,19 @@ export class OfferApi {
                 Budget,
                 Desc
             )
-        this.offerService.Handle(request);
+        this.offerApplicationService.Handle(request);
         return 'Offer has been created'
     }
     
     @Put("Reactived") // PUT /Offers/Reactived
     ReactivedOffer(@Body() request:ReactivateOfferDTO): any{
-        this.offerService.Handle(request);
+        this.offerApplicationService.Handle(request);
         return "Esta accion reactiva una oferta"
     }
 
     @Put("Eliminited") // PUT /Offers/Eliminited
     EliminitedOffer(@Body() request:EliminitedOfferDTO): any{
-        this.offerService.Handle(request);
+        this.offerApplicationService.Handle(request);
         return "Esta accion elimina una oferta"
     }
 }
