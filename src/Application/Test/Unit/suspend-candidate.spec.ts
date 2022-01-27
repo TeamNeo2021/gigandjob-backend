@@ -25,7 +25,7 @@ describe("Suspend candidate", () => {
         new CandidateStateVo(CandidateStatesEnum.Active),
         new CandidateFullNameVo("Michael Kevin", "Nelo Guzman"),
         new CandidatePhoneVo("424", "1956647"),
-        new CandidateEmailVo("michael@shocklogic.com"),
+        new CandidateEmailVo("mknelo.18@est.ucba.edu.ve"),
         new CandidateBirthDateVo(new Date(2000, 3, 23)),
         new CandidateLocationVo(75, 76)
     )
