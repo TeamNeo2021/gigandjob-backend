@@ -1,3 +1,14 @@
+import { IDomainEvent } from "../IDomainEvent";
+
+export class MeetingModifiedEvent implements IDomainEvent {
+    public readonly dateTimeOcurred: Date;
+
+    constructor() {
+        this.dateTimeOcurred = new Date(Date.now());
+    }
+}
+
+/*
 import { MeetingDateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDateVO";
 import { MeetingDescriptionVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDescriptionVO";
 import { MeetingIDVO } from "../../AggRoots/Meeting/ValueObjects/MeetingIDVO";
@@ -24,3 +35,4 @@ export class MeetingModifyEvent implements IDomainEvent {
         this.location = location;
     }
 }
+*/

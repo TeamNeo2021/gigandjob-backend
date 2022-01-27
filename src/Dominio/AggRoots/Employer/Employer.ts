@@ -14,6 +14,8 @@ import { EmployerRifVO } from './ValueObjects/EmployerRifVO';
 import { IDomainEvent } from '../../DomainEvents/IDomainEvent';
 import { EmployerEliminated } from '../../DomainEvents/EmployerEvents/EmployerEliminated';
 import { InvalidEmployerState } from './Errors/invalidEmployerState.error';
+import { EmployerSuspended } from '../../DomainEvents/EmployerEvents/EmployerSuspended';
+import { Offer } from '../Offer/Offer';
 
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
@@ -26,6 +28,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _phone: EmployerPhoneVO;
   private _mail: EmployerMailVO;
   private _comDesignation: EmployerComercialDesignationVO;
+  private _offers: Offer[];
 
   private constructor(
     employerId: EmployerIdVO,
@@ -49,6 +52,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     this._phone = phone;
     this._mail = mail;
     this._comDesignation = comDesignation;
+    this._offers = [];
   }
 
   protected When(event: IDomainEvent): void {
@@ -65,13 +69,25 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
         this.mail = (eventEmployerRegistered.mail);
         this.comDesignation = (eventEmployerRegistered.comDesignation);
         break;
+
       case EmployerModified:
         //si el estado anterior es eliminado
         if ((this._state.value_state == EmployerStates.Eliminated)) {
           throw InvalidEmployerState.ChangingEliminatedState();
-        }
-        
+        }        
         break;
+
+      case EmployerSuspended:
+        //si el estado anterior es eliminado
+        if ((this._state.value_state == EmployerStates.Eliminated)) {
+          throw InvalidEmployerState.ChangingEliminatedState();
+        }
+        //si el estado anterior es suspendido
+        if ((this._state.value_state == EmployerStates.Suspended)) {
+          throw InvalidEmployerState.SuspendingSuspendedState();
+        }      
+      break;
+
       case EmployerEliminated:
         const eventEmployerEliminated: EmployerEliminated = event as EmployerEliminated;
         this.state = (eventEmployerEliminated.state);
@@ -176,6 +192,15 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     return this;
   }
 
+  public SuspendEmployer() {
+    console.log('Suspender Empleador');
+    this.Apply(new EmployerSuspended());
+    
+    this.state = new EmployerStateVO(EmployerStates.Suspended);
+    
+    return this;
+  }
+
   public EliminateEmployer(
     state: EmployerStateVO,
   ) {
@@ -239,6 +264,12 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
   public set comDesignation(value: EmployerComercialDesignationVO) {
     this._comDesignation = value;
+  }
+  public get offers(): Offer[] {
+    return this._offers;
+  }
+  public set offers(value: Offer[]) {
+    this._offers = value;
   }
 }
 

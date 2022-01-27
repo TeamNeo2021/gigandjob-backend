@@ -20,15 +20,11 @@ import { CandidateApplied } from "../../DomainEvents/CandidateEvents/CandidateAp
 import { ApplicationId } from "../Offer/Application/Value Objects/ApplicationId";
 import { MeetingIDVO } from "../Meeting/ValueObjects/MeetingIDVO";
 
-
-
-
 export class Candidate extends AggregateRoot {
 
     private _id: CandidateIdVo;
     private _state: CandidateStateVo;
     private _name: CandidateFullNameVo;
-
     private _phone: CandidatePhoneVo;
     private _email: CandidateEmailVo;
     private _birthDate: CandidateBirthDateVo;
@@ -58,21 +54,31 @@ export class Candidate extends AggregateRoot {
 
     //getters and setters
 
+    //deprecated
     public get Id(): CandidateIdVo {
         return this._id;
     }
+    //correct implementation
+    public get id(): string {
+        return this._id.value;
+    }
+
     public get state(): CandidateStateVo {
         return this._state;
     }
+
     public set state(value: CandidateStateVo) {
         this._state = value;
     }
+
     public get name(): CandidateFullNameVo {
         return this._name;
     }
+
     public set name(value: CandidateFullNameVo) {
         this._name = value;
     }
+
     public get phone(): CandidatePhoneVo {
         return this._phone;
     }
@@ -99,7 +105,7 @@ export class Candidate extends AggregateRoot {
     /**
         * Checks if the Candidate state is valid and throws error when not
         * @returns Void or InvalidCandidateState
-        */
+    */
     protected EnsureValidState(): void {
 
         const notEmptyValues = (
@@ -123,7 +129,7 @@ export class Candidate extends AggregateRoot {
      * Validates the state given in the constructor is valid when is being registered
      * it will return true only when the candidate is being instantiated with an Active State
      * @returns Boolean
-     */
+    */
     isStateValidOnRegister() {
 
         if (this._state.state != CandidateStatesEnum.Active) {
@@ -140,7 +146,7 @@ export class Candidate extends AggregateRoot {
      * Candidate cannot be created twice.
      * Checks if CandidateRegister Domain Event is more thn once on the event list
      * @returns Boolean
-     */
+    */
     isCandidateAlreadyRegistered() {
         console.log('# EVENTOS: ', this.GetChanges().length, 'lISTA: ', this.GetChanges())
         let counter = 0;
@@ -158,12 +164,11 @@ export class Candidate extends AggregateRoot {
         }
     }
 
-
     /**
-  * @extends AggregateRoot.When
-   * Checks the type of the Domain Event to proceed 
-   * @returns Void
-   */
+        * @extends AggregateRoot.When
+        * Checks the type of the Domain Event to proceed 
+        * @returns Void
+    */
     protected When(event: any): void {
         switch (event.constructor) {
 
@@ -191,14 +196,11 @@ export class Candidate extends AggregateRoot {
         }
     }
 
-
     /**
-  * Register a new Candidate 
-  * @returns Candidate
-  */
-    public registerCandidate(
-
-    ) {
+     * Register a new Candidate 
+     * @returns Candidate
+    */
+    public registerCandidate() {
         console.log('Registering Candidate #: ', this._id, '\nName: ', this._name.fullName);
         this.Apply(new CandidateRegisteredDomainEvent(this));
         return this;
@@ -211,6 +213,7 @@ export class Candidate extends AggregateRoot {
         console.log('Eliminating Candidate #: ', this._id.value, '\nName: ', this._name.fullName);
         this.Apply(new CandidateStateModified('Eliminated'))
     }
+
     public suspendThisCandidate() {
         if (this.isSuspended()){
             throw InvalidCandidateAction.alreadySuspended();          
@@ -218,6 +221,7 @@ export class Candidate extends AggregateRoot {
         console.log('Suspending Candidate #: ', this._id.value, '\nName: ', this._name.fullName);
         this.Apply(new CandidateStateModified('Suspended'))
     }
+
     public reactivateThisCandidate(){
         if (!(this.isSuspended())){
             throw InvalidCandidateAction.notSuspended();          
@@ -232,7 +236,6 @@ export class Candidate extends AggregateRoot {
         this.Apply(new CandidateStateModified('Active'))
     }
 
-
     //The following may be useless, but is for support ubiquitous language
     private isEliminated(): boolean{
         return this._state.state == CandidateStatesEnum.Eliminated;
@@ -244,15 +247,11 @@ export class Candidate extends AggregateRoot {
         return this._state.state == CandidateStatesEnum.Active;
     }
     
-
-    
-    
     /**
      * Use it in case of violating terms & conditions
      * Changes the state of an active Candidate to 'Suspended'
-     * */
-
-     public suspend(){ 
+    */
+    public suspend(){ 
         console.log(' Candidate suspended #: ', this._id, '\nName: ', this._name.fullName);
         let event = new SuspendedCandidateDomainEvent(this._id)
         this.Apply(event)
@@ -262,112 +261,95 @@ export class Candidate extends AggregateRoot {
     /**
      * Use it to reactivate a suspended candidate
      * Changes the state of an suspended Candidate to 'Active'
-     * */
-
-     public activate(){ 
+    */
+    public activate(){ 
         console.log(' Candidate activated #: ', this._id, '\nName: ', this._name.fullName);
         let event = new ActivateCandidateDomainEvent(this._id)
           this.Apply(event)
           return event;
       
-      }
+    }
 
-
-      
-       /**
-     * Access point to approve a CV
-     * */
-
-
-      /**
+    /**
      * CV Acess point
      * Use it to submit the CV from a candidate to review it
      *  @returns CandidateCvSubmittedDomainEvent
-     * */
-     private submitCv(
-          candidate_cv: Cv
-      ){
+    */
+    private submitCv(candidate_cv: Cv){
         console.log('User finished and uploaded cv: CandidateCvSubmittedDomainService');
-          console.log('CV: ', candidate_cv);
-        
-       }
+        console.log('CV: ', candidate_cv);
+    }
 
-        /**
+    /**
      * Use it to change candidate's data
      *   @returns CandidateProfileModifiedDomainEvent
-     * */
-       private  modifyProfile(
+    */
+    private  modifyProfile(
         name: CandidateFullNameVo,
         phone: CandidatePhoneVo,
         email: CandidateEmailVo,
         birthDate: CandidateBirthDateVo,
         location: CandidateLocationVo
-      ){ 
+    ){ 
         console.log(' Candidate mofified #: ', this._id);
         let event = new CandidateModified(
             name, phone, email, birthDate, location
         )
         this.Apply(event)
         return event;
-      }
+    }
 
-       /**
+    /**
      * takes the id from a given offer and creates a new Application for it
      * @returns AppliedOfferDomainEvent
-     * */
-      private applyToOffer(
-          offer_id: OfferIdVO
-      ){
+    */
+    private applyToOffer(offer_id: OfferIdVO){
             console.log('Candidate applies to an offer, offer ID: ', offer_id);
             console.log(' Candidate id#: ', this._id, '\nName: ', this._name.fullName);
             //Domain service CandidateAppliesOffer
-       }
+    }
 
-        /**
+    /**
      * removes the Application of candidate from a given offer
      * @returns ApplicationRemovedDomainEvent
-     * */
-       private removeApplicationFromOffer(
+    */
+    private removeApplicationFromOffer(
         offer_id: OfferIdVO,
         application_id: ApplicationId
-      ){
+    ){
         console.log('User remove the application from an offer, offer ID: ', offer_id, 'application id:',application_id);
         console.log('The application has been removed');
         //Domain service RemoveApplicationFromOffer
-      }
+    }
 
-      /**
-       * Candidate accepts the interview, meeeting is confirmed and both Emplyer and Candidate are notified
-     * @returns MeeetingAcceptedDomainEvent
-     * */
-      private acceptInterview(
+    /**
+        * Candidate accepts the interview, meeeting is confirmed and both Emplyer and Candidate are notified
+        * @returns MeeetingAcceptedDomainEvent
+    */
+    private acceptInterview(
           interview_id: MeetingIDVO
       ){ 
         console.log('Candidate id#',this._id,' accepts the interview, id interview ', interview_id);
         console.log('The employer will be notified');
         //Domain Service Accepts Interview
-      }
+    }
 
       
-      /**
-       * Candidate reject the interview, meeeting is NOT confirmed and both Emplyer and Candidate are notified
-     * returns MeeetingRejectedDomainEvent
-     * */
-      private rejectInterview(
-          interview_id: MeetingIDVO
-      ){ 
+    /**
+        * Candidate reject the interview, meeeting is NOT confirmed and both Emplyer and Candidate are notified
+        * returns MeeetingRejectedDomainEvent
+    */
+    private rejectInterview(interview_id: MeetingIDVO){ 
         console.log('Candidate id#',this._id,' rejects the interview, id interview ', interview_id);
         console.log('The employer will be notified');
         //Domain Service Rejects Interview
-      }
+    }
 
-      /**
-       * Candidate cancels the interview for a given reason, meeeting is canceled and both Emplyer and Candidate are notified
-     * returns MeeetingCanceledDomainEvent
-     * */
-      private  cancelInterview(
-        interview_id: MeetingIDVO
-    ){ 
+    /**
+        * Candidate cancels the interview for a given reason, meeeting is canceled and both Emplyer and Candidate are notified
+        * returns MeeetingCanceledDomainEvent
+    */
+    private  cancelInterview(interview_id: MeetingIDVO){ 
         console.log('Candidate id#',this._id,' cancels the interview, id interview ', interview_id);
         console.log('The employer will be notified');
         //Domain Service Cancels Interview

@@ -6,12 +6,12 @@ import { CandidateIdVo } from "../../AggRoots/Candidate/ValueObjects/CandidateId
 import { CandidateLocationVo } from "../../AggRoots/Candidate/ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "../../AggRoots/Candidate/ValueObjects/CandidatePhoneVo";
 import { CandidateStatesEnum, CandidateStateVo } from "../../AggRoots/Candidate/ValueObjects/CandidateStateVo";
-import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
 import { Meeting } from "../../AggRoots/Meeting/Meeting";
 import { MeetingDateVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDateVO";
 import { MeetingDescriptionVO } from "../../AggRoots/Meeting/ValueObjects/MeetingDescriptionVO";
 import { MeetingLocationVO } from "../../AggRoots/Meeting/ValueObjects/MeetingLocationVO";
 import { ValidateCandidateFreeMeeting } from "../../DomainService/ValidateCandidateFreeMeeting";
+import { exampleEmployer } from "../Employer/employerDomainEvents.spec";
 
 const candidateID = new CandidateIdVo();
 const validacion = new ValidateCandidateFreeMeeting();
@@ -33,26 +33,28 @@ function create_exampleCandidate(): Candidate{
     return exampleCandidate
 }
 
+const exampleCandidate = create_exampleCandidate();
+
 function example_meetings(candidate: CandidateIdVo): Meeting[]{
     return [
         Meeting.ScheduleOn(
             new MeetingDateVO(new Date(2022,11,20)),
-            new EmployerIdVO(),
-            candidate,
+            exampleEmployer,
+            exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
             new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         ),
         Meeting.ScheduleOn(
             new MeetingDateVO(date),
-            new EmployerIdVO(),
-            candidate,
+            exampleEmployer,
+            exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
             new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         ),
         Meeting.ScheduleOn(
             new MeetingDateVO(new Date(2022,11,22)),
-            new EmployerIdVO(),
-            candidate,
+            exampleEmployer,
+            create_exampleCandidate(),
             new MeetingDescriptionVO('Meeting test description'),
             new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         )
@@ -62,12 +64,12 @@ function example_meetings(candidate: CandidateIdVo): Meeting[]{
 describe('Valida que un candidato este libre el dia de la reunion',()=>{
     it('La validacion no pasa la prueba',()=>{
         expect(
-            validacion.validate(date,create_exampleCandidate(),example_meetings(candidateID))
+            validacion.validate(date,exampleCandidate,example_meetings(candidateID))
         ).toBe(false)
     })
     it('La validacion pasa la prueba',()=>{
         expect(
-            validacion.validate(new Date(2022,11,27),create_exampleCandidate(),example_meetings(candidateID))
+            validacion.validate(new Date(2022,11,27),exampleCandidate,example_meetings(candidateID))
         ).toBe(true)
     })
 })
