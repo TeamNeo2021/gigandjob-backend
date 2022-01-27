@@ -1,9 +1,11 @@
+import { CandidateApplied } from 'src/Dominio/DomainEvents/CandidateEvents/CandidateApplied';
 import { Candidate } from '../../Dominio//AggRoots/Candidate/Candidate';
 import { Offer } from '../../Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
 import { IApplicationService } from '../Core/IApplicationService';
 import { ApplyToOfferDTO } from '../DTO/Application/ApplyToOffer.dto';
+import { INotificationSender } from '../Ports/INotificationSender';
 import { ICandidateCommandRepository } from '../Repositories/CandidateCommandRepository.repo';
 import { ICandidateQuerryRepository } from '../Repositories/CandidateQuerryRepository.repo';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
@@ -12,15 +14,18 @@ export class ApplyService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
   private readonly CandidaterepoQ: ICandidateQuerryRepository;
   private readonly CandidaterepoC: ICandidateCommandRepository;
+  private readonly Sender: INotificationSender;
 
   constructor(
     Offerrepo: IOfferRepository,
     CandidaterepoQ: ICandidateQuerryRepository,
     CandidaterepoC: ICandidateCommandRepository,
+    Sender: INotificationSender,
   ) {
     this.Offerrepo = Offerrepo;
     this.CandidaterepoQ = CandidaterepoQ;
     this.CandidaterepoC = CandidaterepoC;
+    this.Sender = Sender;
   }
 
   async Handle(command: any): Promise<void> {
@@ -43,6 +48,16 @@ export class ApplyService implements IApplicationService {
           cmd.time,
         );
         DSApplyToOfer.createApplication();
+        this.Sender.send(
+          cmd.EmployerId,
+          new CandidateApplied(
+            cmd.CandidateId,
+            cmd.OfferId,
+            cmd.budget,
+            cmd.description,
+            cmd.time,
+          ),
+        );
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.save(Candidate);
         break;
