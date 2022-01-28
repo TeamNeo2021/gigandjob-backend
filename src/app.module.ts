@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CqrsModule } from '@nestjs/cqrs';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
@@ -14,6 +14,7 @@ import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.h
 import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 const employerProvider = {
   provide: 'EmployerApplicationService',
