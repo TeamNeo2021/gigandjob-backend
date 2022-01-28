@@ -30,7 +30,7 @@ import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueOb
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
 import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRepository.repo';
 import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
-import { OfferApplicationService } from '../../ApplicationServices/OfferApplicationService';
+import { OfferApplicationService } from '../../ApplicationServices/OfferApplicationService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
 import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
 import { INotificationSender } from '../../Ports/INotificationSender';
