@@ -1,5 +1,5 @@
 import {IApplicationService} from "../Core/IApplicationService"
-import {ICVCommandRepository} from "../Repositories/CVCommandRepository.repo"
+import {ICVCommandRepository} from "../Repositories/CVRepository.repo"
 import {RequestCvApprovalDTO} from "../DTO/Candidate/RequestCvApproval.dto"
 import { Cv, CvState } from "../../Dominio/AggRoots/CV/cv.root";
 import { CvCandidate } from "../../Dominio/AggRoots/CV/ValueObjects/cvCandidate.object";
