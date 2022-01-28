@@ -93,7 +93,7 @@ $ npm run test:cov -->
 
 ### UML CLASSES DIAGRAM
 
-![alt text](./assets/uml-diagram.png?raw=true "UML diagram") 
+![alt text](./assets/UML.png?raw=true "UML diagram") 
 
 
 ## :orange_book: Code References

@@ -37,7 +37,10 @@ export class SuspendOffersFromEmployerSuspended implements IObserver{
         //Se recorre la lista de ofertas y se suspenden las que no estén ya suspendidas, eliminadas o cerradas
         for (let offer of this.employer.offers){
             if ((offer._State.state != OfferStatesEnum.Suspended) && (offer._State.state != OfferStatesEnum.Closed) && (offer._State.state != OfferStatesEnum.Eliminated)) {
-                offer.SuspendOffer();
+                
+                //se suspende la oferta con true debido a 
+                //que se esta suspendiendo debido a la suspension del empleador
+                offer.SuspendOffer(true);
             } 
         }
     }

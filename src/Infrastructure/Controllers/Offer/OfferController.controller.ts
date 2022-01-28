@@ -4,9 +4,9 @@ import { OfferApplicationService } from '../../../Application/ApplicationService
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
 import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
-import { ReportOfferDTO } from 'src/Application/DTO/Offer/ReportOffer.dto';
-import { ICandidateRepository } from 'src/Application/Repositories/CandidateRepository';
-import { INotificationSender } from 'src/Application/Ports/INotificationSender';
+import { ReportOfferDTO } from '../../../Application/DTO/Offer/ReportOffer.dto';
+import { ICandidateRepository } from '../../../Application/Repositories/CandidateRepository';
+import { INotificationSender } from '../../../Application/Ports/INotificationSender';
 
 type ReportBody = {
   reason: string;
