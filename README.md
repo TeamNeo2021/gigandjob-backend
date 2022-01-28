@@ -68,7 +68,11 @@ $ npm run test:cov -->
 
 - Website - [https://nestjs.com](https://nestjs.com/)
 
-## Architecture/Code References
+## Architecture
+
+![alt text](https://github.com/TeamNeo2021/gigandjob-backend/blob/main/hexagonal-diagram.png?raw=true)
+![alt text](./assets/uml-diagram.png?raw=true "UML diagram") 
+## Code References
 
 - [Use Firestore with NestJS](https://ricardoromanj.com/posts/firestore-with-nestjs)
 - Hands On Domain Driven Design, Alexey Zimarev
