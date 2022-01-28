@@ -1,4 +1,4 @@
-/*import { Module, DynamicModule } from '@nestjs/common';
+import { Module, DynamicModule } from '@nestjs/common';
 import { Firestore, Settings } from '@google-cloud/firestore';
 import {
   FirestoreDatabaseProvider,
@@ -50,9 +50,9 @@ export class FirestoreModule {
       return FirestoreModule.forRoot({
         imports: [ConfigModule],
         useFactory: (configService: ConfigService) => ({
-          keyFilename: configService.get<string>('SA_KEY'),
+          keyFilename: configService.get<string>('KEY_PATH'),
         }),
         inject: [ConfigService],
       });
   }
-}*/
+}
