@@ -41,13 +41,15 @@ export class OfferApi {
     }
     
     @Put("Reactived") // PUT /Offers/Reactived
-    ReactivedOffer(@Body() request: ReactivateOfferBody): any{
-        this.offerService.Handle(new ReactivateOfferDTO(request.id));
+    ReactivedOffer( @Body('idOffer')IdOffer:string ): any{
+        let request:ReactivateOfferDTO= new ReactivateOfferDTO(IdOffer);
+        this.offerService.Handle(request);
         return "Esta accion reactiva una oferta"
     }
 
     @Put("Eliminited") // PUT /Offers/Eliminited
-    EliminitedOffer(@Body() request:EliminitedOfferDTO): any{
+    EliminitedOffer(@Body('idOffer')IdOffer:string): any{
+        let request:EliminitedOfferDTO= new EliminitedOfferDTO(IdOffer);
         this.offerService.Handle(request);
         return "Esta accion elimina una oferta"
     }

@@ -1,30 +1,50 @@
-import { OfferIdVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
-import { Offer } from "../../Dominio/AggRoots/Offer/Offer";
-import { BudgetVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
-import { DescriptionVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
-import { PublicationDateVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
-import { RatingVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { Sectors, SectorVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
-import { OfferStatesEnum, OfferStateVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
-import { IApplicationService } from ".././Core/IApplicationService";
-import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
-import { ReactivateOfferDTO } from "../DTO/Offer/ReactivateOfferDTO";
-import { EliminitedOfferDTO } from "../DTO/Offer/EliminitedOfferDTO";
-import { IOfferRepository } from "../Repositories/OfferRepository.repo";
-import { ReportOfferDTO } from "../DTO/Offer/ReportOffer.dto";
-import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO";
-
+import { OfferIdVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
+import { Offer } from '../../Dominio/AggRoots/Offer/Offer';
+import { BudgetVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
+import { DescriptionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
+import { DirectionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { PublicationDateVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
+import { RatingVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
+import {
+  Sectors,
+  SectorVO,
+} from '../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo';
+import {
+  OfferStatesEnum,
+  OfferStateVO,
+} from '../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo';
+import { IApplicationService } from '.././Core/IApplicationService';
+import { createOfferDTO } from '../DTO/Offer/CreateOffer.dto';
+import { ReactivateOfferDTO } from '../DTO/Offer/ReactivateOfferDTO';
+import { EliminitedOfferDTO } from '../DTO/Offer/EliminitedOfferDTO';
+import { IOfferRepository } from '../Repositories/OfferRepository.repo';
+import { ReportOfferDTO } from '../DTO/Offer/ReportOffer.dto';
+import { OfferReportVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO';
 
 export class OfferService implements IApplicationService {
+  private readonly repository: IOfferRepository;
 
-    private readonly repository: IOfferRepository;
+  constructor(repo: IOfferRepository) {
+    this.repository = repo;
+  }
 
-    constructor(repo: IOfferRepository){
-        this.repository = repo;
-    }
+  async Handle(command: any): Promise<void> {
+    switch (command.constructor) {
+      case createOfferDTO: {
+        // cast command to get intellisense
+        let cmd: createOfferDTO = <createOfferDTO>command;
 
-    async Handle(command: any): Promise<void> {
+        //! This is tresspassing aggregate offer
+        //! by accesing directly to its VO's
+        let new_offer = Offer.CreateOffer(
+          new OfferStateVO(<OfferStatesEnum>(<unknown>cmd.State)),
+          PublicationDateVO.Create(cmd.PublicationDate),
+          RatingVO.Create(cmd.Rating),
+          DirectionVO.Create(cmd.Direction),
+          new SectorVO(<Sectors>(<unknown>cmd.Sector)),
+          BudgetVO.Create(cmd.Budget),
+          DescriptionVO.Create(cmd.Description),
+        );
 
         switch (command.constructor) {
             
@@ -96,7 +116,42 @@ export class OfferService implements IApplicationService {
                 throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
                 break;
         }
-       
-    }
 
+        //Save the new offer
+        await this.repository.save(new_offer);
+
+        break;
+      }
+
+      case ReactivateOfferDTO: {
+        let cmd: ReactivateOfferDTO = <ReactivateOfferDTO>command;
+        let Offer_Reactived = await this.repository.load(
+          new OfferIdVO(cmd.id_offer),
+        );
+        Offer_Reactived.ReactivateOffer();
+        await this.repository.save(Offer_Reactived);
+        break;
+      }
+
+      case EliminitedOfferDTO: {
+        let cmd: EliminitedOfferDTO = <EliminitedOfferDTO>command;
+        let Offer_Eliminited = await this.repository.load(
+          new OfferIdVO(cmd.id_offer),
+        );
+        Offer_Eliminited.EliminateOffer();
+        await this.repository.save(Offer_Eliminited);
+        break;
+      }
+      // case LikeOffer:
+
+      //     break;
+      // case applyToOffer:
+
+      //     break;
+
+      default:
+        throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+        break;
+    }
+  }
 }

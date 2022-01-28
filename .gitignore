@@ -38,3 +38,6 @@ package-lock.json
 # Private keys
 serviceAccountKey.json
 .env
+
+#package
+package-lock.json

@@ -1,6 +1,6 @@
 import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
-import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
-import { MeetingService } from './Meeting.service';
+import { AcceptMeeting } from '../../../Application/DTO/Meeting/AcceptMeeting';
+import { MeetingService } from '../../../Application/ApplicationServices/Meeting.service';
 
 @Controller('meeting')
 export class MeetingController {
