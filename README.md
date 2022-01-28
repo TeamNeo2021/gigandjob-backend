@@ -33,9 +33,9 @@ This is the 2022 1st semester project for the Software Development subject from 
 
 First you need to set up a Firebase Project and create a FireStore DataBase
 - [1. Set up a new Firebase Project with the console](https://firebase.google.com/products/firestore)
-- 2. Create a Firestore Database 
+2. Create a Firestore Database 
 - [3. Generate private keys from Firebase console ](https://firebase.google.com/docs/admin/setup#initialize-sdk)
-- 4. Install all the dependencies
+4. Install all the dependencies
 
 ```bash
 $ npm install
@@ -87,8 +87,8 @@ $ npm run test:cov -->
 - Clean Architecture Robert C Martin
 ## Contributors
 
-- Carlos Alonso - Product Owner / Teacher 
--[Jose Luis Moncada - Team Leader / Scrum Master](https://github.com/joselmoncada)
+- Carlos Alonso - Product Owner - Teacher 
+-[Jose Luis Moncada - Team Leader - Scrum Master](https://github.com/joselmoncada)
 -[Jorge Croquer - Team Leader](https://github.com/YorchUCAB)
 -[Jose Leonardo Contreras - Team Leader](https://github.com/LeoProgrammerUCAB)
 - Carlos Valero
