@@ -1,4 +1,4 @@
-/* import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
+import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { MeetingService } from './Meeting.service';
 
@@ -17,4 +17,3 @@ export class MeetingController {
     return 'ok';
   }
 }
- */

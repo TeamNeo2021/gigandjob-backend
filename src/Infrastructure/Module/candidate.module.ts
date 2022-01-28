@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
-import { CandidateRegisterService } from "../../Application/ApplicationServices/CandidateRegister.service";
-import { CandidateApi } from "../API/Candidate/candidateRegister.controller";
+import { CandidateApplicationService } from "../../Application/ApplicationServices/CandidateApplicationService.service";
+import { CandidateController } from "../API/candidateController.controller";
 
 @Module({
   imports: [],
   providers: [
-    CandidateRegisterService,
+    CandidateApplicationService,
   ],
   controllers: [
-    CandidateApi
+    CandidateController
   ]
 })
 export class CandidateModule {}

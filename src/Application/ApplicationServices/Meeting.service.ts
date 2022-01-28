@@ -1,4 +1,4 @@
-/* import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Meeting } from 'src/Dominio/AggRoots/Meeting/Meeting';
 import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { IApplicationService } from '../Core/IApplicationService';
@@ -22,4 +22,3 @@ export class MeetingService implements IApplicationService {
     }
   }
 }
- */

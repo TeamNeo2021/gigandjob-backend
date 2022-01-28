@@ -27,8 +27,8 @@ import { CandidateModule } from './Infrastructure/Module/candidate.module';
   ],
   */
 
-  controllers: [AppController /*, MeetingController,OfferApi */],
-  providers: [AppService /*, MeetingService,OfferService */], 
+  controllers: [AppController, MeetingController,OfferApi],
+  providers: [AppService, MeetingService,OfferService], 
 
   imports: [CandidateModule]
 
