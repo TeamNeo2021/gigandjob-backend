@@ -28,8 +28,6 @@ import { CandidateEmailVo } from '../../../Dominio/AggRoots/Candidate/ValueObjec
 import { CandidateBirthDateVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo';
 import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
-import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRepository.repo';
-import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
 import { OfferApplicationService } from '../../ApplicationServices/OfferApplicationService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
 import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
@@ -47,6 +45,7 @@ import {
   EmployerStates,
 } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO';
+import { ICandidateRepository } from 'src/Application/Repositories/CandidateRepository';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -76,14 +75,14 @@ const exampleCandidate = new Candidate(
 );
 
 const exampleEmployer: Employer = Employer.RegisterEmployer(
-  new EmployerNameVO('Soluciones de Prueba'),
-  new EmployerDescriptionVO('La descripcion es una prueba'),
+  EmployerNameVO.Create('Soluciones de Prueba'),
+  EmployerDescriptionVO.Create('La descripcion es una prueba'),
   new EmployerStateVO(EmployerStates.Active),
-  new EmployerLocationVO('Av los Cedros'),
-  new EmployerRifVO('J-1236782'),
-  new EmployerPhoneVO('+584124578457'),
-  new EmployerMailVO('prueba@test.com'),
-  new EmployerComercialDesignationVO('Informatica24.c.a'),
+  EmployerLocationVO.Create('Av los Cedros'),
+  EmployerRifVO.Create('J-1236782'),
+  EmployerPhoneVO.Create('+584124578457'),
+  EmployerMailVO.Create('prueba@test.com'),
+  EmployerComercialDesignationVO.Create('Informatica24.c.a'),
   new EmployerIdVO(randomUUID()),
 );
 
@@ -98,11 +97,10 @@ const ExCommand = new ApplyToOfferDTO(
 
 function create_Service(
   repoO: IOfferRepository,
-  repoCQ: ICandidateQuerryRepository,
-  repoCC: ICandidateCommandRepository,
+  repoCC: ICandidateRepository,
   Msender: INotificationSender,
 ): OfferApplicationService {
-  const service = new OfferApplicationService(repoO, repoCQ, repoCC, Msender);
+  const service = new OfferApplicationService(repoO, repoCC, Msender);
   return service;
 }
 
@@ -110,7 +108,7 @@ describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     MCCrepo.save(exampleCandidate);
     await Orepo.save(exampleOffer);
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
+    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
     expect(
@@ -118,7 +116,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
+    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {
@@ -128,7 +126,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should send a notification to the given employer', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo, Msender);
+    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
     await ApplyService.Handle(ExCommand);
     expect(Msender.NotificatedIds[0]).toBe(
       exampleEmployer.employerId._guid_value,

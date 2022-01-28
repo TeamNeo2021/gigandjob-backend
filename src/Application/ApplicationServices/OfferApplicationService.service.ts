@@ -11,14 +11,12 @@ import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
-  private readonly CandidaterepoQ: ICandidateQuerryRepository;
-  private readonly CandidaterepoC: ICandidateCommandRepository;
+  private readonly CandidaterepoC: ICandidateRepository;
   private readonly Sender: INotificationSender;
 
   constructor(
     Offerrepo: IOfferRepository,
-    CandidaterepoQ: ICandidateQuerryRepository,
-    CandidaterepoC: ICandidateCommandRepository,
+    CandidaterepoC: ICandidateRepository,
     Sender: INotificationSender,
   ) {
     this.Offerrepo = Offerrepo;
