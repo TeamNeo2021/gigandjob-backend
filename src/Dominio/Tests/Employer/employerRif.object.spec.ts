@@ -4,15 +4,15 @@ import { EmployerRifVO } from "../../AggRoots/Employer/ValueObjects/EmployerRifV
 
 describe("EmployerRifVO",()=>{
     it("No debe crearse si el Rif está vacío",()=>{
-        expect(()=>new EmployerRifVO("")).toThrowError(InvalidEmployerRif)
+        expect(()=>EmployerRifVO.Create("")).toThrowError(InvalidEmployerRif)
     })
     it("No debe crearse si el Rif no comienza con el signo J-",()=>{
-        expect(()=>new EmployerRifVO("455544")).toThrowError(InvalidEmployerRif)
+        expect(()=>EmployerRifVO.Create("455544")).toThrowError(InvalidEmployerRif)
     })
     it("No debe crearse si el Rif tiene más de 9 digitos",()=>{
-        expect(()=>new EmployerRifVO("J-34567890123046789")).toThrowError(InvalidEmployerRif)
+        expect(()=>EmployerRifVO.Create("J-34567890123046789")).toThrowError(InvalidEmployerRif)
     })
     it("Debe crearse si el teléfono cumple con todas las restricciones",()=>{
-        expect(new EmployerRifVO("J-25455544")).toBeInstanceOf(EmployerRifVO)
+        expect(EmployerRifVO.Create("J-25455544")).toBeInstanceOf(EmployerRifVO)
     })
 })
