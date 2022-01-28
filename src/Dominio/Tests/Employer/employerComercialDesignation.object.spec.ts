@@ -3,12 +3,12 @@ import { EmployerComercialDesignationVO } from "../../AggRoots/Employer/ValueObj
 
 describe("Employer Comercial Designation", () => {
     it("should not create when value is empty", () => {
-        expect(() => new EmployerComercialDesignationVO("")).toThrowError(InvalidEmployerComercialDesignation)
+        expect(() => EmployerComercialDesignationVO.Create("")).toThrowError(InvalidEmployerComercialDesignation)
     })
     it("should not create when the value has more than 100 characters ", () => {
-        expect(() => new EmployerComercialDesignationVO("naonfnfuofauafuoauafuafaaalfaanjjajnajnajanjjfjfajjnajnnaonfnfuofauafuoauafuafaaalfaanjjajnajnajanjjfjfajjnajn")).toThrowError(InvalidEmployerComercialDesignation)
+        expect(() => EmployerComercialDesignationVO.Create("naonfnfuofauafuoauafuafaaalfaanjjajnajnajanjjfjfajjnajnnaonfnfuofauafuoauafuafaaalfaanjjajnajnajanjjfjfajjnajn")).toThrowError(InvalidEmployerComercialDesignation)
     })
     it(" Create when the value is less than 100 characters and is not empty ", () => {
-        expect(new EmployerComercialDesignationVO("asdfghj")).toBeInstanceOf(EmployerComercialDesignationVO)
+        expect(EmployerComercialDesignationVO.Create("asdfghj")).toBeInstanceOf(EmployerComercialDesignationVO)
     })
 })

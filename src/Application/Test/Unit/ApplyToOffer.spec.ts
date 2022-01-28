@@ -76,7 +76,7 @@ describe('Create an aplication to an offer', () => {
       'prueba',
       3,
     );
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
     expect(
@@ -84,7 +84,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {

@@ -36,12 +36,12 @@ const exampleOverflowedDescription: string = 'Lorem ipsum dolor sit amet, consec
 const exampleOffer = new Offer(
     new OfferIdVO(randomUUID()),
     new OfferStateVO(OfferStatesEnum.Active),
-    new PublicationDateVO(new Date()),
-    new RatingVO(0),
-    new DirectionVO('direction'),
+    PublicationDateVO.Create(new Date()),
+    RatingVO.Create(0),
+    DirectionVO.Create('direction'),
     new SectorVO(Sectors.Laws),
-    new BudgetVO(400),
-    new DescriptionVO('Oferta de prueba')
+    BudgetVO.Create(400),
+    DescriptionVO.Create('Oferta de prueba')
 
 )
 
