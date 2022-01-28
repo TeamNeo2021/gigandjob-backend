@@ -1,17 +1,24 @@
-import { Body, Controller, HttpCode, Post,Put } from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Post,Put } from '@nestjs/common';
 import { OfferFirestoreRepository } from '../../../Infrastructure/Firestore/OfferFirestoreRepository.repo';
 import { OfferService } from '../../../Application/ApplicationServices/OfferService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
 import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
+import { ReportOfferDTO } from 'src/Application/DTO/Offer/ReportOffer.dto';
 
+type ReportBody = {
+    reason: string
+    reporterId: string
+}
+
+type ReactivateOfferBody = {
+    id: string
+}
 
 @Controller('offer')
 export class OfferApi {
     private readonly offerService: OfferService;
-    private readonly repository: OfferFirestoreRepository;
-    constructor(){
-        this.repository = new OfferFirestoreRepository();
+    constructor(private repository: OfferFirestoreRepository){
         this.offerService = new OfferService(this.repository);
     }
 
@@ -45,6 +52,15 @@ export class OfferApi {
         let request:EliminitedOfferDTO= new EliminitedOfferDTO(IdOffer);
         this.offerService.Handle(request);
         return "Esta accion elimina una oferta"
+    }
+    
+    @Post(':id/report')
+    async reportOffer(@Param('id') id: string, @Body() report: ReportBody) {
+        await this.offerService.Handle(new ReportOfferDTO(id, report.reason, report.reporterId))
+        return {
+            reportedOffer: id,
+            reason: report.reason
+        }
     }
 }
 

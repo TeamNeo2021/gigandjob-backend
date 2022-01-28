@@ -2,12 +2,21 @@ import { InvalidOfferPublicationDate } from "../Errors/InvalidOfferPublicationDa
 
 export class PublicationDateVO{
 
-    private readonly value:Date;
+    readonly value:Date;
 
-    constructor(value:Date){
+    private constructor(value:Date){
+        this.value=value;
+    }    
+
+    static Create(value: Date) {
         if(value===null){
             throw InvalidOfferPublicationDate.EmptyPublication();
         }
-        this.value=value;
-    }    
+        
+        return new PublicationDateVO(value)
+    }
+
+    static Unsafe(value: Date) {
+        return new PublicationDateVO(value)
+    }
 }

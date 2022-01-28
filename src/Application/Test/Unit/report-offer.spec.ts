@@ -16,12 +16,12 @@ describe('Report Offer', () => {
     const mockOffer = () => new Offer(
         new OfferIdVO(),
         new OfferStateVO(OfferStatesEnum.Active),
-        new PublicationDateVO(new Date(2022, 1, 27)),
-        new RatingVO(5),
-        new DirectionVO("Caracas Caricuao"),
+        PublicationDateVO.Create(new Date(2022, 1, 27)),
+        RatingVO.Create(5),
+        DirectionVO.Create("Caracas Caricuao"),
         new SectorVO(Sectors.Laws),
-        new BudgetVO(1000),
-        new DescriptionVO("This is a laws offer")
+        BudgetVO.Create(1000),
+        DescriptionVO.Create("This is a laws offer")
     )
 
     it('should report offer multiple times', async () => {

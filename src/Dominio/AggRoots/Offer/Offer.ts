@@ -23,6 +23,9 @@ import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 import { OfferSuspended } from '../../DomainEvents/OfferEvents/OfferSuspended';
 import { OfferEliminated } from '../../DomainEvents/OfferEvents/OfferEliminated';
 import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivated';
+import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReported';
+import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
+import { OfferReportVO } from './ValueObjects/OfferReportVO';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -36,6 +39,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   private Budget: BudgetVO;
   private Description: DescriptionVO;
   private application: Application[];
+  private reports: OfferReportVO[] = []
 
   constructor(
     offerId: OfferIdVO,
@@ -46,6 +50,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     sector: SectorVO,
     budget: BudgetVO,
     description: DescriptionVO,
+    reports: OfferReportVO[] = []
   ) {
     super();
     this.OfferId = offerId;
@@ -103,6 +108,20 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         if (this.State.state == OfferStatesEnum.Eliminated) {
           throw InvalidOfferState.ChangingEliminatadState();
         }
+        break;
+
+      case OfferReported:
+        const evt = event as unknown as OfferReported
+        if (this.State.state == OfferStatesEnum.Eliminated) {
+          throw InvalidOfferReportError.reportedEliminatedOffer(this._Id._value)
+        }
+        if (this.State.state == OfferStatesEnum.Suspended) {
+          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value)
+        }
+        if (this.reports.find(r => r.reporterId == evt.report.reporterId)) {
+          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value)
+        }
+        this.reports.push(evt.report)
         break;
 
       case OfferReactivated:
@@ -197,6 +216,11 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     this.Description = description;
 
     return this;
+  }
+
+  // Reportar oferta
+  public ReportOffer(report: OfferReportVO) {
+    this.Apply(new OfferReported(report))
   }
 
   //Suspender oferta
@@ -332,6 +356,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
   public set _application(value: Application[]) {
     this.application = value;
+  }
+
+  get Reports(): readonly OfferReportVO[] {
+    return this.reports
   }
 
   public createApplication(

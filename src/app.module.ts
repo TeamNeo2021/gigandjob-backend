@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
@@ -16,14 +16,21 @@ import { EmployerPublisherService } from './Infrastructure/Event/Employer/employ
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreRepository.repo';
 
-const employerProvider = {
+const employerServiceProvider = {
   provide: 'EmployerApplicationService',
   useFactory: (repo: EmployerRepositoryService, publisher: EmployerPublisherService) => {
     return new EmployerApplicationService(repo, publisher)
   },
   inject: [EmployerRepositoryService, EmployerPublisherService]
 }
+const offerServiceProvider = {
+  provide: 'OfferApplicationService',
+  useFactory: (repository: OfferFirestoreRepository) => new OfferService(repository),
+  Inject: [OfferFirestoreRepository]
+}
+
 
 @Module({
   
@@ -39,7 +46,8 @@ const employerProvider = {
       }),
       inject: [ConfigService],
       collections: [
-        'employers'
+        'employers',
+        'offers'
       ]
     }),
     CandidateModule,
@@ -55,10 +63,12 @@ const employerProvider = {
     AppService, 
     MeetingService,
     OfferService,
+    OfferFirestoreRepository,
     EmployerRepositoryService,
     EmployerPublisherService,
     EmployerEventHandler,
-    employerProvider,
+    employerServiceProvider,
+    offerServiceProvider
   ],
 })
 export class AppModule {}

@@ -18,6 +18,8 @@ import { createOfferDTO } from '../DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../DTO/Offer/ReactivateOfferDTO';
 import { EliminitedOfferDTO } from '../DTO/Offer/EliminitedOfferDTO';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
+import { ReportOfferDTO } from '../DTO/Offer/ReportOffer.dto';
+import { OfferReportVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO';
 
 export class OfferService implements IApplicationService {
   private readonly repository: IOfferRepository;
@@ -36,19 +38,14 @@ export class OfferService implements IApplicationService {
         //! by accesing directly to its VO's
         let new_offer = Offer.CreateOffer(
           new OfferStateVO(<OfferStatesEnum>(<unknown>cmd.State)),
-          new PublicationDateVO(cmd.PublicationDate),
-          new RatingVO(cmd.Rating),
-          new DirectionVO(cmd.Direction),
+          PublicationDateVO.Create(cmd.PublicationDate),
+          RatingVO.Create(cmd.Rating),
+          DirectionVO.Create(cmd.Direction),
           new SectorVO(<Sectors>(<unknown>cmd.Sector)),
-          new BudgetVO(cmd.Budget),
-          new DescriptionVO(cmd.Description),
+          BudgetVO.Create(cmd.Budget),
+          DescriptionVO.Create(cmd.Description),
         );
 
-        //This should never happen, but in case RandomUUID generates
-        //an used UUID, this will stop the creation
-        if (this.repository.exists(new_offer._Id)) {
-          throw new Error('This offer ID is already registered');
-        }
 
         //Save the new offer
         await this.repository.save(new_offer);
@@ -73,6 +70,13 @@ export class OfferService implements IApplicationService {
         );
         Offer_Eliminited.EliminateOffer();
         await this.repository.save(Offer_Eliminited);
+        break;
+      }
+      case ReportOfferDTO: {
+        let cmd = command as ReportOfferDTO
+        const offer = await this.repository.load(new OfferIdVO(cmd.id))
+        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
+        await this.repository.save(offer)
         break;
       }
       // case LikeOffer:
