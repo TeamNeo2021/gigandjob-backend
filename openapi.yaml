@@ -180,3 +180,23 @@ paths:
             application/json:
               schema:
                 type: string
+components:
+  schemas:
+    CandidateRegistrationForm:
+      description: Form data needed to register a candidate
+      type: object
+      properties:
+        name:
+          type: string
+        lastname:
+          type: string
+        phoneCode:
+          type: string
+        email:
+          type: string
+        birthdate:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
