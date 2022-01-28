@@ -17,6 +17,7 @@ import { IOfferRepository } from "../../Repositories/OfferRepository.repo";
 export class OfferApplicationService implements IApplicationService {
 
     private readonly repository: IOfferRepository;
+    private DB_error: Error = new Error('A Database error has ocurred')
 
     constructor(repo: IOfferRepository){
         this.repository = repo;
@@ -48,12 +49,12 @@ export class OfferApplicationService implements IApplicationService {
 
                 //This should never happen, but in case RandomUUID generates
                 //an used UUID, this will stop the creation
-                if (this.repository.exists(new_offer._Id)){
-                    throw new Error("This offer ID is already registered");
+                if (await this.repository.exists(new_offer._Id).catch(err => {throw this.DB_error})){
+                    throw new Error("This offer ID generation has failed");
                 }
 
                 //Save the new offer
-                await this.repository.save(new_offer);
+                await this.repository.save(new_offer).catch(err => {throw this.DB_error});
                 
 
                 break;
@@ -83,7 +84,7 @@ export class OfferApplicationService implements IApplicationService {
             //     break;
 
             default:
-                throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+                throw new Error(`OfferService: Command doesn't exist: ${command.constructor}`);
                 break;
         }
        
