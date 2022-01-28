@@ -22,26 +22,35 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## :mag_right: Description
 
 DDD oriented Nestjs backend with a Hexagonal Architecture for the Gig&Job System.
 
 This is the 2022 1st semester project for the Software Development subject from the Informatics Engineering Career at Universidad Católica Andrés Bello.
 
+This application handles the backend of a search and application system of jobs or gits.
 
-## Installation
+## :spiral_notepad: Built with
+
+- [Node.js](https://nodejs.org/es/) - JavaScript execution environment
+- [Typescript](https://www.typescriptlang.org/) - Programming language with which the project was built
+- [Git](https://git-scm.com/) - Version manager
+- [Jest](https://jestjs.io/) - Test Framework
+
+
+## :wrench: Installation
 
 First you need to set up a Firebase Project and create a FireStore DataBase
-[1. Set up a new Firebase Project with the console](https://firebase.google.com/products/firestore)
+1. [Set up a new Firebase Project with the console](https://firebase.google.com/products/firestore)
 2. Create a Firestore Database 
-[3. Generate private keys from Firebase console ](https://firebase.google.com/docs/admin/setup#initialize-sdk)
+3. [Generate private keys from Firebase console ](https://firebase.google.com/docs/admin/setup#initialize-sdk)
 4. Install all the dependencies
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## :rocket: Running the app
 
 ```bash
 # development
@@ -54,7 +63,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## :test_tube: Test
 
 ```bash
 ##Unit testing
@@ -71,12 +80,12 @@ $ npm run test:e2e
 $ npm run test:cov -->
 
 
-## Nestjs Documentation
+## :green_book: Nestjs Documentation
 
 
 - Website - [https://nestjs.com](https://nestjs.com/)
 
-## Architecture
+## :blue_book: Architecture
 
 ### HEXAGONAL ARCHITECTURE DIAGRAM
 
@@ -87,24 +96,25 @@ $ npm run test:cov -->
 ![alt text](./assets/uml-diagram.png?raw=true "UML diagram") 
 
 
-## Code References
+## :orange_book: Code References
 
 - [Use Firestore with NestJS](https://ricardoromanj.com/posts/firestore-with-nestjs)
-- Hands On Domain Driven Design, Alexey Zimarev
-- Clean Architecture Robert C Martin
-## Contributors
+- [Hands On Domain Driven Design, Alexey Zimarev](https://www.amazon.com/-/es/Alexey-Zimarev-ebook/dp/B07C5WSR9B)
+- [Clean Architecture Robert C Martin](https://www.amazon.com/-/es/Robert-Martin-Arquitectura-limpia-estructura/dp/0134494164)
 
-- Carlos Alonso - Product Owner - Teacher 
+## :computer: Contributors
+
+- [Carlos Alonso - Product Owner - Teacher](https://github.com/cealonzo) 
 - [Jose Luis Moncada - Team Leader - Scrum Master](https://github.com/joselmoncada)
 - [Jorge Croquer - Team Leader](https://github.com/YorchUCAB)
 - [Jose Leonardo Contreras - Team Leader](https://github.com/LeoProgrammerUCAB)
 - [Carlos Valero](https://github.com/cdevalero)
-- Michael Nello
-- Luis Pinto
-- Cristian Gonzales
-- Rabindra Harinchard
-- Francisco Luna
-- Antonio Nohra
+- [Michael Nello](https://github.com/UCAB-MichaelNelo)
+- [Luis Pinto](https://github.com/LuisPinto17)
+- [Cristian Gonzales](https://github.com/cristianGonz)
+- [Rabindra Harinchard](https://github.com/RabindraHarichand)
+- [Francisco Luna](https://github.com/fjluna13)
+- [Antonio Nohra](https://github.com/anohra15)
 
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
