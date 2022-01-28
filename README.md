@@ -119,23 +119,26 @@ $ npm run test:cov -->
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *http://localhost:3000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**candidatesIdReactivatePost**](docs/Apis/DefaultApi.md#candidatesidreactivatepost) | **POST** /candidates/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
+*DefaultApi* | [**candidatesIdSuspendPost**](docs/Apis/DefaultApi.md#candidatesidsuspendpost) | **POST** /candidates/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
+*DefaultApi* | [**candidatesPost**](docs/Apis/DefaultApi.md#candidatespost) | **POST** /candidates | Registers a new candidate
 *DefaultApi* | [**employersPost**](docs/Apis/DefaultApi.md#employerspost) | **POST** /employers | Registers a new employer
 *DefaultApi* | [**meetingAcceptPut**](docs/Apis/DefaultApi.md#meetingacceptput) | **PUT** /meeting/accept | Accept a meeting
 *DefaultApi* | [**offerEliminitedPut**](docs/Apis/DefaultApi.md#offereliminitedput) | **PUT** /offer/Eliminited | Eliminates an offer
 *DefaultApi* | [**offerIdReportPost**](docs/Apis/DefaultApi.md#offeridreportpost) | **POST** /offer/{id}/report | Reports an offer
 *DefaultApi* | [**offerPost**](docs/Apis/DefaultApi.md#offerpost) | **POST** /offer | Creates a new offer
 *DefaultApi* | [**offerReactivedPut**](docs/Apis/DefaultApi.md#offerreactivedput) | **PUT** /offer/Reactived | Reactivates an offer
-*DefaultApi* | [**registerCandidatePost**](docs/Apis/DefaultApi.md#registercandidatepost) | **POST** /registerCandidate | Registers a new candidate
 
 
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
  - [CandidateRegistrationForm](docs/Models/CandidateRegistrationForm.md)
+ - [CandidateSuspensionForm](docs/Models/CandidateSuspensionForm.md)
  - [EmployerRegistrationForm](docs/Models/EmployerRegistrationForm.md)
  - [MeetingAcceptanceForm](docs/Models/MeetingAcceptanceForm.md)
  - [OfferIdForm](docs/Models/OfferIdForm.md)

@@ -4,7 +4,7 @@ info:
   description: HTTP API Server written in nest for the GigAndJob project
   version: 0.1.0
 paths:
-  /registerCandidate:
+  /candidates:
     post:
       summary: Registers a new candidate
       description: Creates a new candidate that can apply to job offers
@@ -16,6 +16,50 @@ paths:
               $ref: "#/components/schemas/CandidateRegistrationForm"
       responses:
         '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /candidates/{id}/suspend:
+    post:
+      summary: Suspends a candidate or deletes if treshold is surpased
+      description: Suspends a candidate and the candidate is no longer to apply to a offer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to suspend
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CandidateSuspensionForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /candidates/{id}/reactivate:
+    post:
+      summary: Reactivates a candidate or deletes if treshold is surpased
+      description: Reactivates a candidate and the candidate is able to apply to a offer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to reactivate
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
           description: 'A success message'
           content:
             application/json:
@@ -132,6 +176,17 @@ paths:
                 $ref: "#/components/schemas/OfferReportInformation"
 components:
   schemas:
+    CandidateSuspensionForm:
+      description: Form data needed to suspend a candidate
+      type: object
+      required: 
+        - until
+      properties:
+        until:
+          type: string
+          format: date
+          description: Date until the candidate remains suspended
+          example: "January 28 2022 18:00:00 GMT+04:00"
     CandidateRegistrationForm:
       description: Form data needed to register a candidate
       type: object
