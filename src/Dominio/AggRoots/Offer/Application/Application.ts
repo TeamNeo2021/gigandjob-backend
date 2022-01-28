@@ -96,4 +96,8 @@ export class Application extends Entity<ApplicationId>{
     public get getBudget(): ApplicationBudget{
         return this.budget;
     }
+
+    public getTime(): ApplicationTime{
+        return this.time;
+    }
 }
