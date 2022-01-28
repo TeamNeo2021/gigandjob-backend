@@ -125,12 +125,12 @@ Class | Method | HTTP request | Description
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
- - [inline_object](docs/Models/inline_object.md)
- - [inline_object_1](docs/Models/inline_object_1.md)
- - [inline_object_2](docs/Models/inline_object_2.md)
- - [inline_object_3](docs/Models/inline_object_3.md)
- - [inline_object_4](docs/Models/inline_object_4.md)
- - [inline_object_5](docs/Models/inline_object_5.md)
+ - [CandidateRegistrationForm](docs/Models/CandidateRegistrationForm.md)
+ - [EmployerRegistrationForm](docs/Models/EmployerRegistrationForm.md)
+ - [MeetingAcceptanceForm](docs/Models/MeetingAcceptanceForm.md)
+ - [OfferIdForm](docs/Models/OfferIdForm.md)
+ - [OfferRegistrationForm](docs/Models/OfferRegistrationForm.md)
+ - [OfferReportInformation](docs/Models/OfferReportInformation.md)
 
 
 <a name="documentation-for-authorization"></a>

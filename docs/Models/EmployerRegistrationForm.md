@@ -1,4 +1,4 @@
-# inline_object_1
+# EmployerRegistrationForm
 ## Properties
 
 Name | Type | Description | Notes
@@ -12,5 +12,5 @@ Name | Type | Description | Notes
 **mail** | **String** |  | [optional] [default to null]
 **comDesignation** | **String** |  | [optional] [default to null]
 
-[[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+[[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

@@ -13,22 +13,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                lastname:
-                  type: string
-                phoneCode:
-                  type: string
-                email:
-                  type: string
-                birthdate:
-                  type: string
-                latitude:
-                  type: number
-                longitude:
-                  type: number
+              $ref: "#/components/schemas/CandidateRegistrationForm"
       responses:
         '201':
           description: 'A success message'
@@ -45,25 +30,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                description:
-                  type: string
-                location:
-                  type: string
-                state:
-                  type: string
-                  enum: [Active, Eliminated, Suspended]
-                rif:
-                  type: string
-                phone:
-                  type: string
-                mail:
-                  type: string
-                comDesignation:
-                  type: string
+              $ref: "#/components/schemas/EmployerRegistrationForm"
       responses:
         '201':
           description: 'A success message'
@@ -80,12 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                candidateId:
-                  type: string
-                meetingId:
-                  type: string
+              $ref: "#/components/schemas/MeetingAcceptanceForm"
       responses:
         '200':
           description: 'A success message'
@@ -102,17 +64,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                direction:
-                  type: string
-                sector:
-                  type: string
-                  enum: [Laws, Technology]
-                budget:
-                  type: number
-                description:
-                  type: string
+              $ref: "#/components/schemas/OfferRegistrationForm"
       responses:
         '201':
           description: 'A success message'
@@ -129,10 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                idOffer:
-                  type: string
+              $ref: "#/components/schemas/OfferIdForm"
       responses:
         '200':
           description: 'A success message'
@@ -144,6 +93,12 @@ paths:
     put:
       summary: Eliminates an offer
       description: Eliminates an offer and it's related entities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferIdForm"
       responses:
         '200':
           description: 'A success message'
@@ -167,19 +122,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                reason:
-                  type: string
-                reporterId:
-                  type: string
+              $ref: "#/components/schemas/OfferReportInformation"
       responses:
         '200':
           description: 'A success message'
           content:
             application/json:
               schema:
-                type: string
+                $ref: "#/components/schemas/OfferReportInformation"
 components:
   schemas:
     CandidateRegistrationForm:
@@ -200,3 +150,59 @@ components:
           type: number
         longitude:
           type: number
+    EmployerRegistrationForm:
+      description: Form data needed to register an employer
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        state:
+          type: string
+          enum: [Active, Eliminated, Suspended]
+        rif:
+          type: string
+        phone:
+          type: string
+        mail:
+          type: string
+        comDesignation:
+          type: string
+    MeetingAcceptanceForm:
+      description: Form data needed to accept a meeting
+      type: object
+      properties:
+        candidateId:
+          type: string
+        meetingId:
+          type: string
+    OfferRegistrationForm:
+      description: Form data needed to register an offer
+      type: object
+      properties:
+        direction:
+          type: string
+        sector:
+          type: string
+          enum: [Laws, Technology]
+        budget:
+          type: number
+        description:
+          type: string
+    OfferIdForm:
+      description: Form data that indicates an offer Id
+      type: object
+      properties:
+        idOffer:
+          type: string
+    OfferReportInformation:
+      description: Information related to an offer report
+      type: object
+      properties:
+        reason:
+          type: string
+        reporterId:
+          type: string

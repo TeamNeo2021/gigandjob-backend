@@ -1,4 +1,4 @@
-# inline_object_3
+# OfferRegistrationForm
 ## Properties
 
 Name | Type | Description | Notes

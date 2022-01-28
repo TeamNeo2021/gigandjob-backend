@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 <a name="employersPost"></a>
 # **employersPost**
-> String employersPost(inline\_object\_1)
+> String employersPost(EmployerRegistrationForm)
 
 Registers a new employer
 
@@ -25,7 +25,7 @@ Registers a new employer
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inline\_object\_1** | [**inline_object_1**](../Models/inline_object_1.md)|  |
+ **EmployerRegistrationForm** | [**EmployerRegistrationForm**](../Models/EmployerRegistrationForm.md)|  |
 
 ### Return type
 
@@ -42,7 +42,7 @@ No authorization required
 
 <a name="meetingAcceptPut"></a>
 # **meetingAcceptPut**
-> String meetingAcceptPut(inline\_object\_2)
+> String meetingAcceptPut(MeetingAcceptanceForm)
 
 Accept a meeting
 
@@ -52,7 +52,7 @@ Accept a meeting
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inline\_object\_2** | [**inline_object_2**](../Models/inline_object_2.md)|  |
+ **MeetingAcceptanceForm** | [**MeetingAcceptanceForm**](../Models/MeetingAcceptanceForm.md)|  |
 
 ### Return type
 
@@ -69,42 +69,17 @@ No authorization required
 
 <a name="offerEliminitedPut"></a>
 # **offerEliminitedPut**
-> String offerEliminitedPut()
+> String offerEliminitedPut(OfferIdForm)
 
 Eliminates an offer
 
     Eliminates an offer and it&#39;s related entities
 
 ### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-**String**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-<a name="offerIdReportPost"></a>
-# **offerIdReportPost**
-> String offerIdReportPost(id, inline\_object\_5)
-
-Reports an offer
-
-    Reports an offer given it&#39;s id, a reporter Id and a reason
-
-### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**| The id of the offer to be reported | [default to null]
- **inline\_object\_5** | [**inline_object_5**](../Models/inline_object_5.md)|  |
+ **OfferIdForm** | [**OfferIdForm**](../Models/OfferIdForm.md)|  |
 
 ### Return type
 
@@ -119,9 +94,37 @@ No authorization required
 - **Content-Type**: application/json
 - **Accept**: application/json
 
+<a name="offerIdReportPost"></a>
+# **offerIdReportPost**
+> OfferReportInformation offerIdReportPost(id, OfferReportInformation)
+
+Reports an offer
+
+    Reports an offer given it&#39;s id, a reporter Id and a reason
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**| The id of the offer to be reported | [default to null]
+ **OfferReportInformation** | [**OfferReportInformation**](../Models/OfferReportInformation.md)|  |
+
+### Return type
+
+[**OfferReportInformation**](../Models/OfferReportInformation.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
 <a name="offerPost"></a>
 # **offerPost**
-> String offerPost(inline\_object\_3)
+> String offerPost(OfferRegistrationForm)
 
 Creates a new offer
 
@@ -131,7 +134,7 @@ Creates a new offer
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inline\_object\_3** | [**inline_object_3**](../Models/inline_object_3.md)|  |
+ **OfferRegistrationForm** | [**OfferRegistrationForm**](../Models/OfferRegistrationForm.md)|  |
 
 ### Return type
 
@@ -148,7 +151,7 @@ No authorization required
 
 <a name="offerReactivedPut"></a>
 # **offerReactivedPut**
-> String offerReactivedPut(inline\_object\_4)
+> String offerReactivedPut(OfferIdForm)
 
 Reactivates an offer
 
@@ -158,7 +161,7 @@ Reactivates an offer
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inline\_object\_4** | [**inline_object_4**](../Models/inline_object_4.md)|  |
+ **OfferIdForm** | [**OfferIdForm**](../Models/OfferIdForm.md)|  |
 
 ### Return type
 
@@ -175,7 +178,7 @@ No authorization required
 
 <a name="registerCandidatePost"></a>
 # **registerCandidatePost**
-> String registerCandidatePost(inline\_object)
+> String registerCandidatePost(CandidateRegistrationForm)
 
 Registers a new candidate
 
@@ -185,7 +188,7 @@ Registers a new candidate
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **inline\_object** | [**inline_object**](../Models/inline_object.md)|  |
+ **CandidateRegistrationForm** | [**CandidateRegistrationForm**](../Models/CandidateRegistrationForm.md)|  |
 
 ### Return type
 

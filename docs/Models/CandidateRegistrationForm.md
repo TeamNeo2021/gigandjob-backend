@@ -1,4 +1,4 @@
-# inline_object
+# CandidateRegistrationForm
 ## Properties
 
 Name | Type | Description | Notes
