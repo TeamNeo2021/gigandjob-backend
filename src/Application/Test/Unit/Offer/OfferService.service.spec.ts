@@ -1,4 +1,4 @@
-import { OfferApplicationService } from "../../../ApplicationServices/OfferService.service";
+import { OfferApplicationService } from "../../../ApplicationServices/Offer/OfferApplicationService.service";
 import { IOfferRepository } from "../../../Repositories/OfferRepository.repo";
 import { Offer } from "../../../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
