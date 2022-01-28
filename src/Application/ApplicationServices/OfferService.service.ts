@@ -20,7 +20,7 @@ export class OfferApplicationService implements IApplicationService {
     }
 
     Handle(command: any): void {
-        console.log(command.constructor == createOfferDTO)
+        
         switch (command.constructor) {
             
             case createOfferDTO: this.createOffer(command)
