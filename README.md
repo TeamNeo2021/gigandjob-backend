@@ -116,6 +116,39 @@ $ npm run test:cov -->
 - [Francisco Luna](https://github.com/fjluna13)
 - [Antonio Nohra](https://github.com/anohra15)
 
-## :warning: License
+<a name="documentation-for-api-endpoints"></a>
+## Documentation for API Endpoints
+
+All URIs are relative to *http://localhost*
+
+Class | Method | HTTP request | Description
+------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**employersPost**](docs/Apis/DefaultApi.md#employerspost) | **POST** /employers | Registers a new employer
+*DefaultApi* | [**meetingAcceptPut**](docs/Apis/DefaultApi.md#meetingacceptput) | **PUT** /meeting/accept | Accept a meeting
+*DefaultApi* | [**offerEliminitedPut**](docs/Apis/DefaultApi.md#offereliminitedput) | **PUT** /offer/Eliminited | Eliminates an offer
+*DefaultApi* | [**offerIdReportPost**](docs/Apis/DefaultApi.md#offeridreportpost) | **POST** /offer/{id}/report | Reports an offer
+*DefaultApi* | [**offerPost**](docs/Apis/DefaultApi.md#offerpost) | **POST** /offer | Creates a new offer
+*DefaultApi* | [**offerReactivedPut**](docs/Apis/DefaultApi.md#offerreactivedput) | **PUT** /offer/Reactived | Reactivates an offer
+*DefaultApi* | [**registerCandidatePost**](docs/Apis/DefaultApi.md#registercandidatepost) | **POST** /registerCandidate | Registers a new candidate
+
+
+<a name="documentation-for-models"></a>
+## Documentation for Models
+
+ - [CandidateRegistrationForm](docs/Models/CandidateRegistrationForm.md)
+ - [EmployerRegistrationForm](docs/Models/EmployerRegistrationForm.md)
+ - [MeetingAcceptanceForm](docs/Models/MeetingAcceptanceForm.md)
+ - [OfferIdForm](docs/Models/OfferIdForm.md)
+ - [OfferRegistrationForm](docs/Models/OfferRegistrationForm.md)
+ - [OfferReportInformation](docs/Models/OfferReportInformation.md)
+
+
+<a name="documentation-for-authorization"></a>
+## Documentation for Authorization
+
+All endpoints do not require authorization.
+
+
+## License
 
 Nest is [MIT licensed](LICENSE).

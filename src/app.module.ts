@@ -25,12 +25,6 @@ const employerServiceProvider = {
   },
   inject: [EmployerRepositoryService, EmployerPublisherService]
 }
-const offerServiceProvider = {
-  provide: 'OfferApplicationService',
-  useFactory: (repository: OfferFirestoreRepository) => new OfferService(repository),
-  Inject: [OfferFirestoreRepository]
-}
-
 
 @Module({
   
@@ -67,8 +61,7 @@ const offerServiceProvider = {
     EmployerRepositoryService,
     EmployerPublisherService,
     EmployerEventHandler,
-    employerServiceProvider,
-    offerServiceProvider
+    employerServiceProvider
   ],
 })
 export class AppModule {}
