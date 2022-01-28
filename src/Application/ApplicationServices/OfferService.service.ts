@@ -12,14 +12,19 @@ import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { ReactivateOfferDTO } from "../DTO/Offer/ReactivateOfferDTO";
 import { EliminitedOfferDTO } from "../DTO/Offer/EliminitedOfferDTO";
 import { IOfferRepository } from "../Repositories/OfferRepository.repo";
+import { SuspendOfferSystemDTO } from "../DTO/Offer/SuspendOfferXSystem.dto";
+import { SystemOfferSuspensionRespository } from "../Repositories/Offer/Suspensions/repository.interface";
+
 
 
 export class OfferService implements IApplicationService {
 
     private readonly repository: IOfferRepository;
+    private readonly supendofferrepository: SystemOfferSuspensionRespository;
 
-    constructor(repo: IOfferRepository){
+    constructor(repo: IOfferRepository, suspendrepo: SystemOfferSuspensionRespository){
         this.repository = repo;
+        this.supendofferrepository = suspendrepo;
     }
 
     async Handle(command: any): Promise<void> {
@@ -68,11 +73,22 @@ export class OfferService implements IApplicationService {
             }
 
             case EliminitedOfferDTO:{
-                
                 let cmd: EliminitedOfferDTO = <EliminitedOfferDTO> command;
                 let Offer_Eliminited= await this.repository.load(new OfferIdVO(cmd.id_offer));
                 Offer_Eliminited.EliminateOffer();
                 await this.repository.save(Offer_Eliminited);
+                break;
+            }
+
+            case SuspendOfferSystemDTO:{  
+                let cmd: SuspendOfferSystemDTO = <SuspendOfferSystemDTO> command;
+                let Offer_suspended= await this.repository.load(new OfferIdVO(cmd.id_offer))
+                const offer_applications = await this.supendofferrepository.getApplicationsToOfferCount(cmd.id_offer)
+                const offer_date = await this.supendofferrepository.get_publicationDate(cmd.id_offer)
+                if ((offer_date <= new Date(Date.now() - 5184000)) && (offer_applications == 0)) {
+                    Offer_suspended.SuspendOffer()
+                    await this.repository.save(Offer_suspended);
+                } 
                 break;
             }
             // case LikeOffer:

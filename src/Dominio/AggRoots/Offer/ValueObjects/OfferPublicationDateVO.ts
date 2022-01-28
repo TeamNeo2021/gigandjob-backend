@@ -2,7 +2,7 @@ import { InvalidOfferPublicationDate } from "../Errors/InvalidOfferPublicationDa
 
 export class PublicationDateVO{
 
-    private readonly value:Date;
+    value:Date;
 
     constructor(value:Date){
         if(value===null){
