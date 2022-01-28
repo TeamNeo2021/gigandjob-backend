@@ -11,16 +11,16 @@ import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
-  private readonly CandidaterepoC: ICandidateRepository;
+  private readonly Candidaterepo: ICandidateRepository;
   private readonly Sender: INotificationSender;
 
   constructor(
     Offerrepo: IOfferRepository,
-    CandidaterepoC: ICandidateRepository,
+    Candidaterepo: ICandidateRepository,
     Sender: INotificationSender,
   ) {
     this.Offerrepo = Offerrepo;
-    this.CandidaterepoC = CandidaterepoC;
+    this.Candidaterepo = Candidaterepo;
     this.Sender = Sender;
   }
 
@@ -34,7 +34,7 @@ export class OfferApplicationService implements IApplicationService {
           throw err;
         });
         console.log('Saque esta: ' + Oferta);
-        const Candidate: Promise<Candidate> = this.CandidaterepoC.getOne(
+        const Candidate: Promise<Candidate> = this.Candidaterepo.getOne(
           cmd.CandidateId,
         );
         console.log('Saque este candidate:' + Candidate);
@@ -61,7 +61,7 @@ export class OfferApplicationService implements IApplicationService {
           throw error;
         }
         this.Offerrepo.save(Oferta);
-        this.CandidaterepoC.save(await Candidate);
+        this.Candidaterepo.save(await Candidate);
         break;
       default:
         throw new Error(
