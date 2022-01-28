@@ -26,7 +26,6 @@ import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivate
 import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReported';
 import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
 import { OfferReportVO } from './ValueObjects/OfferReportVO';
-import { ReportOfferDTO } from 'src/Application/DTO/Offer/ReportOffer.dto';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -40,7 +39,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   private Budget: BudgetVO;
   private Description: DescriptionVO;
   private application: Application[];
-  private reports: OfferReportVO[]
+  private reports: OfferReportVO[] = []
 
   constructor(
     offerId: OfferIdVO,
@@ -51,6 +50,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     sector: SectorVO,
     budget: BudgetVO,
     description: DescriptionVO,
+    reports: OfferReportVO[] = []
   ) {
     super();
     this.OfferId = offerId;
@@ -122,6 +122,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value)
         }
         this.reports.push(evt.report)
+        break;
 
       case OfferReactivated:
         // si el estado anterior es eliminada
@@ -355,6 +356,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
   public set _application(value: Application[]) {
     this.application = value;
+  }
+
+  get Reports(): readonly OfferReportVO[] {
+    return this.reports
   }
 
   public createApplication(

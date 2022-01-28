@@ -46,76 +46,6 @@ export class OfferService implements IApplicationService {
           DescriptionVO.Create(cmd.Description),
         );
 
-        switch (command.constructor) {
-            
-
-            case createOfferDTO: {
-
-                // cast command to get intellisense
-                let cmd: createOfferDTO = <createOfferDTO> command
-
-
-                //! This is tresspassing aggregate offer
-                //! by accesing directly to its VO's
-                let new_offer = Offer.CreateOffer(
-                    new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
-                    PublicationDateVO.Create(cmd.PublicationDate),
-                    RatingVO.Create(cmd.Rating),
-                    DirectionVO.Create(cmd.Direction),
-                    new SectorVO(<Sectors><unknown>cmd.Sector),
-                    BudgetVO.Create(cmd.Budget),
-                    DescriptionVO.Create(cmd.Description)
-                )
-                
-
-                //This should never happen, but in case RandomUUID generates
-                //an used UUID, this will stop the creation
-                if (this.repository.exists(new_offer._Id)){
-                    throw new Error("This offer ID is already registered");
-                }
-
-                //Save the new offer
-                await this.repository.save(new_offer);
-                
-
-                break;
-            }
-
-            case ReactivateOfferDTO:{
-                let cmd: ReactivateOfferDTO = <ReactivateOfferDTO> command;
-                let Offer_Reactived= await this.repository.load(new OfferIdVO(cmd.id_offer));
-                Offer_Reactived.ReactivateOffer();
-                await this.repository.save(Offer_Reactived);
-                break;
-            }
-
-            case EliminitedOfferDTO:{
-                
-                let cmd: EliminitedOfferDTO = <EliminitedOfferDTO> command;
-                let Offer_Eliminited= await this.repository.load(new OfferIdVO(cmd.id_offer));
-                Offer_Eliminited.EliminateOffer();
-                await this.repository.save(Offer_Eliminited);
-                break;
-            }
-
-            case ReportOfferDTO: {
-                const cmd: ReportOfferDTO = <ReportOfferDTO> command
-                const offer = await this.repository.load(new OfferIdVO(cmd.id))
-                offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
-                await this.repository.save(offer)
-                break
-            }
-            // case LikeOffer:
-
-            //     break;
-            // case applyToOffer:
-
-            //     break;
-
-            default:
-                throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
-                break;
-        }
 
         //Save the new offer
         await this.repository.save(new_offer);
@@ -140,6 +70,13 @@ export class OfferService implements IApplicationService {
         );
         Offer_Eliminited.EliminateOffer();
         await this.repository.save(Offer_Eliminited);
+        break;
+      }
+      case ReportOfferDTO: {
+        let cmd = command as ReportOfferDTO
+        const offer = await this.repository.load(new OfferIdVO(cmd.id))
+        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
+        await this.repository.save(offer)
         break;
       }
       // case LikeOffer:

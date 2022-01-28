@@ -55,8 +55,8 @@ export class OfferApi {
     }
     
     @Post(':id/report')
-    reportOffer(@Param('id') id: string, @Body() report: ReportBody) {
-        this.offerService.Handle(new ReportOfferDTO(id, report.reason, report.reporterId))
+    async reportOffer(@Param('id') id: string, @Body() report: ReportBody) {
+        await this.offerService.Handle(new ReportOfferDTO(id, report.reason, report.reporterId))
         return {
             reportedOffer: id,
             reason: report.reason

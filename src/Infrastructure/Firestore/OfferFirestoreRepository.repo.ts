@@ -8,6 +8,7 @@ import { DirectionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDirect
 import { OfferIdVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
+import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO";
 import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 
@@ -19,7 +20,8 @@ type OfferEntity = {
     direction: string,
     sector: string,
     budget: number,
-    description: string
+    description: string,
+    reports: readonly { reporterId: string, reason: string }[]
 }
 
 @Injectable()
@@ -35,7 +37,8 @@ export class OfferFirestoreRepository implements IOfferRepository{
             direction: offer._Direction.value,
             sector: offer._Sector.value.toString(),
             budget: offer._Budget.value,
-            description: offer._Description.value
+            description: offer._Description.value,
+            reports: offer.Reports.map(r => ({ reporterId: r.reporterId, reason: r.reason}))
         })
     }
     async load(id: OfferIdVO): Promise<Offer> {
@@ -52,7 +55,8 @@ export class OfferFirestoreRepository implements IOfferRepository{
             DirectionVO.Unsafe(offerResult.direction),
             new SectorVO(Sectors[offerResult.sector]),
             BudgetVO.Unsafe(offerResult.budget),
-            DescriptionVO.Unsafe(offerResult.description)
+            DescriptionVO.Unsafe(offerResult.description),
+            offerResult.reports?.map(raw => OfferReportVO.Unsafe(raw.reporterId, raw.reason)) || []
         )
     }
 
