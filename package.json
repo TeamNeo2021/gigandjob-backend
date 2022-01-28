@@ -27,6 +27,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/cqrs": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
+    "firebase": "^9.6.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
@@ -70,9 +71,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "moduleDirectories": [
-      "node_modules",
-      "./"
-    ]
+    "moduleDirectories": ["node_modules", "./"]
   }
 }

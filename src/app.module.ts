@@ -13,7 +13,7 @@ import { OfferApi } from './Infrastructure/API/Offer/offer.controller';
 import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
 import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
-import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
+import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 
 const employerProvider = {
   provide: 'EmployerApplicationService',
@@ -32,7 +32,7 @@ const employerProvider = {
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        keyFilename: configService.get<string>('SA_KEY'),
+        keyFilename: configService.get<string>('KEY_PATH'),
       }),
       inject: [ConfigService],
       collections: [

@@ -70,7 +70,7 @@ $ npm run test:cov -->
 
 ## Architecture/Code References
 
-- Website - [Use Firestore with NestJS](https://ricardoromanj.com/posts/firestore-with-nestjs)
+- [Use Firestore with NestJS](https://ricardoromanj.com/posts/firestore-with-nestjs)
 - Hands On Domain Driven Design, Alexey Zimarev
 - Clean Architecture Robert C Martin
 ## License
