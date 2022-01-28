@@ -193,7 +193,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   }
 
   public SuspendEmployer() {
-    console.log('Suspendar Empleador');
+    console.log('Suspender Empleador');
     this.Apply(new EmployerSuspended());
     
     this.state = new EmployerStateVO(EmployerStates.Suspended);

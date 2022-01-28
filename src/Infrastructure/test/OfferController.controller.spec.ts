@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OfferApi } from '../API/Offer/offer.controller';
+import { OfferApi } from '../Controllers/Offer/OfferController.controller';
 
 const exampleOfferApi: OfferApi = new OfferApi();
 const mockedRequest:any = {
