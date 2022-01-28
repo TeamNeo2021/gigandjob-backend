@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-//import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CandidateModule } from './Infrastructure/Module/candidate.module';
+
 
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
@@ -11,7 +12,8 @@ import { OfferApi } from './Infrastructure/API/Offer/offer.controller';
 import { RepositoryModule } from './Infrastructure/Repository.module';
 
 @Module({
-  /*imports: [
+  /*
+  imports: [
     //TODO: Arreglar una vez se haya conectado bien con firestore
     ConfigModule.forRoot({
       isGlobal: true,
@@ -24,9 +26,13 @@ import { RepositoryModule } from './Infrastructure/Repository.module';
       }),
       inject: [ConfigService],
     }),
-  ],*/
+  ],
+  */
+
   controllers: [AppController, MeetingController,OfferApi],
-  providers: [AppService, MeetingService,OfferService],
+  providers: [AppService, MeetingService,OfferService], 
+
+  imports: [CandidateModule]
 
 })
 export class AppModule {}
