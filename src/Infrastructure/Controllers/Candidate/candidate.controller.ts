@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
-import { CandidateApplicationService } from "src/Application/ApplicationServices/Candidate/service.interface";
+// import { CandidateApplicationService } from "src/Application/ApplicationServices/Candidate/service.interface";
 
 import { candidateExampleDTO } from "./candidateEx.dto";
 
@@ -7,7 +7,7 @@ import { candidateExampleDTO } from "./candidateEx.dto";
 export class CandidateController {
 
     
-    constructor(private candidateAppService: CandidateApplicationService) { }
+    // constructor(private candidateAppService: CandidateApplicationService) { }
 
     @Post('/createCandidate')
     async createPost(@Res() res, @Body() productDTO: candidateExampleDTO) {

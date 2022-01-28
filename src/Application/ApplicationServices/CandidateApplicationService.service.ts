@@ -9,25 +9,19 @@ import { CandidateBirthDateVo } from "../../Dominio/AggRoots/Candidate/ValueObje
 import { CandidateLocationVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO";
 import { ICandidateRepository } from "../Repositories/CandidateRepository";
 import { IApplicationService } from "../Core/IApplicationService";
+import { SuspendCandidateDTO } from "../DTO/Candidate/SuspendCandidate.dto";
+import { CouldNotFindCandidateError } from "../Repositories/Candidate/Errors/could-not-find-candidate.error";
+import { CandidateConfiguration } from "../Configuration/Candidate/configuration.interface";
+import { CandidateScheduler } from "../Scheduler/Candidate/scheduler.interface";
+import { ReactivateCandidateDTO } from "../DTO/Candidate/ReactivateCandidate.dto";
 
 export class CandidateApplicationService implements IApplicationService{
-    private repository: ICandidateRepository;
-    private transactionService;
-    private publisher;
 
     constructor(
-        repository: ICandidateRepository,
-        suspensionRepository?,
-        configuration?,
-        publisher?
-    ){
-        this.repository = repository;
-        /* this.transactionService = {
-            getSuspensionCount: (id: string) => suspensionRepository.getSuspensionCount(id),
-            getSuspensionLimit: () => configuration.getSuspensionLimit()
-        }
-        this.publisher */
-    }
+        private repository: ICandidateRepository,
+        private configuration: CandidateConfiguration,
+        private scheduler: CandidateScheduler
+    ){}
 
     async Handle(command: any): Promise<void> {
         switch (command.constructor){
@@ -47,6 +41,35 @@ export class CandidateApplicationService implements IApplicationService{
                 );
         
                 await this.repository.save(candidate);
+                break;
+            }
+
+            case SuspendCandidateDTO: {
+                const id = (command as SuspendCandidateDTO).id,
+                      until = (command as SuspendCandidateDTO).until,
+                      candidate = await this.repository.getOne(id)
+                if (!candidate) throw new CouldNotFindCandidateError(id)
+
+                if (candidate.state.suspensionCount + 1 >= await this.configuration.getSuspensionLimit()) {
+                    candidate.eliminateThisCandidate()
+                    await this.repository.eliminate(candidate.id)
+                } else {
+                    candidate.suspendThisCandidate()
+                    await this.scheduler.scheduleCandidateReactivation(candidate.id, until)
+                    await this.repository.save(candidate)
+                }
+                break;
+            }
+
+            case ReactivateCandidateDTO: {
+                const id = (command as ReactivateCandidateDTO).id,
+                      candidate = await this.repository.getOne(id)
+                    
+                if (!candidate) throw new CouldNotFindCandidateError(candidate.id)
+
+                candidate.reactivateThisCandidate()
+                await this.repository.save(candidate)
+                break;
             }
                 
         }

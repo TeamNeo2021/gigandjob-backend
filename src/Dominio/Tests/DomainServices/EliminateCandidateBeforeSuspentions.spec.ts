@@ -100,6 +100,6 @@ describe('Eliminate a candidate before x suspentions service', () => {
         actualCandidate.suspendThisCandidate();//third suspention
         //here the service reacts because he observes actualCandidate
         
-        expect(actualCandidate.state).toEqual(new CandidateStateVo(CandidateStatesEnum.Eliminated))
+        expect(actualCandidate.state).toHaveProperty('state', CandidateStatesEnum.Eliminated)
     });
 })
