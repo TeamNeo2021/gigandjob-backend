@@ -138,71 +138,95 @@ components:
       properties:
         name:
           type: string
+          description: First name of the candidate
         lastname:
           type: string
+          description: Last name of the candidate
         phoneCode:
           type: string
+          description: Area code of the phone number of the candidate
         email:
           type: string
+          description: Email of the candidate
         birthdate:
           type: string
+          description: Birth date of the candidate
         latitude:
           type: number
+          description: Latitude coordinate of the candidate location 
         longitude:
           type: number
+          description: Longitude coordinate of the candidate location 
     EmployerRegistrationForm:
       description: Form data needed to register an employer
       type: object
       properties:
         name:
           type: string
+          description: Employer's full name
         description:
           type: string
+          description: Description of the employer
         location:
           type: string
+          description: Address of the employer
         state:
           type: string
+          description: Current state of the employer
           enum: [Active, Eliminated, Suspended]
         rif:
+          description: Rif of the employer
           type: string
         phone:
+          description: Phone of the employer
           type: string
         mail:
+          description: Email of the employer
           type: string
         comDesignation:
+          description: Common designation of the employer
           type: string
     MeetingAcceptanceForm:
       description: Form data needed to accept a meeting
       type: object
       properties:
         candidateId:
+          description: Id of the candidate that's accepting the meeting
           type: string
         meetingId:
+          description: Id of the meeting that's being accepted
           type: string
     OfferRegistrationForm:
       description: Form data needed to register an offer
       type: object
       properties:
         direction:
+          description: Address of the workplace of the offer
           type: string
         sector:
+          description: Sector in which the offer is based
           type: string
           enum: [Laws, Technology]
         budget:
+          description: Budget of the offer
           type: number
         description:
+          description: Description of the offer
           type: string
     OfferIdForm:
       description: Form data that indicates an offer Id
       type: object
       properties:
         idOffer:
+          description: Id of the offer which's state will change
           type: string
     OfferReportInformation:
       description: Information related to an offer report
       type: object
       properties:
         reason:
+          description: Reason why the offer is being reported
           type: string
         reporterId:
+          description: Id of the candidate that's being reported
           type: string

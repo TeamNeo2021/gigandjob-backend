@@ -3,14 +3,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **String** |  | [optional] [default to null]
-**description** | **String** |  | [optional] [default to null]
-**location** | **String** |  | [optional] [default to null]
-**state** | **String** |  | [optional] [default to null]
-**rif** | **String** |  | [optional] [default to null]
-**phone** | **String** |  | [optional] [default to null]
-**mail** | **String** |  | [optional] [default to null]
-**comDesignation** | **String** |  | [optional] [default to null]
+**name** | **String** | Employer&#39;s full name | [optional] [default to null]
+**description** | **String** | Description of the employer | [optional] [default to null]
+**location** | **String** | Address of the employer | [optional] [default to null]
+**state** | **String** | Current state of the employer | [optional] [default to null]
+**rif** | **String** | Rif of the employer | [optional] [default to null]
+**phone** | **String** | Phone of the employer | [optional] [default to null]
+**mail** | **String** | Email of the employer | [optional] [default to null]
+**comDesignation** | **String** | Common designation of the employer | [optional] [default to null]
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 
