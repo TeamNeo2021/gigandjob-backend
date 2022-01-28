@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { CandidateApplicationService } from "../../Application/ApplicationServices/CandidateApplicationService.service";
-import { CandidateController } from "../API/candidateController.controller";
+import { CandidateController } from "../Controllers/candidateController.controller";
 
 @Module({
   imports: [],

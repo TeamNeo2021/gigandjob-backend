@@ -11,13 +11,13 @@ import { Sectors } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/Offe
 import { OfferStateVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo';
 import { OfferStatesEnum } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo';
 import { randomUUID } from 'crypto';
-import { IOfferRepository } from '../../../../../Application/Repositories/OfferRepository.repo';
-import { OfferService } from '../../../../../Application/ApplicationServices/OfferService.service';
-import { OfferReactivated } from '../../../../../Dominio/DomainEvents/OfferEvents/OfferReactivated';
-import { ReactivateOfferDTO } from '../../../../DTO/Offer/ReactivateOfferDTO';
+import {IOfferRepository} from "../../../../../Application/Repositories/OfferRepository.repo";
+import {OfferApplicationService} from "../../../../ApplicationServices/Offer/OfferApplicationService.service";
+import { OfferReactivated } from "../../../../../Dominio/DomainEvents/OfferEvents/OfferReactivated";
+import {ReactivateOfferDTO} from "../../../../DTO/Offer/ReactivateOfferDTO";
+import { InMemoryCandidateCommandRepository } from "src/Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
+import { MockSenderAdapter } from "src/Infrastructure/Memory/MorckSenderAdapter";
 
-import { InMemoryCandidateCommandRepository } from '../../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo';
-import { MockSenderAdapter } from '../../../../../Infrastructure/Memory/MorckSenderAdapter';
 
 const MCandidateRepo = new InMemoryCandidateCommandRepository();
 const Msender = new MockSenderAdapter();
@@ -46,8 +46,9 @@ const exampleOffer3 = new Offer(
 
 const Orepo = new MockOfferRepo();
 
-function create_Service(repoO: IOfferRepository): OfferService {
-  const service = new OfferService(repoO, MCandidateRepo, Msender);
+
+function create_Service(repoO: IOfferRepository): OfferApplicationService {
+  const service = new OfferApplicationService(repoO, MCandidateRepo, Msender);
   return service;
 }
 

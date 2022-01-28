@@ -26,7 +26,7 @@ const exampleApplication = new Application(
 )
 
 describe('Creating an application', () => {
-    it('should fail when empty id is generated',()=>{
+    it('should not fail when correct id is generated',()=>{
         const id = new ApplicationId(randomUUID())
         expect(()=>
         id !== null &&
@@ -34,7 +34,7 @@ describe('Creating an application', () => {
         id.value !== undefined && 
         id.value !== '');
     });
-    it('should fail when empty Candidate id is generated',()=>{
+    it('should not fail when correct Candidate id is generated',()=>{
         const candidateId = new CandidateIdVo();
         expect(()=>
         candidateId !== null &&

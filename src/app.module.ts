@@ -6,17 +6,19 @@ import { AppService } from './app.service';
 import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
 import { CandidateModule } from './Infrastructure/Module/candidate.module';
 
-import { MeetingController } from './Infrastructure/API/meeting/Meeting.controller';
+import { MeetingController } from './Infrastructure/Controllers/meeting/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
-import { OfferService } from './Application/ApplicationServices/OfferService.service';
-import { EmployerController } from './Infrastructure/API/Employer/employer.controller';
-import { OfferApi } from './Infrastructure/API/Offer/offer.controller';
+import { OfferApplicationService } from './Application/ApplicationServices/Offer/OfferApplicationService.service';
+import { EmployerController } from './Infrastructure/Controllers/Employer/employer.controller';
+import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
 import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
 import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreRepository.repo';
+import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
+import { INotificationSender } from './Application/Ports/INotificationSender';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -25,6 +27,12 @@ const employerServiceProvider = {
   },
   inject: [EmployerRepositoryService, EmployerPublisherService]
 }
+const offerServiceProvider = {
+  provide: 'OfferApplicationService',
+  useFactory: (Offerrepo: OfferFirestoreRepository, candidateRepoC: ICandidateRepository, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC,Sender),
+  Inject: [OfferFirestoreRepository]
+}
+
 
 @Module({
   
@@ -50,13 +58,13 @@ const employerServiceProvider = {
   controllers: [
     AppController, 
     MeetingController, 
-    OfferApi, 
+    OfferController, 
     EmployerController
   ],
   providers: [
     AppService, 
     MeetingService,
-    OfferService,
+    OfferApplicationService,
     OfferFirestoreRepository,
     EmployerRepositoryService,
     EmployerPublisherService,
