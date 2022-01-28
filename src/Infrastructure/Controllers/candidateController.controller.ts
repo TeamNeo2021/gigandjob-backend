@@ -1,20 +1,16 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
-import { InMemoryCandidateCommandRepository } from '../Memory/InMemoryCandidateCommandRepository.repo';
-import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository';
-import { IApplicationService } from '../../Application/Core/IApplicationService';
+import { Body, Controller, Get, HttpCode, Inject, Param, Post } from '@nestjs/common';
 import { CandidateApplicationService } from '../../Application/ApplicationServices/CandidateApplicationService.service';
 import { CandidateRegisterDTO } from 'src/Application/DTO/Candidate/RegisterCandidate.dto';
+import { SuspendCandidateDTO } from 'src/Application/DTO/Candidate/SuspendCandidate.dto';
+import { ReactivateCandidateDTO } from 'src/Application/DTO/Candidate/ReactivateCandidate.dto';
 
-@Controller('registerCandidate')
+type CaniddateSuspensionBody = {
+    until: string
+}
+
+@Controller('candidates')
 export class CandidateController {
-    private readonly service: IApplicationService;
-    private readonly repository: ICandidateRepository;
-
-    constructor(){
-        this.repository = new InMemoryCandidateCommandRepository();
-
-        this.service = new CandidateApplicationService(this.repository);
-    }
+    constructor(@Inject('CandidateApplicationService') private service: CandidateApplicationService) {}
 
     @Post()
     @HttpCode(201)
@@ -41,6 +37,18 @@ export class CandidateController {
 
         this.service.Handle(request);
         return 'Candidate has been registed'
+    }
+
+    @Post(":id/suspend")
+    async suspendCandidate(@Param('id') candidateId: string, @Body() suspensionBody: CaniddateSuspensionBody) {
+        await this.service.Handle(new SuspendCandidateDTO(candidateId, new Date(Date.parse(suspensionBody.until))))
+        return 'Candidate suspended'
+    }
+    
+    @Post(":id/reactivate")
+    async reactivateCandidate(@Param('id') candidateId: string) {
+        await this.service.Handle(new ReactivateCandidateDTO(candidateId))
+        return 'Candidate reactivated'
     }
 }
 

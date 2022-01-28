@@ -10,7 +10,6 @@ import { MeetingController } from './Infrastructure/Controllers/meeting/Meeting.
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferApplicationService } from './Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { EmployerController } from './Infrastructure/Controllers/Employer/employer.controller';
-import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
 import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
 import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
@@ -19,6 +18,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreRepository.repo';
 import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
 import { INotificationSender } from './Application/Ports/INotificationSender';
+import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -49,7 +49,8 @@ const offerServiceProvider = {
       inject: [ConfigService],
       collections: [
         'employers',
-        'offers'
+        'offers',
+        'candidates'
       ]
     }),
     CandidateModule,

@@ -17,7 +17,11 @@ let CandidateTestDTO = new CandidateRegisterDTO(
 
 const memoryRepo = new InMemoryCandidateCommandRepository()
 
-const registerService = new CandidateApplicationService(memoryRepo)
+const registerService = new CandidateApplicationService(memoryRepo, {
+    getSuspensionLimit: jest.fn()
+}, {
+    scheduleCandidateReactivation: jest.fn()
+})
 
 describe("register a new Candidate in memory", ()=>{
     
