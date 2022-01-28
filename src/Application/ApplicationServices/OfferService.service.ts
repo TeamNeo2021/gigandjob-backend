@@ -14,36 +14,18 @@ import { IOfferRepository } from "../Repositories/OfferRepository.repo";
 export class OfferApplicationService implements IApplicationService {
 
     private readonly repository: IOfferRepository;
+    private DB_error: Error = new Error('A Database error has ocurred')
 
     constructor(repo: IOfferRepository){
         this.repository = repo;
     }
 
-    Handle(command: any): void {
+    async Handle(command: any): Promise<void> {
         
         switch (command.constructor) {
             
-            case createOfferDTO: this.createOffer(command)
-
-                break;
+            case createOfferDTO: 
             
-            
-
-            // case LikeOffer:
-
-            //     break;
-            // case applyToOffer:
-
-            //     break;
-
-            default:
-                throw Error(`OfferService: Command doesn't exist: ${command.constructor}`);            
-        }
-       
-    }
-
-    async createOffer(command:any): Promise<void>{
-        console.log('inicio');
             // cast command to get intellisense
             let cmd: createOfferDTO = <createOfferDTO> command
 
@@ -62,15 +44,33 @@ export class OfferApplicationService implements IApplicationService {
 
             //This should never happen, but in case RandomUUID generates
             //an used UUID, this will stop the creation
-            if (await this.repository.exists(new_offer._Id)){
+            if (await this.repository.exists(new_offer._Id).catch(err => {throw this.DB_error})){
                 throw new Error("This offer ID is already registered");
             }
-            console.log('voy a salvar');
+            
             //Save the new offer
-            await this.repository.save(new_offer);        
+            await this.repository.save(new_offer).catch(err => {throw this.DB_error})    
 
         
       
-       }
+
+                break;
+            
+            
+
+            // case LikeOffer:
+
+            //     break;
+            // case applyToOffer:
+
+            //     break;
+
+            default:
+                throw Error(`OfferService: Command doesn't exist: ${command.constructor}`);            
+        }
+       
+    }
+
+
 
 }

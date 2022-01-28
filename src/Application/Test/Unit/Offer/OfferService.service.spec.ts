@@ -53,7 +53,7 @@ class mockedOfferRepo implements IOfferRepository{
     }
 }
 
-class fakeCommand{
+class invalidCommand{
 
 }
 
@@ -73,6 +73,7 @@ const valid_command: createOfferDTO = new createOfferDTO(
     exampleBudget,
     exampleDescription
 );
+const invalid_command: invalidCommand = {};
 
 
 const fakeRepo: mockedOfferRepo = new mockedOfferRepo();
@@ -93,18 +94,17 @@ describe('Offer application service', () => {
     it('should succeed when instantiated normally', () => {
         expect(create_offer_service).not.toThrow(Error)
     });
-    it('should fail when command doesnt exist', () => {
+    it('should fail when command doesnt exist', async () => {
         let actualService: OfferApplicationService = create_offer_service();
-        const fakeCmd: fakeCommand = {};
-        expect(()=>{
-            actualService.Handle(fakeCmd)
-        }).toThrow(Error);
+        let error: Error = undefined
+        await actualService.Handle(invalid_command).catch( err => error = err)
+        expect(error).toBeDefined();
     });
-    it('should succeed when receives createOffer command', () => {
+    it('should succeed when receives createOffer command', async() => {
         let actualService: OfferApplicationService = create_offer_service();
-        expect(()=>{
-            actualService.Handle(valid_command)
-        }).not.toThrow(Error);
+        let error: Error = undefined
+        await actualService.Handle(valid_command).catch( err => error = err)
+        expect(error).not.toBeDefined();
     });
     it('should save the new offer in DB',async () => {
         let actualService: OfferApplicationService = create_offer_service();
