@@ -58,7 +58,7 @@ describe('Reactivar una oferta', () => {
     let exampleOffer: Offer = await Orepo.load(
       new OfferIdVO(exampleOffer2._Id.value),
     );
-    exampleOffer.SuspendOffer();
+    exampleOffer.SuspendOffer(false);
     let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
     let OfferService = create_Service(Orepo);
     OfferService.Handle(ExCommand);

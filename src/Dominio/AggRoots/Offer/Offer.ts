@@ -224,9 +224,9 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
 
   //Suspender oferta
-  public SuspendOffer() {
+  public SuspendOffer(isSuspendedEmployer: Boolean) {
     console.log('Suspender Oferta');
-    this.Apply(new OfferSuspended());
+    this.Apply(new OfferSuspended(isSuspendedEmployer));
 
     this._State = new OfferStateVO(OfferStatesEnum.Suspended);
 
