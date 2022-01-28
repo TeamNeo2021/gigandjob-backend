@@ -6,8 +6,7 @@ import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
 import { IApplicationService } from '../Core/IApplicationService';
 import { ApplyToOfferDTO } from '../DTO/Application/ApplyToOffer.dto';
 import { INotificationSender } from '../Ports/INotificationSender';
-import { ICandidateCommandRepository } from '../Repositories/CandidateCommandRepository.repo';
-import { ICandidateQuerryRepository } from '../Repositories/CandidateQuerryRepository.repo';
+import { ICandidateRepository } from '../Repositories/CandidateRepository';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
 export class OfferApplicationService implements IApplicationService {
@@ -23,7 +22,6 @@ export class OfferApplicationService implements IApplicationService {
     Sender: INotificationSender,
   ) {
     this.Offerrepo = Offerrepo;
-    this.CandidaterepoQ = CandidaterepoQ;
     this.CandidaterepoC = CandidaterepoC;
     this.Sender = Sender;
   }
@@ -38,12 +36,12 @@ export class OfferApplicationService implements IApplicationService {
           throw err;
         });
         console.log('Saque esta: ' + Oferta);
-        const Candidate: Candidate = this.CandidaterepoQ.getOne(
+        const Candidate: Promise<Candidate> = this.CandidaterepoC.getOne(
           cmd.CandidateId,
         );
         console.log('Saque este candidate:' + Candidate);
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
-          Candidate,
+          await Candidate,
           Oferta,
           cmd.budget,
           cmd.description,
@@ -65,7 +63,7 @@ export class OfferApplicationService implements IApplicationService {
           throw error;
         }
         this.Offerrepo.save(Oferta);
-        this.CandidaterepoC.save(Candidate);
+        this.CandidaterepoC.save(await Candidate);
         break;
       default:
         throw new Error(

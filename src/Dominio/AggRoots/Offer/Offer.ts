@@ -115,6 +115,24 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           throw InvalidOfferState.ReactivteNotSuspendedState();
         }
         break;
+<<<<<<< HEAD
+=======
+        
+        case OfferReactivated:
+          // si el estado anterior esta activa
+          if (this.State.state == OfferStatesEnum.Active) {
+            throw InvalidOfferState.ReactivteActiveState();
+          }
+          // si el estado anterior es eliminada
+          if (this.State.state == OfferStatesEnum.Eliminated) {
+            throw InvalidOfferState.ChangingEliminatadState();
+          }
+          // si el estado anterior no es suspendida
+          if (this.State.state != OfferStatesEnum.Suspended) {
+            throw InvalidOfferState.ReactivteNotSuspendedState();
+          }
+          break;
+>>>>>>> 42d9ea2eeb8e920964e58503fb235aeca3f729df
 
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied =

@@ -2,8 +2,8 @@ import { Body, Controller, HttpCode, Post,Put } from '@nestjs/common';
 import { OfferFirestoreRepository } from '../../../Infrastructure/Firestore/OfferFirestoreRepository.repo';
 import { OfferService } from '../../../Application/ApplicationServices/OfferService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
-import { ReactivateOfferDTO } from 'src/Application/DTO/Offer/ReactivateOfferDTO';
-import { EliminitedOfferDTO } from 'src/Application/DTO/Offer/EliminitedOfferDTO';
+import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
+import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
 
 
 @Controller('offer')
