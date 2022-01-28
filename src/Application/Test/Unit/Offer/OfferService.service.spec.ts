@@ -1,4 +1,4 @@
-import { OfferService } from "../../../ApplicationServices/OfferService.service";
+import { OfferApplicationService } from "../../../ApplicationServices/OfferService.service";
 import { IOfferRepository } from "../../../Repositories/OfferRepository.repo";
 import { Offer } from "../../../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
@@ -9,8 +9,13 @@ import { PublicationDateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjec
 import { RatingVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
 import { Sectors, SectorVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
+import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
 
 
+const exampleDirection:string = 'testing direction';
+const exampleSector:string = 'testing sector';
+const exampleBudget:number = 10;
+const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
 
 class mockedOfferRepo implements IOfferRepository{
 
@@ -29,8 +34,8 @@ class mockedOfferRepo implements IOfferRepository{
     likeOffer(data: LikeOfferDTO) {
         throw new Error("Method not implemented.");
     }
-    async save(): Promise<void>{
-        
+    async save(offer: Offer): Promise<void>{
+       mockedDB.push(offer);
     }
     async load(id: OfferIdVO): Promise<Offer>{
         let returned_offer: Offer = new Offer(
@@ -48,13 +53,38 @@ class mockedOfferRepo implements IOfferRepository{
     }
 }
 
-const fakeRepo: mockedOfferRepo = new mockedOfferRepo();
+class fakeCommand{
 
-function create_offer_service(): OfferService{
-    return new OfferService(fakeRepo);
 }
 
-const mockedDB: Offer[] = []
+const exampleOffer = Offer.CreateOffer(
+    new OfferStateVO(OfferStatesEnum.Active),
+    new PublicationDateVO(new Date('1999-05-13')),
+    new RatingVO(5),
+    new DirectionVO("AV Francisco de Miranda"),
+    new SectorVO(Sectors.Technology),
+    new BudgetVO(1500),
+    new DescriptionVO("descripcion de prueba")
+);
+
+const valid_command: createOfferDTO = new createOfferDTO(
+    exampleDirection,
+    exampleSector,
+    exampleBudget,
+    exampleDescription
+);
+
+
+const fakeRepo: mockedOfferRepo = new mockedOfferRepo();
+
+var mockedDB: Offer[] = [
+]
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+function create_offer_service(): OfferApplicationService{
+    return new OfferApplicationService(fakeRepo);
+}
 
 
 
@@ -63,14 +93,24 @@ describe('Offer application service', () => {
     it('should succeed when instantiated normally', () => {
         expect(create_offer_service).not.toThrow(Error)
     });
-    // it('should fail when command doesnt exist', () => {
-        
-    // });
-    // it('should succeed when receives createOffer command', () => {
-        
-    // });
-    // it('should fail when RandomUUID is repited in DB', () => {
-        
-    // });
+    it('should fail when command doesnt exist', () => {
+        let actualService: OfferApplicationService = create_offer_service();
+        const fakeCmd: fakeCommand = {};
+        expect(()=>{
+            actualService.Handle(fakeCmd)
+        }).toThrow(Error);
+    });
+    it('should succeed when receives createOffer command', () => {
+        let actualService: OfferApplicationService = create_offer_service();
+        expect(()=>{
+            actualService.Handle(valid_command)
+        }).not.toThrow(Error);
+    });
+    it('should save the new offer in DB',async () => {
+        let actualService: OfferApplicationService = create_offer_service();
+        let previousDB_length: number = mockedDB.length;
+        await actualService.Handle(valid_command);
+        expect(mockedDB.length).toEqual(previousDB_length+1);
+    });
 
 });

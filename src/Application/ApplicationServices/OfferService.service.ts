@@ -11,7 +11,7 @@ import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { IOfferRepository } from "../Repositories/OfferRepository.repo";
 
 
-export class OfferService implements IApplicationService {
+export class OfferApplicationService implements IApplicationService {
 
     private readonly repository: IOfferRepository;
 
@@ -19,43 +19,15 @@ export class OfferService implements IApplicationService {
         this.repository = repo;
     }
 
-    async Handle(command: any): Promise<void> {
-
+    Handle(command: any): void {
+        console.log(command.constructor == createOfferDTO)
         switch (command.constructor) {
-            //todo definir como se van a tratar los comandos
-
-            case createOfferDTO: {
-
-                // cast command to get intellisense
-                let cmd: createOfferDTO = <createOfferDTO> command
-
-
-                //! This is tresspassing aggregate offer
-                //! by accesing directly to its VO's
-                let new_offer = Offer.CreateOffer(
-                    new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
-                    new PublicationDateVO(cmd.PublicationDate),
-                    new RatingVO(cmd.Rating),
-                    new DirectionVO(cmd.Direction),
-                    new SectorVO(<Sectors><unknown>cmd.Sector),
-                    new BudgetVO(cmd.Budget),
-                    new DescriptionVO(cmd.Description)
-                )
-                
-
-                //This should never happen, but in case RandomUUID generates
-                //an used UUID, this will stop the creation
-                if (await this.repository.exists(new_offer._Id)){
-                    throw new Error("This offer ID is already registered");
-                }
-
-                //Save the new offer
-                await this.repository.save(new_offer);
-                
+            
+            case createOfferDTO: this.createOffer(command)
 
                 break;
-            }
-
+            
+            
 
             // case LikeOffer:
 
@@ -65,10 +37,40 @@ export class OfferService implements IApplicationService {
             //     break;
 
             default:
-                throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
-                break;
+                throw Error(`OfferService: Command doesn't exist: ${command.constructor}`);            
         }
        
     }
+
+    async createOffer(command:any): Promise<void>{
+        console.log('inicio');
+            // cast command to get intellisense
+            let cmd: createOfferDTO = <createOfferDTO> command
+
+            //! This is tresspassing aggregate offer
+            //! by accesing directly to its VO's
+            let new_offer = Offer.CreateOffer(
+                new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
+                new PublicationDateVO(cmd.PublicationDate),
+                new RatingVO(cmd.Rating),
+                new DirectionVO(cmd.Direction),
+                new SectorVO(<Sectors><unknown>cmd.Sector),
+                new BudgetVO(cmd.Budget),
+                new DescriptionVO(cmd.Description)
+            )
+            
+
+            //This should never happen, but in case RandomUUID generates
+            //an used UUID, this will stop the creation
+            if (await this.repository.exists(new_offer._Id)){
+                throw new Error("This offer ID is already registered");
+            }
+            console.log('voy a salvar');
+            //Save the new offer
+            await this.repository.save(new_offer);        
+
+        
+      
+       }
 
 }

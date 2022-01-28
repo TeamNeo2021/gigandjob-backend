@@ -2,7 +2,7 @@ import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
 
 const exampleDirection:string = 'testing direction';
 const exampleSector:string = 'testing sector';
-const exampleBudget:number = 0;
+const exampleBudget:number = 10;
 const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
 
 const isToday = (someDate:Date) => {
