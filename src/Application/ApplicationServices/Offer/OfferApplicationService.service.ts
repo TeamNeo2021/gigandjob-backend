@@ -32,7 +32,7 @@ export class OfferApplicationService implements IApplicationService {
   private readonly CandidaterepoC: ICandidateRepository;
   private readonly Sender: INotificationSender;
 
-  private readonly DB_error: Error = new Error('A database error has ocurred')
+  private readonly DB_error: Error = new Error('A database error has ocurred');
 
   constructor(
     Offerrepo: IOfferRepository,
@@ -47,36 +47,38 @@ export class OfferApplicationService implements IApplicationService {
   async Handle(command: any): Promise<void> {
     switch (command.constructor) {
       case createOfferDTO: {
+        // cast command to get intellisense
+        let cmd: createOfferDTO = <createOfferDTO>command;
 
-          // cast command to get intellisense
-          let cmd: createOfferDTO = <createOfferDTO> command
+        //! This is tresspassing aggregate offer
+        //! by accesing directly to its VO's
+        let new_offer = Offer.CreateOffer(
+          new OfferStateVO(<OfferStatesEnum>(<unknown>cmd.State)),
+          PublicationDateVO.Create(cmd.PublicationDate),
+          RatingVO.Create(cmd.Rating),
+          DirectionVO.Create(cmd.Direction),
+          new SectorVO(<Sectors>(<unknown>cmd.Sector)),
+          BudgetVO.Create(cmd.Budget),
+          DescriptionVO.Create(cmd.Description),
+        );
 
+        //This should never happen, but in case RandomUUID generates
+        //an used UUID, this will stop the creation
+        if (
+          await this.Offerrepo.exists(new_offer._Id).catch((err) => {
+            throw this.DB_error;
+          })
+        ) {
+          throw new Error('This offer ID generation has failed');
+        }
 
-          //! This is tresspassing aggregate offer
-          //! by accesing directly to its VO's
-          let new_offer = Offer.CreateOffer(
-              new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
-              PublicationDateVO.Create(cmd.PublicationDate),
-              RatingVO.Create(cmd.Rating),
-              DirectionVO.Create(cmd.Direction),
-              new SectorVO(<Sectors><unknown>cmd.Sector),
-              BudgetVO.Create(cmd.Budget),
-              DescriptionVO.Create(cmd.Description)
-          )
-          
+        //Save the new offer
+        await this.Offerrepo.save(new_offer).catch((err) => {
+          throw this.DB_error;
+        });
 
-          //This should never happen, but in case RandomUUID generates
-          //an used UUID, this will stop the creation
-          if (await this.Offerrepo.exists(new_offer._Id).catch(err => {throw this.DB_error})){
-              throw new Error("This offer ID generation has failed");
-          }
-
-          //Save the new offer
-          await this.Offerrepo.save(new_offer).catch(err => {throw this.DB_error});
-          
-
-          break;
-    }
+        break;
+      }
 
       case ReactivateOfferDTO: {
         let cmd: ReactivateOfferDTO = <ReactivateOfferDTO>command;
@@ -98,10 +100,10 @@ export class OfferApplicationService implements IApplicationService {
         break;
       }
       case ReportOfferDTO: {
-        let cmd = command as ReportOfferDTO
-        const offer = await this.Offerrepo.load(new OfferIdVO(cmd.id))
-        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
-        await this.Offerrepo.save(offer)
+        let cmd = command as ReportOfferDTO;
+        const offer = await this.Offerrepo.load(new OfferIdVO(cmd.id));
+        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason));
+        await this.Offerrepo.save(offer);
         break;
       }
       // case LikeOffer:
@@ -115,7 +117,7 @@ export class OfferApplicationService implements IApplicationService {
           throw err;
         });
         console.log('Saque esta: ' + Oferta);
-        const Candidate: Promise<Candidate> = this.CandidaterepoC.getOne(
+        const Candidate: Candidate = await this.CandidaterepoC.getOne(
           cmd.CandidateId,
         );
         console.log('Saque este candidate:' + Candidate);
@@ -142,16 +144,16 @@ export class OfferApplicationService implements IApplicationService {
           throw error;
         }
         this.Offerrepo.save(Oferta);
-        this.CandidaterepoC.save(await Candidate);
+        this.CandidaterepoC.modify(Candidate.id, Candidate);
         break;
 
       //     break;
 
       default:
-        throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+        throw new Error(
+          `OfferService: Command doesn't exist: ${command.constructor}`,
+        );
         break;
     }
-
-
   }
 }
