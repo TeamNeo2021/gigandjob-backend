@@ -48,34 +48,34 @@ export class OfferApplicationService implements IApplicationService {
     switch (command.constructor) {
       case createOfferDTO: {
 
-        // cast command to get intellisense
-        let cmd: createOfferDTO = <createOfferDTO> command
+          // cast command to get intellisense
+          let cmd: createOfferDTO = <createOfferDTO> command
 
 
-        //! This is tresspassing aggregate offer
-        //! by accesing directly to its VO's
-        let new_offer = Offer.CreateOffer(
-            new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
-            PublicationDateVO.Create(cmd.PublicationDate),
-            RatingVO.Create(cmd.Rating),
-            DirectionVO.Create(cmd.Direction),
-            new SectorVO(<Sectors><unknown>cmd.Sector),
-            BudgetVO.Create(cmd.Budget),
-            DescriptionVO.Create(cmd.Description)
-        )
-        
+          //! This is tresspassing aggregate offer
+          //! by accesing directly to its VO's
+          let new_offer = Offer.CreateOffer(
+              new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
+              PublicationDateVO.Create(cmd.PublicationDate),
+              RatingVO.Create(cmd.Rating),
+              DirectionVO.Create(cmd.Direction),
+              new SectorVO(<Sectors><unknown>cmd.Sector),
+              BudgetVO.Create(cmd.Budget),
+              DescriptionVO.Create(cmd.Description)
+          )
+          
 
-        //This should never happen, but in case RandomUUID generates
-        //an used UUID, this will stop the creation
-        if (await this.Offerrepo.exists(new_offer._Id).catch(err => {throw this.DB_error})){
-            throw new Error("This offer ID generation has failed");
-        }
+          //This should never happen, but in case RandomUUID generates
+          //an used UUID, this will stop the creation
+          if (await this.Offerrepo.exists(new_offer._Id).catch(err => {throw this.DB_error})){
+              throw new Error("This offer ID generation has failed");
+          }
 
-        //Save the new offer
-        await this.Offerrepo.save(new_offer).catch(err => {throw this.DB_error});
-        
+          //Save the new offer
+          await this.Offerrepo.save(new_offer).catch(err => {throw this.DB_error});
+          
 
-        break;
+          break;
     }
 
       case ReactivateOfferDTO: {

@@ -4,15 +4,9 @@ import { OfferApplicationService } from '../../../Application/ApplicationService
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
 import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
-<<<<<<< HEAD:src/Infrastructure/API/Offer/offer.controller.ts
 import { ReportOfferDTO } from '../../../Application/DTO/Offer/ReportOffer.dto';
 import { ICandidateRepository } from '../../../Application/Repositories/CandidateRepository';
 import { INotificationSender } from '../../../Application/Ports/INotificationSender';
-=======
-import { ReportOfferDTO } from 'src/Application/DTO/Offer/ReportOffer.dto';
-import { ICandidateRepository } from 'src/Application/Repositories/CandidateRepository';
-import { INotificationSender } from 'src/Application/Ports/INotificationSender';
->>>>>>> Cambios-de-nombre-jorge:src/Infrastructure/Controllers/Offer/OfferController.controller.ts
 
 type ReportBody = {
   reason: string;
@@ -24,59 +18,6 @@ type ReactivateOfferBody = {
 };
 
 @Controller('offer')
-<<<<<<< HEAD:src/Infrastructure/API/Offer/offer.controller.ts
-export class OfferApi {
-  private readonly offerService: OfferService;
-  constructor(
-    private repository: OfferFirestoreRepository,
-    private candidaterepo: ICandidateRepository,
-    private sender: INotificationSender,
-  ) {
-    this.offerService = new OfferService(
-      this.repository,
-      this.candidaterepo,
-      this.sender,
-    );
-  }
-
-  @Post()
-  @HttpCode(201)
-  createOffer(
-    @Body('direction') Dir: string,
-    @Body('sector') Sector: string,
-    @Body('budget') Budget: number,
-    @Body('description') Desc: string,
-  ): string {
-    let request: createOfferDTO = new createOfferDTO(Dir, Sector, Budget, Desc);
-    this.offerService.Handle(request);
-    return 'Offer has been created';
-  }
-
-  @Put('Reactived') // PUT /Offers/Reactived
-  ReactivedOffer(@Body('idOffer') IdOffer: string): any {
-    let request: ReactivateOfferDTO = new ReactivateOfferDTO(IdOffer);
-    this.offerService.Handle(request);
-    return 'Esta accion reactiva una oferta';
-  }
-
-  @Put('Eliminited') // PUT /Offers/Eliminited
-  EliminitedOffer(@Body('idOffer') IdOffer: string): any {
-    let request: EliminitedOfferDTO = new EliminitedOfferDTO(IdOffer);
-    this.offerService.Handle(request);
-    return 'Esta accion elimina una oferta';
-  }
-
-  @Post(':id/report')
-  async reportOffer(@Param('id') id: string, @Body() report: ReportBody) {
-    await this.offerService.Handle(
-      new ReportOfferDTO(id, report.reason, report.reporterId),
-    );
-    return {
-      reportedOffer: id,
-      reason: report.reason,
-    };
-  }
-=======
 export class OfferController {
     private readonly offerApplicationService: OfferApplicationService;
     private readonly Offerrepo: OfferFirestoreRepository;
@@ -131,5 +72,4 @@ export class OfferController {
             reason: report.reason
         }
     }
->>>>>>> Cambios-de-nombre-jorge:src/Infrastructure/Controllers/Offer/OfferController.controller.ts
 }
