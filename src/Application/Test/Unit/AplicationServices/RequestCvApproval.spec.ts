@@ -2,12 +2,15 @@ import {CvService} from "../../../ApplicationServices/CvService.service";
 
 import { Cv } from "src/Dominio/AggRoots/CV/cv.root";
 import { InMemoryCvCommandRepository } from "src/Infrastructure/Memory/InMemoryCvCommandRepository.repo";
+import { RequestCvApprovalDTO } from "src/Application/DTO/Candidate/RequestCvApproval.dto";
+import { randomUUID } from "crypto";
 
-const RequestCvApprovalDTO = {
-    cvID: "944fadf6-4901-958a-591b94dbdaer",
-    candidateID: "944fadf6-4901-958a-591b94dbdaer",
-    description: "CR7, Siiiuuuuuu",
-    workExperiences: [
+const UUID = randomUUID()
+const RequestCvApprovalDTO1 = new RequestCvApprovalDTO(
+    UUID,
+    UUID,
+     "CR7, Siiiuuuuuu",
+     [
         {
             description: "Futball player",
             startDate: "2002",
@@ -15,7 +18,7 @@ const RequestCvApprovalDTO = {
             job: "Player at "
         }
     ],
-    studies: [
+     [
         {
 
             description: "Bachiller",
@@ -26,34 +29,21 @@ const RequestCvApprovalDTO = {
         }
 
     ],
-    photo: Buffer.from([2]),
-    candidatebirthdate: "2002",  
-}
+     Buffer.from([2]),
+     "1990",  
+)
 
 const memoryRepo = new InMemoryCvCommandRepository()
 
 const submitcv = new CvService(memoryRepo)
 
 describe("submit a new Cv in memory", ()=>{
-
     
-    it("should suceed when submiting a valid Cv",()=>{
-        expect(CvService.Handle(RequestCvApprovalDTO)).toBeInstanceOf(Cv);
+    it("should suceed when submiting a valid Cv", async()=>{
+        submitcv.Handle(RequestCvApprovalDTO1);
+        let cv = await memoryRepo.getAll()
+        expect(cv[0]).toBeTruthy();
     })
 
     
 })
-//const memoryRepo = new InMemoryCandidateCommandRepository()
-
-//const registerService = new CvService(memoryRepo)
-
-/*describe("register a new Candidate in memory", ()=>{
-
-    
-    it("should suceed when registering a valid Candidate",()=>{
-        expect(registerService.RegisterCandidate(CandidateTestDTO)).toBeInstanceOf(Candidate);
-    })
-
-    
-})
-*/

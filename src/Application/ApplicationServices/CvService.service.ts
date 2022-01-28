@@ -18,26 +18,15 @@ export class CvService implements IApplicationService {
     }
 
     async Handle(command: any): Promise<void> {
-
+        console.log("entra al handle");
         switch (command.constructor) {
             
 
             case RequestCvApprovalDTO: {
+                console.log("entra al case");
 
                 let cmd: RequestCvApprovalDTO = <RequestCvApprovalDTO> command
-                
-                /*let Workxp : CvWorkExperience[];
-                for (let i = 0; i < cmd.workExperiences.length ; i++)
-                {
-                    Workxp.push(cmd.workExperiences[i][0],cmd.workExperiences[i][1],cmd.workExperiences[i][2],cmd.workExperiences[i][3]);
-                
-                }
-
-                let Studies : CvStudies[];
-                for (let i = 0; i < cmd.studies.length ; i++)
-                {
-                    Studies.push(cmd.studies[i][0],cmd.studies[i][1],cmd.studies[i][2],cmd.studies[i][3],cmd.studies[i][4]);
-                }*/
+                console.log("1");
 
                 let Workxp : CvWorkExperience[] = [];
                 let Studies : CvStudies[] = [];
@@ -45,11 +34,12 @@ export class CvService implements IApplicationService {
 
                     Workxp.push(new CvWorkExperience(iterator.description, new Date(iterator.startDate), new Date(iterator.finishDate), iterator.job));
                 }
-
+                console.log("2");
                 for (const iterator of cmd.studies) {
 
                     Studies.push(new CvStudies(iterator.description, new Date(iterator.startDate), new Date(iterator.finishDate), iterator.institution, iterator.degree));
                 }
+                console.log("3");
                 const submittedCv: Cv<CvState.Submitted> = Cv.submitCv(
                     new CvDescription(cmd.description),
                     Workxp,
@@ -58,7 +48,7 @@ export class CvService implements IApplicationService {
                     new CvCandidate(cmd.candidateID, new Date(cmd.candidatebirthdate)),
                     new CvId(cmd.cvID),
                 );
-
+                console.log("antes del save");
                 await this.commandRepository.save(submittedCv);
                 
 
