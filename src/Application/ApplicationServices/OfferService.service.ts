@@ -39,12 +39,12 @@ export class OfferService implements IApplicationService {
                 //! by accesing directly to its VO's
                 let new_offer = Offer.CreateOffer(
                     new OfferStateVO(<OfferStatesEnum><unknown>cmd.State),
-                    new PublicationDateVO(cmd.PublicationDate),
-                    new RatingVO(cmd.Rating),
-                    new DirectionVO(cmd.Direction),
+                    PublicationDateVO.Create(cmd.PublicationDate),
+                    RatingVO.Create(cmd.Rating),
+                    DirectionVO.Create(cmd.Direction),
                     new SectorVO(<Sectors><unknown>cmd.Sector),
-                    new BudgetVO(cmd.Budget),
-                    new DescriptionVO(cmd.Description)
+                    BudgetVO.Create(cmd.Budget),
+                    DescriptionVO.Create(cmd.Description)
                 )
                 
 

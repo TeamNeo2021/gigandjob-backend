@@ -36,7 +36,8 @@ const employerProvider = {
       }),
       inject: [ConfigService],
       collections: [
-        'employers'
+        'employers',
+        'offers'
       ]
     }),
     CandidateModule,
