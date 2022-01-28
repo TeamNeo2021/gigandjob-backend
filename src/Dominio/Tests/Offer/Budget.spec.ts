@@ -6,14 +6,14 @@ describe("Budget",()=>{
     
        //Validemos nuestro presupuesto
        it("Deberia fallar si el presupuesto es nulo", ()=>{ //Validate que no es vacia
-        expect(()=>new BudgetVO(null)).toThrowError(InvalidOfferBudget)
+        expect(()=>BudgetVO.Create(null)).toThrowError(InvalidOfferBudget)
     }),
 
     it("Deberia fallar si el presupuesto es menor a 0", ()=>{ //Validate que no es negativa
-        expect(()=>new BudgetVO(-231)).toThrowError(InvalidOfferBudget)
+        expect(()=>BudgetVO.Create(-231)).toThrowError(InvalidOfferBudget)
     })
 
     it("Deberia crear cuando le pase un numero", () => {
-        expect(new BudgetVO(5)).toBeInstanceOf(BudgetVO)
+        expect(BudgetVO.Create(5)).toBeInstanceOf(BudgetVO)
     })
 })

@@ -1,25 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OfferApi } from '../Controllers/Offer/OfferController.controller';
+import { OfferController } from '../Controllers/Offer/OfferController.controller';
 
-const exampleOfferApi: OfferApi = new OfferApi();
-const mockedRequest:any = {
-    body:{
-      "direction": "fake Dir",
-      "sector:": "fake Sector",
-      "budget": 10,
-      "description": "fake desc"
-    }
-}
+
 
 describe('OfferApi', () => {
-  let controller: OfferApi;
+  let controller: OfferController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OfferApi],
+      controllers: [OfferController],
     }).compile();
 
-    controller = module.get<OfferApi>(OfferApi);
+    controller = module.get<OfferController>(OfferController);
   });
 
   it('should be defined', () => {

@@ -15,35 +15,39 @@ import {IOfferRepository} from "../../../../../Application/Repositories/OfferRep
 import {OfferApplicationService} from "../../../../ApplicationServices/Offer/OfferApplicationService.service";
 import { OfferReactivated } from "../../../../../Dominio/DomainEvents/OfferEvents/OfferReactivated";
 import {ReactivateOfferDTO} from "../../../../DTO/Offer/ReactivateOfferDTO";
+import { InMemoryCandidateCommandRepository } from "src/Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
+import { MockSenderAdapter } from "src/Infrastructure/Memory/MorckSenderAdapter";
 
 
 
 const exampleOffer2 = new Offer(
     new OfferIdVO(randomUUID()),
     new OfferStateVO(OfferStatesEnum.Active),
-    new PublicationDateVO(new Date()),
-    new RatingVO(0),
-    new DirectionVO('direction'),
+    PublicationDateVO.Create(new Date()),
+    RatingVO.Create(0),
+    DirectionVO.Create('direction'),
     new SectorVO(Sectors.Laws),
-    new BudgetVO(400),
-    new DescriptionVO('Oferta de prueba'),
+    BudgetVO.Create(400),
+    DescriptionVO.Create('Oferta de prueba'),
   );
 
   const exampleOffer3 = new Offer(
     new OfferIdVO(randomUUID()),
     new OfferStateVO(OfferStatesEnum.Active),
-    new PublicationDateVO(new Date()),
-    new RatingVO(0),
-    new DirectionVO('direction'),
+    PublicationDateVO.Create(new Date()),
+    RatingVO.Create(0),
+    DirectionVO.Create('direction'),
     new SectorVO(Sectors.Laws),
-    new BudgetVO(400),
-    new DescriptionVO('Oferta de prueba'),
+    BudgetVO.Create(400),
+    DescriptionVO.Create('Oferta de prueba'),
   );
 
 const Orepo = new MockOfferRepo();
+const MCCrepo = new InMemoryCandidateCommandRepository();
+const Msender = new MockSenderAdapter();
 
   function create_Service(repoO: IOfferRepository): OfferApplicationService {
-    const service = new OfferApplicationService(repoO);
+    const service = new OfferApplicationService(repoO,MCCrepo,Msender);
     return service;
   }
 

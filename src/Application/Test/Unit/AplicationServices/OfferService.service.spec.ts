@@ -10,6 +10,8 @@ import { RatingVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferR
 import { Sectors, SectorVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
+import { InMemoryCandidateCommandRepository } from "../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
+import { MockSenderAdapter } from "../../../../Infrastructure/Memory/MorckSenderAdapter";
 
 
 const exampleDirection:string = 'testing direction';
@@ -17,15 +19,18 @@ const exampleSector:string = 'testing sector';
 const exampleBudget:number = 10;
 const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
 
+const MCCrepo = new InMemoryCandidateCommandRepository();
+const Msender = new MockSenderAdapter();
+
 class mockedOfferRepo implements IOfferRepository{
 
     private mockedState: OfferStateVO = new OfferStateVO(OfferStatesEnum.Active);
-    private mockedPublicationDate: PublicationDateVO = new PublicationDateVO(new Date());
-    private mockedRating: RatingVO = new RatingVO(0);
-    private mockedDirection: DirectionVO = new DirectionVO('Lorem ipsum dolor sit amet.');
+    private mockedPublicationDate: PublicationDateVO = PublicationDateVO.Create(new Date());
+    private mockedRating: RatingVO = RatingVO.Create(0);
+    private mockedDirection: DirectionVO = DirectionVO.Create('Lorem ipsum dolor sit amet.');
     private mockedSector: SectorVO = new SectorVO(Sectors.Laws);
-    private mockedBugget: BudgetVO = new BudgetVO(10);
-    private mockedDescription: DescriptionVO = new DescriptionVO('Lorem ipsum dolor sit amet.');
+    private mockedBugget: BudgetVO = BudgetVO.Create(10);
+    private mockedDescription: DescriptionVO = DescriptionVO.Create('Lorem ipsum dolor sit amet.');
 
 
     async exists(id: OfferIdVO): Promise<boolean> {
@@ -59,12 +64,12 @@ class invalidCommand{
 
 const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),
-    new PublicationDateVO(new Date('1999-05-13')),
-    new RatingVO(5),
-    new DirectionVO("AV Francisco de Miranda"),
+    PublicationDateVO.Create(new Date('1999-05-13')),
+    RatingVO.Create(5),
+    DirectionVO.Create("AV Francisco de Miranda"),
     new SectorVO(Sectors.Technology),
-    new BudgetVO(1500),
-    new DescriptionVO("descripcion de prueba")
+    BudgetVO.Create(1500),
+    DescriptionVO.Create("descripcion de prueba")
 );
 
 const valid_command: createOfferDTO = new createOfferDTO(
@@ -84,7 +89,7 @@ var mockedDB: Offer[] = [
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 function create_offer_service(): OfferApplicationService{
-    return new OfferApplicationService(fakeRepo);
+    return new OfferApplicationService(fakeRepo,MCCrepo,Msender);
 }
 
 

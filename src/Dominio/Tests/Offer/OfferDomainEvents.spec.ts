@@ -16,30 +16,30 @@ import { type } from "os";
 
 const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),
-    new PublicationDateVO(new Date('1999-05-13')),
-    new RatingVO(5),
-    new DirectionVO("AV Francisco de Miranda"),
+    PublicationDateVO.Create(new Date('1999-05-13')),
+    RatingVO.Create(5),
+    DirectionVO.Create("AV Francisco de Miranda"),
     new SectorVO(Sectors.Technology),
-    new BudgetVO(1500),
-    new DescriptionVO("descripcion de prueba"));
+    BudgetVO.Create(1500),
+    DescriptionVO.Create("descripcion de prueba"));
 
 const exampleOfferReactived = Offer.CreateOffer(
         new OfferStateVO(OfferStatesEnum.Active),
-        new PublicationDateVO(new Date('1999-05-13')),
-        new RatingVO(5),
-        new DirectionVO("AV Francisco de Miranda"),
+        PublicationDateVO.Create(new Date('1999-05-13')),
+        RatingVO.Create(5),
+        DirectionVO.Create("AV Francisco de Miranda"),
         new SectorVO(Sectors.Technology),
-        new BudgetVO(1500),
-        new DescriptionVO("descripcion de prueba"));
+        BudgetVO.Create(1500),
+        DescriptionVO.Create("descripcion de prueba"));
 
 const exampleOfferEliminited = Offer.CreateOffer(
         new OfferStateVO(OfferStatesEnum.Active),
-        new PublicationDateVO(new Date('1999-05-13')),
-        new RatingVO(5),
-        new DirectionVO("AV Francisco de Miranda"),
+        PublicationDateVO.Create(new Date('1999-05-13')),
+        RatingVO.Create(5),
+        DirectionVO.Create("AV Francisco de Miranda"),
         new SectorVO(Sectors.Technology),
-        new BudgetVO(1500),
-        new DescriptionVO("descripcion de prueba"));
+        BudgetVO.Create(1500),
+        DescriptionVO.Create("descripcion de prueba"));
 
 
 describe("crear una oferta", () => {
@@ -53,12 +53,12 @@ describe("modificar una oferta", () => {
     
     it("debe modificar la oferta cuando el estado es activa a suspendida", () => {
         exampleOffer.ModifyOffer(
-            new PublicationDateVO(new Date('2000-01-31')),
-            new RatingVO(7),
-            new DirectionVO("AV Romulo Gallegos"),
+            PublicationDateVO.Create(new Date('2000-01-31')),
+            RatingVO.Create(7),
+            DirectionVO.Create("AV Romulo Gallegos"),
             new SectorVO(Sectors.Technology),
-            new BudgetVO(2000),
-            new DescriptionVO("descripcion de prueba"));
+            BudgetVO.Create(2000),
+            DescriptionVO.Create("descripcion de prueba"));
             expect(exampleOffer.GetChanges()[0]).toBeInstanceOf(OfferCreated);
             expect(exampleOffer.GetChanges()[1]).toBeInstanceOf(OfferModified);
     })    

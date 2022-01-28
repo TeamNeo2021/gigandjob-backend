@@ -10,8 +10,8 @@ export class MeetingService implements IApplicationService {
     switch (command.constructor) {
       case AcceptMeeting:
         //query meeting command.meetingId
-        let meeting = new Meeting();
-        meeting.state = MeetingStates.Pending;
+        // let meeting = new Meeting();
+        // meeting.state = MeetingStates.Pending;
         //query save meeting
         break;
       default:
