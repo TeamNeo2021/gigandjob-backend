@@ -7,7 +7,7 @@ import { CandidatePhoneVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/
 import { CandidateEmailVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateEmailVo";
 import { CandidateBirthDateVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
 import { CandidateLocationVo } from "../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO";
-import { ICandidateRepository } from "../Repositories/CandidateRepository";
+import { ICandidateRepository } from "../Repositories/CandidateRepository.repo";
 import { IApplicationService } from "../Core/IApplicationService";
 
 export class CandidateApplicationService implements IApplicationService{

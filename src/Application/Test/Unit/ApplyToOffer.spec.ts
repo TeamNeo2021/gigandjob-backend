@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { InMemoryCandidateCommandRepository } from '../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo';
+import { InMemoryCandidateRepository } from '../../../Infrastructure/Memory/InMemoryCandidateRepository.repo';
 import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
 import { MockOfferRepo } from '../../../Infrastructure/Memory/MockOfferRepo.repo';
 import { Offer } from '../../../Dominio/AggRoots/Offer/Offer';
@@ -28,12 +28,11 @@ import { CandidateEmailVo } from '../../../Dominio/AggRoots/Candidate/ValueObjec
 import { CandidateBirthDateVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo';
 import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
-import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRepository.repo';
-import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
 import { ApplyService } from '../../ApplicationServices/ApplyService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
+import { ICandidateRepository } from '../../Repositories/CandidateRepository.repo';
 
-const MCCrepo = new InMemoryCandidateCommandRepository();
+const MCCrepo = new InMemoryCandidateRepository();
 const Orepo = new MockOfferRepo();
 
 //const ExCommand = new ApplyToOfferDTO('1', '1', 100, 'prueba', 3);
@@ -60,10 +59,9 @@ const exampleCandidate = new Candidate(
 
 function create_Service(
   repoO: IOfferRepository,
-  repoCQ: ICandidateQuerryRepository,
-  repoCC: ICandidateCommandRepository,
+  repoCC: ICandidateRepository,
 ): ApplyService {
-  const service = new ApplyService(repoO, repoCQ, repoCC);
+  const service = new ApplyService(repoO, repoCC);
   return service;
 }
 
@@ -78,7 +76,7 @@ describe('Create an aplication to an offer', () => {
       'prueba',
       3,
     );
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
     expect(
@@ -86,7 +84,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, MCCrepo);
+    let ApplyService = create_Service(Orepo, MCCrepo);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {

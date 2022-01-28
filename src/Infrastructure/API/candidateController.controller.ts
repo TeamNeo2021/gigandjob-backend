@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
-import { InMemoryCandidateCommandRepository } from '../Memory/InMemoryCandidateCommandRepository.repo';
-import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository';
+import { InMemoryCandidateRepository } from '../Memory/InMemoryCandidateRepository.repo';
+import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository.repo';
 import { IApplicationService } from '../../Application/Core/IApplicationService';
 import { CandidateApplicationService } from '../../Application/ApplicationServices/CandidateApplicationService.service';
 import { CandidateRegisterDTO } from 'src/Application/DTO/Candidate/RegisterCandidate.dto';
@@ -11,7 +11,7 @@ export class CandidateController {
     private readonly repository: ICandidateRepository;
 
     constructor(){
-        this.repository = new InMemoryCandidateCommandRepository();
+        this.repository = new InMemoryCandidateRepository();
 
         this.service = new CandidateApplicationService(this.repository);
     }

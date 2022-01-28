@@ -1,7 +1,7 @@
-import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository';
+import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository.repo';
 import { Candidate } from '../../Dominio/AggRoots/Candidate/Candidate';
 
-export class InMemoryCandidateCommandRepository implements ICandidateRepository{
+export class InMemoryCandidateRepository implements ICandidateRepository{
   private candidates: Candidate[] = [];
 
   async save(candidate: Candidate): Promise<void> {

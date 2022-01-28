@@ -4,7 +4,7 @@ import { OfferIdVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
 import { IApplicationService } from '../Core/IApplicationService';
 import { ApplyToOfferDTO } from '../DTO/Application/ApplyToOffer.dto';
-import { ICandidateRepository } from '../Repositories/CandidateRepository';
+import { ICandidateRepository } from '../Repositories/CandidateRepository.repo';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
 export class ApplyService implements IApplicationService {

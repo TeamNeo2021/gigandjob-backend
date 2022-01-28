@@ -1,5 +1,5 @@
 import { CandidateApplicationService } from "../../ApplicationServices/CandidateApplicationService.service";
-import { InMemoryCandidateCommandRepository } from "../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
+import { InMemoryCandidateRepository } from "../../../Infrastructure/Memory/InMemoryCandidateRepository.repo";
 import { Candidate } from "../../../Dominio/AggRoots/Candidate/Candidate";
 import { CandidateRegisterDTO } from "../../../Application/DTO/Candidate/RegisterCandidate.dto";
 import { type } from "os";
@@ -15,7 +15,7 @@ let CandidateTestDTO = new CandidateRegisterDTO(
     6
 )
 
-const memoryRepo = new InMemoryCandidateCommandRepository()
+const memoryRepo = new InMemoryCandidateRepository()
 
 const registerService = new CandidateApplicationService(memoryRepo)
 
