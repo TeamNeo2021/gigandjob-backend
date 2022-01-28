@@ -17,7 +17,7 @@ import { RejectMeeting } from '../DTO/Meeting/rejectMeetingDTO';
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
 
 @Injectable()
-export class MeetingService implements IApplicationService {
+export class MeetingApplicationService implements IApplicationService {
   private repository: IMeetingRepository;
   constructor(repository: IMeetingRepository) {
     this.repository = repository;

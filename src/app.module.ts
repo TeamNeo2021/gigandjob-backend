@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
-import { MeetingService } from './Application/ApplicationServices/Meeting.service';
+import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
 //import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
 import { RepositoryModule } from './Infrastructure/Repository.module';
 
@@ -23,6 +23,6 @@ import { RepositoryModule } from './Infrastructure/Repository.module';
     }),
   ],*/
   controllers: [AppController, MeetingController],
-  providers: [AppService, MeetingService],
+  providers: [AppService, MeetingApplicationService],
 })
 export class AppModule {}
