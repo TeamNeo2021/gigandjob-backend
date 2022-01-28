@@ -8,11 +8,9 @@ import { Sectors, SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSector
 import { OfferStatesEnum, OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVo";
 import { OfferModified } from "../../DomainEvents/OfferEvents/OfferModified";
 import { OfferCreated } from "../../DomainEvents/OfferEvents/OfferCreated";
-import { InvalidOfferState } from "../../AggRoots/Offer/Errors/InvalidOfferState.error";
 import { OfferSuspended } from "../../DomainEvents/OfferEvents/OfferSuspended";
 import { OfferReactivated } from "../../DomainEvents/OfferEvents/OfferReactivated";
 import { OfferEliminated } from "../../DomainEvents/OfferEvents/OfferEliminated";
-import { type } from "os";
 
 const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),
@@ -70,7 +68,7 @@ describe("Reactivar oferta",()=> {
         expect(()=>exampleOfferReactived.ReactivateOffer()).toThrowError(Error);
     })
     it("Se debe Reactivar una oferta si ha sido suspendida",() =>{
-        exampleOfferReactived.SuspendOffer();
+        exampleOfferReactived.SuspendOffer(false);
         exampleOfferReactived.ReactivateOffer();
         expect(exampleOfferReactived.GetChanges()[0]).toBeInstanceOf(OfferCreated);
         expect(exampleOfferReactived.GetChanges()[1]).toBeInstanceOf(OfferSuspended);
@@ -89,7 +87,7 @@ describe("Eliminar oferta",()=> {
     })
     it("Se debe eliminar una oferta que ha sido suspendida",() =>{
         exampleOfferEliminited._State=new OfferStateVO(OfferStatesEnum.Active);
-        exampleOfferEliminited.SuspendOffer();
+        exampleOfferEliminited.SuspendOffer(false);
         exampleOfferEliminited.EliminateOffer();
         expect(exampleOfferEliminited.GetChanges()[0]).toBeInstanceOf(OfferCreated);
         expect(exampleOfferEliminited.GetChanges()[1]).toBeInstanceOf(OfferSuspended);
