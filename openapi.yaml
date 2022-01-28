@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: GigAndJob API
+  description: HTTP API Server written in nest for the GigAndJob project
+  version: 0.1.0
+paths:
+  /registerCandidate:
+    post:
+      summary: Registers a new candidate
+      description: Creates a new candidate that can apply to job offers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                lastname:
+                  type: string
+                phoneCode:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /employers:
+    post:
+      summary: Registers a new employer
+      description: Creates a new employer that will hire candidates for a job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                location:
+                  type: string
+                state:
+                  type: string
+                  enum: [Active, Eliminated, Suspended]
+                rif:
+                  type: string
+                phone:
+                  type: string
+                mail:
+                  type: string
+                comDesignation:
+                  type: string
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /meeting/accept:
+    put:
+      summary: Accept a meeting
+      description: Candidate accepts going to a meeting with the employer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                candidateId:
+                  type: string
+                meetingId:
+                  type: string
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer:
+    post:
+      summary: Creates a new offer
+      description: Creates a new offer with the fields of direction, sector, budget and description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                sector:
+                  type: string
+                  enum: [Laws, Technology]
+                budget:
+                  type: number
+                description:
+                  type: string
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/Reactived:
+    put:
+      summary: Reactivates an offer
+      description: Reactivates a previously suspended offer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idOffer:
+                  type: string
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/Eliminited:
+    put:
+      summary: Eliminates an offer
+      description: Eliminates an offer and it's related entities
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/{id}/report:
+    post:
+      summary: Reports an offer
+      description: Reports an offer given it's id, a reporter Id and a reason
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the offer to be reported
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                reporterId:
+                  type: string
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string

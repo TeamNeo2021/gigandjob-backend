@@ -14,7 +14,6 @@ type CreateEmployerData = {
     comDesignation: string
 }
 
-
 @Controller('employers')
 export class EmployerController {
     constructor(@Inject('EmployerApplicationService') private employerService: EmployerApplicationService) {}
