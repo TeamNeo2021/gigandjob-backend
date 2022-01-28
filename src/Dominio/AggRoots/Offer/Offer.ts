@@ -23,6 +23,9 @@ import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 import { OfferSuspended } from '../../DomainEvents/OfferEvents/OfferSuspended';
 import { OfferEliminated } from '../../DomainEvents/OfferEvents/OfferEliminated';
 import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivated';
+import { OfferReportVO } from './ValueObjects/OfferReportVO';
+import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReported';
+import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
 
@@ -36,7 +39,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   private Budget: BudgetVO;
   private Description: DescriptionVO;
   private application: Application[];
-
+  private reports: OfferReportVO[] = []
 
 
   constructor(
@@ -124,6 +127,20 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           if (this.State.state != OfferStatesEnum.Suspended) {
             throw InvalidOfferState.ReactivteNotSuspendedState();
           }
+          break;
+      
+      case OfferReported:
+          const evt = <OfferReported> <unknown> event 
+          if (this.State.state == OfferStatesEnum.Eliminated) {
+            throw InvalidOfferReportError.reportedEliminatedOffer(this._Id.value)
+          }
+          if (this.State.state == OfferStatesEnum.Suspended) {
+            throw InvalidOfferReportError.reportedSuspendedOffer(this._Id.value)
+          }
+          if (this.reports.find(r => r.reporterId == evt.report.reporterId)) {
+            throw InvalidOfferReportError.alreadyReportedOffer(this._Id.value)
+          }
+          this.reports.push(evt.report)
           break;
 
       case CandidateApplied:
@@ -218,6 +235,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     this._State = new OfferStateVO(OfferStatesEnum.Active);
     
     return this;
+  }
+
+  public ReportOffer(report: OfferReportVO) {
+    this.Apply(new OfferReported(report))
   }
 
   //Implementacion de crearOferta con domain event

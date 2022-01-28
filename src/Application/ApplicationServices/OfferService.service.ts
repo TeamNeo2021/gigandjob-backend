@@ -12,6 +12,8 @@ import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { ReactivateOfferDTO } from "../DTO/Offer/ReactivateOfferDTO";
 import { EliminitedOfferDTO } from "../DTO/Offer/EliminitedOfferDTO";
 import { IOfferRepository } from "../Repositories/OfferRepository.repo";
+import { ReportOfferDTO } from "../DTO/Offer/ReportOffer.dto";
+import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO";
 
 
 export class OfferService implements IApplicationService {
@@ -74,6 +76,14 @@ export class OfferService implements IApplicationService {
                 Offer_Eliminited.EliminateOffer();
                 await this.repository.save(Offer_Eliminited);
                 break;
+            }
+
+            case ReportOfferDTO: {
+                const cmd: ReportOfferDTO = <ReportOfferDTO> command
+                const offer = await this.repository.load(new OfferIdVO(cmd.id))
+                offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
+                await this.repository.save(offer)
+                break
             }
             // case LikeOffer:
 
