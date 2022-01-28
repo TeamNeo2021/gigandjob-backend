@@ -70,7 +70,7 @@ $ npm run test:cov -->
 
 ## Architecture
 
-![alt text](https://github.com/TeamNeo2021/gigandjob-backend/blob/main/hexagonal-diagram.png?raw=true)
+![alt text](https://github.com/TeamNeo2021/gigandjob-backend/blob/readme/hexagonal-diagram.png?raw=true)
 ![alt text](./assets/uml-diagram.png?raw=true "UML diagram") 
 ## Code References
 
