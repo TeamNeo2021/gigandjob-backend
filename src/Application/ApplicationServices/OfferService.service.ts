@@ -1,3 +1,4 @@
+import { OfferIdVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { Offer } from "../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
@@ -8,6 +9,8 @@ import { Sectors, SectorVO } from "../../Dominio/AggRoots/Offer/ValueObjects/Off
 import { OfferStatesEnum, OfferStateVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 import { IApplicationService } from ".././Core/IApplicationService";
 import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
+import { ReactivateOfferDTO } from "../DTO/Offer/ReactivateOfferDTO";
+import { EliminitedOfferDTO } from "../DTO/Offer/EliminitedOfferDTO";
 import { IOfferRepository } from "../Repositories/OfferRepository.repo";
 
 
@@ -56,7 +59,22 @@ export class OfferService implements IApplicationService {
                 break;
             }
 
+            case ReactivateOfferDTO:{
+                let cmd: ReactivateOfferDTO = <ReactivateOfferDTO> command;
+                let Offer_Reactived= await this.repository.load(new OfferIdVO(cmd.id_offer));
+                Offer_Reactived.ReactivateOffer();
+                await this.repository.save(Offer_Reactived);
+                break;
+            }
 
+            case EliminitedOfferDTO:{
+                
+                let cmd: EliminitedOfferDTO = <EliminitedOfferDTO> command;
+                let Offer_Eliminited= await this.repository.load(new OfferIdVO(cmd.id_offer));
+                Offer_Eliminited.EliminateOffer();
+                await this.repository.save(Offer_Eliminited);
+                break;
+            }
             // case LikeOffer:
 
             //     break;

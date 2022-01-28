@@ -1,7 +1,9 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post,Put } from '@nestjs/common';
 import { OfferFirestoreRepository } from '../../../Infrastructure/Firestore/OfferFirestoreRepository.repo';
 import { OfferService } from '../../../Application/ApplicationServices/OfferService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
+import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
+import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
 
 
 @Controller('offer')
@@ -29,6 +31,18 @@ export class OfferApi {
             )
         this.offerService.Handle(request);
         return 'Offer has been created'
+    }
+    
+    @Put("Reactived") // PUT /Offers/Reactived
+    ReactivedOffer(@Body() request:ReactivateOfferDTO): any{
+        this.offerService.Handle(request);
+        return "Esta accion reactiva una oferta"
+    }
+
+    @Put("Eliminited") // PUT /Offers/Eliminited
+    EliminitedOffer(@Body() request:EliminitedOfferDTO): any{
+        this.offerService.Handle(request);
+        return "Esta accion elimina una oferta"
     }
 }
 
