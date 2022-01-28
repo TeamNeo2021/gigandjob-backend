@@ -7,4 +7,3 @@ Name | Type | Description | Notes
 **meetingId** | **String** | Id of the meeting that&#39;s being accepted | [default to null]
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
-

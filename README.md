@@ -117,12 +117,13 @@ $ npm run test:cov -->
 - [Antonio Nohra](https://github.com/anohra15)
 
 <a name="documentation-for-api-endpoints"></a>
-## Documentation for API Endpoints
+## :satellite: Documentation for API Endpoints
 
 All URIs are relative to *http://localhost:3000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**candidatesIdDelete**](docs/Apis/DefaultApi.md#candidatesiddelete) | **DELETE** /candidates/{id} | Deletes a candidate
 *DefaultApi* | [**candidatesIdReactivatePost**](docs/Apis/DefaultApi.md#candidatesidreactivatepost) | **POST** /candidates/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
 *DefaultApi* | [**candidatesIdSuspendPost**](docs/Apis/DefaultApi.md#candidatesidsuspendpost) | **POST** /candidates/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
 *DefaultApi* | [**candidatesPost**](docs/Apis/DefaultApi.md#candidatespost) | **POST** /candidates | Registers a new candidate
@@ -135,7 +136,7 @@ Class | Method | HTTP request | Description
 
 
 <a name="documentation-for-models"></a>
-## Documentation for Models
+## :memo: Documentation for Models
 
  - [CandidateRegistrationForm](docs/Models/CandidateRegistrationForm.md)
  - [CandidateSuspensionForm](docs/Models/CandidateSuspensionForm.md)
@@ -147,7 +148,7 @@ Class | Method | HTTP request | Description
 
 
 <a name="documentation-for-authorization"></a>
-## Documentation for Authorization
+## :key: Documentation for Authorization
 
 All endpoints do not require authorization.
 

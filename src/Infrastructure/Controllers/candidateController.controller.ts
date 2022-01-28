@@ -1,8 +1,9 @@
-import { Body, Controller, Get, HttpCode, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post } from '@nestjs/common';
 import { CandidateApplicationService } from '../../Application/ApplicationServices/CandidateApplicationService.service';
 import { CandidateRegisterDTO } from 'src/Application/DTO/Candidate/RegisterCandidate.dto';
 import { SuspendCandidateDTO } from 'src/Application/DTO/Candidate/SuspendCandidate.dto';
 import { ReactivateCandidateDTO } from 'src/Application/DTO/Candidate/ReactivateCandidate.dto';
+import { EliminateCandidateDTO } from 'src/Application/DTO/Candidate/EliminateCandidate.dto';
 
 type CaniddateSuspensionBody = {
     until: string
@@ -49,6 +50,12 @@ export class CandidateController {
     async reactivateCandidate(@Param('id') candidateId: string) {
         await this.service.Handle(new ReactivateCandidateDTO(candidateId))
         return 'Candidate reactivated'
+    }
+    
+    @Delete(":id")
+    async delete(@Param('id') candidateId: string) {
+        await this.service.Handle(new EliminateCandidateDTO(candidateId))
+        return 'Candidate deleted'
     }
 }
 

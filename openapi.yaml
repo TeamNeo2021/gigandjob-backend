@@ -65,6 +65,25 @@ paths:
             application/json:
               schema: 
                 type: string
+  /candidates/{id}:
+    delete:
+      summary: Deletes a candidate
+      description: Deletes a candidate and it's related records
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
   /employers:
     post:
       summary: Registers a new employer
