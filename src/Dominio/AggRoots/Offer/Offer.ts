@@ -112,6 +112,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         break;
         
         case OfferReactivated:
+          // si el estado anterior esta activa
+          if (this.State.state == OfferStatesEnum.Active) {
+            throw InvalidOfferState.ReactivteActiveState();
+          }
           // si el estado anterior es eliminada
           if (this.State.state == OfferStatesEnum.Eliminated) {
             throw InvalidOfferState.ChangingEliminatadState();
@@ -215,7 +219,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     
     return this;
   }
-  
+
   //Implementacion de crearOferta con domain event
   static CreateOffer(
     State: OfferStateVO,

@@ -1,4 +1,4 @@
-import { OfferIdVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
+import { OfferIdVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { Offer } from "../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
