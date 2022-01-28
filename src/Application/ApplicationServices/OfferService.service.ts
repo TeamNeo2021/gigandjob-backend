@@ -5,6 +5,7 @@ import { DescriptionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDe
 import { DirectionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import { PublicationDateVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
+import { Candidate } from '../../Dominio/AggRoots/Candidate/Candidate';
 import {
   Sectors,
   SectorVO,
@@ -20,12 +21,25 @@ import { EliminitedOfferDTO } from '../DTO/Offer/EliminitedOfferDTO';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 import { ReportOfferDTO } from '../DTO/Offer/ReportOffer.dto';
 import { OfferReportVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO';
+import { ICandidateRepository } from '../Repositories/CandidateRepository';
+import { INotificationSender } from '../Ports/INotificationSender';
+import { ApplyToOfferDTO } from '../DTO/Application/ApplyToOffer.dto';
+import { CandidateApplied } from '../../Dominio/DomainEvents/CandidateEvents/CandidateApplied';
+import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
 
 export class OfferService implements IApplicationService {
   private readonly repository: IOfferRepository;
+  private readonly Candidaterepo: ICandidateRepository;
+  private readonly Sender: INotificationSender;
 
-  constructor(repo: IOfferRepository) {
+  constructor(
+    repo: IOfferRepository,
+    Candidaterepo: ICandidateRepository,
+    Sender: INotificationSender,
+  ) {
     this.repository = repo;
+    this.Candidaterepo = Candidaterepo;
+    this.Sender = Sender;
   }
 
   async Handle(command: any): Promise<void> {
@@ -45,7 +59,6 @@ export class OfferService implements IApplicationService {
           BudgetVO.Create(cmd.Budget),
           DescriptionVO.Create(cmd.Description),
         );
-
 
         //Save the new offer
         await this.repository.save(new_offer);
@@ -73,12 +86,50 @@ export class OfferService implements IApplicationService {
         break;
       }
       case ReportOfferDTO: {
-        let cmd = command as ReportOfferDTO
-        const offer = await this.repository.load(new OfferIdVO(cmd.id))
-        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason))
-        await this.repository.save(offer)
+        let cmd = command as ReportOfferDTO;
+        const offer = await this.repository.load(new OfferIdVO(cmd.id));
+        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason));
+        await this.repository.save(offer);
         break;
       }
+      case ApplyToOfferDTO:
+        const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
+        const Oferta: Offer = await this.repository
+          .load(new OfferIdVO(cmd.OfferId))
+          .catch((err) => {
+            throw err;
+          });
+        console.log('Saque esta: ' + Oferta);
+        const Candidate: Candidate = await this.Candidaterepo.getOne(
+          cmd.CandidateId,
+        );
+        console.log('Saque este candidate:' + Candidate);
+        //Domain service
+        const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
+          Candidate,
+          Oferta,
+          cmd.budget,
+          cmd.description,
+          cmd.time,
+        );
+        DSApplyToOfer.createApplication();
+        try {
+          this.Sender.send(
+            cmd.EmployerId,
+            new CandidateApplied(
+              cmd.CandidateId,
+              cmd.OfferId,
+              cmd.budget,
+              cmd.description,
+              cmd.time,
+            ),
+          );
+        } catch (error) {
+          throw error;
+        }
+        this.repository.save(Oferta);
+        this.Candidaterepo.modify(Candidate.Id.value, Candidate);
+        break;
       // case LikeOffer:
 
       //     break;
@@ -87,7 +138,9 @@ export class OfferService implements IApplicationService {
       //     break;
 
       default:
-        throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+        throw new Error(
+          `OfferService: Command doesn't exist: ${command.constructor}`,
+        );
         break;
     }
   }

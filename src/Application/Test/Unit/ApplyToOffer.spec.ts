@@ -28,7 +28,6 @@ import { CandidateEmailVo } from '../../../Dominio/AggRoots/Candidate/ValueObjec
 import { CandidateBirthDateVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo';
 import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
-import { OfferApplicationService } from '../../ApplicationServices/OfferApplicationService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
 import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
 import { INotificationSender } from '../../Ports/INotificationSender';
@@ -45,7 +44,8 @@ import {
   EmployerStates,
 } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO';
-import { ICandidateRepository } from 'src/Application/Repositories/CandidateRepository';
+import { ICandidateRepository } from '../../Repositories/CandidateRepository';
+import { OfferService } from '../../ApplicationServices/OfferService.service';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -99,8 +99,8 @@ function create_Service(
   repoO: IOfferRepository,
   repoCC: ICandidateRepository,
   Msender: INotificationSender,
-): OfferApplicationService {
-  const service = new OfferApplicationService(repoO, repoCC, Msender);
+): OfferService {
+  const service = new OfferService(repoO, repoCC, Msender);
   return service;
 }
 
@@ -122,7 +122,7 @@ describe('Create an aplication to an offer', () => {
     expect(() => {
       throw error;
     }).toThrowError(
-      new Error(`ApplyService: Command doesn't exist: ${Object}`),
+      new Error(`OfferService: Command doesn't exist: ${Object}`),
     );
   });
   it('Should send a notification to the given employer', async () => {
