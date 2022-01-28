@@ -78,8 +78,15 @@ $ npm run test:cov -->
 
 ## Architecture
 
+HEXAGONAL ARCHITECTURE DIAGRAM
+
 ![alt text](./assets/hexagonal-diagram.png?raw=true "Hexagonal Diagram")
+
+UML CLASSES DIAGRAM
+
 ![alt text](./assets/uml-diagram.png?raw=true "UML diagram") 
+
+
 ## Code References
 
 - [Use Firestore with NestJS](https://ricardoromanj.com/posts/firestore-with-nestjs)
