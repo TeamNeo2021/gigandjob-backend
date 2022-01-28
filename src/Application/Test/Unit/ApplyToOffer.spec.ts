@@ -28,10 +28,9 @@ import { CandidateEmailVo } from '../../../Dominio/AggRoots/Candidate/ValueObjec
 import { CandidateBirthDateVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo';
 import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
-import { ICandidateQuerryRepository } from '../../Repositories/CandidateQuerryRepository.repo';
-import { ICandidateCommandRepository } from '../../Repositories/CandidateCommandRepository.repo';
 import { ApplyService } from '../../ApplicationServices/ApplyService.service';
 import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
+import { ICandidateRepository } from 'src/Application/Repositories/CandidateRepository';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -60,10 +59,9 @@ const exampleCandidate = new Candidate(
 
 function create_Service(
   repoO: IOfferRepository,
-  repoCQ: ICandidateQuerryRepository,
-  repoCC: ICandidateCommandRepository,
+  repoCQ: ICandidateRepository,
 ): ApplyService {
-  const service = new ApplyService(repoO, repoCQ, repoCC);
+  const service = new ApplyService(repoO, repoCQ);
   return service;
 }
 
