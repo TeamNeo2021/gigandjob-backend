@@ -5,6 +5,7 @@ import { DescriptionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDe
 import { DirectionVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import { PublicationDateVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
+import { Candidate } from '../../Dominio/AggRoots/Candidate/Candidate';
 import {
   Sectors,
   SectorVO,
@@ -99,13 +100,13 @@ export class OfferService implements IApplicationService {
             throw err;
           });
         console.log('Saque esta: ' + Oferta);
-        const Candidate: Promise<Candidate> = this.Candidaterepo.getOne(
+        const Candidate: Candidate = await this.Candidaterepo.getOne(
           cmd.CandidateId,
         );
         console.log('Saque este candidate:' + Candidate);
         //Domain service
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
-          await Candidate,
+          Candidate,
           Oferta,
           cmd.budget,
           cmd.description,
@@ -127,7 +128,7 @@ export class OfferService implements IApplicationService {
           throw error;
         }
         this.repository.save(Oferta);
-        this.Candidaterepo.save(await Candidate);
+        this.Candidaterepo.modify(Candidate.Id.value, Candidate);
         break;
       // case LikeOffer:
 
@@ -137,7 +138,9 @@ export class OfferService implements IApplicationService {
       //     break;
 
       default:
-        throw new Error(`OfferService: Command doesn't exist: ${command.type}`);
+        throw new Error(
+          `OfferService: Command doesn't exist: ${command.constructor}`,
+        );
         break;
     }
   }
