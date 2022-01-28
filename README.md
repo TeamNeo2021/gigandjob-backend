@@ -98,7 +98,7 @@ $ npm run test:cov -->
 - [Jose Luis Moncada - Team Leader - Scrum Master](https://github.com/joselmoncada)
 - [Jorge Croquer - Team Leader](https://github.com/YorchUCAB)
 - [Jose Leonardo Contreras - Team Leader](https://github.com/LeoProgrammerUCAB)
-- Carlos Valero
+- [Carlos Valero](https://github.com/cdevalero)
 - Michael Nello
 - Luis Pinto
 - Cristian Gonzales
