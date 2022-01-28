@@ -14,6 +14,7 @@ import { CouldNotFindCandidateError } from "../Repositories/Candidate/Errors/cou
 import { CandidateConfiguration } from "../Configuration/Candidate/configuration.interface";
 import { CandidateScheduler } from "../Scheduler/Candidate/scheduler.interface";
 import { ReactivateCandidateDTO } from "../DTO/Candidate/ReactivateCandidate.dto";
+import { EliminateCandidateDTO } from "../DTO/Candidate/EliminateCandidate.dto";
 
 export class CandidateApplicationService implements IApplicationService{
 
@@ -69,6 +70,13 @@ export class CandidateApplicationService implements IApplicationService{
 
                 candidate.reactivateThisCandidate()
                 await this.repository.save(candidate)
+                break;
+            }
+
+            case EliminateCandidateDTO: {
+                const id = (command as EliminateCandidateDTO).id
+
+                await this.repository.eliminate(id)
                 break;
             }
                 

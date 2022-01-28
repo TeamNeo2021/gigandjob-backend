@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**candidatesIdDelete**](DefaultApi.md#candidatesIdDelete) | **DELETE** /candidates/{id} | Deletes a candidate
 [**candidatesIdReactivatePost**](DefaultApi.md#candidatesIdReactivatePost) | **POST** /candidates/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
 [**candidatesIdSuspendPost**](DefaultApi.md#candidatesIdSuspendPost) | **POST** /candidates/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
 [**candidatesPost**](DefaultApi.md#candidatesPost) | **POST** /candidates | Registers a new candidate
@@ -14,6 +15,33 @@ Method | HTTP request | Description
 [**offerPost**](DefaultApi.md#offerPost) | **POST** /offer | Creates a new offer
 [**offerReactivedPut**](DefaultApi.md#offerReactivedPut) | **PUT** /offer/Reactived | Reactivates an offer
 
+
+<a name="candidatesIdDelete"></a>
+# **candidatesIdDelete**
+> String candidatesIdDelete(id)
+
+Deletes a candidate
+
+    Deletes a candidate and it&#39;s related records
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **UUID**| The id of the candidate to delete | [default to null]
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 <a name="candidatesIdReactivatePost"></a>
 # **candidatesIdReactivatePost**
