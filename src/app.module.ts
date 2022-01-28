@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
+import { MeetingController } from './Infrastructure/API/meeting/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferService } from './Application/ApplicationServices/OfferService.service';
 import { OfferApi } from './Infrastructure/API/Offer/offer.controller';
@@ -25,8 +25,7 @@ import { RepositoryModule } from './Infrastructure/Repository.module';
       inject: [ConfigService],
     }),
   ],*/
-  controllers: [AppController, MeetingController,OfferApi],
-  providers: [AppService, MeetingService,OfferService],
-
+  controllers: [AppController, MeetingController, OfferApi],
+  providers: [AppService, MeetingService, OfferService],
 })
 export class AppModule {}
