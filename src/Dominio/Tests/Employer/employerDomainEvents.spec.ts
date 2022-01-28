@@ -13,14 +13,14 @@ import { EmployerModified } from "../../DomainEvents/EmployerEvents/EmployerModi
 import { EmployerSuspended } from "../../DomainEvents/EmployerEvents/EmployerSuspended";
 
 export const exampleEmployer = Employer.RegisterEmployer(
-    new EmployerNameVO("Soluciones de Prueba"),
-    new EmployerDescriptionVO("La descripcion es una prueba"),
+    EmployerNameVO.Create("Soluciones de Prueba"),
+    EmployerDescriptionVO.Create("La descripcion es una prueba"),
     new EmployerStateVO(EmployerStates.Active),
-    new EmployerLocationVO("Av los Cedros"),
-    new EmployerRifVO("J-1236782"),
-    new EmployerPhoneVO("+584124578457"),
-    new EmployerMailVO("prueba@test.com"),
-    new EmployerComercialDesignationVO("Informatica24.c.a"),
+    EmployerLocationVO.Create("Av los Cedros"),
+    EmployerRifVO.Create("J-1236782"),
+    EmployerPhoneVO.Create("+584124578457"),
+    EmployerMailVO.Create("prueba@test.com"),
+    EmployerComercialDesignationVO.Create("Informatica24.c.a"),
 );
 
 describe("crear un empleador", () => {
@@ -34,13 +34,13 @@ describe("modificar un empleador", () => {
 
     it("debe modificar el empleador cuando se cambia el estado es activo o suspendido", () => {
         exampleEmployer.ModifyEmployer(
-            new EmployerNameVO("Soluciones de Prueba"),
-            new EmployerDescriptionVO("La descripcion ha sido modificada"),
-            new EmployerLocationVO("Av los Cedros"),
-            new EmployerRifVO("J-1236782"),
-            new EmployerPhoneVO("+584124578457"),
-            new EmployerMailVO("prueba@test.com"),
-            new EmployerComercialDesignationVO("Informatica24.c.a"));
+            EmployerNameVO.Create("Soluciones de Prueba"),
+            EmployerDescriptionVO.Create("La descripcion ha sido modificada"),
+            EmployerLocationVO.Create("Av los Cedros"),
+            EmployerRifVO.Create("J-1236782"),
+            EmployerPhoneVO.Create("+584124578457"),
+            EmployerMailVO.Create("prueba@test.com"),
+            EmployerComercialDesignationVO.Create("Informatica24.c.a"));
         expect(exampleEmployer.GetChanges()[0]).toBeInstanceOf(EmployerRegistered);
         expect(exampleEmployer.GetChanges()[1]).toBeInstanceOf(EmployerModified);
     })
@@ -69,13 +69,13 @@ describe("Eliminar un empleador", () => {
 describe("modificar un empleador", () => {
     it("no debe modificar el empleador cuando su estado es eliminado", () => {
         expect(() => exampleEmployer.ModifyEmployer(
-            new EmployerNameVO("Soluciones de Prueba"),
-            new EmployerDescriptionVO("La descripcion vuelve a ser una prueba"),
-            new EmployerLocationVO("Av los Cedros"),
-            new EmployerRifVO("J-1236782"),
-            new EmployerPhoneVO("+584124578457"),
-            new EmployerMailVO("prueba@test.com"),
-            new EmployerComercialDesignationVO("Informatica24.c.a"))
+            EmployerNameVO.Create("Soluciones de Prueba"),
+            EmployerDescriptionVO.Create("La descripcion vuelve a ser una prueba"),
+            EmployerLocationVO.Create("Av los Cedros"),
+            EmployerRifVO.Create("J-1236782"),
+            EmployerPhoneVO.Create("+584124578457"),
+            EmployerMailVO.Create("prueba@test.com"),
+            EmployerComercialDesignationVO.Create("Informatica24.c.a"))
         ).toThrowError(Error);
     });        
 })

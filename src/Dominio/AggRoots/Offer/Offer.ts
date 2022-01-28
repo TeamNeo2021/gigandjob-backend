@@ -23,7 +23,7 @@ import { InvalidOfferState } from './Errors/InvalidOfferState.error';
 import { OfferSuspended } from '../../DomainEvents/OfferEvents/OfferSuspended';
 import { OfferEliminated } from '../../DomainEvents/OfferEvents/OfferEliminated';
 import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivated';
-import { Employer } from '../Employer/Employer';
+
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
   private OfferId: OfferIdVO;
@@ -115,8 +115,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
           throw InvalidOfferState.ReactivteNotSuspendedState();
         }
         break;
-<<<<<<< HEAD
-=======
+
         
         case OfferReactivated:
           // si el estado anterior esta activa
@@ -132,7 +131,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
             throw InvalidOfferState.ReactivteNotSuspendedState();
           }
           break;
->>>>>>> 42d9ea2eeb8e920964e58503fb235aeca3f729df
 
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied =
@@ -228,6 +226,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
     return this;
   }
+
+
 
   //Implementacion de crearOferta con domain event
   static CreateOffer(

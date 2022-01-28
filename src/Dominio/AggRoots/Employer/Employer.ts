@@ -147,6 +147,30 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     }
   }
 
+  static Unsafe(
+    id: string,
+    name: string,
+    description: string,
+    state: EmployerStates,
+    location: string,
+    rif: string,
+    phone: string,
+    mail: string,
+    comDesignation: string
+  ) {
+    return new Employer(
+      new EmployerIdVO(id),
+      EmployerNameVO.Unsafe(name),
+      EmployerDescriptionVO.Unsafe(description),
+      new EmployerStateVO(state),
+      EmployerLocationVO.Unsafe(location),
+      EmployerRifVO.Unsafe(rif),
+      EmployerPhoneVO.Unsafe(phone),
+      EmployerMailVO.Unsafe(mail),
+      EmployerComercialDesignationVO.Unsafe(comDesignation)
+    )
+  }
+
   static RegisterEmployer(
     name: EmployerNameVO,
     description: EmployerDescriptionVO,
@@ -172,6 +196,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     );
     employer.Apply(
       new EmployerRegistered(
+        id,
         name,
         description,
         state,

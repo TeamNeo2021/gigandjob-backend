@@ -2,13 +2,24 @@ import { InvalidEmployerComercialDesignation } from "../Errors/InvalidEmployerCo
 
 export class EmployerComercialDesignationVO {
     value_comercial_designation: string;
-    constructor(value: string) {
+
+    private constructor() {}
+
+    static Create(value: string) {
+      const des = new EmployerComercialDesignationVO() 
       if (!value || value.trim() == "") {
         throw InvalidEmployerComercialDesignation.EmptyComercialDesignation()
       }
       if (value.length > 100) {
         throw InvalidEmployerComercialDesignation.TooBigComercialDesignation();
       }
-      this.value_comercial_designation = value;
+      des.value_comercial_designation = value;
+      return des
+    }
+
+    static Unsafe(value: string) {
+      const des = new EmployerComercialDesignationVO() 
+      des.value_comercial_designation = value;
+      return des
     }
   }

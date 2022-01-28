@@ -2,10 +2,13 @@ import { InvalidEmployerRif } from "../Errors/InvalidEmployerRif.error";
 
 export class EmployerRifVO {
 
-    private readonly value_employer_rif:String;
+    readonly value_employer_rif:String;
 
-    constructor(value_employer_rif:String) {
-        
+    private constructor(value_employer_rif:String) {
+        this.value_employer_rif=value_employer_rif;
+    }
+
+    static Create(value_employer_rif: string) {
         if(!value_employer_rif || value_employer_rif.trim() == ""){
             throw InvalidEmployerRif.EmptyRif();
         }
@@ -16,6 +19,10 @@ export class EmployerRifVO {
             throw InvalidEmployerRif.TooBigRif();
         }
 
-        this.value_employer_rif=value_employer_rif;
+        return new EmployerRifVO(value_employer_rif)
+    }
+
+    static Unsafe(value_employer_rif: string) {
+        return new EmployerRifVO(value_employer_rif)
     }
 }

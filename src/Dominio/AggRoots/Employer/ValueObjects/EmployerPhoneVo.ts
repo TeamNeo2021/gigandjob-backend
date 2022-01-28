@@ -4,8 +4,11 @@ export class EmployerPhoneVO {
 
     value_employer_phone :String;
 
-    constructor(value: String) {
-        
+    private constructor(value: String) {
+        this.value_employer_phone=value;
+    }
+
+    static Create(value: string) {
         if(!value || value.trim() == ""){
             throw InvalidEmployerPhone.EmptyPhone();
         }
@@ -16,6 +19,10 @@ export class EmployerPhoneVO {
             throw InvalidEmployerPhone.TooBigPhone();
         }
 
-        this.value_employer_phone=value;
+        return new EmployerPhoneVO(value)
+    }
+
+    static Unsafe(value: string) {
+        return new EmployerPhoneVO(value)
     }
 }

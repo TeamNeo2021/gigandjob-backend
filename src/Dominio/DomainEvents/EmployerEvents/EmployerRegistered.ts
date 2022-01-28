@@ -12,6 +12,7 @@ import { IDomainEvent } from '../IDomainEvent';
 export class EmployerRegistered implements IDomainEvent {
     public dateTimeOcurred: Date;
 
+    id: EmployerIdVO
     name: EmployerNameVO;
     description: EmployerDescriptionVO;
     state: EmployerStateVO;
@@ -22,6 +23,7 @@ export class EmployerRegistered implements IDomainEvent {
     comDesignation: EmployerComercialDesignationVO;
 
     constructor(
+        id: EmployerIdVO,
         name: EmployerNameVO,
         description: EmployerDescriptionVO,
         state: EmployerStateVO,
@@ -31,6 +33,7 @@ export class EmployerRegistered implements IDomainEvent {
         mail: EmployerMailVO,
         comDesignation: EmployerComercialDesignationVO,
     ) {
+        this.id = id
         this.dateTimeOcurred = new Date(Date.now());
         this.name = name;
         this.description = description;
