@@ -4,22 +4,18 @@ import { OfferIdVO } from '../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { ApplyToOffer } from '../../Dominio/DomainService/ApplyToOffer';
 import { IApplicationService } from '../Core/IApplicationService';
 import { ApplyToOfferDTO } from '../DTO/Application/ApplyToOffer.dto';
-import { ICandidateCommandRepository } from '../Repositories/CandidateCommandRepository.repo';
-import { ICandidateQuerryRepository } from '../Repositories/CandidateQuerryRepository.repo';
+import { ICandidateRepository } from '../Repositories/CandidateRepository';
 import { IOfferRepository } from '../Repositories/OfferRepository.repo';
 
 export class ApplyService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
-  private readonly CandidaterepoQ: ICandidateQuerryRepository;
-  private readonly CandidaterepoC: ICandidateCommandRepository;
+  private readonly CandidaterepoC: ICandidateRepository;
 
   constructor(
     Offerrepo: IOfferRepository,
-    CandidaterepoQ: ICandidateQuerryRepository,
-    CandidaterepoC: ICandidateCommandRepository,
+    CandidaterepoC: ICandidateRepository,
   ) {
     this.Offerrepo = Offerrepo;
-    this.CandidaterepoQ = CandidaterepoQ;
     this.CandidaterepoC = CandidaterepoC;
   }
 
@@ -31,12 +27,12 @@ export class ApplyService implements IApplicationService {
           new OfferIdVO(cmd.OfferId),
         );
         console.log('Saque esta: ' + Oferta);
-        const Candidate: Candidate = this.CandidaterepoQ.getOne(
+        const Candidate: Promise<Candidate> = this.CandidaterepoC.getOne(
           cmd.CandidateId,
         );
         console.log('Saque este candidate:' + Candidate);
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
-          Candidate,
+          await Candidate,
           Oferta,
           cmd.budget,
           cmd.description,
@@ -44,7 +40,7 @@ export class ApplyService implements IApplicationService {
         );
         DSApplyToOfer.createApplication();
         this.Offerrepo.save(Oferta);
-        this.CandidaterepoC.save(Candidate);
+        this.CandidaterepoC.save(await Candidate);
         break;
       default:
         throw new Error(

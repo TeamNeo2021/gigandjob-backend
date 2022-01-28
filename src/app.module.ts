@@ -4,7 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
-
+import { CandidateModule } from './Infrastructure/Module/candidate.module';
 import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
 import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferService } from './Application/ApplicationServices/OfferService.service';
@@ -39,6 +39,7 @@ const employerProvider = {
         'employers'
       ]
     }),
+    CandidateModule,
     CqrsModule
   ],
   controllers: [
@@ -56,6 +57,5 @@ const employerProvider = {
     EmployerEventHandler,
     employerProvider,
   ],
-
 })
 export class AppModule {}
