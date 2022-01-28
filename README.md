@@ -106,8 +106,6 @@ $ npm run test:cov -->
 - Francisco Luna
 - Antonio Nohra
 
-## Documentation for GigAndJob API
-
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
