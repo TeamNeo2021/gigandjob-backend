@@ -135,6 +135,14 @@ components:
     CandidateRegistrationForm:
       description: Form data needed to register a candidate
       type: object
+      required: 
+        - name
+        - lastname
+        - phoneCode
+        - email
+        - birthdate
+        - latitude
+        - longitude
       properties:
         name:
           type: string
@@ -146,20 +154,31 @@ components:
           type: string
           description: Area code of the phone number of the candidate
         email:
+          format: email
           type: string
           description: Email of the candidate
         birthdate:
+          format: date
           type: string
           description: Birth date of the candidate
         latitude:
-          type: number
+          type: double
           description: Latitude coordinate of the candidate location 
         longitude:
-          type: number
+          type: double
           description: Longitude coordinate of the candidate location 
     EmployerRegistrationForm:
       description: Form data needed to register an employer
       type: object
+      required: 
+        - name
+        - description
+        - location
+        - state
+        - rif
+        - phone
+        - mail
+        - comDesignation
       properties:
         name:
           type: string
@@ -183,22 +202,32 @@ components:
         mail:
           description: Email of the employer
           type: string
+          format: email
         comDesignation:
           description: Common designation of the employer
           type: string
     MeetingAcceptanceForm:
       description: Form data needed to accept a meeting
       type: object
+      required: 
+        - candidateId
+        - meetingId
       properties:
         candidateId:
           description: Id of the candidate that's accepting the meeting
           type: string
+          format: uuid
         meetingId:
           description: Id of the meeting that's being accepted
           type: string
     OfferRegistrationForm:
       description: Form data needed to register an offer
       type: object
+      required: 
+        - direction
+        - sector
+        - budget
+        - description
       properties:
         direction:
           description: Address of the workplace of the offer
@@ -216,13 +245,19 @@ components:
     OfferIdForm:
       description: Form data that indicates an offer Id
       type: object
+      required:
+        - idOffer
       properties:
         idOffer:
           description: Id of the offer which's state will change
           type: string
+          format: uuid
     OfferReportInformation:
       description: Information related to an offer report
       type: object
+      required: 
+        - reason
+        - reporterId
       properties:
         reason:
           description: Reason why the offer is being reported
@@ -230,3 +265,4 @@ components:
         reporterId:
           description: Id of the candidate that's being reported
           type: string
+          format: uuid
