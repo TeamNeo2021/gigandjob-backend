@@ -3,15 +3,15 @@ import { EmployerNameVO } from "../../AggRoots/Employer/ValueObjects/EmployerNam
 
 describe("Employer Name", () => {
     it("Deberia fallar si el nombre es nulo", () => { //Validar que no es vacia
-        expect(() => new EmployerNameVO('')).toThrowError(InvalidEmployerName)
+        expect(() => EmployerNameVO.Create('')).toThrowError(InvalidEmployerName)
     }),
 
         it("Deberia fallar si el nombre es mayor a 20 caracteres", () => { //Validar que no es mayor a 20 caracteres
             let nombre = new Array(21).fill(".").join("")
-            expect(() => new EmployerNameVO(nombre)).toThrowError(InvalidEmployerName)
+            expect(() => EmployerNameVO.Create(nombre)).toThrowError(InvalidEmployerName)
         })
 
     it("Debería funcionar si le pasas un nombre ", () => {
-        expect(new EmployerNameVO("Luis")).toBeInstanceOf(EmployerNameVO)
+        expect(EmployerNameVO.Create("Luis")).toBeInstanceOf(EmployerNameVO)
     })
 })

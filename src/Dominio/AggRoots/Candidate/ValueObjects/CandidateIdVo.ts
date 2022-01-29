@@ -3,8 +3,8 @@ import { randomUUID } from "crypto";
 export class CandidateIdVo {
     private _value: string;
 
-    constructor() {
-      this._value = randomUUID();
+    constructor(id: string = randomUUID()) {
+      this._value = id;
     }
     public get value(): string {
         return this._value;

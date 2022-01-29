@@ -34,3 +34,20 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 package-lock.json
+
+# OpenAPI
+.openapi-generator-ignore
+**/.openapi-generator/**
+openapitools.json
+
+# Private keys
+serviceAccountKey.json
+.env
+
+# OpenAPI
+**/.openapi-generator/**
+.openapi-generator-ignore
+openapitools.json
+
+#package
+package-lock.json

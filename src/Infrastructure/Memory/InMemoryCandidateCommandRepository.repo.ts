@@ -1,42 +1,45 @@
-import { ICandidateCommandRepository } from "../../Application/Repositories/CandidateCommandRepository.repo";
-import { Candidate } from "../../Dominio/AggRoots/Candidate/Candidate";
+import { ICandidateRepository } from '../../Application/Repositories/CandidateRepository';
+import { Candidate } from '../../Dominio/AggRoots/Candidate/Candidate';
 
-export class InMemoryCandidateCommandRepository implements ICandidateCommandRepository{
+export class InMemoryCandidateCommandRepository
+  implements ICandidateRepository
+{
+  private candidates: Candidate[] = [];
 
-    private candidates: Candidate[] = [];
+  async save(candidate: Candidate): Promise<void> {
+    this.candidates.push(candidate.registerCandidate());
+  }
 
-    save(candidate: Candidate): Candidate {
-        this.candidates.push(candidate);
-        return candidate
-    }
+  async modify(id: string, candidate: Candidate): Promise<void> {
+    this.candidates = this.candidates.filter((candidate) => candidate.id != id);
+    this.candidates.push(candidate);
+  }
 
-    modify(id: string, candidate: Candidate): Candidate {
-        this.candidates = this.candidates.filter(candidate=>candidate.id != id);
-        this.candidates.push(candidate);
-        return candidate
-    }
+  async eliminate(id: string): Promise<void> {
+    this.candidates = this.candidates.filter((candidate) => candidate.id != id);
+  }
 
-    eliminate(id: string): void {
-        this.candidates = this.candidates.filter(candidate=>candidate.id != id);
-    }
+  async suspend(id: string, candidate: Candidate): Promise<void> {
+    this.candidates = this.candidates.filter((candidate) => candidate.id != id);
+    this.candidates.push(candidate);
+  }
 
-    suspend(id: string, candidate: Candidate): Candidate {
-        this.candidates = this.candidates.filter(candidate=>candidate.id != id);
-        this.candidates.push(candidate);
-        return candidate
-    }
+  async reactive(id: string, candidate: Candidate): Promise<void> {
+    this.candidates = this.candidates.filter((candidate) => candidate.id != id);
+    this.candidates.push(candidate);
+  }
 
-    reactive(id: string, candidate: Candidate): Candidate {
-        this.candidates = this.candidates.filter(candidate=>candidate.id != id);
-        this.candidates.push(candidate);
-        return candidate
-    }
+  /**
+   * **This will be delete !!!**
+   */
+  async getOne(id: string): Promise<Candidate> {
+    return this.candidates.find((candidate) => candidate.id == id);
+  }
 
-    // we must user CQRS, this will be delete
-    getOne(id: string): Candidate {
-        return this.candidates.find(candidate=>candidate.id !== id)
-    }
-    getAll(): Candidate[] {
-        return this.candidates
-    }
+  /**
+   * **This will be delete !!!**
+   */
+  async getAll(): Promise<Candidate[]> {
+    return this.candidates;
+  }
 }

@@ -1,0 +1,342 @@
+openapi: 3.0.0
+info:
+  title: GigAndJob API
+  description: HTTP API Server written in nest for the GigAndJob project
+  version: 0.1.0
+paths:
+  /candidates:
+    post:
+      summary: Registers a new candidate
+      description: Creates a new candidate that can apply to job offers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CandidateRegistrationForm"
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /candidates/{id}/suspend:
+    post:
+      summary: Suspends a candidate or deletes if treshold is surpased
+      description: Suspends a candidate and the candidate is no longer to apply to a offer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to suspend
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CandidateSuspensionForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /candidates/{id}/reactivate:
+    post:
+      summary: Reactivates a candidate or deletes if treshold is surpased
+      description: Reactivates a candidate and the candidate is able to apply to a offer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to reactivate
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /candidates/{id}:
+    delete:
+      summary: Deletes a candidate
+      description: Deletes a candidate and it's related records
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /employers:
+    post:
+      summary: Registers a new employer
+      description: Creates a new employer that will hire candidates for a job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployerRegistrationForm"
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /meeting/accept:
+    put:
+      summary: Accept a meeting
+      description: Candidate accepts going to a meeting with the employer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingAcceptanceForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer:
+    post:
+      summary: Creates a new offer
+      description: Creates a new offer with the fields of direction, sector, budget and description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferRegistrationForm"
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/Reactived:
+    put:
+      summary: Reactivates an offer
+      description: Reactivates a previously suspended offer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferIdForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/Eliminited:
+    put:
+      summary: Eliminates an offer
+      description: Eliminates an offer and it's related entities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferIdForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/{id}/report:
+    post:
+      summary: Reports an offer
+      description: Reports an offer given it's id, a reporter Id and a reason
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the offer to be reported
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferReportInformation"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferReportInformation"
+components:
+  schemas:
+    CandidateSuspensionForm:
+      description: Form data needed to suspend a candidate
+      type: object
+      required: 
+        - until
+      properties:
+        until:
+          type: string
+          format: date
+          description: Date until the candidate remains suspended
+          example: "January 28 2022 18:00:00 GMT+04:00"
+    CandidateRegistrationForm:
+      description: Form data needed to register a candidate
+      type: object
+      required: 
+        - name
+        - lastname
+        - phoneCode
+        - email
+        - birthdate
+        - latitude
+        - longitude
+      properties:
+        name:
+          type: string
+          description: First name of the candidate
+        lastname:
+          type: string
+          description: Last name of the candidate
+        phoneCode:
+          type: string
+          description: Area code of the phone number of the candidate
+        email:
+          format: email
+          type: string
+          description: Email of the candidate
+        birthdate:
+          format: date
+          type: string
+          description: Birth date of the candidate
+        latitude:
+          type: double
+          description: Latitude coordinate of the candidate location 
+        longitude:
+          type: double
+          description: Longitude coordinate of the candidate location 
+    EmployerRegistrationForm:
+      description: Form data needed to register an employer
+      type: object
+      required: 
+        - name
+        - description
+        - location
+        - state
+        - rif
+        - phone
+        - mail
+        - comDesignation
+      properties:
+        name:
+          type: string
+          description: Employer's full name
+        description:
+          type: string
+          description: Description of the employer
+        location:
+          type: string
+          description: Address of the employer
+        state:
+          type: string
+          description: Current state of the employer
+          enum: [Active, Eliminated, Suspended]
+        rif:
+          description: Rif of the employer
+          type: string
+        phone:
+          description: Phone of the employer
+          type: string
+        mail:
+          description: Email of the employer
+          type: string
+          format: email
+        comDesignation:
+          description: Common designation of the employer
+          type: string
+    MeetingAcceptanceForm:
+      description: Form data needed to accept a meeting
+      type: object
+      required: 
+        - candidateId
+        - meetingId
+      properties:
+        candidateId:
+          description: Id of the candidate that's accepting the meeting
+          type: string
+          format: uuid
+        meetingId:
+          description: Id of the meeting that's being accepted
+          type: string
+    OfferRegistrationForm:
+      description: Form data needed to register an offer
+      type: object
+      required: 
+        - direction
+        - sector
+        - budget
+        - description
+      properties:
+        direction:
+          description: Address of the workplace of the offer
+          type: string
+        sector:
+          description: Sector in which the offer is based
+          type: string
+          enum: [Laws, Technology]
+        budget:
+          description: Budget of the offer
+          type: number
+        description:
+          description: Description of the offer
+          type: string
+    OfferIdForm:
+      description: Form data that indicates an offer Id
+      type: object
+      required:
+        - idOffer
+      properties:
+        idOffer:
+          description: Id of the offer which's state will change
+          type: string
+          format: uuid
+    OfferReportInformation:
+      description: Information related to an offer report
+      type: object
+      required: 
+        - reason
+        - reporterId
+      properties:
+        reason:
+          description: Reason why the offer is being reported
+          type: string
+        reporterId:
+          description: Id of the candidate that's being reported
+          type: string
+          format: uuid

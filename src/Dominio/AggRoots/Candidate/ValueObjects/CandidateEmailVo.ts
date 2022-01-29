@@ -10,7 +10,7 @@ export class CandidateEmailVo{
     }
 
     get email(): String{
-        return this.email;
+        return this._email;
     }
 
     protected emailValidate(email: String){

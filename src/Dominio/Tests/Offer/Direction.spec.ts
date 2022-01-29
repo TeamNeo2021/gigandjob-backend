@@ -6,10 +6,10 @@ describe("Direction",()=>{
     
     //Validemos nuestra dirección
     it("Deberia fallar si la dirección es nula", ()=>{ //Validar que no es vacia
-        expect(()=>new DirectionVO('')).toThrowError(InvalidOfferDirection)
+        expect(()=>DirectionVO.Create('')).toThrowError(InvalidOfferDirection)
     })
 
     it("Deberia crear cuando le pase una dirección", () => {
-        expect(new DirectionVO("Avenida Principal Macaracuay")).toBeInstanceOf(DirectionVO)
+        expect(DirectionVO.Create("Avenida Principal Macaracuay")).toBeInstanceOf(DirectionVO)
     })
 })

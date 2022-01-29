@@ -183,7 +183,7 @@ export class Candidate extends AggregateRoot {
                 }
                 break;
             case CandidateStateModified:
-                this._state = CandidateStateVo.fromString(event.new_current)
+                this._state = CandidateStateVo.fromString(event.new_current, this._state.suspensionCount)
                 console.log('new state '
                     + event.new_current
                     + ' applied to candidate '

@@ -1,6 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Candidate } from 'src/Dominio/AggRoots/Candidate/Candidate';
+import { Candidate, Candidate } from 'src/Dominio/AggRoots/Candidate/Candidate';
 import { CandidateIdVo } from 'src/Dominio/AggRoots/Candidate/ValueObjects/CandidateIdVo';
+import { Employer } from 'src/Dominio/AggRoots/Employer/Employer';
+import { EmployerComercialDesignationVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo';
+import { EmployerDescriptionVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO';
+import { EmployerIdVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO';
+import { EmployerLocationVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO';
+import { EmployerMailVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo';
+import { EmployerNameVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo';
+import { EmployerPhoneVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo';
+import { EmployerRifVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO';
+import { EmployerStateVO } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 import { Meeting } from 'src/Dominio/AggRoots/Meeting/Meeting';
 import { MeetingDateVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDateVO';
 import { MeetingDescriptionVO } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDescriptionVO';
@@ -26,35 +36,19 @@ export class MeetingApplicationService implements IApplicationService {
     switch (command.constructor) {
       case AcceptMeeting:
         //agendar en calendario
-        const dtoMeeting: MeetingDTO = this.repository.getById(
-          command.meetingId,
-        );
-        const Ameeting = new Meeting(
-          new MeetingIDVO(dtoMeeting.id),
-          new MeetingStateVO(dtoMeeting.state),
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          new Candidate(
-            dtoMeeting.candidate,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-          ),
-        );
-        Ameeting.Accept();
-        dtoMeeting.state = Ameeting.state.current;
-        this.repository.modifyMeeting(dtoMeeting);
+        const cmd: AcceptMeeting = <AcceptMeeting>command;
+        const Mdto: MeetingDTO = this.repository.getById(cmd.meetingId);
+        const AMeeting:Meeting = translateDtoIntoMeeting(Mdto);
+        AMeeting.Accept();
+        this.repository.modifyMeeting()
         break;
       case RejectMeeting:
         //query meeting command.meetingId
-        let meeting = new Meeting();
-        meeting.state = MeetingStates.Rejected;
-        this.repository.modifyMeeting(meeting);
+        const cmd: AcceptMeeting = <AcceptMeeting>command;
+        const Mdto: MeetingDTO = this.repository.getById(cmd.meetingId);
+        const RMeeting:Meeting = translateDtoIntoMeeting(Mdto);
+        AMeeting.Reject();
+        this.repository.modifyMeeting()
         break;
       default:
         throw new Error(
@@ -62,5 +56,38 @@ export class MeetingApplicationService implements IApplicationService {
         );
         break;
     }
+  }
+
+  private MeetingDtoIntoMeeting(Mdto: MeetingDTO): Meeting {
+    const meeting: Meeting = new Meeting(
+      new MeetingIDVO(Mdto.id),
+      new MeetingStateVO(Mdto.state),
+      new MeetingDescriptionVO(Mdto.description),
+      new MeetingDateVO(Mdto.date),
+      new MeetingLocationVO(Mdto.location),
+      this.EmployerDtoIntoEmployer(Mdto.employer),
+      this.CandidateDtoIntoCanditate(Mdto.candidate),
+    );
+    return meeting;
+  }
+
+  private EmployerDtoIntoEmployer(Edto: EmployerDTO): Employer {
+    const employer: Employer = new Employer(
+      new EmployerIdVO(),
+      new EmployerNameVO(),
+      new EmployerDescriptionVO(),
+      new EmployerStateVO(),
+      new EmployerLocationVO(),
+      new EmployerRifVO(),
+      new EmployerPhoneVO(),
+      new EmployerMailVO(),
+      new EmployerComercialDesignationVO(),
+    );
+    return employer.;
+  }
+
+  private CandidateDtoIntoCanditate(Cdto: CandidateDTO): Candidate {
+    const candidate: Candidate = new Candidate();
+    return candidate;
   }
 }
