@@ -2,7 +2,7 @@ import { Cv as CV } from "../../Dominio/AggRoots/CV/cv.root";
 
 export interface ICVCommandRepository{
 
-    save(cv: CV): Promise<CV>;
+    save(cv: CV): Promise<void>;
 
     /**
      * It is used for the Domain Events: Approved, Rejected and other...
