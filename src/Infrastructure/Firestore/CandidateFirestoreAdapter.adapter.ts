@@ -9,7 +9,7 @@ import { CandidateIdVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/Candi
 import { CandidateLocationVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO";
 import { CandidatePhoneVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidatePhoneVo";
 import { CandidateStatesEnum, CandidateStateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
-import { candidateExampleDTO } from "../Controllers/Candidate/candidateEx.dto";
+
 
 type CandidateEntity = {
     id: string
@@ -46,7 +46,7 @@ function entityToClass(candidateResult: CandidateEntity) {
 }
 
 @Injectable()
-export class CandidateFirestoreRepository implements ICandidateRepository {
+export class CandidateFirestoreAdapter implements ICandidateRepository {
     constructor(@Inject('candidates') private repo: CollectionReference<CandidateEntity>) {}
 
     async save(candidate: Candidate): Promise<void> {

@@ -15,7 +15,7 @@ import { EmployerPublisherService } from './Infrastructure/Event/Employer/employ
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreRepository.repo';
+import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter.';
 import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
 import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
@@ -50,7 +50,8 @@ const offerServiceProvider = {
       collections: [
         'employers',
         'offers',
-        'candidates'
+        'candidates',
+        'applications'
       ]
     }),
     CandidateModule,

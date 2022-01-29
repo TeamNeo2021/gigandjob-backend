@@ -8,5 +8,6 @@ export class ApplicationState{
 
 export enum ApplicationStates{
     Active,
-    Inactive
+    Inactive,
+    Canceled,
 }

@@ -8,7 +8,7 @@ import { isNumberObject } from "util/types";
 import { CandidateApplicationService } from "../../Application/ApplicationServices/CandidateApplicationService.service";
 import { CandidateSuspensionsLimitService } from "../Configuration/candidate-suspensions-limit.service";
 import { CandidateController } from "../Controllers/candidateController.controller";
-import { CandidateFirestoreRepository } from "../Firestore/CandidateFirestoreRepository.repo";
+import { CandidateFirestoreAdapter } from "../Firestore/CandidateFirestoreAdapter.adapter";
 import { CandidateSchedulerService } from "../Scheduler/candidate-scheduler.service";
 
 const candidateApplicationServiceProvider = {
@@ -16,7 +16,7 @@ const candidateApplicationServiceProvider = {
   useFactory: (repo: ICandidateRepository, ref: ModuleRef, config: CandidateConfiguration) => {
     return new CandidateApplicationService(repo, config, ref.get(CandidateSchedulerService))
   },
-  inject: [CandidateFirestoreRepository, ModuleRef, CandidateSuspensionsLimitService]
+  inject: [CandidateFirestoreAdapter, ModuleRef, CandidateSuspensionsLimitService]
 }
 
 @Module({
@@ -24,7 +24,7 @@ const candidateApplicationServiceProvider = {
     ScheduleModule.forRoot()
   ],
   providers: [
-    CandidateFirestoreRepository,
+    CandidateFirestoreAdapter,
     CandidateSchedulerService,
     CandidateSuspensionsLimitService,
     candidateApplicationServiceProvider

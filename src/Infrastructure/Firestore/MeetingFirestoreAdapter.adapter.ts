@@ -7,7 +7,7 @@ import { IMeetingRepository } from '../../Application/Repositories/MeetingReposi
 
 
 //@Injectable()
-export class MeeetingFirestoreAdapter implements IMeetingRepository {
+export class MeetingFirestoreAdapter implements IMeetingRepository {
 
     repository :any;
     
