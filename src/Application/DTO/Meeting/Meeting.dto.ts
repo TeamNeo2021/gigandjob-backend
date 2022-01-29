@@ -1,4 +1,4 @@
-class MeetingDTO {
+export class MeetingDTO {
   public candidate: CandidateDTO;
   public employer: EmployerDTO;
   public id: string;

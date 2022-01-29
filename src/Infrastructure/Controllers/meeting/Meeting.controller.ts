@@ -1,7 +1,7 @@
 import { Controller, Put, Post, Delete, Body } from '@nestjs/common';
 import { AcceptMeeting } from 'src/Application/DTO/Meeting/AcceptMeeting';
 import { IMeetingRepository } from 'src/Application/Repositories/MeetingRepository.repo';
-import { MeeetingFirestoreRepository } from 'src/Infrastructure/Firestore/MeetingFirestoreRepository.repo';
+import { MeeetingFirestoreAdapter} from 'src/Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
 import { MeetingApplicationService} from '../../../Application/ApplicationServices/MeetingApplicationService.service';
 import { RejectMeeting } from '../../../Application/DTO/Meeting/RejectMeetingDTO';
 
@@ -11,7 +11,7 @@ export class MeetingController {
   private readonly meetingService: MeetingApplicationService;
   private readonly repository: IMeetingRepository;
   constructor() {
-    this.repository = new MeeetingFirestoreRepository();
+    this.repository = new MeeetingFirestoreAdapter();
     this.meetingService = new MeetingApplicationService(this.repository);
   }
 
