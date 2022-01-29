@@ -16,11 +16,11 @@ import {
 import { IApplicationService } from '../.././Core/IApplicationService';
 import { createOfferDTO } from '../../DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../DTO/Offer/ReactivateOfferDTO';
-import { EliminitedOfferDTO } from '../../DTO/Offer/EliminitedOfferDTO';
+import { EliminatedOfferDTO } from '../../DTO/Offer/EliminatedOfferDTO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
 import { ReportOfferDTO } from '../../DTO/Offer/ReportOffer.dto';
 import { OfferReportVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferReportVO';
-import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
+
 import { INotificationSender } from '../../Ports/INotificationSender';
 import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { ApplyToOffer } from '../../../Dominio/DomainService/ApplyToOffer';
@@ -92,8 +92,8 @@ export class OfferApplicationService implements IApplicationService {
         break;
       }
 
-      case EliminitedOfferDTO: {
-        let cmd: EliminitedOfferDTO = <EliminitedOfferDTO>command;
+      case EliminatedOfferDTO: {
+        let cmd: EliminatedOfferDTO = <EliminatedOfferDTO>command;
         let Offer_Eliminited = await this.Offerrepo.load(
           new OfferIdVO(cmd.id_offer),
         );
@@ -114,13 +114,13 @@ export class OfferApplicationService implements IApplicationService {
       case ApplyToOfferDTO:
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         const Oferta: Offer = await this.Offerrepo.load(
-          new OfferIdVO(cmd.OfferId),
+          new OfferIdVO(cmd.offerId),
         ).catch((err) => {
           throw err;
         });
         console.log('Saque esta: ' + Oferta);
         const Candidate: Candidate = await this.CandidaterepoC.getOne(
-          cmd.CandidateId,
+          cmd.candidateId,
         );
         console.log('Saque este candidate:' + Candidate);
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
@@ -128,18 +128,18 @@ export class OfferApplicationService implements IApplicationService {
           Oferta,
           cmd.budget,
           cmd.description,
-          cmd.time,
+          cmd.duration_days,
         );
         DSApplyToOfer.createApplication();
         try {
           this.Sender.send(
-            cmd.EmployerId,
+            cmd.employerId,
             new CandidateApplied(
-              cmd.CandidateId,
-              cmd.OfferId,
+              cmd.candidateId,
+              cmd.offerId,
               cmd.budget,
               cmd.description,
-              cmd.time,
+              cmd.duration_days,
             ),
           );
         } catch (error) {

@@ -6,14 +6,14 @@ import { ApplicationStates } from "src/Dominio/AggRoots/Offer/Application/Value 
 class ApplicationFirestoreAdapter implements IApplicationRepository{   //todo Delete this, this goes in OfferFirestoreAdapter
     constructor(
         @Inject
-        ('applications') private collection: CollectionReference<ApplicationDTO>
+        ('applications') private collection: CollectionReference<ApplyToOfferDTO>
         ){}
 
 
    
-    async newApllication(application: ApplicationDTO): Promise<void> {
+    async newApllication(application: ApplyToOfferDTO): Promise<void> {
        try {
-        let result = await this.collection.doc(application.id).set(application);
+        let result = await this.collection.doc(application.applicationId).set(application);
         console.log
        } catch (error) {
            
@@ -33,7 +33,7 @@ class ApplicationFirestoreAdapter implements IApplicationRepository{   //todo De
         }
     }
 
-    async findById(applicationId: string): Promise<ApplicationDTO> {
+    async findById(applicationId: string): Promise<ApplyToOfferDTO> {
         try {
         const result = await this.collection.doc(applicationId).get();
 
@@ -41,18 +41,18 @@ class ApplicationFirestoreAdapter implements IApplicationRepository{   //todo De
             throw new NotFoundException(`Application with id ${applicationId} not found`)
         }
         console.log()
-        return new ApplicationDTO(result.data());
+        return new ApplyToOfferDTO(result.data());
             
         } catch (error) {
             console.log('MeeetingFirestoreAdapter: findById error: ', error);
             
         }
     }
-    async findAll(): Promise<ApplicationDTO[]> {
+    async findAll(): Promise<ApplyToOfferDTO[]> {
        try {
         const result = await this.collection.get();
         console.log('MeeetingFirestoreAdapter: findAll response: ', result);
-        const applicationsList =  result.docs.map(doc => new ApplicationDTO(doc.data()));
+        const applicationsList =  result.docs.map(doc => new ApplyToOfferDTO(doc.data()));
         console.log('MeeetingFirestoreAdapter: findAll applicationsList: ', applicationsList);
         return applicationsList;
        } catch (error) {

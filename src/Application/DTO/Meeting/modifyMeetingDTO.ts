@@ -1,12 +1,12 @@
 class ModifyMeetingDTO {
-  public id: String;
+  public id: string;
   public state: string;
   public description: string;
   public date: Date;
   public location: LocationDTO;
 
   constructor(
-    $id: String,
+    $id: string,
     $state: string,
     $description: string,
     $date: Date,

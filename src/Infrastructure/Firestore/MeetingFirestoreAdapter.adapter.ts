@@ -1,18 +1,24 @@
 
 
 import { CollectionReference } from '@google-cloud/firestore';
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { MeetingDTO } from 'src/Application/DTO/Meeting/Meeting.dto';
 import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { IMeetingRepository } from '../../Application/Repositories/MeetingRepository.repo';
 
 
-//@Injectable()
+@Injectable()
 export class MeetingFirestoreAdapter implements IMeetingRepository {
 
     repository :any;
     
     constructor(
         @Inject('meetings') private collection: CollectionReference<MeetingDTO>) {}
+
+
+    getById(id: string): Promise<MeetingDTO> {
+        throw new Error('Method not implemented.');
+    }
 
 
     async saveMeeting(meeting: MeetingDTO)/**: Promise<MeetingDTO> */ {

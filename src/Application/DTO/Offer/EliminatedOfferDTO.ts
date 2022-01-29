@@ -1,4 +1,4 @@
-export class EliminitedOfferDTO {
+export class EliminatedOfferDTO {
 
     public id_offer:string;
 

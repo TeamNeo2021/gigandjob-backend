@@ -3,7 +3,7 @@ import { OfferFirestoreRepository } from '../../Firestore/OfferFirestoreAdapter.
 import { OfferApplicationService } from '../../../Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
-import { EliminitedOfferDTO } from './../../../Application/DTO/Offer/EliminitedOfferDTO';
+import { EliminatedOfferDTO } from './../../../Application/DTO/Offer/EliminatedOfferDTO';
 import { ReportOfferDTO } from '../../../Application/DTO/Offer/ReportOffer.dto';
 import { ICandidateRepository } from '../../../Application/Repositories/CandidateRepository';
 import { INotificationSender } from '../../../Application/Ports/INotificationSender';
@@ -57,9 +57,9 @@ export class OfferController {
         return "Esta accion reactiva una oferta"
     }
 
-    @Put("Eliminited") // PUT /Offers/Eliminited
-    EliminitedOffer(@Body('idOffer')IdOffer:string): any{
-        let request:EliminitedOfferDTO= new EliminitedOfferDTO(IdOffer);
+    @Put("Eliminated") // PUT /Offers/Eliminated
+    EliminatedOffer(@Body('idOffer')IdOffer:string): any{
+        let request:EliminatedOfferDTO= new EliminatedOfferDTO(IdOffer);
         this.offerApplicationService.Handle(request);
         return "Esta accion elimina una oferta"
     }
@@ -71,5 +71,38 @@ export class OfferController {
             reportedOffer: id,
             reason: report.reason
         }
+    }
+
+ 
+    //APPLICATION 
+
+    @Put('/applyToOffer')
+    async apply(
+        @Body ('idOffer') idOffer:string, 
+        @Body ('idCandidate') idCandidate:string,
+        @Body ('idEmployer') idEmployer:string,
+        @Body  ('idApplication') idApplication:string,
+    //@Body( 'state') state: string,
+  //  @Body ('previous_state') previous_state: string,
+    @Body( 'budget') budget: Number,
+    @Body ('description') description: string,
+    @Body( 'duration_days')duration_days : Number,
+    ){
+        let newApplication = new ApplyToOfferDTO(
+            {
+                applicationId: idApplication,
+                offerId: idOffer,
+                employerId: idEmployer,
+                candidateId: idCandidate,
+               // state: state,
+              //  previous_state: previous_state,
+                budget: budget,
+                description: description,
+                duration_days: duration_days
+
+            }
+        );
+        await this.offerApplicationService.Handle(newApplication);
+
     }
 }

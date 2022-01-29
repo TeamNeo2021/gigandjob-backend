@@ -1,3 +1,4 @@
+import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
 
 export interface IMeetingRepository {
 
@@ -38,6 +39,6 @@ export interface IMeetingRepository {
      * @param candidateId */ 
     cancelAllCandidateMeetings(candidateId: String);
 
-    getById(id:string): MeetingDTO;
+    getById(id:string): Promise<MeetingDTO>;
 
 }

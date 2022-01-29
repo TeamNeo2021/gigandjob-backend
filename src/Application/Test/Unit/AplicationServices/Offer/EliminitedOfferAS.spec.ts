@@ -13,7 +13,7 @@ import { OfferStatesEnum } from '../../../../../Dominio/AggRoots/Offer/ValueObje
 import { randomUUID } from 'crypto';
 import {IOfferRepository} from "../../../../../Application/Repositories/OfferRepository.repo";
 import {OfferApplicationService} from "../../../../ApplicationServices/Offer/OfferApplicationService.service";
-import { EliminitedOfferDTO } from "../../../../DTO/Offer/EliminitedOfferDTO";
+import { EliminatedOfferDTO } from "../../../../DTO/Offer/EliminatedOfferDTO";
 import { MockSenderAdapter } from "src/Infrastructure/Memory/MorckSenderAdapter";
 import { InMemoryCandidateCommandRepository } from "src/Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
 
@@ -58,7 +58,7 @@ describe('Eliminar una oferta', () => {
     let exampleOffer: Offer = await Orepo.load(
       new OfferIdVO(exampleOffer2._Id.value),
     );
-    let ExCommand = new EliminitedOfferDTO((await exampleOffer)._Id.value);
+    let ExCommand = new EliminatedOfferDTO((await exampleOffer)._Id.value);
     let OfferService = create_Service(Orepo);
     OfferService.Handle(ExCommand);
     let oferReactived: Offer = await Orepo.load(exampleOffer._Id);
@@ -74,7 +74,7 @@ describe('Eliminar una oferta', () => {
       new OfferIdVO(exampleOffer3._Id.value),
     );
     exampleOffer._State.state = OfferStatesEnum.Closed;
-    let ExCommand = new EliminitedOfferDTO((await exampleOffer)._Id.value);
+    let ExCommand = new EliminatedOfferDTO((await exampleOffer)._Id.value);
     let OfferService = create_Service(Orepo);
     let error: any = undefined;
     await OfferService.Handle(ExCommand).catch((err) => (error = err));

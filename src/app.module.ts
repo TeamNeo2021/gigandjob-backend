@@ -3,17 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-<<<<<<< HEAD
-import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
-import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
-//import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
-import { RepositoryModule } from './Infrastructure/Repository.module';
-=======
 import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
 import { CandidateModule } from './Infrastructure/Module/candidate.module';
 
 import { MeetingController } from './Infrastructure/Controllers/meeting/Meeting.controller';
-import { MeetingService } from './Application/ApplicationServices/Meeting.service';
 import { OfferApplicationService } from './Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { EmployerController } from './Infrastructure/Controllers/Employer/employer.controller';
 import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
@@ -25,6 +18,8 @@ import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirest
 import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
 import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
+import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
+import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -39,7 +34,14 @@ const offerServiceProvider = {
   Inject: [OfferFirestoreRepository]
 }
 
->>>>>>> origin/main
+const meetingAdapterProvider = {
+  provide: 'MeetingFirestoreAdapter',
+  useFactory: (repo: MeetingFirestoreAdapter) => {
+    return new MeetingApplicationService(repo)
+  },
+  inject: [MeetingFirestoreAdapter]
+}
+
 
 @Module({
   
@@ -56,16 +58,12 @@ const offerServiceProvider = {
       inject: [ConfigService],
       collections: [
         'employers',
+        'meetings',
         'offers',
         'candidates',
         'applications'
       ]
     }),
-<<<<<<< HEAD
-  ],*/
-  controllers: [AppController, MeetingController],
-  providers: [AppService, MeetingApplicationService],
-=======
     CandidateModule,
     CqrsModule
   ],
@@ -77,14 +75,15 @@ const offerServiceProvider = {
   ],
   providers: [
     AppService, 
-    MeetingService,
+    MeetingApplicationService,
+    MeetingFirestoreAdapter,
     OfferApplicationService,
     OfferFirestoreRepository,
     EmployerRepositoryService,
     EmployerPublisherService,
     EmployerEventHandler,
-    employerServiceProvider
+    employerServiceProvider,
+    meetingAdapterProvider
   ],
->>>>>>> origin/main
 })
 export class AppModule {}
