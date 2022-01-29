@@ -153,9 +153,10 @@ export class OfferApplicationService implements IApplicationService {
           const Offer_Completed = await this.Offerrepo.load(
             new OfferIdVO,
           );
-          let hired2: ApplicantHired;
-          hired2.CandidateContract(Offer_Completed);
-          break;      
+          let applicationHired: ApplicantHired;
+          applicationHired.CandidateContract(Offer_Completed);
+          await this.Offerrepo.save(Offer_Completed);
+        break;      
       //     break;
 
       default:
