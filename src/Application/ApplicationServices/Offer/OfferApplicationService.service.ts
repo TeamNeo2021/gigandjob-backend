@@ -26,6 +26,8 @@ import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { ApplyToOffer } from '../../../Dominio/DomainService/ApplyToOffer';
 import { CandidateApplied } from '../../../Dominio/DomainEvents/CandidateEvents/CandidateApplied';
 import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
+import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
+import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
@@ -146,7 +148,15 @@ export class OfferApplicationService implements IApplicationService {
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.modify(Candidate.id, Candidate);
         break;
-
+        case CompletedOfferDTO:
+          const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
+          const Offer_Completed = await this.Offerrepo.load(
+            new OfferIdVO,
+          );
+          let applicationHired: ApplicantHired;
+          applicationHired.CandidateContract(Offer_Completed);
+          await this.Offerrepo.save(Offer_Completed);
+        break;      
       //     break;
 
       default:

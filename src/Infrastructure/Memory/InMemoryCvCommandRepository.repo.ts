@@ -21,11 +21,10 @@ export class InMemoryCvCommandRepository
   }
   
 
-  async save(cv: Cv): Promise<Cv> {
+  async save(cv: Cv): Promise<void> {
     this.cv.push(cv);
     console.log("guardar");
     console.log(cv);
-    return cv
   }
 
   

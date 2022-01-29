@@ -11,6 +11,8 @@ import { InvalidMeetingDate } from './Errors/InvalidMeetingDate.error';
 import { MeetingModifiedEvent } from '../../DomainEvents/MeetingEvents/MeetingModifed.event';
 import { Candidate } from '../Candidate/Candidate';
 import { Employer } from '../Employer/Employer';
+import { MeetingAccepted } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingAccepted.event';
+import { MeetingRejected } from 'src/Dominio/DomainEvents/MeetingEvents/MeetingRejected.event';
 
 export class Meeting extends AggregateRoot {
   private _candidate: Candidate;
@@ -53,6 +55,11 @@ export class Meeting extends AggregateRoot {
         break;
 
       case MeetingModifiedEvent:
+        break;
+      case MeetingAccepted:
+        this.state = new MeetingStateVO(MeetingStates.Active);
+      case MeetingRejected:
+        this.state = new MeetingStateVO(MeetingStates.Rejected);
         break;
     }
   }
@@ -147,6 +154,18 @@ export class Meeting extends AggregateRoot {
       this.date = date;
     }
     this.Apply(new MeetingModifiedEvent());
+  }
+
+  public Accept() {
+    console.log('Accept meeting');
+    this.Apply(new MeetingAccepted(this.id.id, this.candidate.id));
+    return this;
+  }
+
+  public Reject() {
+    console.log('Reject meeting');
+    this.Apply(new MeetingRejected(this.id.id, this.candidate.id));
+    return this;
   }
 
   // getters y setters
