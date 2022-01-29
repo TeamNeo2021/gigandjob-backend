@@ -32,7 +32,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _comDesignation: EmployerComercialDesignationVO;
   private _offers: Offer[];
 
-  private constructor(
+  constructor(
     employerId: EmployerIdVO,
     name: EmployerNameVO,
     description: EmployerDescriptionVO,
@@ -156,7 +156,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     rif: string,
     phone: string,
     mail: string,
-    comDesignation: string
+    comDesignation: string,
   ) {
     return new Employer(
       new EmployerIdVO(id),
@@ -167,8 +167,8 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
       EmployerRifVO.Unsafe(rif),
       EmployerPhoneVO.Unsafe(phone),
       EmployerMailVO.Unsafe(mail),
-      EmployerComercialDesignationVO.Unsafe(comDesignation)
-    )
+      EmployerComercialDesignationVO.Unsafe(comDesignation),
+    );
   }
 
   static RegisterEmployer(

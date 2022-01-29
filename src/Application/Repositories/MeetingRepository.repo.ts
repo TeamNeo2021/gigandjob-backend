@@ -1,7 +1,7 @@
 
 export interface IMeetingRepository {
 
-      repository;
+      //repository;
 
     /**Creates new meeting
      * @returns Promise<MeetingDTO> 
@@ -37,5 +37,7 @@ export interface IMeetingRepository {
      * @returns void
      * @param candidateId */ 
     cancelAllCandidateMeetings(candidateId: String);
+
+    getById(id:string): MeetingDTO;
 
 }

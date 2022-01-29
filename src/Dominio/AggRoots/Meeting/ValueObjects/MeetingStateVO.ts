@@ -10,4 +10,5 @@ export enum MeetingStates {
   Suspended,
   Canceled,
   Pending,
+  Rejected,
 }

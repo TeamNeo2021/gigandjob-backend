@@ -3,6 +3,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+<<<<<<< HEAD
+import { MeetingController } from './Application/ApplicationServices/Meeting.controller';
+import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
+//import { FirestoreModule } from './Infrastructure/Firestore/firestore.module';
+import { RepositoryModule } from './Infrastructure/Repository.module';
+=======
 import { EmployerApplicationService } from './Application/ApplicationServices/Employer/employer.service';
 import { CandidateModule } from './Infrastructure/Module/candidate.module';
 
@@ -33,6 +39,7 @@ const offerServiceProvider = {
   Inject: [OfferFirestoreRepository]
 }
 
+>>>>>>> origin/main
 
 @Module({
   
@@ -53,6 +60,11 @@ const offerServiceProvider = {
         'candidates'
       ]
     }),
+<<<<<<< HEAD
+  ],*/
+  controllers: [AppController, MeetingController],
+  providers: [AppService, MeetingApplicationService],
+=======
     CandidateModule,
     CqrsModule
   ],
@@ -72,5 +84,6 @@ const offerServiceProvider = {
     EmployerEventHandler,
     employerServiceProvider
   ],
+>>>>>>> origin/main
 })
 export class AppModule {}
