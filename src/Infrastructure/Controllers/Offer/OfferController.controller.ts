@@ -105,4 +105,23 @@ export class OfferController {
         await this.offerApplicationService.Handle(newApplication);
 
     }
+    
+    @Put('likeOffer')
+    async likeOffer(
+        @Body('id_candidate') id_candidate: string,
+        @Body('id_offer') id_offer: string,
+        @Body('date') date: Date
+        ) {
+        let result = await this.offerApplicationService.Handle(new LikeOfferDTO(
+            {
+                id_candidate: id_candidate,
+                 id_offer: id_offer,
+                  date: date
+            }
+        ));
+        return ({
+            message: 'Offer Liked',
+            result: result
+        })
+    }
 }

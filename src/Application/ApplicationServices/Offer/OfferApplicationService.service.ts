@@ -108,9 +108,15 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(offer);
         break;
       }
-      // case LikeOffer:
+        case LikeOfferDTO:
+       {
+        const cmd: LikeOfferDTO =  < LikeOfferDTO> command;
+        const offer = await this.Offerrepo.likeOffer(cmd);
+        console.log('Liked offer: ', cmd.id_offer, ' candidate: ', cmd.id_candidate);
+        //todo ver que se hace aqui
 
-      //     break;
+        break;
+       }
       case ApplyToOfferDTO:
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         const Oferta: Offer = await this.Offerrepo.load(

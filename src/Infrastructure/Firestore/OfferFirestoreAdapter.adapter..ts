@@ -65,7 +65,20 @@ export class OfferFirestoreRepository implements IOfferRepository{
     }
 
     likeOffer(data: LikeOfferDTO) {
-        throw new Error("Method not implemented.");
+        try {
+
+            let result = this.offerRepository.doc(data.id_offer).collection('likes').doc(data.id_candidate).set({
+                id_candidate: data.id_candidate,
+                id_offer: data.id_offer,
+                like: true,
+                date: new Date()
+            });
+
+            return result;
+        } catch (error) {
+            console.log('OfferFirestoreAdapter: likeOffer error', error)
+            
+        }
     }
     
 }
