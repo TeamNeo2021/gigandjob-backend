@@ -7,15 +7,15 @@ type work = {
     description: string,
     startDate: string,
     finishDate: string,
-    job: string
+    job: string,
 }
 
 type studies = {
-    description: string
-    startDate: string
-    finishDate: string
-    institution: string
-    degree: string
+    description: string,
+    startDate: string,
+    finishDate: string,
+    institution: string,
+    degree: string,
 }
 
 export class RequestCvApprovalDTO{

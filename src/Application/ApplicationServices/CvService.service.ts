@@ -62,35 +62,4 @@ export class CvService implements IApplicationService {
        
     }
 
-
-    /*public RequestCvApproval(dto: RequestCvApprovalDTO): Cv{
-
-        let Workxp : CvWorkExperience[];
-        for (let i = 0; i < dto.workExperiences.length ; i++)
-        {
-            Workxp.push(dto.workExperiences[i][0],dto.workExperiences[i][1],dto.workExperiences[i][2],dto.workExperiences[i][3]);
-        
-        }
-
-        let Studies : CvStudies[];
-        for (let i = 0; i < dto.studies.length ; i++)
-        {
-            Studies.push(dto.studies[i][0],dto.studies[i][1],dto.studies[i][2],dto.studies[i][3],dto.studies[i][4]);
-        
-        }
-
-        let submittedCv: Cv<CvState.Submitted> = Cv.submitCv(
-            new CvDescription(dto.description),
-            Workxp,
-            Studies,
-            new CvPhoto(dto.photo),
-            new CvCandidate(dto.candidateID, dto.candidatebirthdate),
-            new CvId(dto.cvID),
-        );
-
-        this.commandRepository.save(submittedCv);
-
-        return submittedCv
-    }*/
-
 }
