@@ -35,7 +35,7 @@ const offerServiceProvider = {
 }
 
 const meetingAdapterProvider = {
-  provide: 'MeetingFirestoreAdapter',
+  provide: 'MeetingApplicationService',
   useFactory: (repo: MeetingFirestoreAdapter) => {
     return new MeetingApplicationService(repo)
   },
