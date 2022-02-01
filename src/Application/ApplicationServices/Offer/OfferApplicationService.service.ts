@@ -28,6 +28,7 @@ import { CandidateApplied } from '../../../Dominio/DomainEvents/CandidateEvents/
 import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
 import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
 import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
+import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
@@ -164,6 +165,16 @@ export class OfferApplicationService implements IApplicationService {
           await this.Offerrepo.save(Offer_Completed);
         break;      
       //     break;
+
+      case SuspendOfferDTO:{
+        let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
+        let Offer_Suspended = await this.Offerrepo.load(
+          new OfferIdVO(cmd.id_offer),
+        );
+        Offer_Suspended.SuspendOffer(false);
+        await this.Offerrepo.save(Offer_Suspended);
+        break;
+      }
 
       default:
         throw new Error(
