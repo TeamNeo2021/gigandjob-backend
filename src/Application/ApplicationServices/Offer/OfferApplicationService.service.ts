@@ -28,6 +28,7 @@ import { CandidateApplied } from '../../../Dominio/DomainEvents/CandidateEvents/
 import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
 import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
 import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
+import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
