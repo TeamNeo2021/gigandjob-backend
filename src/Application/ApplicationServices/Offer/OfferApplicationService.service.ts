@@ -165,6 +165,16 @@ export class OfferApplicationService implements IApplicationService {
         break;      
       //     break;
 
+      case SuspendOfferDTO:{
+        let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
+        let Offer_Suspended = await this.Offerrepo.load(
+          new OfferIdVO(cmd.id_offer),
+        );
+        Offer_Suspended.SuspendOffer(false);
+        await this.Offerrepo.save(Offer_Suspended);
+        break;
+      }
+
       default:
         throw new Error(
           `OfferService: Command doesn't exist: ${command.constructor}`,
