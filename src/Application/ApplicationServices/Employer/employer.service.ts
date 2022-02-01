@@ -10,17 +10,43 @@ import { CouldNotGetAllEmployersError } from "src/Application/Repositories/Emplo
 import { EmployerRepository } from "src/Application/Repositories/Employer/repository.interface";
 import { EmployerApplicationService as Contract  } from "./service.interface";
 import { EmployerTransactionService } from "./transaction.interface";
+import { ReactivateEmployerDTO } from "src/Application/DTO/ReactivateEmployer.dto";
+import { EliminateEmployerDTO } from "src/Application/DTO/EliminateEmployer.dto";
 
 export class EmployerApplicationService implements Contract {
     transactionService: EmployerTransactionService
 
-    constructor(repository: EmployerRepository, private publisher: EmployerPublisher) {
+    constructor(private repository: EmployerRepository, private publisher: EmployerPublisher) {
         this.transactionService = {
             get(id: string) {
                 return repository.get(id)
             },
             getAll() {
                 return repository.getAll()
+            }
+        }
+        
+    }
+
+    async Handle(command: any): Promise<void> {
+        switch (command.constructor){
+
+            case ReactivateEmployerDTO: {
+                const id = (command as ReactivateEmployerDTO).id,
+                      employer = await this.repository.get(id)
+                    
+                if (!employer) throw new Error //CouldNotFindEmployerError(employer.employerId)
+
+                employer.reactivateThisEmployer()
+                await this.repository.save(employer)
+                break;
+            }
+
+            case EliminateEmployerDTO: {
+                const id = (command as EliminateEmployerDTO).id
+
+                await this.repository.eliminate(id)
+                break;
             }
         }
     }
