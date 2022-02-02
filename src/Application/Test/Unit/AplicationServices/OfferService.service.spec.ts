@@ -12,6 +12,7 @@ import { OfferStatesEnum, OfferStateVO } from "../../../../Dominio/AggRoots/Offe
 import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
 import { InMemoryCandidateCommandRepository } from "../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
 import { MockSenderAdapter } from "../../../../Infrastructure/Memory/MorckSenderAdapter";
+import { MockEmployerRepo } from "../../../../Infrastructure/Memory/MockEmployerRepo.repo";
 
 
 const exampleDirection:string = 'testing direction';
@@ -21,6 +22,7 @@ const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Msender = new MockSenderAdapter();
+const EMrepo = new MockEmployerRepo();
 
 class mockedOfferRepo implements IOfferRepository{
 
@@ -89,7 +91,7 @@ var mockedDB: Offer[] = [
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 function create_offer_service(): OfferApplicationService{
-    return new OfferApplicationService(fakeRepo,MCCrepo,Msender);
+    return new OfferApplicationService(fakeRepo,MCCrepo, EMrepo, Msender);
 }
 
 
