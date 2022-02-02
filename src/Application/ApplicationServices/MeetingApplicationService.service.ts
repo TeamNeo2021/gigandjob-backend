@@ -7,7 +7,6 @@ import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
 import { RejectMeeting } from '../DTO/Meeting/RejectMeetingDTO';
 
-
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
 
 export class MeetingApplicationService implements IApplicationService {
@@ -17,8 +16,8 @@ export class MeetingApplicationService implements IApplicationService {
   }
   async Handle(command: any): Promise<void> {
     switch (command.constructor) {
-      case AcceptMeeting:
-       { //agendar en calendario
+      case AcceptMeeting: {
+        //agendar en calendario
         const cmd: AcceptMeeting = <AcceptMeeting>command;
         const Mdto: MeetingDTO = await this.repository.getById(cmd.meetingId);
         const AMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
@@ -28,10 +27,10 @@ export class MeetingApplicationService implements IApplicationService {
         this.repository.modifyMeeting(MMdto);
         break;
       }
-      case RejectMeeting:
-        {//query meeting command.meetingId
+      case RejectMeeting: {
+        //query meeting command.meetingId
         const cmd2: AcceptMeeting = <AcceptMeeting>command;
-        let Mdto: MeetingDTO = await this.repository.getById(cmd2.meetingId);
+        const Mdto: MeetingDTO = await this.repository.getById(cmd2.meetingId);
         const RMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
         RMeeting.Reject();
         const MMdto2: ModifyMeetingDTO =

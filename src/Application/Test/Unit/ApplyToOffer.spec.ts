@@ -29,7 +29,7 @@ import { CandidateBirthDateVo } from '../../../Dominio/AggRoots/Candidate/ValueO
 import { CandidateLocationVo } from '../../../Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO';
 import { IOfferRepository } from '../../Repositories/OfferRepository.repo';
 import { OfferApplicationService } from '../../ApplicationServices/Offer/OfferApplicationService.service';
-import { ApplyToOfferDTO } from '../../DTO/Application/ApplyToOffer.dto';
+import { ApplyToOfferDTO } from '../../DTO/Application/ApplicationDTO.dto';
 import { MockSenderAdapter } from '../../../Infrastructure/Memory/MorckSenderAdapter';
 import { INotificationSender } from '../../Ports/INotificationSender';
 import { Employer } from '../../../Dominio/AggRoots/Employer/Employer';
@@ -48,7 +48,6 @@ import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/Em
 import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { EmployerRepository } from '../../Repositories/Employer/repository.interface';
 import { MockEmployerRepo } from '../../../Infrastructure/Memory/MockEmployerRepo.repo';
-
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -90,14 +89,16 @@ const exampleEmployer: Employer = Employer.RegisterEmployer(
   new EmployerIdVO(randomUUID()),
 );
 
-const ExCommand = new ApplyToOfferDTO(
-  exampleOffer._Id.value,
-  exampleCandidate.id,
-  exampleEmployer.employerId._guid_value,
-  100,
-  'prueba',
-  3,
-);
+const ExCommand = new ApplyToOfferDTO({
+  offerId: exampleOffer._Id._value,
+  employerId: exampleEmployer.employerId._guid_value,
+  candidateId: exampleCandidate.Id.value,
+  state: exampleOffer._State.state,
+  //  previous_state: previous_state,
+  budget: 200,
+  description: 'Descripcion de prueba',
+  duration_days: 3,
+});
 
 function create_Service(
   repoO: IOfferRepository,
