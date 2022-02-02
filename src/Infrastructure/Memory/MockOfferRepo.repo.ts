@@ -1,3 +1,4 @@
+import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 import { IOfferRepository } from 'src/Application/Repositories/OfferRepository.repo';
 import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';

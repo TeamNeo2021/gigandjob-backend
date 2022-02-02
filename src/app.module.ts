@@ -30,7 +30,7 @@ const employerServiceProvider = {
 }
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
-  useFactory: (Offerrepo: OfferFirestoreRepository, candidateRepoC: ICandidateRepository, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC,Sender),
+  useFactory: (Offerrepo: OfferFirestoreRepository, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
   Inject: [OfferFirestoreRepository]
 }
 

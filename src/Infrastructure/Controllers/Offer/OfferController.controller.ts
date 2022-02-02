@@ -7,6 +7,9 @@ import { EliminatedOfferDTO } from './../../../Application/DTO/Offer/EliminatedO
 import { ReportOfferDTO } from '../../../Application/DTO/Offer/ReportOffer.dto';
 import { ICandidateRepository } from '../../../Application/Repositories/CandidateRepository';
 import { INotificationSender } from '../../../Application/Ports/INotificationSender';
+import { EmployerRepositoryService } from 'src/Infrastructure/Firestore/Employer/repository/repository.service';
+import { ApplyToOfferDTO } from '../../../Application/DTO/Application/ApplicationDTO.dto';
+import { LikeOfferDTO } from '../../../Application/DTO/Offer/LikeOfferDTO.dto';
 
 type ReportBody = {
   reason: string;
@@ -19,18 +22,20 @@ type ReactivateOfferBody = {
 
 @Controller('offer')
 export class OfferController {
-  private readonly offerApplicationService: OfferApplicationService;
-  private readonly Offerrepo: OfferFirestoreRepository;
-  private readonly CandidaterepoC: ICandidateRepository;
-  private readonly Sender: INotificationSender;
-  constructor(offerRepo: OfferFirestoreRepository) {
-    this.Offerrepo = offerRepo;
-    this.offerApplicationService = new OfferApplicationService(
-      this.Offerrepo,
-      this.CandidaterepoC,
-      this.Sender,
-    );
-  }
+    private readonly offerApplicationService: OfferApplicationService;
+    private readonly Offerrepo: OfferFirestoreRepository;
+    private readonly CandidaterepoC: ICandidateRepository;
+    private readonly Employerrepo: EmployerRepositoryService;
+    private readonly Sender: INotificationSender;
+    constructor(offerRepo: OfferFirestoreRepository){
+        this.Offerrepo = offerRepo;
+        this.offerApplicationService = 
+            new OfferApplicationService(
+                this.Offerrepo,
+                this.CandidaterepoC,
+                this.Employerrepo,
+                this.Sender);
+    }
 
   @Post()
   @HttpCode(201)

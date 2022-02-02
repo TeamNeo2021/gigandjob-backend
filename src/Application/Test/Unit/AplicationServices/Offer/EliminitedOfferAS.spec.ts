@@ -16,10 +16,12 @@ import {OfferApplicationService} from "../../../../ApplicationServices/Offer/Off
 import { EliminatedOfferDTO } from "../../../../DTO/Offer/EliminatedOfferDTO";
 import { MockSenderAdapter } from "src/Infrastructure/Memory/MorckSenderAdapter";
 import { InMemoryCandidateCommandRepository } from "src/Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
+import { MockEmployerRepo } from '../../../../../Infrastructure/Memory/MockEmployerRepo.repo';
 
 
 const MCandidateRepo = new InMemoryCandidateCommandRepository();
 const Msender = new MockSenderAdapter();
+const EMrepo = new MockEmployerRepo();
 
 const exampleOffer2 = new Offer(
   new OfferIdVO(randomUUID()),
@@ -48,7 +50,7 @@ const Orepo = new MockOfferRepo();
 
 
 function create_Service(repoO: IOfferRepository): OfferApplicationService {
-  const service = new OfferApplicationService(repoO, MCandidateRepo, Msender);
+  const service = new OfferApplicationService(repoO, MCandidateRepo, EMrepo, Msender);
   return service;
 }
 
