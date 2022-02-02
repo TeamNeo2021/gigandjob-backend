@@ -1,5 +1,6 @@
 import { CollectionReference } from "@google-cloud/firestore";
 import { Inject, Injectable } from "@nestjs/common";
+import { LikeOfferDTO } from "src/Application/DTO/Offer/LikeOfferDTO.dto";
 import { IOfferRepository } from "src/Application/Repositories/OfferRepository.repo";
 import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
