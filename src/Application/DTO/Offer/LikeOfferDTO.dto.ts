@@ -1,5 +1,5 @@
 
-class LikeOfferDTO{
+export class LikeOfferDTO{
 
     public id_candidate: string;
     public id_offer: string;
