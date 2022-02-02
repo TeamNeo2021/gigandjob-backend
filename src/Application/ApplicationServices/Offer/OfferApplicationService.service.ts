@@ -125,8 +125,7 @@ export class OfferApplicationService implements IApplicationService {
         }
 
         break;
-       }
-      
+       }      
 
       case LikeOfferDTO:
        {
