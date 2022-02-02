@@ -173,6 +173,7 @@ export class OfferApplicationService implements IApplicationService {
         let Offer_Suspended = await this.Offerrepo.load(
           new OfferIdVO(cmd.id_offer),
         );
+        console.log(Offer_Suspended);
         Offer_Suspended.SuspendOffer(false);
         try {
           this.Sender.send(
