@@ -29,10 +29,12 @@ import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
 import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
 import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
 import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
+import { EmployerRepository } from 'src/Application/Repositories/Employer/repository.interface';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
   private readonly CandidaterepoC: ICandidateRepository;
+  private readonly Employerrepo: EmployerRepository;
   private readonly Sender: INotificationSender;
 
   private readonly DB_error: Error = new Error('A database error has ocurred');
@@ -40,10 +42,12 @@ export class OfferApplicationService implements IApplicationService {
   constructor(
     Offerrepo: IOfferRepository,
     CandidaterepoC: ICandidateRepository,
+    Employerrepo: EmployerRepository,
     Sender: INotificationSender,
   ) {
     this.Offerrepo = Offerrepo;
     this.CandidaterepoC = CandidaterepoC;
+    this.Employerrepo = Employerrepo;
     this.Sender = Sender;
   }
 
@@ -102,6 +106,7 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(Offer_Eliminited);
         break;
       }
+      
       case ReportOfferDTO: {
         let cmd = command as ReportOfferDTO;
         const offer = await this.Offerrepo.load(new OfferIdVO(cmd.id));
@@ -109,7 +114,21 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(offer);
         break;
       }
-        case LikeOfferDTO:
+
+      case EliminateOfferFromEmployerEliminatedDTO:
+       {
+        const cmd: EliminateOfferFromEmployerEliminatedDTO =  < EliminateOfferFromEmployerEliminatedDTO> command;
+        const employer = await this.Employerrepo.get(cmd.id_employer);
+        for (let offer of employer.offers){         
+              offer.EliminateOffer();
+              await this.Offerrepo.save(offer);
+        }
+
+        break;
+       }
+      
+
+      case LikeOfferDTO:
        {
         const cmd: LikeOfferDTO =  < LikeOfferDTO> command;
         const offer = await this.Offerrepo.likeOffer(cmd);
