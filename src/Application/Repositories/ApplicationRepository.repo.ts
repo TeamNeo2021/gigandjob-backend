@@ -1,6 +1,6 @@
 export interface IApplicationRepository{ //todo Delete this, this goes in IOfferRepository
   
-    newApllication(new_application: ApplyToOfferDTO): Promise<void>;
+   // newApllication(new_application: ApplyToOfferDTO): Promise<void>;
 
     findById(id: string): Promise<ApplyToOfferDTO>;
 

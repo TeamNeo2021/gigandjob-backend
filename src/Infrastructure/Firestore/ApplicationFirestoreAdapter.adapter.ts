@@ -11,14 +11,14 @@ class ApplicationFirestoreAdapter implements IApplicationRepository{   //todo De
 
 
    
-    async newApllication(application: ApplyToOfferDTO): Promise<void> {
-       try {
-        let result = await this.collection.doc(application.applicationId).set(application);
-        console.log
-       } catch (error) {
+    // async newApllication(application: ApplyToOfferDTO): Promise<void> {
+    //    try {
+    //     let result = await this.collection.doc(application.applicationId).set(application);
+    //     console.log
+    //    } catch (error) {
            
-       }
-    }
+    //    }
+    // }
 
     async cancelApplication(application_id: string) {
         try {
