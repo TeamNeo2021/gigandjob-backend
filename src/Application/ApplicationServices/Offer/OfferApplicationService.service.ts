@@ -29,6 +29,8 @@ import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
 import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
 import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
 import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
+import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
+import { ApplyToOfferDTO } from 'src/Application/DTO/Application/ApplicationDTO.dto';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
@@ -109,15 +111,19 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(offer);
         break;
       }
-        case LikeOfferDTO:
-       {
-        const cmd: LikeOfferDTO =  < LikeOfferDTO> command;
+      case LikeOfferDTO: {
+        const cmd: LikeOfferDTO = <LikeOfferDTO>command;
         const offer = await this.Offerrepo.likeOffer(cmd);
-        console.log('Liked offer: ', cmd.id_offer, ' candidate: ', cmd.id_candidate);
+        console.log(
+          'Liked offer: ',
+          cmd.id_offer,
+          ' candidate: ',
+          cmd.id_candidate,
+        );
         //todo ver que se hace aqui
 
         break;
-       }
+      }
       case ApplyToOfferDTO:
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         const Oferta: Offer = await this.Offerrepo.load(
@@ -155,18 +161,16 @@ export class OfferApplicationService implements IApplicationService {
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.modify(Candidate.id, Candidate);
         break;
-        case CompletedOfferDTO:
-          const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
-          const Offer_Completed = await this.Offerrepo.load(
-            new OfferIdVO,
-          );
-          let applicationHired: ApplicantHired;
-          applicationHired.CandidateContract(Offer_Completed);
-          await this.Offerrepo.save(Offer_Completed);
-        break;      
+      case CompletedOfferDTO:
+        const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
+        const Offer_Completed = await this.Offerrepo.load(new OfferIdVO());
+        let applicationHired: ApplicantHired;
+        applicationHired.CandidateContract(Offer_Completed);
+        await this.Offerrepo.save(Offer_Completed);
+        break;
       //     break;
 
-      case SuspendOfferDTO:{
+      case SuspendOfferDTO: {
         let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
         let Offer_Suspended = await this.Offerrepo.load(
           new OfferIdVO(cmd.id_offer),
