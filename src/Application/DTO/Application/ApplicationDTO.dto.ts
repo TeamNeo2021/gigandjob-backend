@@ -1,5 +1,5 @@
 class ApplyToOfferDTO{
-    public  applicationId: string;
+    // public  applicationId: string;
     public offerId: string;
     public employerId : string;
     public candidateId: string;
@@ -9,9 +9,9 @@ class ApplyToOfferDTO{
     public description: string;
     public duration_days: number;
 
-    constructor( applicationData: any)
+    constructor( applicationData: any) 
 {
-    this.applicationId = applicationData.id;
+    // this.applicationId = applicationData.id;
     this.candidateId = applicationData.candidateId;
     this.offerId = applicationData.offerId;
     this.employerId = applicationData.employerId;

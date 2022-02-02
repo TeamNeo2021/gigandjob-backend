@@ -17,7 +17,7 @@ export class MeetingApplicationService implements IApplicationService {
   async Handle(command: any): Promise<void> {
     switch (command.constructor) {
       case AcceptMeeting:
-        //agendar en calendario
+       { //agendar en calendario
         const cmd: AcceptMeeting = <AcceptMeeting>command;
         const Mdto: MeetingDTO = await this.repository.getById(cmd.meetingId);
         const AMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
@@ -26,16 +26,18 @@ export class MeetingApplicationService implements IApplicationService {
           EntitiesFactory.fromMeetingToModifyMeetingDTO(AMeeting);
         this.repository.modifyMeeting(MMdto);
         break;
+      }
       case RejectMeeting:
-        //query meeting command.meetingId
+        {//query meeting command.meetingId
         const cmd2: AcceptMeeting = <AcceptMeeting>command;
-        const Mdto2: MeetingDTO = await this.repository.getById(cmd2.meetingId);
-        const RMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto2);
+        let Mdto: MeetingDTO = await this.repository.getById(cmd2.meetingId);
+        const RMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
         RMeeting.Reject();
         const MMdto2: ModifyMeetingDTO =
           EntitiesFactory.fromMeetingToModifyMeetingDTO(RMeeting);
         this.repository.modifyMeeting(MMdto2);
         break;
+      }
       default:
         throw new Error(
           `MeetingService: Command doesn't exist: ${command.constructor}`,
