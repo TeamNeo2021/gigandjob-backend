@@ -19,6 +19,8 @@ import { EmployerEliminated } from '../../DomainEvents/EmployerEvents/EmployerEl
 import { InvalidEmployerState } from './Errors/invalidEmployerState.error';
 import { EmployerSuspended } from '../../DomainEvents/EmployerEvents/EmployerSuspended';
 import { Offer } from '../Offer/Offer';
+import { InvalidEmployerAction } from './Errors/InvalidEmployerAction.error';
+import { EmployerStateModified } from 'src/Dominio/DomainEvents/EmployerEvents/EmployerStateModified';
 
 export class Employer extends AggregateRoot implements IInternalEventHandler {
   private _employerId: EmployerIdVO;
@@ -246,6 +248,31 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     console.log('Eliminar Empleador');
     this.Apply(new EmployerEliminated(this._employerId, state));
     return this;
+  }
+
+  public reactivateThisEmployer(){
+    if (!(this.isSuspended())){
+        throw InvalidEmployerAction.notSuspended();          
+    }
+    if (this.isActive()){
+        throw InvalidEmployerAction.alreadyActive();
+    }
+    if (this.isEliminated()){
+        throw InvalidEmployerAction.alreadyEliminated();
+    }
+    console.log('Reactivating Employer #: ', this._employerId._guid_value, '\nName: ', this._name.value_name_employer);
+    this.Apply(new EmployerStateModified('Active'))
+}
+
+  //The following may be useless, but is for support ubiquitous language
+  private isEliminated(): boolean{
+      return this._state.value_state == EmployerStates.Eliminated;
+  }
+  private isSuspended(): boolean{
+      return this._state.value_state == EmployerStates.Suspended;
+  }
+  private isActive(): boolean{
+      return this._state.value_state == EmployerStates.Active;
   }
 
   //Getters y setters

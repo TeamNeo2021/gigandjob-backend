@@ -77,6 +77,7 @@ export class CandidateApplicationService implements IApplicationService{
                 const id = (command as EliminateCandidateDTO).id
 
                 await this.repository.eliminate(id)
+                
                 break;
             }
                 
