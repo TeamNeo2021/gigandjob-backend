@@ -1,7 +1,9 @@
 import { CollectionReference } from "@google-cloud/firestore";
-import { Inject, Injectable } from "@nestjs/common";
+import { applyDecorators, Inject, Injectable } from "@nestjs/common";
 import { LikeOfferDTO } from "src/Application/DTO/Offer/LikeOfferDTO.dto";
 import { IOfferRepository } from "src/Application/Repositories/OfferRepository.repo";
+import { Application } from "src/Dominio/AggRoots/Offer/Application/Application";
+import { ApplicationStates } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates";
 import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
@@ -13,6 +15,16 @@ import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRepo
 import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 
+type ApplicationEntity = { 
+    id: string, 
+    state: string, 
+    candidateId: string, 
+    previous_state: string, 
+    budget: number, 
+    description: string, 
+    time: number 
+}
+
 type OfferEntity = {
     id: string,
     state: string,
@@ -22,7 +34,8 @@ type OfferEntity = {
     sector: string,
     budget: number,
     description: string,
-    reports: readonly { reporterId: string, reason: string }[]
+    reports: readonly { reporterId: string, reason: string }[],
+    applications: readonly ApplicationEntity[]
 }
 
 @Injectable()
@@ -39,7 +52,16 @@ export class OfferFirestoreRepository implements IOfferRepository{
             sector: offer._Sector.value.toString(),
             budget: offer._Budget.value,
             description: offer._Description.value,
-            reports: offer.Reports.map(r => ({ reporterId: r.reporterId, reason: r.reason}))
+            reports: offer.Reports.map(r => ({ reporterId: r.reporterId, reason: r.reason})),
+            applications: offer._application.map(app => ({
+                id: app.guid.value,
+                description: app.getDescription().value,
+                candidateId: app.getCandidateId().value,
+                budget: app.getBudget.value,
+                time: app.getTime().days,
+                previous_state: ApplicationStates[app.getPreviousState()],
+                state: ApplicationStates[app.getState()]
+            }))
         })
     }
     async load(id: OfferIdVO): Promise<Offer> {
@@ -48,7 +70,7 @@ export class OfferFirestoreRepository implements IOfferRepository{
 
         if (!offerResult) return null
 
-        return new Offer(
+        const offer = new Offer(
             new OfferIdVO(offerResult.id),
             new OfferStateVO(OfferStatesEnum[offerResult.state]),
             PublicationDateVO.Unsafe(offerResult.publicationDate),
@@ -59,6 +81,7 @@ export class OfferFirestoreRepository implements IOfferRepository{
             DescriptionVO.Unsafe(offerResult.description),
             offerResult.reports?.map(raw => OfferReportVO.Unsafe(raw.reporterId, raw.reason)) || []
         )
+        return offer
     }
 
     async exists(id: OfferIdVO): Promise<boolean> {

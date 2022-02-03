@@ -100,4 +100,8 @@ export class Application extends Entity<ApplicationId>{
     public getTime(): ApplicationTime{
         return this.time;
     }
+
+    public getDescription() {
+        return this.description
+    }
 }

@@ -5,10 +5,10 @@ import { EmployerPublisher as Contract } from "src/Application/Publisher/Employe
 
 @Injectable()
 export class EmployerPublisherService implements Contract {
-    constructor(private eventPublisher: EventBus<EmployerPublisherEvent>) {}
+    constructor(private eventBus: EventBus<EmployerPublisherEvent>) {}
 
     publish(evts: EmployerPublisherEvent[]) {
         console.log(evts)
-        this.eventPublisher.publishAll(evts)
+        this.eventBus.publishAll(evts)
     }
 }

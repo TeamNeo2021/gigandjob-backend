@@ -11,6 +11,8 @@ describe('Register Employer', () => {
                   {
                       get: getMockFn,
                       getAll: getAllMockFn,
+                      save: jest.fn(),
+                      eliminate: jest.fn()
                   },
                   {
                       publish: publishMockFn
