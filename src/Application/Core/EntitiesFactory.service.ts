@@ -75,10 +75,10 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
       //FROM ENTITY TO DTO
     
       static fromMeetingLocationVOToLocationDTO(
-        MLVO: MeetingLocationVO,
+        meetingLocation: MeetingLocationVO,
       ): LocationDTO {
-        const LDTO = new LocationDTO(MLVO.latitude, MLVO.longitude);
-        return LDTO;
+        const locationDTO = new LocationDTO(meetingLocation);
+        return locationDTO;
       }
 
 }
