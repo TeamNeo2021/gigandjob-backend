@@ -14,7 +14,7 @@ import { EmployerPublisherService } from './Infrastructure/Event/Employer/employ
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter.';
+import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter.';
 import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
 import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
@@ -30,8 +30,8 @@ const employerServiceProvider = {
 }
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
-  useFactory: (Offerrepo: OfferFirestoreRepository, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
-  Inject: [OfferFirestoreRepository]
+  useFactory: (Offerrepo: OfferFirestoreAdapter, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
+  Inject: [OfferFirestoreAdapter]
 }
 
 const meetingAdapterProvider = {
@@ -78,7 +78,7 @@ const meetingAdapterProvider = {
     MeetingApplicationService,
     MeetingFirestoreAdapter,
     OfferApplicationService,
-    OfferFirestoreRepository,
+    OfferFirestoreAdapter,
     EmployerRepositoryService,
     EmployerPublisherService,
     EmployerEventHandler,

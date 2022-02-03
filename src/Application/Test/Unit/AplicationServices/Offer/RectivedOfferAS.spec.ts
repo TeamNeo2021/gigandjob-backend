@@ -2,7 +2,7 @@ import { MockOfferRepo } from '../../../../../Infrastructure/Memory/MockOfferRep
 import { Offer } from '../../../../../Dominio/AggRoots/Offer/Offer';
 import { BudgetVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
 import { DescriptionVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
-import { DirectionVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { OfferLocationVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import { OfferIdVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { PublicationDateVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
@@ -29,7 +29,7 @@ const exampleOffer2 = new Offer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(0),
-  DirectionVO.Create('direction'),
+  OfferLocationVO.Create('direction'),
   new SectorVO(Sectors.Laws),
   BudgetVO.Create(400),
   DescriptionVO.Create('Oferta de prueba'),
@@ -40,7 +40,7 @@ const exampleOffer3 = new Offer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(0),
-  DirectionVO.Create('direction'),
+  OfferLocationVO.Create('direction'),
   new SectorVO(Sectors.Laws),
   BudgetVO.Create(400),
   DescriptionVO.Create('Oferta de prueba'),
@@ -57,14 +57,14 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
 describe('Reactivar una oferta', () => {
   it('debe tener éxito al reactivar una oferta cuando esta suspendida', async () => {
     await Orepo.save(exampleOffer2);
-    let exampleOffer: Offer = await Orepo.load(
+    let exampleOffer: Offer = await Orepo.getOfferById(
       new OfferIdVO(exampleOffer2._Id.value),
     );
     exampleOffer.SuspendOffer(false);
     let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
     let OfferService = create_Service(Orepo);
     OfferService.Handle(ExCommand);
-    let oferReactived: Offer = await Orepo.load(exampleOffer._Id);
+    let oferReactived: Offer = await Orepo.getOfferById(exampleOffer._Id);
     expect(
       () =>
         oferReactived._State.state.toString() ==
@@ -73,7 +73,7 @@ describe('Reactivar una oferta', () => {
   });
   it('no debe tener éxito cuando una oferta no esta suspendida', async () => {
     await Orepo.save(exampleOffer3);
-    let exampleOffer: Offer = await Orepo.load(
+    let exampleOffer: Offer = await Orepo.getOfferById(
       new OfferIdVO(exampleOffer3._Id.value),
     );
     let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
@@ -86,7 +86,7 @@ describe('Reactivar una oferta', () => {
   });
   it('no debe tener éxito cuando una oferta esta eliminada', async () => {
     await Orepo.save(exampleOffer3);
-    let exampleOffer: Offer = await Orepo.load(
+    let exampleOffer: Offer = await Orepo.getOfferById(
       new OfferIdVO(exampleOffer3._Id.value),
     );
     exampleOffer.EliminateOffer();

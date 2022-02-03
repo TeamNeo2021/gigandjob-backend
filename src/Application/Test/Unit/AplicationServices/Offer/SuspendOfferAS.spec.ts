@@ -2,7 +2,7 @@ import { MockOfferRepo } from '../../../../../Infrastructure/Memory/MockOfferRep
 import { Offer } from '../../../../../Dominio/AggRoots/Offer/Offer';
 import { BudgetVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
 import { DescriptionVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
-import { DirectionVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { OfferLocationVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import { OfferIdVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 import { PublicationDateVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
@@ -29,7 +29,7 @@ const FirstExample = new Offer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(3),
-  DirectionVO.Create('Tucacas'),
+  OfferLocationVO.Create('Tucacas'),
   new SectorVO(Sectors.Technology),
   BudgetVO.Create(666),
   DescriptionVO.Create('Oferta de prueba11'),
@@ -40,7 +40,7 @@ const SecondExample = new Offer(
   new OfferStateVO(OfferStatesEnum.Closed),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(3),
-  DirectionVO.Create('direction'),
+  OfferLocationVO.Create('direction'),
   new SectorVO(Sectors.Laws),
   BudgetVO.Create(450),
   DescriptionVO.Create('Oferta de prueba2'),
@@ -58,13 +58,13 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
 describe('Suspender una oferta', () => {
   it('debe tener éxito al suspender una oferta cuando esta activa', async () => {
     await OfferRepo.save(FirstExample);
-    let exampleOffer: Offer = await OfferRepo.load(
+    let exampleOffer: Offer = await OfferRepo.getOfferById(
       new OfferIdVO(FirstExample._Id.value),
     );
     let ExCommand = new SuspendOfferDTO((await exampleOffer)._Id.value);
     let OfferService = create_Service(OfferRepo);
     OfferService.Handle(ExCommand);
-    let suspendedOffer: Offer = await OfferRepo.load(exampleOffer._Id);
+    let suspendedOffer: Offer = await OfferRepo.getOfferById(exampleOffer._Id);
     expect(
       () =>
       suspendedOffer._State.state.toString() ==
@@ -73,7 +73,7 @@ describe('Suspender una oferta', () => {
   });
   it('no debe tener éxito cuando una oferta esta cerrada', async () => {
     await OfferRepo.save(SecondExample);
-    let exampleOffer: Offer = await OfferRepo.load(
+    let exampleOffer: Offer = await OfferRepo.getOfferById(
       new OfferIdVO(SecondExample._Id.value),
     );
     exampleOffer._State.state = OfferStatesEnum.Closed;

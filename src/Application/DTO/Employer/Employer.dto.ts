@@ -1,13 +1,16 @@
 
 class EmployerDTO{
-    public employerId: String;
-    public name: String;
-    public description: String;
-    public state: String;
+    public employerId: string;
+    public name: string;
+    public description: string;
+    public state: string;
     public location: LocationDTO;
-    public rif: String;
-    public phone: String;
-    public mail: String;
+    public rif: string;
+    public phone: string;
+    public mail: string;
+    public comDesignation: string;
+    public offers : [];
+
   //  public comDesignation: EmployerComercialDesignationVO;
 
 	constructor(
@@ -21,5 +24,7 @@ class EmployerDTO{
     this.rif = employerData.rif;
     this.phone = employerData.phone;
     this.mail = employerData.mail;
+    this.comDesignation = employerData.comDesignation;
+    this.offers = employerData.offers;
 	}
 }

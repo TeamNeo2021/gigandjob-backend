@@ -2,7 +2,7 @@ import { OfferStatesEnum, OfferStateVO } from "../../AggRoots/Offer/ValueObjects
 import { Offer } from "../../AggRoots/Offer/Offer";
 import { PublicationDateVO } from "../../AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { Sectors, SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
@@ -43,7 +43,7 @@ function create_exampleOffer(): Offer{
         new OfferStateVO(OfferStatesEnum.Active),
         PublicationDateVO.Create(new Date('1999-05-13')),
         RatingVO.Create(5),
-        DirectionVO.Create("AV Francisco de Miranda"),
+        new OfferLocationVO(24,150),
         new SectorVO(Sectors.Technology),
         BudgetVO.Create(1500),
         DescriptionVO.Create("descripcion de prueba"));

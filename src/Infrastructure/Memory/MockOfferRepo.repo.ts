@@ -1,27 +1,31 @@
+import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
 import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
+import { OfferDTO } from 'src/Application/DTO/Offer/OfferDTO';
 import { IOfferRepository } from 'src/Application/Repositories/OfferRepository.repo';
 import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 
 export class MockOfferRepo implements IOfferRepository {
-  
-  getAll(): Promise<Offer[]> {
+
+  getAll(): Promise<OfferDTO[]> {
     throw new Error('Method not implemented.');
   }
-  private Offers: Offer[] = [];
 
-  async save(offer: Offer): Promise<void> {
+  private Offers: OfferDTO[] = [];
+
+  async save(offer: OfferDTO): Promise<void> {    
     this.Offers.push(offer);
   }
-  async load(id: OfferIdVO): Promise<Offer> {
-    console.log('Me llegó este id:' + id);
+  async getOfferById(id_offer: string): Promise<OfferDTO> {
+    console.log('Me llegó este id:' + id_offer);
     console.log('Mi longitud es:' + this.Offers.length);
-    return this.Offers.find((offer) => offer._Id._value == id._value);
+    return this.Offers.find((offer) => offer.OfferId == id_offer);
   }
-  exists(id: OfferIdVO): Promise<boolean> {
+  exists(id: String): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
   likeOffer(data: LikeOfferDTO) {
     throw new Error('Method not implemented.');
   }
 }
+

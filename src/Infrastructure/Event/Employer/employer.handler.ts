@@ -11,16 +11,8 @@ export class EmployerEventHandler implements IEventHandler<EmployerPublisherEven
         switch (tEvent.ident) {
             case 'EmployerRegistered': 
             let event = tEvent.body as EmployerRegistered
-            this.repository.insert(
-                event.id.guid_value,
-                event.name.value_name_employer,
-                event.description.value_employer_description.valueOf(),
-                event.location.value_employer_location.valueOf(),
-                event.state.value_state.toString(),
-                event.rif.value_employer_rif.valueOf(),
-                event.phone.value_employer_phone.valueOf(),
-                event.mail.value_employer_mail,
-                event.comDesignation.value_comercial_designation
+            this.repository.save(
+              new EmployerDTO(event) //TODO REVISAR ESTO
             )
             .then(() => console.log('Empleado registrado'))
         }

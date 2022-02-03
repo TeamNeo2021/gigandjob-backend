@@ -1,19 +1,48 @@
 import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate";
+import { CandidateBirthDateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
+import { CandidateEmailVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateEmailVo";
+import { CandidateFullNameVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateFullNameVo";
 import { CandidateIdVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateIdVo";
+import { CandidateLocationVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateLocationVO";
+import { CandidatePhoneVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidatePhoneVo";
+import { CandidateStatesEnum, CandidateStateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
 import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
+import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
+import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
 import { EmployerIdVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO";
+import { EmployerLocationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO";
+import { EmployerMailVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo";
+import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo";
+import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
+import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO";
+import { EmployerStates, EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
 import { Meeting } from "src/Dominio/AggRoots/Meeting/Meeting";
 import { MeetingDateVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDateVO";
 import { MeetingDescriptionVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingDescriptionVO";
 import { MeetingIDVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingIDVO";
 import { MeetingLocationVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingLocationVO";
 import { MeetingStates, MeetingStateVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO";
+import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
+import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
+import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
+import { OfferLocationVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferIdVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
+import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
+import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
+import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
+import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
+import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
+import { OfferDTO } from "../DTO/Offer/OfferDTO";
 
 export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and create a FromEntityToDTO
 
   
-
+     /**
+       * Returns a Meeting given a Meeting DTO
+       * @param {MeetingDTO} Mdto
+       * @returns {Meeting}
+       */
     static fromMeetingDtotoMeeting(Mdto: MeetingDTO): Meeting {
         const meeting: Meeting = new Meeting(
           new MeetingIDVO(Mdto.id),
@@ -28,38 +57,120 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
         );
         return meeting;
       }
+
+      /**
+       * Returns a Meeting DTO given a Meeting 
+       * @param {Meeting} meeting
+       * @returns {MeetingDTO}
+       */
+
+      static fromMeetingToMeetingDTO(meeting: Meeting): MeetingDTO {
+        const meetingDTO = new MeetingDTO(
+          {
+            id : meeting.id._id,
+            state : meeting.state.current,
+            description : meeting.description.value,
+            date : meeting.date.value,
+            location : {
+              latitude : meeting.location.latitude,
+              longitude: meeting.location.longitude
+            },
+            employer : this.fromEmployerToEmployerDTO(meeting.employer),
+            candidate : this.fromCandidateToCandidateDTO(meeting.candidate),
+          }
+        );
+        return meetingDTO;
+
+      }
+
+
+
     
-      /*Estos constructores vacíos son temporales, el servicio puede funcionar de esta forma
-      ya que no necesita los datos del employer ni del candidate perteneciente a la oferta
-      en ningun momento, sin embargo buscaremos mas adelante buscaremos una solción mas segura*/
-      static fromEmployerDtoToEmployer(Edto: EmployerDTO): Employer {
-        const employer: Employer = new Employer(
-          new EmployerIdVO(),
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
+         /**
+       * Returns an Employer instance given an EmployerDTO
+       * @param {EmployerDTO} employerDTO
+       * @returns {Employer}
+       */ 
+    
+      static fromEmployerDtoToEmployer(employerDTO: CreateEmployerDTO): Employer {
+        const employer: Employer =  Employer.RegisterEmployer(
+           EmployerNameVO.Unsafe(employerDTO.name),
+           EmployerDescriptionVO.Unsafe (employerDTO.description), 
+           new EmployerStateVO (EmployerStates[employerDTO.state]),
+           new EmployerLocationVO (employerDTO.location.latitude, employerDTO.location.longitude),
+           EmployerRifVO.Unsafe (employerDTO.rif),
+           EmployerPhoneVO.Unsafe (employerDTO.phone),
+           EmployerMailVO.Unsafe( employerDTO.mail),
+           EmployerComercialDesignationVO.Unsafe (employerDTO.comDesignation)
         );
         return employer;
       }
-    
-      static fromCandidateDtoToCanditate(Cdto: CandidateDTO): Candidate {
+
+    /**
+       * Returns an EmployerDTO given an Employer instance
+       * @param {Employer} employer
+       * @returns {EmployerDTO}
+       */
+
+      static fromEmployerToEmployerDTO(employer: Employer): EmployerDTO{
+        const employerDTO: EmployerDTO =  new EmployerDTO(
+          {
+              employerId : employer.employerId,
+              name : employer.name,
+              description : employer.description,
+              state : employer.state,
+              location : employer.location,
+              rif : employer.rif,
+              phone : employer.phone,
+              mail : employer.mail,
+              comDesignation : employer.comDesignation,
+              offers : [],
+          }
+        );
+        return employerDTO;
+      }
+
+
+          /**
+       * Returns an CandidateDTO given an Candidate instance
+       * @param {Candidate} employer
+       * @returns {CandidateDTO}
+       */
+      static fromCandidateToCandidateDTO(candidate: Candidate): CandidateDTO{
+        const candidateDTO: CandidateDTO =  new CandidateDTO(
+          {
+              candidateId : candidate.Id,
+              name : candidate.name,
+              state : candidate.state,
+              location : candidate.location,
+              phone : candidate.phone,
+              mail : candidate.email
+          }
+        );
+        return candidateDTO;
+      }
+
+         /**
+       * Returns a Candidate given an Candidate DTO
+       * @param {CandidateDTO} candidateDto
+       * @returns {Candidate}
+       */
+      static fromCandidateDtoToCanditate(candidateDto: CandidateDTO): Candidate {
         const candidate: Candidate = new Candidate(
-          new CandidateIdVo(Cdto.id),
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
+          new CandidateIdVo(candidateDto.candidateId),
+          new CandidateStateVo(CandidateStatesEnum[candidateDto.state]),
+          new CandidateFullNameVo(candidateDto.name.split(" ")[0],candidateDto.name.split(" ")[1]),
+          new CandidatePhoneVo(candidateDto.phone.toString().slice(0,4), candidateDto.phone.toString().slice(4)),
+          new CandidateEmailVo(candidateDto.email),
+          new CandidateBirthDateVo(candidateDto.birthDate),
+          new CandidateLocationVo(candidateDto.location.latitude, candidateDto.location.longitude),
+
         );
         return candidate;
       }
     
+
+      
       static fromMeetingToModifyMeetingDTO(Meeting: Meeting): ModifyMeetingDTO {
         const MMDto: ModifyMeetingDTO = new ModifyMeetingDTO(
           Meeting.id._id as string, //todo esto debe ser refactorizado
@@ -71,6 +182,8 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
         return;
       }
 
+      
+
 
       //FROM ENTITY TO DTO
     
@@ -80,5 +193,72 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
         const locationDTO = new LocationDTO(meetingLocation);
         return locationDTO;
       }
+
+
+      //OFFER 
+ 
+/**
+       * Use it when instantiating an Offer from an Response
+       * 
+       * @param OfferDTO 
+       * @returns Offer
+       */
+      static fromOfferDTOtoOffer(OfferDTO: OfferDTO): Offer {
+        const offer: Offer = new Offer(
+          new OfferIdVO(OfferDTO.OfferId),
+          new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
+          PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
+          RatingVO.Unsafe(OfferDTO.Rating),
+          new OfferLocationVO(OfferDTO.Direction.latitude, OfferDTO.Direction.longitude),
+          new SectorVO(Sectors[OfferDTO.Sector]),
+          BudgetVO.Unsafe(OfferDTO.Budget),
+          DescriptionVO.Unsafe(OfferDTO.Description),
+        );
+        return offer;
+      }
+
+      /**
+       * Use it when creating a new Offer
+       * 
+       * @param createOfferDTO 
+       * @returns Offer
+       */
+      static fromCreateOfferDTOtoOffer(OfferDTO: createOfferDTO): Offer {
+        const offer: Offer =  Offer.CreateOffer(
+          // new OfferIdVO(OfferDTO.OfferId),
+          new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
+          PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
+          RatingVO.Unsafe(OfferDTO.Rating),
+          new OfferLocationVO(OfferDTO.Direction.latitude, OfferDTO.Direction.longitude),
+          new SectorVO(Sectors[OfferDTO.Sector]),
+          BudgetVO.Unsafe(OfferDTO.Budget),
+          DescriptionVO.Unsafe(OfferDTO.Description),
+        );
+        return offer;
+      }
+
+         /**
+       * Use it to translate from a Offer to an OfferDTO to save it in a DB or to send it in a request
+       * 
+       * @param Offer
+       * @returns OfferDTO
+       */
+
+      static fromOfferToOfferDTO(offer: Offer): OfferDTO {
+        const newOfferDto: OfferDTO = new OfferDTO({
+          OfferId: offer._Id._value,
+          State:  offer._State.state.toString(),
+          PublicationDate: offer._PublicationDate.value,
+          Rating: offer._Rating.value,
+          Direction: offer._Direction,
+          Sector:  offer._Sector.value.toString(),
+          Budget:   offer._Budget.value,
+          Description: offer._Description.value,
+
+        }
+        );
+        return newOfferDto;
+      }
+
 
 }

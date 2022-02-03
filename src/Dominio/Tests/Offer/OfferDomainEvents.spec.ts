@@ -1,4 +1,4 @@
-import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { Offer } from "../../AggRoots/Offer/Offer";
 import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
@@ -16,7 +16,7 @@ const exampleOffer = Offer.CreateOffer(
     new OfferStateVO(OfferStatesEnum.Active),
     PublicationDateVO.Create(new Date('1999-05-13')),
     RatingVO.Create(5),
-    DirectionVO.Create("AV Francisco de Miranda"),
+    new OfferLocationVO(24,150),
     new SectorVO(Sectors.Technology),
     BudgetVO.Create(1500),
     DescriptionVO.Create("descripcion de prueba"));
@@ -25,7 +25,7 @@ const exampleOfferReactived = Offer.CreateOffer(
         new OfferStateVO(OfferStatesEnum.Active),
         PublicationDateVO.Create(new Date('1999-05-13')),
         RatingVO.Create(5),
-        DirectionVO.Create("AV Francisco de Miranda"),
+        new OfferLocationVO(24,150),
         new SectorVO(Sectors.Technology),
         BudgetVO.Create(1500),
         DescriptionVO.Create("descripcion de prueba"));
@@ -34,7 +34,7 @@ const exampleOfferEliminited = Offer.CreateOffer(
         new OfferStateVO(OfferStatesEnum.Active),
         PublicationDateVO.Create(new Date('1999-05-13')),
         RatingVO.Create(5),
-        DirectionVO.Create("AV Francisco de Miranda"),
+        new OfferLocationVO(24,150),
         new SectorVO(Sectors.Technology),
         BudgetVO.Create(1500),
         DescriptionVO.Create("descripcion de prueba"));
@@ -53,7 +53,7 @@ describe("modificar una oferta", () => {
         exampleOffer.ModifyOffer(
             PublicationDateVO.Create(new Date('2000-01-31')),
             RatingVO.Create(7),
-            DirectionVO.Create("AV Romulo Gallegos"),
+            new OfferLocationVO(50,150),
             new SectorVO(Sectors.Technology),
             BudgetVO.Create(2000),
             DescriptionVO.Create("descripcion de prueba"));

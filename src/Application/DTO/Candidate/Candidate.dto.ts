@@ -1,15 +1,15 @@
 class CandidateDTO {
-  public id: string;
-  public state: String;
-  public name: String;
+  public candidateId: string;
+  public state: string;
+  public name: string;
 
-  public phone: String;
-  public email: String;
+  public phone: string;
+  public email: string;
   public birthDate: Date;
   public location: LocationDTO;
 
   constructor(candidateData: any) {
-    this.id = candidateData.id;
+    this.candidateId = candidateData.id;
     this.state = candidateData.state;
     this.name = candidateData.name;
     this.phone = candidateData.phone;

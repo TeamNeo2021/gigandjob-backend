@@ -10,7 +10,7 @@ import {
 } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo';
 import { PublicationDateVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
-import { DirectionVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { OfferLocationVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import {
   Sectors,
   SectorVO,
@@ -48,6 +48,7 @@ import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/Em
 import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { EmployerRepository } from '../../Repositories/Employer/repository.interface';
 import { MockEmployerRepo } from '../../../Infrastructure/Memory/MockEmployerRepo.repo';
+import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -62,7 +63,7 @@ const exampleOffer = new Offer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(0),
-  DirectionVO.Create('direction'),
+  new OfferLocationVO(50,150),
   new SectorVO(Sectors.Laws),
   BudgetVO.Create(400),
   DescriptionVO.Create('Oferta de prueba'),
@@ -81,7 +82,7 @@ const exampleEmployer: Employer = Employer.RegisterEmployer(
   EmployerNameVO.Create('Soluciones de Prueba'),
   EmployerDescriptionVO.Create('La descripcion es una prueba'),
   new EmployerStateVO(EmployerStates.Active),
-  EmployerLocationVO.Create('Av los Cedros'),
+  new EmployerLocationVO(24,100),
   EmployerRifVO.Create('J-1236782'),
   EmployerPhoneVO.Create('+584124578457'),
   EmployerMailVO.Create('prueba@test.com'),
@@ -113,12 +114,14 @@ function create_Service(
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     MCCrepo.save(exampleCandidate);
-    await Orepo.save(exampleOffer); 
+    let newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer)
+    await Orepo.save(newOffer); 
     let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     ApplyService.Handle(ExCommand);
-    let new_offer: Offer = await Orepo.load(exampleOffer._Id);
+    let new_offer = await Orepo.getOfferById(newOffer.OfferId);
+    let new_test_offer = EntitiesFactory.fromOfferDTOtoOffer(new_offer);
     expect(
-      () => new_offer._application[0].getCandidateId() == exampleCandidate.Id,
+      () => new_test_offer._application[0].getCandidateId() == exampleCandidate.Id,
     );
   });
   it('Should fail when using an Invalid command', async () => {

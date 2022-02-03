@@ -3,7 +3,7 @@ import { IOfferRepository } from "../../../Repositories/OfferRepository.repo";
 import { Offer } from "../../../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { OfferIdVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
@@ -26,13 +26,12 @@ const Msender = new MockSenderAdapter();
 const EMrepo = new MockEmployerRepo();
 
 class mockedOfferRepo implements IOfferRepository {
-
   private mockedState: OfferStateVO = new OfferStateVO(OfferStatesEnum.Active);
   private mockedPublicationDate: PublicationDateVO = PublicationDateVO.Create(
     new Date(),
   );
   private mockedRating: RatingVO = RatingVO.Create(0);
-  private mockedDirection: DirectionVO = DirectionVO.Create(
+  private mockedDirection: OfferLocationVO = OfferLocationVO.Create(
     'Lorem ipsum dolor sit amet.',
   );
   private mockedSector: SectorVO = new SectorVO(Sectors.Laws);
@@ -40,6 +39,7 @@ class mockedOfferRepo implements IOfferRepository {
   private mockedDescription: DescriptionVO = DescriptionVO.Create(
     'Lorem ipsum dolor sit amet.',
   );
+
   getAll(): Promise<Offer[]> {
     throw new Error("Method not implemented.");
   }
@@ -52,7 +52,7 @@ class mockedOfferRepo implements IOfferRepository {
   async save(offer: Offer): Promise<void> {
     mockedDB.push(offer);
   }
-  async load(id: OfferIdVO): Promise<Offer> {
+  async getOfferById(id: OfferIdVO): Promise<Offer> {
     let returned_offer: Offer = new Offer(
       id,
       this.mockedState,
@@ -74,7 +74,7 @@ const exampleOffer = Offer.CreateOffer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date('1999-05-13')),
   RatingVO.Create(5),
-  DirectionVO.Create('AV Francisco de Miranda'),
+  OfferLocationVO.Create('AV Francisco de Miranda'),
   new SectorVO(Sectors.Technology),
   BudgetVO.Create(1500),
   DescriptionVO.Create('descripcion de prueba'),

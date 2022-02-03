@@ -10,8 +10,9 @@ import { CouldNotGetAllEmployersError } from "src/Application/Repositories/Emplo
 import { EmployerRepository } from "src/Application/Repositories/Employer/repository.interface";
 import { EmployerApplicationService as Contract  } from "./service.interface";
 import { EmployerTransactionService } from "./transaction.interface";
-import { ReactivateEmployerDTO } from "src/Application/DTO/ReactivateEmployer.dto";
-import { EliminateEmployerDTO } from "src/Application/DTO/EliminateEmployer.dto";
+import { ReactivateEmployerDTO } from "src/Application/DTO/Employer/ReactivateEmployer.dto";
+import { EliminateEmployerDTO } from "src/Application/DTO/Employer/EliminateEmployer.dto";
+import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
 
 export class EmployerApplicationService implements Contract {
     transactionService: EmployerTransactionService
@@ -31,7 +32,7 @@ export class EmployerApplicationService implements Contract {
     async Handle(command: any): Promise<void> {
         switch (command.constructor){
 
-            case ReactivateEmployerDTO: {
+            /*case ReactivateEmployerDTO: {
                 const id = (command as ReactivateEmployerDTO).id,
                       employer = await this.repository.get(id)
                     
@@ -39,6 +40,18 @@ export class EmployerApplicationService implements Contract {
 
                 employer.reactivateThisEmployer()
                 await this.repository.save(employer)
+                break;
+            }*/
+
+            case ReactivateEmployerDTO:{
+                let cmd: ReactivateEmployerDTO = <ReactivateEmployerDTO> command;
+                let employerReactivated = await this.repository.get(cmd.id)
+
+                if (!employerReactivated) throw new Error //CouldNotFindEmployerError(employer.employerId)
+
+                let newEmployerReactivated = EntitiesFactory.fromEmployerDtoToEmployer(employerReactivated);
+                newEmployerReactivated.reactivateThisEmployer()
+                await this.repository.save(EntitiesFactory.fromEmployerToEmployerDTO(newEmployerReactivated))
                 break;
             }
 

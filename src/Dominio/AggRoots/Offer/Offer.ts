@@ -1,7 +1,7 @@
 import { AggregateRoot } from '../AggregateRoot';
 import { OfferIdVO } from './ValueObjects/OfferIdVO';
 import { BudgetVO } from './ValueObjects/OfferBudgetVO';
-import { DirectionVO } from './ValueObjects/OfferDirectionVO';
+
 import { DescriptionVO } from './ValueObjects/OfferDescriptionVO';
 import { RatingVO } from './ValueObjects/OfferRatingVO';
 import { OfferCreated } from '../../DomainEvents/OfferEvents/OfferCreated';
@@ -27,6 +27,7 @@ import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReporte
 import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
 import { OfferReportVO } from './ValueObjects/OfferReportVO';
 import { ApplicationEliminated } from 'src/Dominio/DomainEvents/ApplicationEvents/ApplicationEliminated';
+import { OfferLocationVO } from './ValueObjects/OfferDirectionVO';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -35,7 +36,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   private Before_State: OfferStateVO;
   private PublicationDate: PublicationDateVO;
   private Rating: RatingVO;
-  private Direction: DirectionVO;
+  private Direction: OfferLocationVO;
   private Sector: SectorVO;
   private Budget: BudgetVO;
   private Description: DescriptionVO;
@@ -47,7 +48,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     state: OfferStateVO,
     publicationDate: PublicationDateVO,
     rating: RatingVO,
-    direction: DirectionVO,
+    direction: OfferLocationVO,
     sector: SectorVO,
     budget: BudgetVO,
     description: DescriptionVO,
@@ -202,7 +203,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   public ModifyOffer(
     publicationDate: PublicationDateVO,
     rating: RatingVO,
-    direction: DirectionVO,
+    direction: OfferLocationVO,
     sector: SectorVO,
     budget: BudgetVO,
     description: DescriptionVO,
@@ -259,7 +260,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     State: OfferStateVO,
     PublicationDate: PublicationDateVO,
     Rating: RatingVO,
-    Direction: DirectionVO,
+    Direction: OfferLocationVO,
     Sector: SectorVO,
     Budget: BudgetVO,
     Description: DescriptionVO,
@@ -324,10 +325,10 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     this.Rating = value;
   }
 
-  public get _Direction(): DirectionVO {
+  public get _Direction(): OfferLocationVO {
     return this.Direction;
   }
-  public set _Direction(value: DirectionVO) {
+  public set _Direction(value: OfferLocationVO) {
     this.Direction = value;
   }
 

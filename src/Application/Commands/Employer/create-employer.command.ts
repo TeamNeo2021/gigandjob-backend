@@ -14,7 +14,8 @@ export class CreateEmployerCommand implements EmployerCommand<void> {
     constructor(
         private name: string,
         private description: string,
-        private location: string,
+        private latitude: Number,
+        private longitude: Number,
         private state: EmployerStates, 
         private rif: string,
         private phone: string,
@@ -29,7 +30,7 @@ export class CreateEmployerCommand implements EmployerCommand<void> {
             EmployerNameVO.Create(this.name),
             EmployerDescriptionVO.Create(this.description),
             new EmployerStateVO(this.state),
-            EmployerLocationVO.Create(this.location),
+            new EmployerLocationVO(this.latitude, this.longitude),
             EmployerRifVO.Create(this.rif),
             EmployerPhoneVO.Create(this.phone),
             EmployerMailVO.Create(this.mail),
