@@ -1,15 +1,6 @@
-export class LocationDTO {
-  public latitude: Number;
+class LocationDTO{ 
 
-  public longitude: Number;
 
-<<<<<<< HEAD
-  constructor(locationData: any) {
-    this.latitude = locationData.latitude;
-    this.longitude = locationData.longitude;
-  }
-}
-=======
     public latitude: Number;
    
     public longitude: Number;
@@ -22,4 +13,3 @@ export class LocationDTO {
   
  
 }
->>>>>>> main

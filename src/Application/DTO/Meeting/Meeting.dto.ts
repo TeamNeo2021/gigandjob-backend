@@ -1,7 +1,3 @@
-import { CandidateDTO } from '../Candidate.dto';
-import { EmployerDTO } from '../Employer.dto';
-import { LocationDTO } from '../Location.dto';
-
 export class MeetingDTO {
   public candidate: CandidateDTO;
   public employer: EmployerDTO;

@@ -1,7 +1,7 @@
 export class AcceptMeeting {
   public candidateId: string;
-  public meetingId: String;
-  constructor(candidateId: string, meetingId: String) {
+  public meetingId: string;
+  constructor(candidateId: string, meetingId: string) {
     this.candidateId = candidateId;
     this.meetingId = meetingId;
   }

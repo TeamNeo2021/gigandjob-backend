@@ -1,6 +1,4 @@
-import { LocationDTO } from './Location.dto';
-
-export class CandidateDTO {
+class CandidateDTO {
   public id: string;
   public state: String;
   public name: String;
