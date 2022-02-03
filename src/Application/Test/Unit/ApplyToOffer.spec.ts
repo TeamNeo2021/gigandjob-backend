@@ -46,9 +46,12 @@ import {
 } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 import { EmployerIdVO } from '../../../Dominio/AggRoots/Employer/ValueObjects/EmployerIdVO';
 import { ICandidateRepository } from '../../Repositories/CandidateRepository';
+import { EmployerRepository } from '../../Repositories/Employer/repository.interface';
+import { MockEmployerRepo } from '../../../Infrastructure/Memory/MockEmployerRepo.repo';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
+const EMrepo = new MockEmployerRepo();
 const Msender = new MockSenderAdapter();
 
 //const ExCommand = new ApplyToOfferDTO('1', '1', 100, 'prueba', 3);
@@ -100,17 +103,18 @@ const ExCommand = new ApplyToOfferDTO({
 function create_Service(
   repoO: IOfferRepository,
   repoCC: ICandidateRepository,
+  reporEm: EmployerRepository,
   Msender: INotificationSender,
 ): OfferApplicationService {
-  const service = new OfferApplicationService(repoO, repoCC, Msender);
+  const service = new OfferApplicationService(repoO, repoCC, reporEm, Msender);
   return service;
 }
 
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     MCCrepo.save(exampleCandidate);
-    await Orepo.save(exampleOffer);
-    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
+    await Orepo.save(exampleOffer); 
+    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     ApplyService.Handle(ExCommand);
     let new_offer: Offer = await Orepo.load(exampleOffer._Id);
     expect(
@@ -118,7 +122,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
+    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {
@@ -128,7 +132,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should send a notification to the given employer', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
+    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     await ApplyService.Handle(ExCommand);
     expect(Msender.NotificatedIds[0]).toBe(
       exampleEmployer.employerId._guid_value,

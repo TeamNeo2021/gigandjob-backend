@@ -26,9 +26,7 @@ export class EntitiesFactory {
       new MeetingStateVO(MeetingStates[Mdto.state]),
       new MeetingDescriptionVO(Mdto.description),
       new MeetingDateVO(Mdto.date),
-      new MeetingLocationVO(
-        '' + Mdto.location.latitude + ' , ' + Mdto.location.longitude,
-      ),
+      new MeetingLocationVO(Mdto.location.latitude, Mdto.location.longitude),
       this.fromEmployerDtoToEmployer(Mdto.employer),
       this.fromCandidateDtoToCanditate(Mdto.candidate),
     );
@@ -76,13 +74,12 @@ export class EntitiesFactory {
     );
     return MMDto;
   }
-
   //FROM ENTITY TO DTO
 
   static fromMeetingLocationVOToLocationDTO(
-    MLVO: MeetingLocationVO,
+    meetingLocation: MeetingLocationVO,
   ): LocationDTO {
-    const LDTO = new LocationDTO(MLVO.getValue());
-    return LDTO;
+    const locationDTO = new LocationDTO(meetingLocation);
+    return locationDTO;
   }
 }

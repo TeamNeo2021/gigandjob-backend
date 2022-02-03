@@ -1,5 +1,6 @@
 import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
 import { OfferIdVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
+import { LikeOfferDTO } from "../DTO/Offer/LikeOfferDTO.dto";
 
 //Repository for the aggregate Offer
 
@@ -25,6 +26,8 @@ export interface IOfferRepository {
     exists(id: OfferIdVO): Promise<boolean>;
 
     likeOffer(data: LikeOfferDTO);
+
+    getAll(): Promise<Offer[]>;
 
 
 

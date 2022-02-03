@@ -10,4 +10,5 @@ export enum ApplicationStates{
     Active,
     Inactive,
     Canceled,
+    Eliminated,
 }

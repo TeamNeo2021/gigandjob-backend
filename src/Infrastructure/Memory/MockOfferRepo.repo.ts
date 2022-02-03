@@ -1,8 +1,13 @@
+import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 import { IOfferRepository } from 'src/Application/Repositories/OfferRepository.repo';
 import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 
 export class MockOfferRepo implements IOfferRepository {
+  
+  getAll(): Promise<Offer[]> {
+    throw new Error('Method not implemented.');
+  }
   private Offers: Offer[] = [];
 
   async save(offer: Offer): Promise<void> {

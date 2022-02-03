@@ -12,7 +12,7 @@ import { OfferModified } from '../../DomainEvents/OfferEvents/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { CandidateApplied } from '../../DomainEvents/CandidateEvents/CandidateApplied';
 import { ApplicationId } from './Application/Value Objects/ApplicationId';
-import { ApplicationState } from './Application/Value Objects/ApplicationStates';
+import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
 import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
 import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
 import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
@@ -26,6 +26,7 @@ import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivate
 import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReported';
 import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
 import { OfferReportVO } from './ValueObjects/OfferReportVO';
+import { ApplicationEliminated } from 'src/Dominio/DomainEvents/ApplicationEvents/ApplicationEliminated';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -378,4 +379,13 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       ),
     );
   }
+
+  //Eliminar aplicacion
+  public EliminateApplication(application: Application) {
+    console.log('Eliminar Aplicacion');
+    this.Apply(new ApplicationEliminated());
+    application.setState(ApplicationStates.Eliminated)
+    
+  }
+
 }
