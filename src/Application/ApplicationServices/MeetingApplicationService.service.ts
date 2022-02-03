@@ -19,10 +19,14 @@ export class MeetingApplicationService implements IApplicationService {
     switch (command.constructor) {
       case AcceptMeeting: {
         //agendar en calendario
+        console.log('Entre');
         const cmd: AcceptMeeting = <AcceptMeeting>command;
         const Mdto: MeetingDTO = await this.repository.getById(cmd.meetingId);
+        console.log('A punto de llamar entity fact');
         const AMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
+        console.log('entityfactory superado');
         AMeeting.Accept();
+        console.log('Accept Superado');
         const MMdto: ModifyMeetingDTO =
           EntitiesFactory.fromMeetingToModifyMeetingDTO(AMeeting);
         this.repository.modifyMeeting(MMdto);
@@ -40,6 +44,7 @@ export class MeetingApplicationService implements IApplicationService {
         break;
       }
       default:
+        console.log('default');
         throw new Error(
           `MeetingService: Command doesn't exist: ${command.constructor}`,
         );

@@ -72,7 +72,7 @@ export class EntitiesFactory {
       Meeting.date.value,
       this.fromMeetingLocationVOToLocationDTO(Meeting.location),
     );
-    return;
+    return MMDto;
   }
 
   //FROM ENTITY TO DTO

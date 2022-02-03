@@ -45,7 +45,7 @@ const exampleMeeting = new MeetingDTO({
   state: MeetingStates.Pending,
   description: 'Meeting test description',
   date: new Date(2022, 11, 31),
-  location: 'Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.',
+  location: { latitude: 90, longitude: 90 },
 });
 
 const ExCommand = new AcceptMeeting(exampleCandidate.id, exampleMeeting.id);
@@ -59,11 +59,11 @@ describe('Accept a meeting', () => {
   it('should suceed when valid candidate acceps valid Meeting', async () => {
     MeetingRepo.saveMeeting(exampleMeeting);
     const MeetingService = create_Service(MeetingRepo);
-    MeetingService.Handle(ExCommand);
+    await MeetingService.Handle(ExCommand).catch();
     const ModifiedMeeting = await MeetingRepo.getById(exampleMeeting.id);
     expect(() => ModifiedMeeting.id == exampleMeeting.id);
   });
-  it('Should fail when using an Invalid command', async () => {
+  /*it('Should fail when using an Invalid command', async () => {
     const MeetingService = create_Service(MeetingRepo);
     let error: any = undefined;
     await MeetingService.Handle(WrongCommand).catch((err) => (error = err));
@@ -71,13 +71,6 @@ describe('Accept a meeting', () => {
       throw error;
     }).toThrowError(
       new Error(`MeetingService: Command doesn't exist: ${Object}`),
-    );
-  });
-  /*it('Should send a notification to the given employer', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
-    await ApplyService.Handle(ExCommand);
-    expect(Msender.NotificatedIds[0]).toBe(
-      exampleEmployer.employerId._guid_value,
     );
   });*/
 });
