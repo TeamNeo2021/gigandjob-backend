@@ -5,6 +5,7 @@ import { EntitiesFactory } from '../Core/EntitiesFactory.service';
 import { IApplicationService } from '../Core/IApplicationService';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
+import { ModifyMeetingDTO } from '../DTO/Meeting/modifyMeetingDTO';
 import { RejectMeeting } from '../DTO/Meeting/RejectMeetingDTO';
 
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';

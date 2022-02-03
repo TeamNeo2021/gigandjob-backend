@@ -1,3 +1,5 @@
+import { LocationDTO } from './Location.dto';
+
 export class EmployerDTO {
   public employerId: String;
   public name: String;

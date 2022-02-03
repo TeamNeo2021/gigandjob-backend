@@ -1,5 +1,5 @@
 import { MeetingDTO } from 'src/Application/DTO/Meeting/Meeting.dto';
-import { ModifyMeetingDTO } from 'src/Application/DTO/Meeting/modifyMeetingDTO';
+import { ModifyMeetingDTO } from '../../Application/DTO/Meeting/modifyMeetingDTO';
 import { Meeting } from 'src/Dominio/AggRoots/Meeting/Meeting';
 import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { IMeetingRepository } from '../../Application/Repositories/MeetingRepository.repo';
