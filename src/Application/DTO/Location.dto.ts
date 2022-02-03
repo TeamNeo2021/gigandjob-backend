@@ -1,4 +1,4 @@
-class LocationDTO{ 
+export class LocationDTO{ 
 
 
     public latitude: Number;

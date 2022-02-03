@@ -1,4 +1,5 @@
 import { ApplyToOfferDTO } from "../Application/ApplicationDTO.dto";
+import { LocationDTO } from "../Location.dto";
 
 export class OfferDTO {
   public  OfferId: string;

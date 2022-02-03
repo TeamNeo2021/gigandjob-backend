@@ -31,6 +31,7 @@ import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/Offer
 import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
 import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
+import { LocationDTO } from "../DTO/Location.dto";
 import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
 import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { OfferDTO } from "../DTO/Offer/OfferDTO";

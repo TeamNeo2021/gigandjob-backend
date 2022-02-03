@@ -1,5 +1,6 @@
+import { LocationDTO } from "../Location.dto";
+
 export class createOfferDTO {
-    OfferId: string;
     State: string;
     PublicationDate: Date;
     Rating: number;
@@ -11,7 +12,6 @@ export class createOfferDTO {
     constructor(
         offerData: any){
 
-        this.OfferId = offerData.OfferId;
         this.State = 'Active'
         this.PublicationDate = new Date();
         this.Rating = 0;
