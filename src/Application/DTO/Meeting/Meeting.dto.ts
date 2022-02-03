@@ -14,6 +14,6 @@ export class MeetingDTO {
     this.state = meetingData.state;
     this.description = meetingData.description;
     this.date = meetingData.date;
-    this.location = new LocationDTO(meetingData.location);
+    this.location = new LocationDTO(meetingData);
   }
 }
