@@ -28,6 +28,12 @@ type OfferEntity = {
 @Injectable()
 export class OfferFirestoreRepository implements IOfferRepository{
     constructor(@Inject('offers') private offerRepository: CollectionReference<OfferEntity>) {}
+   
+   async getAll(): Promise<Offer[]> {
+            const offerQuery = await this.offerRepository.get()
+    
+            return //employerQuery.docs.map(r => this.entityToOffer(r.data()))
+        }
 
     async save(offer: Offer): Promise<void> {
         await this.offerRepository.doc(offer._Id._value).set({
