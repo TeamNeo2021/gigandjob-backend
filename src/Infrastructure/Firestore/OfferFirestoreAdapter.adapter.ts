@@ -81,6 +81,15 @@ export class OfferFirestoreRepository implements IOfferRepository{
             DescriptionVO.Unsafe(offerResult.description),
             offerResult.reports?.map(raw => OfferReportVO.Unsafe(raw.reporterId, raw.reason)) || []
         )
+        offerResult.applications.forEach(app => offer.unsafeCreateApplication(
+            app.id,
+            app.candidateId,
+            app.budget,
+            app.description,
+            app.time,
+            ApplicationStates[app.state],
+            ApplicationStates[app.previous_state]
+        ))
         return offer
     }
 

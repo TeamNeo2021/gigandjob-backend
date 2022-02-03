@@ -83,9 +83,12 @@ export class Application extends Entity<ApplicationId>{
          this.state.current = state;
     }
 
-
     public getPreviousState():ApplicationStates{
         return this.previous_state.current;
+    }
+
+    public setPreviousState(state: ApplicationStates) {
+        this.previous_state.current = state
     }
 
     public getCandidateId(): CandidateIdVo{

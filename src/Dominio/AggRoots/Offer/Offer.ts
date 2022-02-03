@@ -12,7 +12,7 @@ import { OfferModified } from '../../DomainEvents/OfferEvents/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { CandidateApplied } from '../../DomainEvents/CandidateEvents/CandidateApplied';
 import { ApplicationId } from './Application/Value Objects/ApplicationId';
-import { ApplicationState } from './Application/Value Objects/ApplicationStates';
+import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
 import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
 import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
 import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
@@ -377,5 +377,34 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         time,
       ),
     );
+  }
+
+  public unsafeCreateApplication(
+    id: string,
+    candidateId: string,
+    budget: number,
+    description: string,
+    time: number,
+    state: ApplicationStates,
+    previous_state: ApplicationStates
+  ) {
+    const currentState = new ApplicationState(),
+          previousState = new ApplicationState()
+        
+    currentState.current = state
+
+    const application = new Application(
+      this.Apply,
+      new ApplicationId(id),
+      new CandidateIdVo(candidateId),
+      currentState,
+      new ApplicationBudget(budget),
+      new ApplicationDescription(description),
+      new ApplicationTime(time)
+    )
+
+    application.setPreviousState(previous_state)
+
+    this.application.push(application)
   }
 }
