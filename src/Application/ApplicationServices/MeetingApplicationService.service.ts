@@ -5,6 +5,7 @@ import { EntitiesFactory } from '../Core/EntitiesFactory.service';
 import { IApplicationService } from '../Core/IApplicationService';
 import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
+import { ModifyMeetingDTO } from '../DTO/Meeting/modifyMeetingDTO';
 import { RejectMeeting } from '../DTO/Meeting/RejectMeetingDTO';
 
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
@@ -21,10 +22,14 @@ export class MeetingApplicationService implements IApplicationService {
         const cmd: AcceptMeeting = <AcceptMeeting>command;
         const Mdto: MeetingDTO = await this.repository.getById(cmd.meetingId);
         const AMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
+        console.log('Leegué hasta antes de accept');
         AMeeting.Accept();
+        console.log('Leegué hasta antes despues de accept');
         const MMdto: ModifyMeetingDTO =
           EntitiesFactory.fromMeetingToModifyMeetingDTO(AMeeting);
+        console.log('Pasé el entitiesFactory, tengo:' + MMdto);
         this.repository.modifyMeeting(MMdto);
+        console.log('Pasé el modify Meeting');
         break;
       }
       case RejectMeeting: {
