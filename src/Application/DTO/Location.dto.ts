@@ -1,15 +1,10 @@
-class LocationDTO{ 
+export class LocationDTO {
+  public latitude: Number;
 
+  public longitude: Number;
 
-    public latitude: Number;
-   
-    public longitude: Number;
-
-    constructor(locationData: any)
-    {
-        this.latitude = locationData.latitude;
-        this.longitude = locationData.longitude;
-    }
-  
- 
+  constructor(locationData: any) {
+    this.latitude = locationData.latitude;
+    this.longitude = locationData.longitude;
+  }
 }

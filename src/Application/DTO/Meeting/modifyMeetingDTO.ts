@@ -1,4 +1,6 @@
-class ModifyMeetingDTO {
+import { LocationDTO } from '../Location.dto';
+
+export class ModifyMeetingDTO {
   public id: string;
   public state: string;
   public description: string;
