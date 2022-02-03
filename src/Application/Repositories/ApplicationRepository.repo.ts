@@ -1,5 +1,3 @@
-import { ApplyToOfferDTO } from "../DTO/Application/ApplicationDTO.dto";
-
 export interface IApplicationRepository{ //todo Delete this, this goes in IOfferRepository
   
    // newApllication(new_application: ApplyToOfferDTO): Promise<void>;

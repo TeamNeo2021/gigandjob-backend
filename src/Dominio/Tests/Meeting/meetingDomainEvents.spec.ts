@@ -15,7 +15,7 @@ const meetingExample = Meeting.ScheduleOn(
     exampleEmployer,
     exampleCandidate,
     new MeetingDescriptionVO('Meeting test description'),
-    new MeetingLocationVO(20, 90),
+    new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
 );
 
 describe("Agendar una reunion", ()=>{
@@ -28,7 +28,7 @@ describe('Modificar una reunion',()=>{
     it('Debe cambiar todos los valores posibles',()=>{
         meetingExample.Modified(
             new MeetingDescriptionVO('Meeting description modify'),
-            new MeetingLocationVO(20, 90),
+            new MeetingLocationVO('Meeting location modify'),
         );
         expect(meetingExample.GetChanges()[0]).toBeInstanceOf(MeetingScheduledEvent);
         expect(meetingExample.GetChanges()[1]).toBeInstanceOf(MeetingModifiedEvent);

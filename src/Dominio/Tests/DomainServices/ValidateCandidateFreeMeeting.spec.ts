@@ -42,21 +42,21 @@ function example_meetings(candidate: CandidateIdVo): Meeting[]{
             exampleEmployer,
             exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
-            new MeetingLocationVO(25,95),
+            new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         ),
         Meeting.ScheduleOn(
             new MeetingDateVO(date),
             exampleEmployer,
             exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
-            new MeetingLocationVO(25,95),
+            new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         ),
         Meeting.ScheduleOn(
             new MeetingDateVO(new Date(2022,11,22)),
             exampleEmployer,
             create_exampleCandidate(),
             new MeetingDescriptionVO('Meeting test description'),
-            new MeetingLocationVO(25,95),
+            new MeetingLocationVO('Av. Teherán, Urb. Montalbán. Universidad Católica Andrés Bello.'),
         )
     ]
 }

@@ -1,6 +1,5 @@
 import { CollectionReference } from "@google-cloud/firestore"
 import { Inject, NotFoundException } from "@nestjs/common"
-import { ApplyToOfferDTO } from "src/Application/DTO/Application/ApplicationDTO.dto";
 import { IApplicationRepository } from "src/Application/Repositories/ApplicationRepository.repo"
 import { ApplicationStates } from "src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates";
 

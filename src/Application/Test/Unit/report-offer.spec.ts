@@ -33,8 +33,7 @@ describe('Report Offer', () => {
                   load: loadFn,
                   save: saveFn,
                   exists: jest.fn(),
-                  likeOffer: jest.fn(),
-                  getAll: jest.fn()
+                  likeOffer: jest.fn()
               }, {
                 getAll: jest.fn(),
                 save: jest.fn(),
@@ -43,13 +42,7 @@ describe('Report Offer', () => {
                 getOne: jest.fn(),
                 eliminate: jest.fn(),
                 reactive: jest.fn()
-              }, {        
-                save: jest.fn(),            
-                get: jest.fn(),
-                getAll: jest.fn(),
-                eliminate: jest.fn(),                                                
-              },
-               {
+              }, {
                 send: jest.fn()
               })
         await applicationService.Handle(new ReportOfferDTO(offer._Id._value, 'No me gusta', randomUUID()))
@@ -68,8 +61,7 @@ describe('Report Offer', () => {
                   load: loadFn,
                   save: saveFn,
                   exists: jest.fn(),
-                  likeOffer: jest.fn(),
-                  getAll: jest.fn()
+                  likeOffer: jest.fn()
               }, {
                 getAll: jest.fn(),
                 save: jest.fn(),
@@ -78,11 +70,6 @@ describe('Report Offer', () => {
                 getOne: jest.fn(),
                 eliminate: jest.fn(),
                 reactive: jest.fn()
-              }, {        
-                save: jest.fn(),            
-                get: jest.fn(),
-                getAll: jest.fn(),
-                eliminate: jest.fn(),                                                
               }, {
                 send: jest.fn()
               }),

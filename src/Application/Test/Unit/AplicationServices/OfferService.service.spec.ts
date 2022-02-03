@@ -1,32 +1,34 @@
-import { OfferApplicationService } from "../../../ApplicationServices/Offer/OfferApplicationService.service";
-import { IOfferRepository } from "../../../Repositories/OfferRepository.repo";
-import { Offer } from "../../../../Dominio/AggRoots/Offer/Offer";
-import { BudgetVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
-import { DescriptionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
-import { OfferIdVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
-import { PublicationDateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
-import { RatingVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
-import { Sectors, SectorVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
-import { OfferStatesEnum, OfferStateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
-import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
-import { InMemoryCandidateCommandRepository } from "../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
-import { MockSenderAdapter } from "../../../../Infrastructure/Memory/MorckSenderAdapter";
-import { MockEmployerRepo } from "../../../../Infrastructure/Memory/MockEmployerRepo.repo";
-import { LikeOfferDTO } from "../../../DTO/Offer/LikeOfferDTO.dto";
+import { OfferApplicationService } from '../../../ApplicationServices/Offer/OfferApplicationService.service';
+import { IOfferRepository } from '../../../Repositories/OfferRepository.repo';
+import { Offer } from '../../../../Dominio/AggRoots/Offer/Offer';
+import { BudgetVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
+import { DescriptionVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
+import { DirectionVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { OfferIdVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
+import { PublicationDateVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
+import { RatingVO } from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
+import {
+  Sectors,
+  SectorVO,
+} from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo';
+import {
+  OfferStatesEnum,
+  OfferStateVO,
+} from '../../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo';
+import { createOfferDTO } from '../../../DTO/Offer/CreateOffer.dto';
+import { InMemoryCandidateCommandRepository } from '../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo';
+import { MockSenderAdapter } from '../../../../Infrastructure/Memory/MorckSenderAdapter';
+import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 
-
-const exampleDirection:string = 'testing direction';
-const exampleSector:string = 'testing sector';
-const exampleBudget:number = 10;
-const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
+const exampleDirection: string = 'testing direction';
+const exampleSector: string = 'testing sector';
+const exampleBudget: number = 10;
+const exampleDescription: string = 'Lorem ipsum dolor sit amet.';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Msender = new MockSenderAdapter();
-const EMrepo = new MockEmployerRepo();
 
 class mockedOfferRepo implements IOfferRepository {
-
   private mockedState: OfferStateVO = new OfferStateVO(OfferStatesEnum.Active);
   private mockedPublicationDate: PublicationDateVO = PublicationDateVO.Create(
     new Date(),
@@ -40,9 +42,7 @@ class mockedOfferRepo implements IOfferRepository {
   private mockedDescription: DescriptionVO = DescriptionVO.Create(
     'Lorem ipsum dolor sit amet.',
   );
-  getAll(): Promise<Offer[]> {
-    throw new Error("Method not implemented.");
-  }
+
   async exists(id: OfferIdVO): Promise<boolean> {
     return false;
   }
@@ -94,8 +94,8 @@ var mockedDB: Offer[] = [];
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-function create_offer_service(): OfferApplicationService{
-    return new OfferApplicationService(fakeRepo,MCCrepo, EMrepo, Msender);
+function create_offer_service(): OfferApplicationService {
+  return new OfferApplicationService(fakeRepo, MCCrepo, Msender);
 }
 
 describe('Offer application service', () => {
