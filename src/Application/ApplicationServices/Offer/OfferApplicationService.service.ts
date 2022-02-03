@@ -33,6 +33,7 @@ import { EmployerRepository } from 'src/Application/Repositories/Employer/reposi
 import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 import { ApplyToOfferDTO } from 'src/Application/DTO/Application/ApplicationDTO.dto';
 import { EliminateApplicationFromCandidateDTO } from '../../DTO/Offer/EliminateApplicationFromCandidate.dto';
+import { EliminateOfferFromEmployerEliminatedDTO } from 'src/Application/DTO/Offer/EliminateOfferFromEmployerEliminatedDTO';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
