@@ -21,7 +21,7 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
           new MeetingDescriptionVO(Mdto.description),
           new MeetingDateVO(Mdto.date),
           new MeetingLocationVO(
-            '' + Mdto.location.latitude + ' , ' + Mdto.location.longitude,
+           Mdto.location.latitude , Mdto.location.longitude,
           ),
           this.fromEmployerDtoToEmployer(Mdto.employer),
           this.fromCandidateDtoToCanditate(Mdto.candidate),
@@ -75,10 +75,10 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
       //FROM ENTITY TO DTO
     
       static fromMeetingLocationVOToLocationDTO(
-        MLVO: MeetingLocationVO,
+        meetingLocation: MeetingLocationVO,
       ): LocationDTO {
-        const LDTO = new LocationDTO(MLVO.getValue());
-        return LDTO;
+        const locationDTO = new LocationDTO(meetingLocation);
+        return locationDTO;
       }
 
 }

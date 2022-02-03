@@ -26,6 +26,7 @@ import { OfferReactivated } from '../../DomainEvents/OfferEvents/OfferReactivate
 import { OfferReported } from 'src/Dominio/DomainEvents/OfferEvents/OfferReported';
 import { InvalidOfferReportError } from './Errors/InvalidOfferReport.error';
 import { OfferReportVO } from './ValueObjects/OfferReportVO';
+import { ApplicationEliminated } from 'src/Dominio/DomainEvents/ApplicationEvents/ApplicationEliminated';
 
 
 export class Offer extends AggregateRoot implements IInternalEventHandler {
@@ -407,4 +408,12 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
     this.application.push(application)
   }
+  //Eliminar aplicacion
+  public EliminateApplication(application: Application) {
+    console.log('Eliminar Aplicacion');
+    this.Apply(new ApplicationEliminated());
+    application.setState(ApplicationStates.Eliminated)
+    
+  }
+
 }

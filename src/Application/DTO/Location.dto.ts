@@ -5,9 +5,8 @@ class LocationDTO{
    
     public longitude: Number;
 
-    constructor(
-        locationData: any
-    ){
+    constructor(locationData: any)
+    {
         this.latitude = locationData.latitude;
         this.longitude = locationData.longitude;
     }
