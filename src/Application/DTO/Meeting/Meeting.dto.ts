@@ -1,3 +1,5 @@
+import { EmployerDTO } from '../Employer.dto';
+
 export class MeetingDTO {
   public candidate: CandidateDTO;
   public employer: EmployerDTO;
