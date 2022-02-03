@@ -73,11 +73,4 @@ describe('Accept a meeting', () => {
       new Error(`MeetingService: Command doesn't exist: ${Object}`),
     );
   });
-  /*it('Should send a notification to the given employer', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, Msender);
-    await ApplyService.Handle(ExCommand);
-    expect(Msender.NotificatedIds[0]).toBe(
-      exampleEmployer.employerId._guid_value,
-    );
-  });*/
 });
