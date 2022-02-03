@@ -127,7 +127,21 @@ export class OfferApplicationService implements IApplicationService {
         }
 
         break;
-       }      
+       }    
+       
+      case EliminateApplicationFromCandidateDTO:
+      {
+        const cmd: EliminateApplicationFromCandidateDTO = <EliminateApplicationFromCandidateDTO> command;
+        const offers = await this.Offerrepo.getAll()
+        for (let offer of offers){         
+        for (let application of offer._application){
+              if (application.getCandidateId.toString() == cmd.id_candidate){
+                offer.EliminateApplication(application);
+              }
+            }
+          await this.Offerrepo.save(offer);
+        }
+      } 
 
       case LikeOfferDTO:
        {

@@ -27,6 +27,8 @@ export interface IOfferRepository {
 
     likeOffer(data: LikeOfferDTO);
 
+    getAll(): Promise<Offer[]>;
+
 
 
 }

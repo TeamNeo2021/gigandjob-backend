@@ -33,7 +33,8 @@ describe('Report Offer', () => {
                   load: loadFn,
                   save: saveFn,
                   exists: jest.fn(),
-                  likeOffer: jest.fn()
+                  likeOffer: jest.fn(),
+                  getAll: jest.fn()
               }, {
                 getAll: jest.fn(),
                 save: jest.fn(),
@@ -67,7 +68,8 @@ describe('Report Offer', () => {
                   load: loadFn,
                   save: saveFn,
                   exists: jest.fn(),
-                  likeOffer: jest.fn()
+                  likeOffer: jest.fn(),
+                  getAll: jest.fn()
               }, {
                 getAll: jest.fn(),
                 save: jest.fn(),
