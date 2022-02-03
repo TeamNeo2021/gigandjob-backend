@@ -26,6 +26,7 @@ const Msender = new MockSenderAdapter();
 const EMrepo = new MockEmployerRepo();
 
 class mockedOfferRepo implements IOfferRepository {
+
   private mockedState: OfferStateVO = new OfferStateVO(OfferStatesEnum.Active);
   private mockedPublicationDate: PublicationDateVO = PublicationDateVO.Create(
     new Date(),
@@ -39,7 +40,9 @@ class mockedOfferRepo implements IOfferRepository {
   private mockedDescription: DescriptionVO = DescriptionVO.Create(
     'Lorem ipsum dolor sit amet.',
   );
-
+  getAll(): Promise<Offer[]> {
+    throw new Error("Method not implemented.");
+  }
   async exists(id: OfferIdVO): Promise<boolean> {
     return false;
   }
