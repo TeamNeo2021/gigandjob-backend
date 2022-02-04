@@ -63,7 +63,7 @@ const exampleOffer = new Offer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date()),
   RatingVO.Create(0),
-  new OfferLocationVO(50,150),
+  new OfferLocationVO(50, 150),
   new SectorVO(Sectors.Laws),
   BudgetVO.Create(400),
   DescriptionVO.Create('Oferta de prueba'),
@@ -82,7 +82,7 @@ const exampleEmployer: Employer = Employer.RegisterEmployer(
   EmployerNameVO.Create('Soluciones de Prueba'),
   EmployerDescriptionVO.Create('La descripcion es una prueba'),
   new EmployerStateVO(EmployerStates.Active),
-  new EmployerLocationVO(24,100),
+  new EmployerLocationVO(24, 100),
   EmployerRifVO.Create('J-1236782'),
   EmployerPhoneVO.Create('+584124578457'),
   EmployerMailVO.Create('prueba@test.com'),
@@ -114,14 +114,17 @@ function create_Service(
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     MCCrepo.save(exampleCandidate);
-    let newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer)
-    await Orepo.save(newOffer); 
+    let newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer);
+    await Orepo.save(newOffer);
     let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
-    ApplyService.Handle(ExCommand);
+    await ApplyService.Handle(ExCommand).catch((err) => {
+      throw err;
+    });
     let new_offer = await Orepo.getOfferById(newOffer.OfferId);
     let new_test_offer = EntitiesFactory.fromOfferDTOtoOffer(new_offer);
     expect(
-      () => new_test_offer._application[0].getCandidateId() == exampleCandidate.Id,
+      () =>
+        new_test_offer._application[0].getCandidateId() == exampleCandidate.Id,
     );
   });
   it('Should fail when using an Invalid command', async () => {
@@ -136,7 +139,9 @@ describe('Create an aplication to an offer', () => {
   });
   it('Should send a notification to the given employer', async () => {
     let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
-    await ApplyService.Handle(ExCommand);
+    await ApplyService.Handle(ExCommand).catch((err) => {
+      throw err;
+    });
     expect(Msender.NotificatedIds[0]).toBe(
       exampleEmployer.employerId._guid_value,
     );
