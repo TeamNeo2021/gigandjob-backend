@@ -101,6 +101,26 @@ paths:
             application/json:
               schema: 
                 type: string
+  /employers/Reactivated:
+    put:
+      summary: Reactiva un Empleador
+      description: Esta accion cambio el estado de suspendido a reactivado/activo de un Empleador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployerStateChangeInformation"
+  /employers/Eliminated:
+    put:
+      summary: Elimina un Empleador
+      description: Esta accion cambio el estado de cualquiera a eliminado de un Empleador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployerStateChangeInformation"
   /meeting/accept:
     put:
       summary: Accept a meeting
@@ -338,5 +358,15 @@ components:
           type: string
         reporterId:
           description: Id of the candidate that's being reported
+          type: string
+          format: uuid
+    EmployerStateChangeInformation:
+      description: Informacion relacionada al cambio de estado de un empleador
+      type: object
+      required: 
+        - id
+      properties:
+        id:
+          description: id del empleador a cambiar de estado
           type: string
           format: uuid
