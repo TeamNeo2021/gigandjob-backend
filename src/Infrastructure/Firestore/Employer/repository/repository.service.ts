@@ -35,7 +35,9 @@ export class EmployerRepositoryService implements EmployerRepository {
             employer.offers.map(o => o._Id._value))
     }
     async eliminate(id: string): Promise<void> {
-        await this.collection.doc(id).delete()
+        await this.collection.doc(id).update({
+            state: EmployerStates[EmployerStates.Eliminated]
+        })
     }
 
     private entityToEmployer(employerResult: EmployerEntity) {
