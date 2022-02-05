@@ -32,6 +32,8 @@ import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
 import { EmployerRepository } from 'src/Application/Repositories/Employer/repository.interface';
 import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 import { ApplyToOfferDTO } from 'src/Application/DTO/Application/ApplicationDTO.dto';
+import { EliminateApplicationFromCandidateDTO } from '../../DTO/Offer/EliminateApplicationFromCandidate.dto';
+import { EliminateOfferFromEmployerEliminatedDTO } from 'src/Application/DTO/Offer/EliminateOfferFromEmployerEliminatedDTO';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
@@ -108,7 +110,7 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(Offer_Eliminited);
         break;
       }
-      
+
       case ReportOfferDTO: {
         let cmd = command as ReportOfferDTO;
         const offer = await this.Offerrepo.load(new OfferIdVO(cmd.id));
@@ -117,35 +119,36 @@ export class OfferApplicationService implements IApplicationService {
         break;
       }
 
-      case EliminateOfferFromEmployerEliminatedDTO:
-       {
-        const cmd: EliminateOfferFromEmployerEliminatedDTO =  < EliminateOfferFromEmployerEliminatedDTO> command;
+      case EliminateOfferFromEmployerEliminatedDTO: {
+        const cmd: EliminateOfferFromEmployerEliminatedDTO = <
+          EliminateOfferFromEmployerEliminatedDTO
+        >command;
         const employer = await this.Employerrepo.get(cmd.id_employer);
-        for (let offer of employer.offers){         
-              offer.EliminateOffer();
-              await this.Offerrepo.save(offer);
+        for (let offer of employer.offers) {
+          offer.EliminateOffer();
+          await this.Offerrepo.save(offer);
         }
 
         break;
-       }    
-       
-      case EliminateApplicationFromCandidateDTO:
-      {
-        const cmd: EliminateApplicationFromCandidateDTO = <EliminateApplicationFromCandidateDTO> command;
-        const offers = await this.Offerrepo.getAll()
-        for (let offer of offers){         
-        for (let application of offer._application){
-              if (application.getCandidateId.toString() == cmd.id_candidate){
-                offer.EliminateApplication(application);
-              }
+      }
+
+      case EliminateApplicationFromCandidateDTO: {
+        const cmd: EliminateApplicationFromCandidateDTO = <
+          EliminateApplicationFromCandidateDTO
+        >command;
+        const offers = await this.Offerrepo.getAll();
+        for (let offer of offers) {
+          for (let application of offer._application) {
+            if (application.getCandidateId.toString() == cmd.id_candidate) {
+              offer.EliminateApplication(application);
             }
+          }
           await this.Offerrepo.save(offer);
         }
-      } 
+      }
 
-      case LikeOfferDTO:
-       {
-        const cmd: LikeOfferDTO =  <LikeOfferDTO> command;
+      case LikeOfferDTO: {
+        const cmd: LikeOfferDTO = <LikeOfferDTO>command;
         const offer = await this.Offerrepo.likeOffer(cmd);
         console.log(
           'Liked offer: ',
