@@ -380,6 +380,34 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     );
   }
 
+  public unsafeCreateApplication(
+    id: string,
+    candidateId: string,
+    budget: number,
+    description: string,
+    time: number,
+    state: ApplicationStates,
+    previous_state: ApplicationStates
+  ) {
+    const currentState = new ApplicationState(),
+          previousState = new ApplicationState()
+        
+    currentState.current = state
+
+    const application = new Application(
+      this.Apply,
+      new ApplicationId(id),
+      new CandidateIdVo(candidateId),
+      currentState,
+      new ApplicationBudget(budget),
+      new ApplicationDescription(description),
+      new ApplicationTime(time)
+    )
+
+    application.setPreviousState(previous_state)
+
+    this.application.push(application)
+  }
   //Eliminar aplicacion
   public EliminateApplication(application: Application) {
     console.log('Eliminar Aplicacion');

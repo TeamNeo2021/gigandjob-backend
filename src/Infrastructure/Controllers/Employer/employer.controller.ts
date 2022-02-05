@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Inject, Post } from '@nestjs/common';
-import { EmployerApplicationService } from 'src/Application/ApplicationServices/Employer/service.interface';
-import { CreateEmployerCommand } from 'src/Application/Commands/Employer/create-employer.command';
+import { EmployerApplicationService } from 'src/Application/ApplicationServices/Employer/employer.service';
+import { CreateEmployerCommandDTO } from 'src/Application/DTO/CreateEmployer.dto';
 import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 
 type CreateEmployerData = {
@@ -21,8 +21,8 @@ export class EmployerController {
     @Post()
     @HttpCode(201)
     async create(@Body() body: CreateEmployerData) {
-        await this.employerService.execute(
-            new CreateEmployerCommand(
+        await this.employerService.Handle(
+            new CreateEmployerCommandDTO(
                 body.name, 
                 body.description, 
                 body.location,

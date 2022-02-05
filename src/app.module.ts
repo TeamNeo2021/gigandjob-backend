@@ -9,12 +9,10 @@ import { CandidateModule } from './Infrastructure/Module/candidate.module';
 import { MeetingController } from './Infrastructure/Controllers/meeting/Meeting.controller';
 import { OfferApplicationService } from './Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { EmployerController } from './Infrastructure/Controllers/Employer/employer.controller';
-import { EmployerEventHandler } from './Infrastructure/Event/Employer/employer.handler';
-import { EmployerPublisherService } from './Infrastructure/Event/Employer/employer.publisher';
 import { EmployerRepositoryService } from './Infrastructure/Firestore/Employer/repository/repository.service';
 import { FirestoreModule } from './Infrastructure/Firestore/config/firestore.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter.';
+import { OfferFirestoreRepository } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
 import { ICandidateRepository } from './Application/Repositories/CandidateRepository';
 import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
@@ -23,10 +21,10 @@ import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFires
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
-  useFactory: (repo: EmployerRepositoryService, publisher: EmployerPublisherService) => {
-    return new EmployerApplicationService(repo, publisher)
+  useFactory: (repo: EmployerRepositoryService) => {
+    return new EmployerApplicationService(repo)
   },
-  inject: [EmployerRepositoryService, EmployerPublisherService]
+  inject: [EmployerRepositoryService]
 }
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
@@ -80,8 +78,6 @@ const meetingAdapterProvider = {
     OfferApplicationService,
     OfferFirestoreRepository,
     EmployerRepositoryService,
-    EmployerPublisherService,
-    EmployerEventHandler,
     employerServiceProvider,
     meetingAdapterProvider
   ],

@@ -1,32 +1,19 @@
-import { EmployerCommand } from "src/Application/Commands/Employer/command.interface";
-import { DomainError } from "src/Application/Errors/domain.error";
-import { InfrastructureError } from "src/Application/Errors/infrastructure.error";
-import { CouldNotPublishEventsError } from "src/Application/Publisher/Errors/could-not-publish-events.error";
-import { EmployerPublisherEvent } from "src/Application/Publisher/Employer/event";
-import { EmployerPublisher } from "src/Application/Publisher/Employer/publisher.interface";
-import { EmployerQuery } from "src/Application/Queries/Employer/query.interface";
-import { CouldNotFindEmployerError } from "src/Application/Repositories/Employer/Errors/could-not-find-employer.error";
-import { CouldNotGetAllEmployersError } from "src/Application/Repositories/Employer/Errors/could-not-get-all-employers.error";
 import { EmployerRepository } from "src/Application/Repositories/Employer/repository.interface";
-import { EmployerApplicationService as Contract  } from "./service.interface";
-import { EmployerTransactionService } from "./transaction.interface";
 import { ReactivateEmployerDTO } from "src/Application/DTO/ReactivateEmployer.dto";
 import { EliminateEmployerDTO } from "src/Application/DTO/EliminateEmployer.dto";
+import { CreateEmployerCommandDTO } from "src/Application/DTO/CreateEmployer.dto";
+import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
+import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo";
+import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
+import { EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
+import { EmployerLocationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO";
+import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO";
+import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
+import { EmployerMailVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo";
+import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
 
-export class EmployerApplicationService implements Contract {
-    transactionService: EmployerTransactionService
-
-    constructor(private repository: EmployerRepository, private publisher: EmployerPublisher) {
-        this.transactionService = {
-            get(id: string) {
-                return repository.get(id)
-            },
-            getAll() {
-                return repository.getAll()
-            }
-        }
-        
-    }
+export class EmployerApplicationService {
+    constructor(private repository: EmployerRepository) {}
 
     async Handle(command: any): Promise<void> {
         switch (command.constructor){
@@ -48,35 +35,22 @@ export class EmployerApplicationService implements Contract {
                 await this.repository.eliminate(id)
                 break;
             }
-        }
-    }
 
-    async execute<T>(command: EmployerCommand<T>): Promise<T> {
-        try {
-            const commandResult = await command.execute(this.transactionService),
-                  eventsToPublish = commandResult.events.map(evt => new EmployerPublisherEvent(evt.constructor.name, evt))
-            
-            this.publisher.publish(eventsToPublish) 
-            return commandResult.result
-        } catch(e) {
-            if (e instanceof CouldNotPublishEventsError) {
-                throw new InfrastructureError(e) // Publisher errors
-            } else if (e instanceof CouldNotFindEmployerError || e instanceof CouldNotGetAllEmployersError) {
-                throw new InfrastructureError(e) // Repository errors
-            } else {
-                throw new DomainError(e) // Domain layer errors
-            }
+            case CreateEmployerCommandDTO: {
+                const cmd = command as CreateEmployerCommandDTO
+                const employer = Employer.RegisterEmployer(
+                    EmployerNameVO.Create(cmd.name),
+                    EmployerDescriptionVO.Create(cmd.description),
+                    new EmployerStateVO(cmd.state),
+                    EmployerLocationVO.Create(cmd.location),
+                    EmployerRifVO.Create(cmd.rif),
+                    EmployerPhoneVO.Create(cmd.phone),
+                    EmployerMailVO.Create(cmd.mail),
+                    EmployerComercialDesignationVO.Create(cmd.comDesignation),
+                )
 
-        }
-    }
-    query<T>(query: EmployerQuery<T>): Promise<T> {
-        try {
-            return query.query(this.transactionService)
-        } catch(e) {
-            if (e instanceof CouldNotFindEmployerError || e instanceof CouldNotGetAllEmployersError) {
-                throw new InfrastructureError(e) // Repository errors
-            } else {
-                throw new DomainError(e) // Domain errors
+                await this.repository.save(employer)
+                break;
             }
         }
     }
