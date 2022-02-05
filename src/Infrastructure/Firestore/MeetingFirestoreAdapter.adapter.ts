@@ -3,6 +3,7 @@
 import { CollectionReference } from '@google-cloud/firestore';
 import { Inject, Injectable } from '@nestjs/common';
 import { MeetingDTO } from 'src/Application/DTO/Meeting/Meeting.dto';
+import { ModifyMeetingDTO } from 'src/Application/DTO/Meeting/modifyMeetingDTO';
 import { MeetingStates } from 'src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { IMeetingRepository } from '../../Application/Repositories/MeetingRepository.repo';
 
