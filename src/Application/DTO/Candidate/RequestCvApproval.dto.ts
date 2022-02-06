@@ -23,7 +23,7 @@ export class RequestCvApprovalDTO{
     public candidateID: string;
     public description: string;
     public workExperiences: [work];
-    public studies: [studies]
+    public studies: [studies];
     public photo: Buffer;
     public candidatebirthdate: string;
     
