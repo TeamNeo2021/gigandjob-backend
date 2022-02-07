@@ -91,13 +91,28 @@ export class CVFirestoreRepository implements ICVCommandRepository{
             works: works,
         })
     }
+
     async change(id: string, cv: Cv<CvState>): Promise<void> {
         throw new Error("Method not implemented.");
     }
+
     async getOne(id: string): Promise<Cv<CvState>> {
-        throw new Error("Method not implemented.");
+        const cvQuery = await this.repo.where('id','==',id).get(),
+              cvResult = cvQuery.docs[0].data()
+
+        if(!cvResult) return null
+
+        return entityToClass(cvResult)
+
     }
+
     async getAll(): Promise<Cv<CvState>[]> {
+        /* const cvQuery = await this.repo.get()
+        let cvResult: Cv<CvState>[];
+        cvQuery.forEach((cv)=>{
+            cvResult.push(entityToClass(cv as CVEntity))
+        });
+        return cvResult */
         throw new Error("Method not implemented.");
     }
 }

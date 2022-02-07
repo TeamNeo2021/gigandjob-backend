@@ -34,6 +34,7 @@ import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
 import { ApplyToOfferDTO } from 'src/Application/DTO/Application/ApplicationDTO.dto';
 import { EliminateApplicationFromCandidateDTO } from '../../DTO/Offer/EliminateApplicationFromCandidate.dto';
 import { EliminateOfferFromEmployerEliminatedDTO } from 'src/Application/DTO/Offer/EliminateOfferFromEmployerEliminatedDTO';
+import { OfferCompleted } from 'src/Dominio/DomainEvents/OfferEvents/OfferCompleted';
 
 export class OfferApplicationService implements IApplicationService {
   private readonly Offerrepo: IOfferRepository;
@@ -180,6 +181,7 @@ export class OfferApplicationService implements IApplicationService {
           cmd.duration_days,
         );
         DSApplyToOfer.createApplication();
+
         try {
           this.Sender.send(
             cmd.employerId,
@@ -194,17 +196,27 @@ export class OfferApplicationService implements IApplicationService {
         } catch (error) {
           throw error;
         }
+
         this.Offerrepo.save(Oferta);
         this.CandidaterepoC.modify(Candidate.id, Candidate);
         break;
+
       case CompletedOfferDTO:
         const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
         const Offer_Completed = await this.Offerrepo.load(new OfferIdVO());
         let applicationHired: ApplicantHired;
         applicationHired.CandidateContract(Offer_Completed);
+        
+        try{
+          this.Sender.send(
+            hired.id_offer,
+            new OfferCompleted()
+          )
+        } catch (error) {
+          throw error;
+        }
         await this.Offerrepo.save(Offer_Completed);
         break;
-      //     break;
 
       case SuspendOfferDTO: {
         let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;

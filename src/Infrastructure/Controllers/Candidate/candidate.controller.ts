@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
+/* import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
 // import { CandidateApplicationService } from "src/Application/ApplicationServices/Candidate/service.interface";
 
 
@@ -19,4 +19,4 @@ export class CandidateController {
     //     // })
     // }
   
-}
+} */
