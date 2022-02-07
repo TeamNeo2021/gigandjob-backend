@@ -59,7 +59,8 @@ const meetingAdapterProvider = {
         'meetings',
         'offers',
         'candidates',
-        'applications'
+        'applications',
+        'dashboardModel'
       ]
     }),
     CandidateModule,
