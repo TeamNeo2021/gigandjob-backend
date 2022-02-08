@@ -2,20 +2,59 @@ import { InvalidEmployerLocation } from "../Errors/InvalidEmployerLocation.error
 
 export class EmployerLocationVO {
 
-    readonly value_employer_location: String;
-
-    private constructor(value_employer_location:String) {
-        this.value_employer_location=value_employer_location;
-    }
-
-    static Create(value_employer_location: String) {
-        if(!value_employer_location || value_employer_location.trim() == ""){
-            throw InvalidEmployerLocation.EmptyLocation();
+  
+    private _latitude: Number; 
+    private _longitude: Number;
+   
+    constructor(latitude: Number, longitude: Number) {
+        if( this.checkNull(latitude) && this.checkNull(longitude) && this.checkLatitude(latitude) && this.checkLongitude(longitude) ){
+            this._latitude = latitude;
+            this._longitude = longitude;
+        }else{
+              throw new Error('Invalid Location');
         }
-        return new EmployerLocationVO(value_employer_location)
     }
-
-    static Unsafe(value_employer_location: String) {
-        return new EmployerLocationVO(value_employer_location)
-    }
-}
+  
+      //getters and setters
+  
+      public get latitude(): Number {
+          return this._latitude;
+      }
+      public set latitude(value: Number) {
+          this._latitude = value;
+      }
+  
+      public get longitude(): Number {
+          return this._longitude;
+      }
+      public set longitude(value: Number) {
+          this._longitude = value;
+      }
+        
+      checkNull(coord:Number){
+          if(coord != undefined){
+              return true
+          }else{
+               // throw new Error('coordinate cannot be null');
+               throw InvalidEmployerLocation.coordinateNull();
+          }
+      }
+  
+      checkLatitude(coord:Number){
+          if(coord< -90 || coord>90){
+              throw InvalidEmployerLocation.latitudeOutOfRange();
+              return false;
+          }else{
+              return true
+          }
+  
+      }checkLongitude(coord:Number){
+          if(coord< -180 || coord>180){
+              throw InvalidEmployerLocation.longitudeOutOfRange();
+              return false;
+          }else{
+              return true
+          }
+  
+      }
+  }

@@ -1,5 +1,7 @@
 import { EmployerApplicationService } from "src/Application/ApplicationServices/Employer/employer.service"
+import { CreateEmployerCommand } from "src/Application/Commands/Employer/create-employer.command"
 import { CreateEmployerCommandDTO } from "src/Application/DTO/CreateEmployer.dto"
+import { LocationDTO } from "src/Application/DTO/Location.dto"
 import { EmployerStates } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo"
 
 describe('Register Employer', () => {
@@ -18,7 +20,12 @@ describe('Register Employer', () => {
               registerEmployerCommand = new CreateEmployerCommandDTO(
                   "Michael Nelo",
                   "This is a test employer",
-                  "Caracas Caricuao",
+                  new LocationDTO(
+                      {
+                          latitude:90,
+                          longitude:90
+                      }
+                  ),
                   EmployerStates.Active,
                   "J-123123123",
                   "+58 4241956647",

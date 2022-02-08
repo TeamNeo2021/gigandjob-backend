@@ -24,7 +24,7 @@ class ApplicationFirestoreAdapter implements IApplicationRepository{   //todo De
     async cancelApplication(application_id: string) {
         try {
             let result =  await this.collection.doc(application_id).update({
-                 state: ApplicationStates.Canceled.toString()
+                 state: ApplicationStates.Canceled
              });
             
              console.log('MeeetingFirestoreAdapter: cancelMeeting response: ', result);
