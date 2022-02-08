@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { randomUUID } from 'crypto';
 import { MeetingApplicationService } from '../../../../ApplicationServices/MeetingApplicationService.service';
-import { EmployerDTO } from '../../../../DTO/Employer.dto';
-
 import { AcceptMeeting } from '../../../../DTO/Meeting/AcceptMeeting';
 import { MeetingDTO } from '../../../../DTO/Meeting/Meeting.dto';
 import { IMeetingRepository } from '../../../../Repositories/MeetingRepository.repo';
@@ -11,7 +9,8 @@ import { EmployerStates } from '../../../../../Dominio/AggRoots/Employer/ValueOb
 import { MeetingStates } from '../../../../../Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { MockMeetingAdapter } from '../../../../../Infrastructure/Memory/MockMeetingRepo';
 import { LocationDTO } from '../../../../DTO/Location.dto';
-import { CandidateDTO } from '../../../../DTO/Candidate.dto';
+import { CandidateDTO } from 'src/Application/DTO/Candidate/Candidate.dto';
+import { EmployerDTO } from 'src/Application/DTO/Employer/Employer.dto';
 
 const MeetingRepo = new MockMeetingAdapter();
 
@@ -22,10 +21,11 @@ const exampleEmployer = new EmployerDTO({
   name: 'Soluciones de Prueba',
   description: 'La descripcion es una prueba',
   state: EmployerStates.Active,
-  location: new LocationDTO({ latitude: 20, logitude: 90 }),
+  location: { latitude: 20, longitude: 90 },
   rif: 'J-1236782',
   phone: '+584124578457',
   mail: 'prueba@test.com',
+  offers: [],
 });
 
 const exampleCandidate = new CandidateDTO({
@@ -35,7 +35,7 @@ const exampleCandidate = new CandidateDTO({
   phone: '0414 4407938',
   email: 'spidey@gmail.com',
   birthDate: new Date('2000-01-16'),
-  location: new LocationDTO({ latitude: 20, logitude: 90 }),
+  location: { latitude: 20, longitude: 90 },
 });
 
 const exampleMeeting = new MeetingDTO({
@@ -48,7 +48,10 @@ const exampleMeeting = new MeetingDTO({
   location: { latitude: 90, longitude: 90 },
 });
 
-const ExCommand = new AcceptMeeting(exampleCandidate.id, exampleMeeting.id);
+const ExCommand = new AcceptMeeting(
+  exampleCandidate.candidateId,
+  exampleMeeting.id,
+);
 
 function create_Service(repoO: IMeetingRepository): MeetingApplicationService {
   const service = new MeetingApplicationService(repoO);

@@ -1,15 +1,25 @@
 import { InvalidOfferDirection } from "../../AggRoots/Offer/Errors/InvalidOfferDirection.error"
-import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO"
+import { OfferLocationVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO"
 
 
-describe("Direction",()=>{
+describe("create a new Offer Location Value Object", ()=>{
+
     
-    //Validemos nuestra dirección
-    it("Deberia fallar si la dirección es nula", ()=>{ //Validar que no es vacia
-        expect(()=>DirectionVO.Create('')).toThrowError(InvalidOfferDirection)
+    it("should fail when latitude is smaller than -90",()=>{
+        expect(()=> new OfferLocationVO(-150,0)).toThrowError(InvalidOfferDirection)
+    }),
+    it("should fail when latitude is bigger than 90",()=>{
+        expect(()=> new OfferLocationVO(150,0)).toThrowError(InvalidOfferDirection)
+    }),
+    it("should fail when longitude is smller than -180",()=>{
+        expect(()=> new OfferLocationVO(0,-250)).toThrowError(InvalidOfferDirection)
+    }),
+    it("should fail when longitude is bigger than 180",()=>{
+        expect(()=> new OfferLocationVO(0,250)).toThrowError(InvalidOfferDirection)
+    }),
+    it("should succeed when entering valid coordenates",()=>{
+        expect(()=> new OfferLocationVO(24,150))
     })
 
-    it("Deberia crear cuando le pase una dirección", () => {
-        expect(DirectionVO.Create("Avenida Principal Macaracuay")).toBeInstanceOf(DirectionVO)
-    })
-})
+}
+)

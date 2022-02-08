@@ -21,7 +21,7 @@ export class MockMeetingAdapter implements IMeetingRepository {
 
   async getAllCandidateMeetings(candidateId: String): Promise<MeetingDTO[]> {
     return this.Meetings.filter(
-      (meeting) => meeting.candidate.id == candidateId,
+      (meeting) => meeting.candidate.candidateId == candidateId,
     );
   }
   getAllEmployerMeetings(employerId: String): Promise<MeetingDTO[]> {

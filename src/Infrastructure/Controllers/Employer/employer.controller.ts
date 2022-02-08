@@ -1,20 +1,23 @@
 import { Body, Controller, HttpCode, Inject, Post, Put } from '@nestjs/common';
 import { EmployerApplicationService } from 'src/Application/ApplicationServices/Employer/employer.service';
 import { CreateEmployerCommandDTO } from 'src/Application/DTO/CreateEmployer.dto';
-import { EliminateEmployerDTO } from 'src/Application/DTO/EliminateEmployer.dto';
-import { ReactivateEmployerDTO } from 'src/Application/DTO/ReactivateEmployer.dto';
+import { EliminateEmployerDTO } from 'src/Application/DTO/Employer/EliminateEmployer.dto';
+import { ReactivateEmployerDTO } from 'src/Application/DTO/Employer/ReactivateEmployer.dto';
 import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 
-type CreateEmployerData = {
-    name: string,
-    description: string,
-    location: string, 
-    state: string, 
-    rif: string,
-    phone: string,
-    mail: string,
-    comDesignation: string
-}
+ type CreateEmployerData = {
+     name: string,
+     description: string,
+     location: {
+         latitude: number,
+         longitude: number
+     }, 
+     state: string, 
+     rif: string,
+     phone: string,
+     mail: string,
+     comDesignation: string
+ }
 
 @Controller('employers')
 export class EmployerController {

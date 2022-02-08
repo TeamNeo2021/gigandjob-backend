@@ -2,7 +2,7 @@ import { OfferIdVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdV
 import { Offer } from '../../../Dominio/AggRoots/Offer/Offer';
 import { BudgetVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO';
 import { DescriptionVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO';
-import { DirectionVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
+import { OfferLocationVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO';
 import { PublicationDateVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO';
 import { RatingVO } from '../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO';
 import {
@@ -26,14 +26,15 @@ import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { ApplyToOffer } from '../../../Dominio/DomainService/ApplyToOffer';
 import { CandidateApplied } from '../../../Dominio/DomainEvents/CandidateEvents/CandidateApplied';
 import { Candidate } from '../../../Dominio/AggRoots/Candidate/Candidate';
-import { CompletedOfferDTO } from 'src/Application/DTO/Offer/CompletedOfferDTO';
-import { ApplicantHired } from 'src/Dominio/DomainService/ApplicantHired';
-import { SuspendOfferDTO } from 'src/Application/DTO/Offer/SuspendOffer.dto';
-import { EmployerRepository } from 'src/Application/Repositories/Employer/repository.interface';
-import { LikeOfferDTO } from 'src/Application/DTO/Offer/LikeOfferDTO.dto';
-import { ApplyToOfferDTO } from 'src/Application/DTO/Application/ApplicationDTO.dto';
-import { EliminateApplicationFromCandidateDTO } from '../../DTO/Offer/EliminateApplicationFromCandidate.dto';
-import { EliminateOfferFromEmployerEliminatedDTO } from 'src/Application/DTO/Offer/EliminateOfferFromEmployerEliminatedDTO';
+import { CompletedOfferDTO } from '../../DTO/Offer/CompletedOfferDTO';
+import { ApplicantHired } from '../../../Dominio/DomainService/ApplicantHired';
+import { SuspendOfferDTO } from '../../DTO/Offer/SuspendOffer.dto';
+import { EmployerRepository } from '../../Repositories/Employer/repository.interface';
+import { LikeOfferDTO } from '../../DTO/Offer/LikeOfferDTO.dto';
+import { ApplyToOfferDTO } from '../../DTO/Application/ApplicationDTO.dto';
+import { EntitiesFactory } from '../../Core/EntitiesFactory.service';
+import { EliminateOfferFromEmployerEliminatedDTO } from '../../DTO/Offer/EliminateOfferFromEmployerEliminatedDTO';
+import { EliminateApplicationFromCandidateDTO } from '../..//DTO/Offer/EliminateApplicationFromCandidate.dto';
 import { OfferCompleted } from 'src/Dominio/DomainEvents/OfferEvents/OfferCompleted';
 
 export class OfferApplicationService implements IApplicationService {
@@ -64,28 +65,24 @@ export class OfferApplicationService implements IApplicationService {
 
         //! This is tresspassing aggregate offer
         //! by accesing directly to its VO's
-        let new_offer = Offer.CreateOffer(
-          new OfferStateVO(<OfferStatesEnum>(<unknown>cmd.State)),
-          PublicationDateVO.Create(cmd.PublicationDate),
-          RatingVO.Create(cmd.Rating),
-          DirectionVO.Create(cmd.Direction),
-          new SectorVO(<Sectors>(<unknown>cmd.Sector)),
-          BudgetVO.Create(cmd.Budget),
-          DescriptionVO.Create(cmd.Description),
-        );
+        let new_offer = EntitiesFactory.fromCreateOfferDTOtoOffer(cmd); //At this point the CreatedOfferEvent is made
 
         //This should never happen, but in case RandomUUID generates
         //an used UUID, this will stop the creation
         if (
-          await this.Offerrepo.exists(new_offer._Id).catch((err) => {
+          await this.Offerrepo.exists(new_offer._Id._value).catch((err) => {
+            console.log('OfferApplicationService CREATE OFFER Error', err);
             throw this.DB_error;
           })
         ) {
+          console.log('THIS OFFER ALREADY EXIST');
           throw new Error('This offer ID generation has failed');
         }
 
         //Save the new offer
-        await this.Offerrepo.save(new_offer).catch((err) => {
+        await this.Offerrepo.save(
+          EntitiesFactory.fromOfferToOfferDTO(new_offer),
+        ).catch((err) => {
           throw this.DB_error;
         });
 
@@ -94,29 +91,36 @@ export class OfferApplicationService implements IApplicationService {
 
       case ReactivateOfferDTO: {
         let cmd: ReactivateOfferDTO = <ReactivateOfferDTO>command;
-        let Offer_Reactived = await this.Offerrepo.load(
-          new OfferIdVO(cmd.id_offer),
+        let offerReactived = await this.Offerrepo.getOfferById(cmd.id_offer);
+        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(offerReactived);
+        newOffer.ReactivateOffer();
+        await this.Offerrepo.save(
+          EntitiesFactory.fromOfferToOfferDTO(newOffer),
         );
-        Offer_Reactived.ReactivateOffer();
-        await this.Offerrepo.save(Offer_Reactived);
         break;
       }
 
       case EliminatedOfferDTO: {
         let cmd: EliminatedOfferDTO = <EliminatedOfferDTO>command;
-        let Offer_Eliminited = await this.Offerrepo.load(
-          new OfferIdVO(cmd.id_offer),
-        );
-        Offer_Eliminited.EliminateOffer();
-        await this.Offerrepo.save(Offer_Eliminited);
+        let Offer_Eliminated = await this.Offerrepo.getOfferById(cmd.id_offer);
+        if (Offer_Eliminated) {
+          let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Eliminated);
+          newOffer.EliminateOffer();
+          await this.Offerrepo.save(
+            EntitiesFactory.fromOfferToOfferDTO(newOffer),
+          );
+        }
         break;
       }
 
       case ReportOfferDTO: {
-        let cmd = command as ReportOfferDTO;
-        const offer = await this.Offerrepo.load(new OfferIdVO(cmd.id));
-        offer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason));
-        await this.Offerrepo.save(offer);
+        let cmd: ReportOfferDTO = <ReportOfferDTO>command;
+        const Offer_Reported = await this.Offerrepo.getOfferById(cmd.id);
+        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Reported);
+        newOffer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason));
+        await this.Offerrepo.save(
+          EntitiesFactory.fromOfferToOfferDTO(newOffer),
+        );
         break;
       }
 
@@ -124,10 +128,13 @@ export class OfferApplicationService implements IApplicationService {
         const cmd: EliminateOfferFromEmployerEliminatedDTO = <
           EliminateOfferFromEmployerEliminatedDTO
         >command;
-        const employer = await this.Employerrepo.get(cmd.id_employer);
+        let employer = await this.Employerrepo.get(cmd.id_employer);
         for (let offer of employer.offers) {
-          offer.EliminateOffer();
-          await this.Offerrepo.save(offer);
+          //revisar esto
+          let NewOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
+          NewOffer.EliminateOffer();
+          let SaveOffer = EntitiesFactory.fromOfferToOfferDTO(NewOffer);
+          await this.Offerrepo.save(SaveOffer);
         }
 
         break;
@@ -139,12 +146,14 @@ export class OfferApplicationService implements IApplicationService {
         >command;
         const offers = await this.Offerrepo.getAll();
         for (let offer of offers) {
-          for (let application of offer._application) {
+          let newOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
+          for (let application of newOffer._application) {
             if (application.getCandidateId.toString() == cmd.id_candidate) {
-              offer.EliminateApplication(application);
+              newOffer.EliminateApplication(application);
             }
           }
-          await this.Offerrepo.save(offer);
+          let fOffer = EntitiesFactory.fromOfferToOfferDTO(newOffer);
+          await this.Offerrepo.save(fOffer);
         }
       }
 
@@ -161,21 +170,18 @@ export class OfferApplicationService implements IApplicationService {
 
         break;
       }
-      case ApplyToOfferDTO:
+      case ApplyToOfferDTO: {
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
-        const Oferta: Offer = await this.Offerrepo.load(
-          new OfferIdVO(cmd.offerId),
-        ).catch((err) => {
-          throw err;
-        });
-        console.log('Saque esta: ' + Oferta);
+        let Offer_Applied = await this.Offerrepo.getOfferById(cmd.offerId);
+        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Applied);
+        console.log('Saque esta: ' + Offer_Applied);
         const Candidate: Candidate = await this.CandidaterepoC.getOne(
           cmd.candidateId,
         );
         console.log('Saque este candidate:' + Candidate);
         const DSApplyToOfer: ApplyToOffer = new ApplyToOffer(
           await Candidate,
-          Oferta,
+          newOffer,
           cmd.budget,
           cmd.description,
           cmd.duration_days,
@@ -196,16 +202,20 @@ export class OfferApplicationService implements IApplicationService {
         } catch (error) {
           throw error;
         }
-
-        this.Offerrepo.save(Oferta);
+        Offer_Applied = EntitiesFactory.fromOfferToOfferDTO(newOffer);
+        this.Offerrepo.save(Offer_Applied);
         this.CandidaterepoC.modify(Candidate.id, Candidate);
         break;
-
-      case CompletedOfferDTO:
+      }
+      case CompletedOfferDTO: {
         const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
-        const Offer_Completed = await this.Offerrepo.load(new OfferIdVO());
+        let Offer_Completed = await this.Offerrepo.getOfferById(
+          new OfferIdVO().value,
+        );
+        let newOfferCompleted =
+          EntitiesFactory.fromOfferDTOtoOffer(Offer_Completed);
         let applicationHired: ApplicantHired;
-        applicationHired.CandidateContract(Offer_Completed);
+        applicationHired.CandidateContract(newOfferCompleted);
         
         try{
           this.Sender.send(
@@ -218,16 +228,23 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(Offer_Completed);
         break;
 
+        /*applicationHired.CandidateContract(newOfferCompleted);
+        Offer_Completed =
+          EntitiesFactory.fromOfferToOfferDTO(newOfferCompleted);
+        await this.Offerrepo.save(Offer_Completed);
+        break;*/
+      }
+      //     break;
+
       case SuspendOfferDTO: {
         let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
-        let Offer_Suspended = await this.Offerrepo.load(
-          new OfferIdVO(cmd.id_offer),
-        );
-        Offer_Suspended.SuspendOffer(false);
+        let Offer_Suspended = await this.Offerrepo.getOfferById(cmd.id_offer);
+        let NewOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Suspended);
+        NewOffer.SuspendOffer(false);
+        Offer_Suspended = EntitiesFactory.fromOfferToOfferDTO(NewOffer);
         await this.Offerrepo.save(Offer_Suspended);
         break;
       }
-
       default:
         throw new Error(
           `OfferService: Command doesn't exist: ${command.constructor}`,

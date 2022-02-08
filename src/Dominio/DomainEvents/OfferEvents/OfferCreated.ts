@@ -1,7 +1,7 @@
 import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { BudgetVO } from "../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { RatingVO } from "../../AggRoots/Offer/ValueObjects/OfferRatingVO";
 import { SectorVO } from "../../AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStateVO } from "../../AggRoots/Offer/ValueObjects/OfferStateVo";
@@ -13,7 +13,7 @@ export class OfferCreated implements IDomainEvent {
     public State: OfferStateVO;
     public PublicationDate: PublicationDateVO;
     public Rating: RatingVO;
-    public Direction: DirectionVO;
+    public Direction: OfferLocationVO;
     public Sector: SectorVO;
     public Budget: BudgetVO;
     public Description: DescriptionVO;
@@ -22,7 +22,7 @@ export class OfferCreated implements IDomainEvent {
         State: OfferStateVO,
         PublicationDate: PublicationDateVO,
         Rating: RatingVO,
-        Direction: DirectionVO,
+        Direction: OfferLocationVO,
         Sector: SectorVO,
         Budget: BudgetVO,
         Description: DescriptionVO,
