@@ -207,7 +207,7 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
        */
       static fromOfferDTOtoOffer(OfferDTO: OfferDTO): Offer {
         const offer: Offer = new Offer(
-          new OfferIdVO(OfferDTO.OfferId),
+          new OfferIdVO(),
           new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
           PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
           RatingVO.Unsafe(OfferDTO.Rating),

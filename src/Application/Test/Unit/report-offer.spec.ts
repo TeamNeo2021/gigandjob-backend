@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto"
+import { OfferDTO } from "src/Application/DTO/Offer/OfferDTO"
 import { OfferApplicationService } from "../../../Application/ApplicationServices/Offer/OfferApplicationService.service"
 import { ReportOfferDTO } from "../../../Application/DTO/Offer/ReportOffer.dto"
 import { InvalidOfferReportError } from "../../../Dominio/AggRoots/Offer/Errors/InvalidOfferReport.error"
@@ -13,17 +14,33 @@ import { Sectors, SectorVO } from "../../../Dominio/AggRoots/Offer/ValueObjects/
 import { OfferStatesEnum, OfferStateVO } from "../../../Dominio/AggRoots/Offer/ValueObjects/OfferStateVo"
 
 describe('Report Offer', () => {
-  const mockOffer = () =>
-    new Offer(
-      new OfferIdVO(),
-      new OfferStateVO(OfferStatesEnum.Active),
-      PublicationDateVO.Create(new Date(2022, 1, 27)),
-      RatingVO.Create(5),
-      new OfferLocationVO(10,100),
-      new SectorVO(Sectors.Laws),
-      BudgetVO.Create(1000),
-      DescriptionVO.Create('This is a laws offer'),
-    );
+  // const mockOffer = () =>
+  //   new Offer(
+  //     new OfferIdVO(),
+  //     new OfferStateVO(OfferStatesEnum.Active),
+  //     PublicationDateVO.Create(new Date(2022, 1, 27)),
+  //     RatingVO.Create(5),
+  //     new OfferLocationVO(10,100),
+  //     new SectorVO(Sectors.Laws),
+  //     BudgetVO.Create(1000),
+  //     DescriptionVO.Create('This is a laws offer'),
+  //   );
+
+    const mockOffer =() => new OfferDTO(
+      {
+        id: randomUUID(),
+        state: OfferStatesEnum.Active,
+        publicationDate: new Date(2022, 1, 27),
+        rating: 5,
+        location: {
+          latitude: 10,
+          longitude: 100
+        },
+        sector: Sectors.Laws,
+        budget: 1000,
+        description: 'This is a laws offer'
+      }
+    )
 
     it('should report offer multiple times', async () => {
         const offer = mockOffer(), 
