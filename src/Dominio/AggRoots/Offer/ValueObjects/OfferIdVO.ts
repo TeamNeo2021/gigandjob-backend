@@ -11,13 +11,12 @@ export class OfferIdVO {
         return this.value;
     }
 
-    constructor(value: string = randomUUID()) {
-      console.log('Valor de trim: ', value.trim);
-      if (!value || String(value).trim() == "") 
+    constructor(_value: string = randomUUID()) {
+      if (!_value || String.prototype.trim.apply(_value, []) == "") 
       throw InvalidOfferId.EmptyId(); 
-      if (!value.match(UUID_FORMAT) || value.match(UUID_FORMAT).length == 0) 
-      throw InvalidOfferId.InvalidFormatId(value);  
-      this.value = value
+      if (!_value.match(UUID_FORMAT) || _value.match(UUID_FORMAT).length == 0) 
+      throw InvalidOfferId.InvalidFormatId(_value);  
+      this.value = _value
 
     }
 
