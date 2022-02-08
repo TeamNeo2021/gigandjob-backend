@@ -4,6 +4,23 @@ info:
   description: HTTP API Server written in nest for the GigAndJob project
   version: 0.1.0
 paths:
+  /CV:
+    post:
+      summary: Registers a new CV of a candidate
+      description: Creates a new cv that can be approved
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CVSubmitForm"
+      responses:
+        '201':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
   /candidates:
     post:
       summary: Registers a new candidate
@@ -370,3 +387,63 @@ components:
           description: id del empleador a cambiar de estado
           type: string
           format: uuid
+    CVSubmitForm:
+      description: Form data needed to submit a cv
+      type: object
+      required: 
+        - cvID
+        - candidateID
+        - description
+        - workExperiences
+        - studies 
+        - photo
+        - candidatebirthdate
+      properties:
+        cvID:
+          type: string
+          format: uuid
+          description: Id of the CV being submitted
+        candidateID:
+          type: string
+          format: uuid
+          description: Id of the candidate who's submit his CV
+        description:
+          type: string
+          description: Description of the candidate inside the CV
+        workExperiences:
+          type: array
+            items:
+              type: object
+              properties:
+                description:
+                  type: string
+                startDate:
+                  type: string
+                finishDate:
+                  type: string
+                job:
+                  type: string
+          description: Work Experiences of the candidate
+        studies:
+          type: array
+            items:
+              type: object
+              properties:
+                description:
+                  type: string
+                startDate:
+                  type: string
+                finishDate:
+                  type: string
+                institution:
+                  type: string
+                degree:
+                  type: string
+          description: Studies of the candidate
+        photo:
+          type: string
+          format: byte
+        candidatebirthdate:
+          type: string
+          format: date
+          description: Birth date of the candidate 
