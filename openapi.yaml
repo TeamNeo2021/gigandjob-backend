@@ -213,6 +213,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OfferReportInformation"
+  /dashboard/{dateString}:
+    get:
+      summary: Read-Side for dashboard
+      description: Queries the info to build the web dashboard screen 
+      content:
+        application/json: 
+          schema:
+            $ref: '#/components/schemas/DashboardQueryDate'
+      parameters: 
+        - dateString: string
+          in: path
+          required: true
+          description: The date to query the info
+          schema:
+            type: string
+      responses: 
+        '200':
+          description: 'A dashboard DTO JSON'
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDTO'
 components:
   schemas:
     CandidateSuspensionForm:
@@ -370,3 +392,22 @@ components:
           description: id del empleador a cambiar de estado
           type: string
           format: uuid
+    DashboardQueryDate:
+      description: Date that is used for query the dashboard data
+      type: Date
+    DashboardDTO:
+      description: A DTO with the dashboard info
+      required: 
+        - meetings
+        - employers
+        - users
+      properties:
+        meetings: 
+          description: number that represents today's meetings
+          type: number
+        employers: 
+          description: number of employers registered
+          type: number
+        users: 
+          description: number of users registered
+          type: number

@@ -12,18 +12,22 @@ export class DashboardWebQueryFirestoreAdapter
     constructor(@Inject('dashboardModel') private queryModel: CollectionReference<DashboardWebModelDTO>) {}
 
     async getModel(date: Date): Promise<DashboardWebModelDTO> {
+        
         const query = await this.queryModel.where('date', '==', date).get();
-        const result = query.docs[0].data();
-
-        if (!result) return null
-
-        const dashboardDTO = new DashboardWebModelDTO(
-            result.meetings,
-            result.employers,
-            result.users
-        );
-
-        return dashboardDTO;
+        try {
+            const result = query.docs[0].data();
+            const dashboardDTO = new DashboardWebModelDTO(
+                result.meetings,
+                result.employers,
+                result.users,
+                result.date
+            );
+    
+            return dashboardDTO;
+        } catch (error) {
+            return null
+        }
+        
     }
 
 }
