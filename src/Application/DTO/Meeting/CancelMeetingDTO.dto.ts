@@ -1,4 +1,4 @@
-class CancelMeetingDTO{
+export class CancelMeetingDTO{
     public id: String;
     public state: String;
     constructor(id: String){

@@ -1,4 +1,5 @@
 import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
+import { EmployerDTO } from "src/Application/DTO/Employer/Employer.dto";
 import { EmployerPublisherEvent } from "src/Application/Publisher/Employer/event";
 import { EmployerRegistered } from "src/Dominio/DomainEvents/EmployerEvents/EmployerRegistered";
 import { EmployerRepositoryService } from "src/Infrastructure/Firestore/Employer/repository/repository.service";

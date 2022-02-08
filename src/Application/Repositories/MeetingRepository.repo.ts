@@ -1,4 +1,5 @@
 import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
+import { ModifyMeetingDTO } from "../DTO/Meeting/modifyMeetingDTO";
 
 export interface IMeetingRepository {
 

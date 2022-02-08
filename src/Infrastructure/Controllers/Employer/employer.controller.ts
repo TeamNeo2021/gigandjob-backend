@@ -1,5 +1,6 @@
 import { Body, Controller, HttpCode, Inject, Post } from '@nestjs/common';
 import { EmployerApplicationService } from 'src/Application/ApplicationServices/Employer/service.interface';
+import { CreateEmployerDTO } from 'src/Application/DTO/Employer/CreateEmployer';
 
 import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';
 

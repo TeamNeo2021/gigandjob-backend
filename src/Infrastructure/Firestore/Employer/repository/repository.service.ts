@@ -1,6 +1,7 @@
 import { CollectionReference } from '@google-cloud/firestore';
 import { Inject, Injectable } from '@nestjs/common';
 import { async } from 'rxjs';
+import { EmployerDTO } from 'src/Application/DTO/Employer/Employer.dto';
 import { EmployerRepository } from 'src/Application/Repositories/Employer/repository.interface';
 import { Employer } from 'src/Dominio/AggRoots/Employer/Employer';
 import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo';

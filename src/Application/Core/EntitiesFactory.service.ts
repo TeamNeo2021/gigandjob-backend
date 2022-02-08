@@ -36,8 +36,11 @@ import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/Offer
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
 import { ApplicationDTO } from "../DTO/Application/ApplicationDTO.dto";
 import { CandidateDTO } from "../DTO/Candidate/Candidate.dto";
+import { CreateEmployerDTO } from "../DTO/Employer/CreateEmployer";
+import { EmployerDTO } from "../DTO/Employer/Employer.dto";
 import { LocationDTO } from "../DTO/Location.dto";
 import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
+import { ModifyMeetingDTO } from "../DTO/Meeting/modifyMeetingDTO";
 import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { OfferDTO } from "../DTO/Offer/OfferDTO";
 

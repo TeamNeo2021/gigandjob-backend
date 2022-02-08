@@ -1,5 +1,6 @@
+import { LocationDTO } from "../Location.dto";
 
-class CreateEmployerDTO{
+export class CreateEmployerDTO{
  
     public name: string;
     public description: string;

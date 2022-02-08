@@ -1,4 +1,5 @@
 import { CandidateDTO } from "../Candidate/Candidate.dto";
+import { EmployerDTO } from "../Employer/Employer.dto";
 import { LocationDTO } from "../Location.dto";
 
 export class MeetingDTO {
