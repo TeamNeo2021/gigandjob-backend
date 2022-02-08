@@ -10,6 +10,7 @@ import { INotificationSender } from '../../../Application/Ports/INotificationSen
 import { EmployerRepositoryService } from 'src/Infrastructure/Firestore/Employer/repository/repository.service';
 import { ApplyToOfferDTO } from '../../../Application/DTO/Application/ApplicationDTO.dto';
 import { LikeOfferDTO } from '../../../Application/DTO/Offer/LikeOfferDTO.dto';
+import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates';
 
 type ReportBody = {
   reason: string;
@@ -95,15 +96,15 @@ export class OfferController {
     //@Body  ('idApplication') idApplication:string,
     @Body('state') state: string,
     //@Body ('previous_state') previous_state: string,
-    @Body('budget') budget: Number,
+    @Body('budget') budget: number,
     @Body('description') description: string,
-    @Body('duration_days') duration_days: Number,
+    @Body('duration_days') duration_days: number,
   ) {
     let newApplication = new ApplyToOfferDTO({
       offerId: idOffer,
       employerId: idEmployer,
       candidateId: idCandidate,
-      state: state,
+      state: ApplicationStates[state],
       //  previous_state: previous_state,
       budget: budget,
       description: description,

@@ -6,12 +6,14 @@ import { Offer } from 'src/Dominio/AggRoots/Offer/Offer';
 import { OfferIdVO } from 'src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO';
 
 export class MockOfferRepo implements IOfferRepository {
+  constructor(public Offers: OfferDTO[] = []) {}
 
   getAll(): Promise<OfferDTO[]> {
     throw new Error('Method not implemented.');
   }
-
-  private Offers: OfferDTO[] = [];
+  clear()  {
+    this.Offers = [];
+  }
 
   async save(offer: OfferDTO): Promise<void> {    
     this.Offers.push(offer);

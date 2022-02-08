@@ -1,3 +1,4 @@
+import { application } from "express";
 import { Candidate } from "src/Dominio/AggRoots/Candidate/Candidate";
 import { CandidateBirthDateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateBirthDateVo";
 import { CandidateEmailVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateEmailVo";
@@ -22,6 +23,7 @@ import { MeetingDescriptionVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/
 import { MeetingIDVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingIDVO";
 import { MeetingLocationVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingLocationVO";
 import { MeetingStates, MeetingStateVO } from "src/Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO";
+import { Application } from "src/Dominio/AggRoots/Offer/Application/Application";
 import { Offer } from "src/Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
@@ -29,8 +31,10 @@ import { OfferLocationVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferDi
 import { OfferIdVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
+import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO";
 import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
+import { ApplicationDTO } from "../DTO/Application/ApplicationDTO.dto";
 import { CandidateDTO } from "../DTO/Candidate/Candidate.dto";
 import { LocationDTO } from "../DTO/Location.dto";
 import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
@@ -207,15 +211,29 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
        */
       static fromOfferDTOtoOffer(OfferDTO: OfferDTO): Offer {
         const offer: Offer = new Offer(
-          new OfferIdVO(),
-          new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
+          new OfferIdVO(OfferDTO.OfferId),
+          new OfferStateVO(OfferDTO.State),
           PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
           RatingVO.Unsafe(OfferDTO.Rating),
           new OfferLocationVO(OfferDTO.Direction.latitude, OfferDTO.Direction.longitude),
-          new SectorVO(Sectors[OfferDTO.Sector]),
+          new SectorVO(OfferDTO.Sector),
           BudgetVO.Unsafe(OfferDTO.Budget),
           DescriptionVO.Unsafe(OfferDTO.Description),
+          OfferDTO.reports.map(r => OfferReportVO.Unsafe(r.reporterId, r.reason)),
         );
+
+        OfferDTO.applications.forEach(app => {
+          offer.unsafeCreateApplication(
+            app.applicationId,
+            app.candidateId,
+            app.budget,
+            app.description,
+            app.duration_days,
+            app.state,
+            app.previous_state
+          )
+        })
+
         return offer;
       }
 
@@ -225,7 +243,7 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
        * @param createOfferDTO 
        * @returns Offer
        */
-      static fromCreateOfferDTOtoOffer(OfferDTO: createOfferDTO): Offer {
+      static fromCreateOfferDTOtoOffer(OfferDTO: createOfferDTO): Offer { //PILAS ESTO ES PARA CREAR UN OFFER
         const offer: Offer =  Offer.CreateOffer(
           // new OfferIdVO(OfferDTO.OfferId),
           new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
@@ -249,14 +267,23 @@ export class EntitiesFactory {  //wpuld like to refactor to FromDTOtoEntity and 
       static fromOfferToOfferDTO(offer: Offer): OfferDTO {
         const newOfferDto: OfferDTO = new OfferDTO({
           OfferId: offer._Id._value,
-          State:  offer._State.state.toString(),
+          State:  offer._State.state,
           PublicationDate: offer._PublicationDate.value,
           Rating: offer._Rating.value,
           Direction: offer._Direction,
-          Sector:  offer._Sector.value.toString(),
+          Sector:  offer._Sector.value,
           Budget:   offer._Budget.value,
           Description: offer._Description.value,
-
+          reports: offer.Reports.map(r => ({ ...r })),
+          applications: offer._application.map(application => new ApplicationDTO({
+            applicationId: application.id.value,
+            state: application.state.current,
+            candidateId: application.candidateId.value,
+            previous_state: application.previous_state?.current,
+            budget: application.budget.value,
+            description: application.description.value,
+            duration_days: application.time.days,
+          }))
         }
         );
         return newOfferDto;

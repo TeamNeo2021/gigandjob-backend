@@ -52,7 +52,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     sector: SectorVO,
     budget: BudgetVO,
     description: DescriptionVO,
-    reports: OfferReportVO[] = []
+    reports: OfferReportVO[] = [],
+    application: Application[] = []
   ) {
     super();
     this.OfferId = offerId;
@@ -63,7 +64,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     this.Sector = sector;
     this.Budget = budget;
     this.Description = description;
-    this.application = [];
+    this.reports = reports;
+    this.application = application;
   }
 
   protected When(event: IDomainEvent): void {
@@ -184,14 +186,14 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     const changes = this.GetChanges();
 
     //Create offer
-    if (
-      (this.State.state == OfferStatesEnum.Suspended ||
-        this.State.state == OfferStatesEnum.Closed ||
-        this.State.state == OfferStatesEnum.Eliminated) &&
-      changes.length == 0
-    ) {
-      throw InvalidOfferState.BadCreatedOffer();
-    }
+    // if (
+    //   (this.State.state == OfferStatesEnum.Suspended ||
+    //     this.State.state == OfferStatesEnum.Closed ||
+    //     this.State.state == OfferStatesEnum.Eliminated) &&
+    //   changes.length == 0
+    // ) {
+    //   throw InvalidOfferState.BadCreatedOffer();
+    // }
 
     //algunos de los VO es nulo
     if (!valid) {
@@ -267,6 +269,8 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     id: OfferIdVO = new OfferIdVO(),
   ) {
     console.log('Crear Oferta');
+    if (State.state != OfferStatesEnum.Active)
+      throw InvalidOfferState.BadCreatedOffer();
     let offer = new Offer(
       id,
       State,
@@ -379,6 +383,35 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         time,
       ),
     );
+  }
+
+  public unsafeCreateApplication(
+    id: string,
+    candidateId: string,
+    budget: number,
+    description: string,
+    time: number,
+    state: ApplicationStates,
+    previous_state: ApplicationStates
+  ) {
+    const currentState = new ApplicationState(),
+          previousState = new ApplicationState()
+        
+    currentState.current = state
+
+    const application = new Application(
+      this.Apply,
+      new ApplicationId(id),
+      new CandidateIdVo(candidateId),
+      currentState,
+      new ApplicationBudget(budget),
+      new ApplicationDescription(description),
+      new ApplicationTime(time)
+    )
+
+    application.setPreviousState(previous_state)
+
+    this.application.push(application)
   }
 
   //Eliminar aplicacion

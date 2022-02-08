@@ -2,7 +2,7 @@ import { EmployerRepository } from "src/Application/Repositories/Employer/reposi
 import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
 
 export class MockEmployerRepo implements EmployerRepository {
-    private Employers: Employer[] = [];
+    public Employers: Employer[] = [];
     save(employer: EmployerDTO): Promise<void> {
         throw new Error("Method not implemented.");
     }    

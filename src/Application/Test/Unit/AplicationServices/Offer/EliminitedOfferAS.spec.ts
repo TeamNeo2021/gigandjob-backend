@@ -56,6 +56,7 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
 
   
   describe('Eliminar una oferta', () => {
+
     it('debe tener éxito al suspender una oferta cuando esta activa', async () => {
       await Orepo.save(offerDTO);
       let exampleOffer: OfferDTO = await Orepo.getOfferById(
@@ -64,10 +65,9 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
       let offer = EntitiesFactory.fromOfferDTOtoOffer(exampleOffer);
       let ExCommand = new EliminatedOfferDTO((await offer)._Id.value);
       let OfferService = create_Service(Orepo);
-      OfferService.Handle(ExCommand);
+      await OfferService.Handle(ExCommand);
       let EliminatedOffer: OfferDTO = await Orepo.getOfferById(offer._Id._value);
       expect(
-        () =>
         EliminatedOffer.State.toString() ==
           OfferStatesEnum.Eliminated.toString(),
       );
@@ -82,21 +82,11 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
     );
     let offer = EntitiesFactory.fromOfferDTOtoOffer(exampleOffer);
     offer._State.state = OfferStatesEnum.Closed;
+    Orepo.clear()
+    await Orepo.save(EntitiesFactory.fromOfferToOfferDTO(offer))
     let ExCommand = new EliminatedOfferDTO((await offer)._Id.value);
     let OfferService = create_Service(Orepo);
-    expect(() => OfferService.Handle(ExCommand)).rejects.toThrowError(InvalidOfferState);
+    expect(OfferService.Handle(ExCommand)).rejects.toThrowError(InvalidOfferState);
   });
 });
 
-/**
- *   exampleOffer._State.state = OfferStatesEnum.Closed;
-    let ExCommand = new EliminatedOfferDTO((await exampleOffer)._Id.value);
-    let OfferService = create_Service(Orepo);
-    let error: any = undefined;
-    await OfferService.Handle(ExCommand).catch((err) => (error = err));
-    expect(() => {
-      throw error;
-    }).toThrowError(error);
-  });
-});
- */

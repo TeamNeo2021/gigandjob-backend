@@ -17,6 +17,7 @@ import { LikeOfferDTO } from "../../../DTO/Offer/LikeOfferDTO.dto";
 import { OfferDTO } from "../../../DTO/Offer/OfferDTO";
 import { Application } from "../../../../Dominio/AggRoots/Offer/Application/Application";
 import { LocationDTO } from "../../../DTO/Location.dto"
+import { ApplicationDTO } from "src/Application/DTO/Application/ApplicationDTO.dto";
 
 const exampleDirection:LocationDTO = new LocationDTO(
   {
@@ -74,16 +75,24 @@ class mockedOfferRepo implements IOfferRepository {
   async getOfferById(id: string): Promise<OfferDTO> {
     
     let returned_offer: OfferDTO = new OfferDTO({
-      OfferId: new OfferIdVO(id),
-      State:this.mockedState,
-      PublicationDate: this.mockedPublicationDate,
-      rating: this.mockedRating,
+      OfferId: id,
+      State: this.mockedState.state,
+      PublicationDate: this.mockedPublicationDate.value,
+      Rating: this.mockedRating.value,
       Direction: this.mockedDirection,
-      Sector: this.mockedSector,
-      Budget: this.mockedBugget,
-      Description: this.mockedDescription,
+      Sector: this.mockedSector.value,
+      Budget: this.mockedBugget.value,
+      Description: this.mockedDescription.value,
       reports:this.mockedReports,
-      applications: this.mockedApplications
+      applications: this.mockedApplications.map(application => new ApplicationDTO({
+        applicationId: application.guid.value,
+        state: application.state.current,
+        candidateId: application.candidateId.value,
+        previous_state: application.previous_state.current,
+        budget: application.budget.value,
+        description: application.description.value,
+        duration_days: application.time.days,
+      }))
     }
       
     );

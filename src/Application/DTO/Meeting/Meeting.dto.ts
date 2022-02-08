@@ -1,3 +1,6 @@
+import { CandidateDTO } from "../Candidate/Candidate.dto";
+import { LocationDTO } from "../Location.dto";
+
 export class MeetingDTO {
   public candidate: CandidateDTO;
   public employer: EmployerDTO;

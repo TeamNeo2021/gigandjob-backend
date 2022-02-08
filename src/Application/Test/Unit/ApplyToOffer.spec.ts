@@ -49,6 +49,7 @@ import { ICandidateRepository } from '../../Repositories/CandidateRepository';
 import { EmployerRepository } from '../../Repositories/Employer/repository.interface';
 import { MockEmployerRepo } from '../../../Infrastructure/Memory/MockEmployerRepo.repo';
 import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
+import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates';
 
 const MCCrepo = new InMemoryCandidateCommandRepository();
 const Orepo = new MockOfferRepo();
@@ -94,7 +95,7 @@ const ExCommand = new ApplyToOfferDTO({
   offerId: exampleOffer._Id._value,
   employerId: exampleEmployer.employerId._guid_value,
   candidateId: exampleCandidate.Id.value,
-  state: exampleOffer._State.state,
+  state: ApplicationStates.Active,
   //  previous_state: previous_state,
   budget: 200,
   description: 'Descripcion de prueba',
@@ -113,7 +114,7 @@ function create_Service(
 
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
-    MCCrepo.save(exampleCandidate);
+    await MCCrepo.save(exampleCandidate);
     let newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer);
     await Orepo.save(newOffer);
     let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
