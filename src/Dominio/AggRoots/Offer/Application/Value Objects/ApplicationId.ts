@@ -6,7 +6,7 @@ export class ApplicationId{
     }
 
     public get value(): string{
-        return this.value
+        return this._value
     }
 }
 

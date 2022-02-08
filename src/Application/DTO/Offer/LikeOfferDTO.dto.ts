@@ -6,6 +6,6 @@ export class LikeOfferDTO {
   constructor(data: any) {
     this.id_candidate = data.id_candidate;
     this.id_offer = data.id_offer;
-    this.date = data.date;
+    this.date = new Date();
   }
 }

@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Param, Post, Put } from '@nestjs/common';
-import { OfferFirestoreRepository } from '../../Firestore/OfferFirestoreAdapter.adapter';
+import { OfferFirestoreAdapter } from '../../Firestore/OfferFirestoreAdapter.adapter';
 import { OfferApplicationService } from '../../../Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
 import { ReactivateOfferDTO } from '../../../Application/DTO/Offer/ReactivateOfferDTO';
@@ -10,6 +10,7 @@ import { INotificationSender } from '../../../Application/Ports/INotificationSen
 import { EmployerRepositoryService } from 'src/Infrastructure/Firestore/Employer/repository/repository.service';
 import { ApplyToOfferDTO } from '../../../Application/DTO/Application/ApplicationDTO.dto';
 import { LikeOfferDTO } from '../../../Application/DTO/Offer/LikeOfferDTO.dto';
+import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates';
 
 type ReportBody = {
   reason: string;
@@ -23,11 +24,11 @@ type ReactivateOfferBody = {
 @Controller('offer')
 export class OfferController {
     private readonly offerApplicationService: OfferApplicationService;
-    private readonly Offerrepo: OfferFirestoreRepository;
+    private readonly Offerrepo: OfferFirestoreAdapter;
     private readonly CandidaterepoC: ICandidateRepository;
     private readonly Employerrepo: EmployerRepositoryService;
     private readonly Sender: INotificationSender;
-    constructor(offerRepo: OfferFirestoreRepository){
+    constructor(offerRepo: OfferFirestoreAdapter){
         this.Offerrepo = offerRepo;
         this.offerApplicationService = 
             new OfferApplicationService(
@@ -40,12 +41,22 @@ export class OfferController {
   @Post()
   @HttpCode(201)
   createOffer(
-    @Body('direction') Dir: string,
+    @Body('direction') Direction: string,
     @Body('sector') Sector: string,
     @Body('budget') Budget: number,
-    @Body('description') Desc: string,
+    @Body('description') Description: string,
+  
+    
   ): string {
-    let request: createOfferDTO = new createOfferDTO(Dir, Sector, Budget, Desc);
+    let request: createOfferDTO = new createOfferDTO(
+      {
+        direction: Direction,
+        sector: Sector,
+        budget: Budget,
+        description: Description,
+
+      }
+    );
     this.offerApplicationService.Handle(request);
     return 'Offer has been created';
   }
@@ -85,15 +96,15 @@ export class OfferController {
     //@Body  ('idApplication') idApplication:string,
     @Body('state') state: string,
     //@Body ('previous_state') previous_state: string,
-    @Body('budget') budget: Number,
+    @Body('budget') budget: number,
     @Body('description') description: string,
-    @Body('duration_days') duration_days: Number,
+    @Body('duration_days') duration_days: number,
   ) {
     let newApplication = new ApplyToOfferDTO({
       offerId: idOffer,
       employerId: idEmployer,
       candidateId: idCandidate,
-      state: state,
+      state: ApplicationStates[state],
       //  previous_state: previous_state,
       budget: budget,
       description: description,

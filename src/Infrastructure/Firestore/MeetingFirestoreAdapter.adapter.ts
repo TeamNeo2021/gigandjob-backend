@@ -1,5 +1,3 @@
-
-
 import { CollectionReference } from '@google-cloud/firestore';
 import { Inject, Injectable } from '@nestjs/common';
 import { MeetingDTO } from 'src/Application/DTO/Meeting/Meeting.dto';
@@ -51,7 +49,9 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
     }
     async modifyMeeting(meetingUpdate: ModifyMeetingDTO)/**: Promise<MeetingDTO> */{
         try {
-           let updatedMeeting =  await this.collection.doc(meetingUpdate.id).update(meetingUpdate);
+           let updatedMeeting =  await this.collection.doc(meetingUpdate.id).update(
+               meetingUpdate
+           );
            console.log('MeeetingFirestoreAdapter: modifyMeeting response: ', updatedMeeting);
              // return new MeetingDTO(updatedMeeting);
         } catch (error) {

@@ -16,7 +16,7 @@ export const exampleEmployer = Employer.RegisterEmployer(
     EmployerNameVO.Create("Soluciones de Prueba"),
     EmployerDescriptionVO.Create("La descripcion es una prueba"),
     new EmployerStateVO(EmployerStates.Active),
-    EmployerLocationVO.Create("Av los Cedros"),
+    new EmployerLocationVO(24,150),
     EmployerRifVO.Create("J-1236782"),
     EmployerPhoneVO.Create("+584124578457"),
     EmployerMailVO.Create("prueba@test.com"),
@@ -36,7 +36,7 @@ describe("modificar un empleador", () => {
         exampleEmployer.ModifyEmployer(
             EmployerNameVO.Create("Soluciones de Prueba"),
             EmployerDescriptionVO.Create("La descripcion ha sido modificada"),
-            EmployerLocationVO.Create("Av los Cedros"),
+            new EmployerLocationVO(90,90),
             EmployerRifVO.Create("J-1236782"),
             EmployerPhoneVO.Create("+584124578457"),
             EmployerMailVO.Create("prueba@test.com"),
@@ -71,7 +71,7 @@ describe("modificar un empleador", () => {
         expect(() => exampleEmployer.ModifyEmployer(
             EmployerNameVO.Create("Soluciones de Prueba"),
             EmployerDescriptionVO.Create("La descripcion vuelve a ser una prueba"),
-            EmployerLocationVO.Create("Av los Cedros"),
+            new EmployerLocationVO(90,90),
             EmployerRifVO.Create("J-1236782"),
             EmployerPhoneVO.Create("+584124578457"),
             EmployerMailVO.Create("prueba@test.com"),

@@ -17,7 +17,7 @@ import { ApplicationTime } from "../../../AggRoots/Offer/Application/Value Objec
 import { Offer } from "../../../AggRoots/Offer/Offer";
 import { BudgetVO } from "../../../AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../../AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../../AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { OfferIdVO } from "../../../AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "../../../AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "../../../AggRoots/Offer/ValueObjects/OfferRatingVO";
@@ -38,7 +38,7 @@ const exampleOffer = new Offer(
     new OfferStateVO(OfferStatesEnum.Active),
     PublicationDateVO.Create(new Date()),
     RatingVO.Create(0),
-    DirectionVO.Create('direction'),
+    new OfferLocationVO(50,120),
     new SectorVO(Sectors.Laws),
     BudgetVO.Create(400),
     DescriptionVO.Create('Oferta de prueba')

@@ -1,6 +1,6 @@
-import { CandidateDTO } from '../Candidate.dto';
-import { EmployerDTO } from '../Employer.dto';
-import { LocationDTO } from '../Location.dto';
+import { CandidateDTO } from "../Candidate/Candidate.dto";
+import { EmployerDTO } from "../Employer/Employer.dto";
+import { LocationDTO } from "../Location.dto";
 
 export class MeetingDTO {
   public candidate: CandidateDTO;
@@ -12,8 +12,8 @@ export class MeetingDTO {
   public location: LocationDTO;
 
   constructor(meetingData: any) {
-    this.candidate = new CandidateDTO(meetingData.candidate);
-    this.employer = new EmployerDTO(meetingData.employer);
+    this.candidate = (meetingData.candidate);
+    this.employer = (meetingData.employer);
     this.id = meetingData.id;
     this.state = meetingData.state;
     this.description = meetingData.description;

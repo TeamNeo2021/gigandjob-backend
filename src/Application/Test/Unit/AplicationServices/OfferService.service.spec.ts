@@ -3,7 +3,7 @@ import { IOfferRepository } from "../../../Repositories/OfferRepository.repo";
 import { Offer } from "../../../../Dominio/AggRoots/Offer/Offer";
 import { BudgetVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferBudgetVO";
 import { DescriptionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDescriptionVO";
-import { DirectionVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
+import { OfferLocationVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferDirectionVO";
 import { OfferIdVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferIdVO";
 import { PublicationDateVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferPublicationDateVO";
 import { RatingVO } from "../../../../Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO";
@@ -14,10 +14,18 @@ import { InMemoryCandidateCommandRepository } from "../../../../Infrastructure/M
 import { MockSenderAdapter } from "../../../../Infrastructure/Memory/MorckSenderAdapter";
 import { MockEmployerRepo } from "../../../../Infrastructure/Memory/MockEmployerRepo.repo";
 import { LikeOfferDTO } from "../../../DTO/Offer/LikeOfferDTO.dto";
+import { OfferDTO } from "../../../DTO/Offer/OfferDTO";
+import { Application } from "../../../../Dominio/AggRoots/Offer/Application/Application";
+import { LocationDTO } from "../../../DTO/Location.dto"
+import { ApplicationDTO } from "src/Application/DTO/Application/ApplicationDTO.dto";
 
-
-const exampleDirection:string = 'testing direction';
-const exampleSector:string = 'testing sector';
+const exampleDirection:LocationDTO = new LocationDTO(
+  {
+    latitude:0,
+    longitude:0
+  }
+);
+const exampleSector:string = 'Laws';
 const exampleBudget:number = 10;
 const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
 
@@ -26,42 +34,67 @@ const Msender = new MockSenderAdapter();
 const EMrepo = new MockEmployerRepo();
 
 class mockedOfferRepo implements IOfferRepository {
-
   private mockedState: OfferStateVO = new OfferStateVO(OfferStatesEnum.Active);
   private mockedPublicationDate: PublicationDateVO = PublicationDateVO.Create(
     new Date(),
   );
   private mockedRating: RatingVO = RatingVO.Create(0);
-  private mockedDirection: DirectionVO = DirectionVO.Create(
-    'Lorem ipsum dolor sit amet.',
+  private mockedDirection: OfferLocationVO = new OfferLocationVO(
+    0,0 //Latitude, Longitude
   );
   private mockedSector: SectorVO = new SectorVO(Sectors.Laws);
   private mockedBugget: BudgetVO = BudgetVO.Create(10);
   private mockedDescription: DescriptionVO = DescriptionVO.Create(
     'Lorem ipsum dolor sit amet.',
   );
-  getAll(): Promise<Offer[]> {
+  private mockedApplications: Application[] = [];
+  private mockedReports: { reporterId: string, reason: string }[]
+
+  getAll(): Promise<OfferDTO[]> {
     throw new Error("Method not implemented.");
   }
-  async exists(id: OfferIdVO): Promise<boolean> {
+  async exists(id: string): Promise<boolean> {
     return false;
   }
   likeOffer(data: LikeOfferDTO) {
     throw new Error('Method not implemented.');
   }
-  async save(offer: Offer): Promise<void> {
-    mockedDB.push(offer);
+  async save(offer: OfferDTO): Promise<void> {
+    let _offer = Offer.CreateOffer(
+      new OfferStateVO(<OfferStatesEnum><unknown>offer.State),
+      PublicationDateVO.Create(offer.PublicationDate),
+      RatingVO.Create(offer.Rating),
+      new OfferLocationVO(0,0),
+      new SectorVO(<Sectors><unknown>offer.Sector),
+      BudgetVO.Create(offer.Budget),
+      DescriptionVO.Create(offer.Description),
+      new OfferIdVO(offer.OfferId)
+    )
+    mockedDB.push(_offer);
   }
-  async load(id: OfferIdVO): Promise<Offer> {
-    let returned_offer: Offer = new Offer(
-      id,
-      this.mockedState,
-      this.mockedPublicationDate,
-      this.mockedRating,
-      this.mockedDirection,
-      this.mockedSector,
-      this.mockedBugget,
-      this.mockedDescription,
+  async getOfferById(id: string): Promise<OfferDTO> {
+    
+    let returned_offer: OfferDTO = new OfferDTO({
+      OfferId: id,
+      State: this.mockedState.state,
+      PublicationDate: this.mockedPublicationDate.value,
+      Rating: this.mockedRating.value,
+      Direction: this.mockedDirection,
+      Sector: this.mockedSector.value,
+      Budget: this.mockedBugget.value,
+      Description: this.mockedDescription.value,
+      reports:this.mockedReports,
+      applications: this.mockedApplications.map(application => new ApplicationDTO({
+        applicationId: application.guid.value,
+        state: application.state.current,
+        candidateId: application.candidateId.value,
+        previous_state: application.previous_state.current,
+        budget: application.budget.value,
+        description: application.description.value,
+        duration_days: application.time.days,
+      }))
+    }
+      
     );
 
     return returned_offer;
@@ -74,17 +107,19 @@ const exampleOffer = Offer.CreateOffer(
   new OfferStateVO(OfferStatesEnum.Active),
   PublicationDateVO.Create(new Date('1999-05-13')),
   RatingVO.Create(5),
-  DirectionVO.Create('AV Francisco de Miranda'),
+  new OfferLocationVO(0,0),
   new SectorVO(Sectors.Technology),
   BudgetVO.Create(1500),
   DescriptionVO.Create('descripcion de prueba'),
 );
 
 const valid_command: createOfferDTO = new createOfferDTO(
-  exampleDirection,
-  exampleSector,
-  exampleBudget,
-  exampleDescription,
+  {
+    Direction:exampleDirection,
+    Budget: exampleBudget,
+    Sector: exampleSector,
+    Description: exampleDescription
+  }
 );
 const invalid_command: invalidCommand = {};
 

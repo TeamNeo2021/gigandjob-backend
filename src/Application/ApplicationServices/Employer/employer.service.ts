@@ -1,6 +1,4 @@
 import { EmployerRepository } from "src/Application/Repositories/Employer/repository.interface";
-import { ReactivateEmployerDTO } from "src/Application/DTO/ReactivateEmployer.dto";
-import { EliminateEmployerDTO } from "src/Application/DTO/EliminateEmployer.dto";
 import { CreateEmployerCommandDTO } from "src/Application/DTO/CreateEmployer.dto";
 import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
 import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo";
@@ -11,6 +9,9 @@ import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/Employ
 import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
 import { EmployerMailVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerMailVo";
 import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
+import { EntitiesFactory } from "src/Application/Core/EntitiesFactory.service";
+import { ReactivateEmployerDTO } from "src/Application/DTO/Employer/ReactivateEmployer.dto";
+import { EliminateEmployerDTO } from "src/Application/DTO/Employer/EliminateEmployer.dto";
 
 export class EmployerApplicationService {
     constructor(private repository: EmployerRepository) {}
@@ -18,7 +19,7 @@ export class EmployerApplicationService {
     async Handle(command: any): Promise<void> {
         switch (command.constructor){
 
-            case ReactivateEmployerDTO: {
+            /*case ReactivateEmployerDTO: {
                 const id = (command as ReactivateEmployerDTO).id,
                       employer = await this.repository.get(id)
                     
@@ -26,6 +27,18 @@ export class EmployerApplicationService {
 
                 employer.reactivateThisEmployer()
                 await this.repository.save(employer)
+                break;
+            }*/
+
+            case ReactivateEmployerDTO:{
+                let cmd: ReactivateEmployerDTO = <ReactivateEmployerDTO> command;
+                let employerReactivated = await this.repository.get(cmd.id)
+
+                if (!employerReactivated) throw new Error //CouldNotFindEmployerError(employer.employerId)
+
+                let newEmployerReactivated = EntitiesFactory.fromEmployerDtoToEmployer(employerReactivated);
+                newEmployerReactivated.reactivateThisEmployer()
+                await this.repository.save(EntitiesFactory.fromEmployerToEmployerDTO(newEmployerReactivated))
                 break;
             }
 
@@ -42,14 +55,14 @@ export class EmployerApplicationService {
                     EmployerNameVO.Create(cmd.name),
                     EmployerDescriptionVO.Create(cmd.description),
                     new EmployerStateVO(cmd.state),
-                    EmployerLocationVO.Create(cmd.location),
+                    new EmployerLocationVO(cmd.location.latitude,cmd.location.longitude),
                     EmployerRifVO.Create(cmd.rif),
                     EmployerPhoneVO.Create(cmd.phone),
                     EmployerMailVO.Create(cmd.mail),
                     EmployerComercialDesignationVO.Create(cmd.comDesignation),
                 )
 
-                await this.repository.save(employer)
+                await this.repository.save(EntitiesFactory.fromEmployerToEmployerDTO(employer))
                 break;
             }
         }

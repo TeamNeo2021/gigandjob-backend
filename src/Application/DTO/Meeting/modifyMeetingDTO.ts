@@ -1,4 +1,4 @@
-import { LocationDTO } from '../Location.dto';
+import { LocationDTO } from "../Location.dto";
 
 export class ModifyMeetingDTO {
   public id: string;

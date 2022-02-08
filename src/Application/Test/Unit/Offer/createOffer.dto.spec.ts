@@ -1,6 +1,9 @@
+import { LocationDTO } from "src/Application/DTO/Location.dto";
 import { createOfferDTO } from "../../../DTO/Offer/CreateOffer.dto";
 
-const exampleDirection:string = 'testing direction';
+const exampleDirection:LocationDTO = new LocationDTO(
+    {latitude:0,longitude:0}
+);
 const exampleSector:string = 'testing sector';
 const exampleBudget:number = 10;
 const exampleDescription:string = 'Lorem ipsum dolor sit amet.'
@@ -16,10 +19,12 @@ const isToday = (someDate:Date) => {
 //function to create the DTO`s
 function create_Offer_dto():createOfferDTO{
     return new createOfferDTO(
-        exampleDirection,
-        exampleSector,
-        exampleBudget,
-        exampleDescription
+        {
+            Direction:exampleDirection,
+            Budget: exampleBudget,
+            Sector: exampleSector,
+            Description: exampleDescription
+        } 
     );
 }
 

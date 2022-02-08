@@ -4,7 +4,10 @@ export class CreateEmployerCommandDTO {
     constructor(
         public name: string,
         public description: string,
-        public location: string,
+        public location: {
+            latitude: number,
+            longitude: number
+        },
         public state: EmployerStates, 
         public rif: string,
         public phone: string,

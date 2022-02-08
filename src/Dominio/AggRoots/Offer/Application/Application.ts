@@ -9,13 +9,13 @@ import { ApplicationTime } from "./Value Objects/ApplicationTime";
 
 
 export class Application extends Entity<ApplicationId>{
-    private readonly id: ApplicationId;
-    private candidateId: CandidateIdVo;
-    private state: ApplicationState;
-    private previous_state: ApplicationState;
-    private budget: ApplicationBudget;
-    private description: ApplicationDescription;
-    private time: ApplicationTime;
+    public readonly id: ApplicationId;
+    public candidateId: CandidateIdVo;
+    public state: ApplicationState;
+    public previous_state?: ApplicationState;
+    public budget: ApplicationBudget;
+    public description: ApplicationDescription;
+    public time: ApplicationTime;
     
 
     constructor(applier: any,

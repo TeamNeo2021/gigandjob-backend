@@ -17,7 +17,7 @@ describe("create a new Candidate Location Value Object", ()=>{
         expect(()=> new CandidateLocationVo(24,200)).toThrowError(InvalidCandidateLocationError)
     }),
     it("should succeed when entering valid coordenates",()=>{
-        expect(()=> new CandidateLocationVo(24,200))
+        expect(()=> new CandidateLocationVo(24,100))
     })
 
 }
