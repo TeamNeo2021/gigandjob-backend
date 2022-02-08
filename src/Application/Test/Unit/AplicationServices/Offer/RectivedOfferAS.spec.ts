@@ -18,33 +18,31 @@ import {ReactivateOfferDTO} from "../../../../DTO/Offer/ReactivateOfferDTO";
 import { InMemoryCandidateCommandRepository } from "src/Infrastructure/Memory/InMemoryCandidateCommandRepository.repo";
 import { MockSenderAdapter } from "src/Infrastructure/Memory/MorckSenderAdapter";
 import { MockEmployerRepo } from '../../../../../Infrastructure/Memory/MockEmployerRepo.repo';
+import { OfferDTO } from 'src/Application/DTO/Offer/OfferDTO';
+import { LocationDTO } from 'src/Application/DTO/Location.dto';
+import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
+import { InvalidOfferState } from 'src/Dominio/AggRoots/Offer/Errors/InvalidOfferState.error';
 
 
 const MCandidateRepo = new InMemoryCandidateCommandRepository();
 const Msender = new MockSenderAdapter();
 const EMrepo = new MockEmployerRepo();
 
-const exampleOffer2 = new Offer(
-  new OfferIdVO(randomUUID()),
-  new OfferStateVO(OfferStatesEnum.Active),
-  PublicationDateVO.Create(new Date()),
-  RatingVO.Create(0),
-  OfferLocationVO.Create('direction'),
-  new SectorVO(Sectors.Laws),
-  BudgetVO.Create(400),
-  DescriptionVO.Create('Oferta de prueba'),
-);
 
-const exampleOffer3 = new Offer(
-  new OfferIdVO(randomUUID()),
-  new OfferStateVO(OfferStatesEnum.Active),
-  PublicationDateVO.Create(new Date()),
-  RatingVO.Create(0),
-  OfferLocationVO.Create('direction'),
-  new SectorVO(Sectors.Laws),
-  BudgetVO.Create(400),
-  DescriptionVO.Create('Oferta de prueba'),
-);
+const exampleOfferDto = new OfferDTO({
+  OfferId: randomUUID(),
+  State: OfferStatesEnum.Active,
+  PublicationDate: new Date(),
+  Rating: 0,
+  Direction: new LocationDTO({
+    longitude: 90,
+    latitude: 90,
+  }),
+  Sector: Sectors.Laws,
+  Budget: 400,
+  Description: 'Oferta de prueba',
+
+})
 
 const Orepo = new MockOfferRepo();
 
@@ -56,15 +54,20 @@ function create_Service(repoO: IOfferRepository): OfferApplicationService {
 
 describe('Reactivar una oferta', () => {
   it('debe tener éxito al reactivar una oferta cuando esta suspendida', async () => {
-    await Orepo.save(exampleOffer2);
-    let exampleOffer: Offer = await Orepo.getOfferById(
-      new OfferIdVO(exampleOffer2._Id.value),
+    await Orepo.save(exampleOfferDto);
+    let exampleOffer: OfferDTO = await Orepo.getOfferById(
+      exampleOfferDto.OfferId,
     );
-    exampleOffer.SuspendOffer(false);
-    let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
-    let OfferService = create_Service(Orepo);
+    let offer = EntitiesFactory.fromOfferDTOtoOffer(exampleOffer);
+    offer.SuspendOffer(false);
+    let ExCommand = new ReactivateOfferDTO((await offer)._Id.value);
+    let OfferService = create_Service(Orepo); // comment jose: estas creando instancias del servicio en cada test, crealo por fuera y usalo es mejor
     OfferService.Handle(ExCommand);
-    let oferReactived: Offer = await Orepo.getOfferById(exampleOffer._Id);
+    let oferReactived: Offer = EntitiesFactory.fromOfferDTOtoOffer(
+      await Orepo.getOfferById(
+        offer._Id.value
+        )
+        );
     expect(
       () =>
         oferReactived._State.state.toString() ==
@@ -72,30 +75,26 @@ describe('Reactivar una oferta', () => {
     );
   });
   it('no debe tener éxito cuando una oferta no esta suspendida', async () => {
-    await Orepo.save(exampleOffer3);
-    let exampleOffer: Offer = await Orepo.getOfferById(
-      new OfferIdVO(exampleOffer3._Id.value),
+    await Orepo.save(exampleOfferDto);
+    let exampleOffer: OfferDTO = await Orepo.getOfferById(
+      exampleOfferDto.OfferId,
     );
-    let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
+    let offer = EntitiesFactory.fromOfferDTOtoOffer(exampleOffer);
+    let ExCommand = new ReactivateOfferDTO((await offer)._Id.value);
     let OfferService = create_Service(Orepo);
-    let error: any = undefined;
-    await OfferService.Handle(ExCommand).catch((err) => (error = err));
-    expect(() => {
-      throw error;
-    }).toThrowError(error);
+    expect(() => OfferService.Handle(ExCommand)).rejects.toThrowError(InvalidOfferState);
   });
   it('no debe tener éxito cuando una oferta esta eliminada', async () => {
-    await Orepo.save(exampleOffer3);
-    let exampleOffer: Offer = await Orepo.getOfferById(
-      new OfferIdVO(exampleOffer3._Id.value),
+    await Orepo.save(exampleOfferDto);
+    let exampleOffer: OfferDTO = await Orepo.getOfferById(
+      exampleOfferDto.OfferId,
     );
-    exampleOffer.EliminateOffer();
-    let ExCommand = new ReactivateOfferDTO((await exampleOffer)._Id.value);
+    let offer = EntitiesFactory.fromOfferDTOtoOffer(exampleOffer);
+    offer.EliminateOffer();
+    let ExCommand = new ReactivateOfferDTO((await offer)._Id.value);
     let OfferService = create_Service(Orepo);
-    let error: any = undefined;
-    await OfferService.Handle(ExCommand).catch((err) => (error = err));
-    expect(() => {
-      throw error;
-    }).toThrowError(error);
+
+ 
+    expect(() => OfferService.Handle(ExCommand)).rejects.toThrowError(InvalidOfferState);
   });
 });

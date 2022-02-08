@@ -17,8 +17,8 @@ export class MockOfferRepo implements IOfferRepository {
     this.Offers.push(offer);
   }
   async getOfferById(id_offer: string): Promise<OfferDTO> {
-    console.log('Me llegó este id:' + id_offer);
-    console.log('Mi longitud es:' + this.Offers.length);
+    console.log('OfferREPO: getOfferById: Offer id:' + id_offer);
+    console.log('Offer repo length:' + this.Offers.length);
     return this.Offers.find((offer) => offer.OfferId == id_offer);
   }
   exists(id: String): Promise<boolean> {

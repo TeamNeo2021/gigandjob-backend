@@ -1,4 +1,5 @@
 import { EmployerTransactionService } from "src/Application/ApplicationServices/Employer/transaction.interface";
+import { LocationDTO } from "src/Application/DTO/Location.dto";
 import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
 import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerComercialDesignationVo";
 import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
@@ -14,8 +15,7 @@ export class CreateEmployerCommand implements EmployerCommand<void> {
     constructor(
         private name: string,
         private description: string,
-        private latitude: Number,
-        private longitude: Number,
+        private location: LocationDTO,
         private state: EmployerStates, 
         private rif: string,
         private phone: string,
@@ -30,7 +30,10 @@ export class CreateEmployerCommand implements EmployerCommand<void> {
             EmployerNameVO.Create(this.name),
             EmployerDescriptionVO.Create(this.description),
             new EmployerStateVO(this.state),
-            new EmployerLocationVO(this.latitude, this.longitude),
+            new EmployerLocationVO(
+                this.location.latitude, 
+                this.location.longitude,
+            ),
             EmployerRifVO.Create(this.rif),
             EmployerPhoneVO.Create(this.phone),
             EmployerMailVO.Create(this.mail),

@@ -13,7 +13,7 @@ export class InvalidOfferState extends Error {
     }
 
     static ChangingClosedState() {
-        return new InvalidOfferState("ERROR: Ya la oferta está concretada, no se puede abrir o suspender")
+        return new InvalidOfferState("ERROR: Ya la oferta está concretada, no se puede abrir, suspender, o eliminar")
     }
 
     static ChangingEliminatadState() {

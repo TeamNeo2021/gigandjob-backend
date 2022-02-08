@@ -38,7 +38,7 @@ const exampleOffer = new Offer(
     new OfferStateVO(OfferStatesEnum.Active),
     PublicationDateVO.Create(new Date()),
     RatingVO.Create(0),
-    new OfferLocationVO(123,90),
+    new OfferLocationVO(50,120),
     new SectorVO(Sectors.Laws),
     BudgetVO.Create(400),
     DescriptionVO.Create('Oferta de prueba')

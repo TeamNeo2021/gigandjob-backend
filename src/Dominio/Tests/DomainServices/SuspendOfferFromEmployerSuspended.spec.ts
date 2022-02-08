@@ -27,7 +27,7 @@ function create_exampleEmployer(): Employer{
         EmployerNameVO.Create("Soluciones de Prueba"),
         EmployerDescriptionVO.Create("La descripcion es una prueba"),
         new EmployerStateVO(EmployerStates.Active),
-        EmployerLocationVO.Create("Av los Cedros"),
+        new EmployerLocationVO(90,90),
         EmployerRifVO.Create("J-1236782"),
         EmployerPhoneVO.Create("+584124578457"),
         EmployerMailVO.Create("prueba@test.com"),

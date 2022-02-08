@@ -27,7 +27,7 @@ export class OfferFirestoreAdapter implements IOfferRepository{
     }
 
     async save(offer: OfferDTO): Promise<void> {
-        await this.offerRepository.doc(offer.OfferId).set(offer)
+        await this.offerRepository.doc(offer.OfferId).set(offer);
     }
 
 

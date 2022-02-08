@@ -95,6 +95,17 @@ $ npm run test:cov -->
 
 ![alt text](./assets/UML.png?raw=true "UML diagram") 
 
+## Refactor Practices Made:
+
+- Combine Functions Into Class: EntitiesFactory
+- Extract Functions: In EntitiesFactory, Create, Unsafe
+- Extract Variable: Controllers responses
+- Change Function Declaration: Repositories  load() --> getOfferById(), as well as return types.
+- Rename variable
+- Introduce Parameter Object: all DTOS, ex: LocationDTO
+- Inline Variables
+
+
 
 ## :orange_book: Code References
 
