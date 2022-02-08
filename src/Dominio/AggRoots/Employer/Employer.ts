@@ -98,9 +98,9 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
           event as EmployerEliminated;
         this.state = eventEmployerEliminated.state;
         break;
-      
+
       case EmployerReactivated:
-        this.state = new EmployerStateVO(EmployerStates.Active)
+        this.state = new EmployerStateVO(EmployerStates.Active);
       default:
         break;
     }
@@ -159,23 +159,26 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     description: string,
     state: EmployerStates,
     latitude: Number,
-    longitude:  Number,
+    longitude: Number,
     rif: string,
     phone: string,
     mail: string,
     comDesignation: string,
+    offers: Offer[],
   ) {
-    return new Employer(
+    let newEmployer = new Employer(
       new EmployerIdVO(id),
       EmployerNameVO.Unsafe(name),
       EmployerDescriptionVO.Unsafe(description),
       new EmployerStateVO(state),
-      new EmployerLocationVO(latitude,longitude),
+      new EmployerLocationVO(latitude, longitude),
       EmployerRifVO.Unsafe(rif),
       EmployerPhoneVO.Unsafe(phone),
       EmployerMailVO.Unsafe(mail),
       EmployerComercialDesignationVO.Unsafe(comDesignation),
     );
+    newEmployer.offers = offers;
+    return newEmployer;
   }
 
   static RegisterEmployer(
@@ -255,29 +258,34 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     return this;
   }
 
-  public reactivateThisEmployer(){
-    if (!(this.isSuspended())){
-        throw InvalidEmployerAction.notSuspended();          
+  public reactivateThisEmployer() {
+    if (!this.isSuspended()) {
+      throw InvalidEmployerAction.notSuspended();
     }
-    if (this.isActive()){
-        throw InvalidEmployerAction.alreadyActive();
+    if (this.isActive()) {
+      throw InvalidEmployerAction.alreadyActive();
     }
-    if (this.isEliminated()){
-        throw InvalidEmployerAction.alreadyEliminated();
+    if (this.isEliminated()) {
+      throw InvalidEmployerAction.alreadyEliminated();
     }
-    console.log('Reactivating Employer #: ', this._employerId._guid_value, '\nName: ', this._name.value_name_employer);
-    this.Apply(new EmployerReactivated(this.tid))
-}
+    console.log(
+      'Reactivating Employer #: ',
+      this._employerId._guid_value,
+      '\nName: ',
+      this._name.value_name_employer,
+    );
+    this.Apply(new EmployerReactivated(this.tid));
+  }
 
   //The following may be useless, but is for support ubiquitous language
-  private isEliminated(): boolean{
-      return this._state.value_state == EmployerStates.Eliminated;
+  private isEliminated(): boolean {
+    return this._state.value_state == EmployerStates.Eliminated;
   }
-  private isSuspended(): boolean{
-      return this._state.value_state == EmployerStates.Suspended;
+  private isSuspended(): boolean {
+    return this._state.value_state == EmployerStates.Suspended;
   }
-  private isActive(): boolean{
-      return this._state.value_state == EmployerStates.Active;
+  private isActive(): boolean {
+    return this._state.value_state == EmployerStates.Active;
   }
 
   //Getters y setters

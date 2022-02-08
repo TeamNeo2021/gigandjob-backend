@@ -11,7 +11,7 @@ export class EmployerDTO{
     public phone: string;
     public mail: string;
     public comDesignation: string;
-    public offers : OfferDTO[];
+    public offers : OfferDTO[] = [];
 
   //  public comDesignation: EmployerComercialDesignationVO;
 

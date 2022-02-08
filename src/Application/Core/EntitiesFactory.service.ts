@@ -120,16 +120,20 @@ export class EntitiesFactory {
        * @returns {Employer}
        */ 
     
-      static fromEmployerDtoToEmployer(employerDTO: CreateEmployerDTO): Employer {
-        const employer: Employer =  Employer.RegisterEmployer(
-           EmployerNameVO.Unsafe(employerDTO.name),
-           EmployerDescriptionVO.Unsafe (employerDTO.description), 
-           new EmployerStateVO (EmployerStates[employerDTO.state]),
-           new EmployerLocationVO (employerDTO.location.latitude, employerDTO.location.longitude),
-           EmployerRifVO.Unsafe (employerDTO.rif),
-           EmployerPhoneVO.Unsafe (employerDTO.phone),
-           EmployerMailVO.Unsafe( employerDTO.mail),
-           EmployerComercialDesignationVO.Unsafe (employerDTO.comDesignation)
+      static fromEmployerDtoToEmployer(employerDTO: EmployerDTO): Employer {
+        const employer: Employer =  Employer.Unsafe(
+           (employerDTO.employerId),
+           (employerDTO.name),
+           (employerDTO.description), 
+           (EmployerStates[employerDTO.state]),
+           (employerDTO.location.latitude),
+           (employerDTO.location.longitude),
+           (employerDTO.rif),
+           (employerDTO.phone),
+           (employerDTO.mail),
+           (employerDTO.comDesignation),
+           (employerDTO.offers.map(EntitiesFactory.fromOfferDTOtoOffer))
+
         );
         return employer;
       }
@@ -152,7 +156,7 @@ export class EntitiesFactory {
               phone : employer.phone,
               mail : employer.mail,
               comDesignation : employer.comDesignation,
-              offers : [],
+              offers : employer.offers.map(EntitiesFactory.fromOfferToOfferDTO),
           }
         );
         return employerDTO;
@@ -188,7 +192,7 @@ export class EntitiesFactory {
           new CandidateIdVo(candidateDto.candidateId),
           new CandidateStateVo(CandidateStatesEnum[candidateDto.state]),
           new CandidateFullNameVo(candidateDto.name.split(" ")[0],candidateDto.name.split(" ")[1]),
-          new CandidatePhoneVo(candidateDto.phone.toString().slice(0,4), candidateDto.phone.toString().slice(4)),
+          new CandidatePhoneVo(candidateDto.phone.slice(0,4), candidateDto.phone.slice(5)),
           new CandidateEmailVo(candidateDto.email),
           new CandidateBirthDateVo(candidateDto.birthDate),
           new CandidateLocationVo(candidateDto.location.latitude, candidateDto.location.longitude),

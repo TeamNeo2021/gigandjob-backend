@@ -8,7 +8,10 @@ import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/Emplo
  type CreateEmployerData = {
      name: string,
      description: string,
-     location: string, 
+     location: {
+         latitude: number,
+         longitude: number
+     }, 
      state: string, 
      rif: string,
      phone: string,

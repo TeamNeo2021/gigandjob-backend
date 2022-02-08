@@ -4,7 +4,6 @@ export class CandidateDTO {
   public candidateId: string;
   public state: string;
   public name: string;
-
   public phone: string;
   public email: string;
   public birthDate: Date;

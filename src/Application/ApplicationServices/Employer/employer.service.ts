@@ -55,14 +55,14 @@ export class EmployerApplicationService {
                     EmployerNameVO.Create(cmd.name),
                     EmployerDescriptionVO.Create(cmd.description),
                     new EmployerStateVO(cmd.state),
-                    EmployerLocationVO.Create(cmd.location),
+                    new EmployerLocationVO(cmd.location.latitude,cmd.location.longitude),
                     EmployerRifVO.Create(cmd.rif),
                     EmployerPhoneVO.Create(cmd.phone),
                     EmployerMailVO.Create(cmd.mail),
                     EmployerComercialDesignationVO.Create(cmd.comDesignation),
                 )
 
-                await this.repository.save(employer)
+                await this.repository.save(EntitiesFactory.fromEmployerToEmployerDTO(employer))
                 break;
             }
         }
