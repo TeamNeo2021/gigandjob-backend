@@ -17,7 +17,7 @@ type studies = {
     degree: string
 }
 
-@Controller('candidates')
+@Controller('CV')
 export class CVController {
     constructor(@Inject('CvService') private service: CvService) {}
 
