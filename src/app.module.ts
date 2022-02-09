@@ -15,6 +15,8 @@ import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
 import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
 import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
+import { DashboardController } from './Infrastructure/Controllers/Read-side/dashboard/dashboard.controller';
+import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/DashboardWebQueryFirestoreAdapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 
@@ -68,6 +70,7 @@ const meetingAdapterProvider = {
         'offers',
         'candidates',
         'applications',
+        'dashboardModel',
       ],
     }),
     CandidateModule,
@@ -78,6 +81,11 @@ const meetingAdapterProvider = {
     MeetingController,
     OfferController,
     EmployerController,
+    AppController,
+    MeetingController,
+    OfferController,
+    EmployerController,
+    DashboardController,
   ],
   providers: [
     AppService,
@@ -89,6 +97,7 @@ const meetingAdapterProvider = {
     employerServiceProvider,
     meetingAdapterProvider,
     OfferQueryFirestoreAdapter,
+    DashboardWebQueryFirestoreAdapter,
   ],
 })
 export class AppModule {}
