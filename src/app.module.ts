@@ -15,6 +15,8 @@ import { INotificationSender } from './Application/Ports/INotificationSender';
 import { OfferController } from './Infrastructure/Controllers/Offer/OfferController.controller';
 import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
 import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
+import { DashboardController } from './Infrastructure/Controllers/Read-side/dashboard/dashboard.controller';
+import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/DashboardWebQueryFirestoreAdapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
 import { BasicStrategy } from 'passport-http';
 import { AuthService } from './Infrastructure/Services/auth.service';
@@ -25,11 +27,13 @@ import { UserCreationHandler } from './Infrastructure/Event/Handlers/UserCreatio
 import { UserController } from './Infrastructure/Controllers/User/user.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
+import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
+
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
   useFactory: (repo: EmployerRepositoryService) => {
-    return new EmployerApplicationService(repo)
+    return new EmployerApplicationService(repo);
   },
   inject: [EmployerRepositoryService]
 }
@@ -44,21 +48,30 @@ const userServiceProvider = {
 
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
-  useFactory: (Offerrepo: OfferFirestoreAdapter, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
-  Inject: [OfferFirestoreAdapter]
-}
+  useFactory: (
+    Offerrepo: OfferFirestoreAdapter,
+    candidateRepoC: ICandidateRepository,
+    Employerrepo: EmployerRepositoryService,
+    Sender: INotificationSender,
+  ) =>
+    new OfferApplicationService(
+      Offerrepo,
+      candidateRepoC,
+      Employerrepo,
+      Sender,
+    ),
+  Inject: [OfferFirestoreAdapter],
+};
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
   useFactory: (repo: MeetingFirestoreAdapter) => {
-    return new MeetingApplicationService(repo)
+    return new MeetingApplicationService(repo);
   },
-  inject: [MeetingFirestoreAdapter]
-}
-
+  inject: [MeetingFirestoreAdapter],
+};
 
 @Module({
-  
   imports: [
     //TODO: Arreglar una vez se haya conectado bien con firestore
     ConfigModule.forRoot({
@@ -90,7 +103,8 @@ const meetingAdapterProvider = {
     MeetingController, 
     OfferController, 
     UserController,
-    EmployerController
+    EmployerController,
+    DashboardController,
   ],
   providers: [
     // Users stack
@@ -108,6 +122,8 @@ const meetingAdapterProvider = {
     EmployerRepositoryService,
     employerServiceProvider,
     meetingAdapterProvider,
+    OfferQueryFirestoreAdapter,
+    DashboardWebQueryFirestoreAdapter,
   ],
 })
 export class AppModule {}

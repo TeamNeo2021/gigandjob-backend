@@ -304,7 +304,7 @@ export class EntitiesFactory {
        */
 
       static fromOfferToOfferDTO(offer: Offer): OfferDTO {
-        const newOfferDto: OfferDTO = new OfferDTO({
+        return new OfferDTO({
           OfferId: offer._Id._value,
           State:  offer._State.state,
           PublicationDate: offer._PublicationDate.value,
@@ -323,9 +323,7 @@ export class EntitiesFactory {
             description: application.description.value,
             duration_days: application.time.days,
           }))
-        }
-        );
-        return newOfferDto;
+        });
       }
 
 
