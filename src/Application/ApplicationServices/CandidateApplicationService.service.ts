@@ -32,14 +32,21 @@ export class CandidateApplicationService implements IApplicationService{
             case CandidateRegisterDTO: {
                 
                 let dto: CandidateRegisterDTO = <CandidateRegisterDTO> command
-
+                console.log(dto.birthDate.split('-'));
+                console.log(new Date(1995, 6, 2));
                 let candidate = new Candidate(
                     new CandidateIdVo(),
                     new CandidateStateVo(CandidateStatesEnum.Active),
                     new CandidateFullNameVo(dto.name, dto.lastname),
                     new CandidatePhoneVo(dto.phoneCode, dto.phoneNumber),
                     new CandidateEmailVo(dto.email),
-                    new CandidateBirthDateVo(new Date(dto.birthDate)),
+                    new CandidateBirthDateVo(
+                        new Date(
+                            parseInt(dto.birthDate.split('-')[2]),
+                            parseInt(dto.birthDate.split('-')[1]),
+                            parseInt(dto.birthDate.split('-')[0])
+                        )
+                    ),
                     new CandidateLocationVo(dto.latitude, dto.longitude),
                 );
 
