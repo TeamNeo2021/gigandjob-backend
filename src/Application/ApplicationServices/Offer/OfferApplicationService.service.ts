@@ -83,7 +83,7 @@ export class OfferApplicationService implements IApplicationService {
         await this.Offerrepo.save(
           EntitiesFactory.fromOfferToOfferDTO(new_offer),
         ).catch((err) => {
-          throw err;
+          throw err.DB_error;
         });
 
         break;
