@@ -5,7 +5,7 @@ export class InMemoryCandidateRepository implements ICandidateRepository{
   private candidates: Candidate[] = [];
 
   async save(candidate: Candidate): Promise<void> {
-    this.candidates.push(candidate.registerCandidate());
+    this.candidates.push(candidate.registerCandidate(""));
   }
 
   async modify(id: string, candidate: Candidate): Promise<void>  {

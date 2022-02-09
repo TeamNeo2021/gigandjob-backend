@@ -5,8 +5,10 @@ export class CandidateRegisterDTO{
     public phoneNumber: string;
     public email: string;
     public birthDate: string;
+    public password: string;
     public latitude: Number;
     public longitude: Number;
+
     constructor(
         name: string,
         lastname: string,
@@ -16,6 +18,7 @@ export class CandidateRegisterDTO{
         birthDate: string,
         latitude: Number,
         longitude: Number,
+        password: string
     ){
         this.name = name;
         this.lastname = lastname;
@@ -25,5 +28,6 @@ export class CandidateRegisterDTO{
         this.email = email;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.password = password
     }
 } 

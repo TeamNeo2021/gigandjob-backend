@@ -4,17 +4,72 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**authLoginPost**](DefaultApi.md#authLoginPost) | **POST** /auth/login | Logs in a Candidate given an email and password
+[**cVPost**](DefaultApi.md#cVPost) | **POST** /CV | Registers a new CV of a candidate
 [**candidatesIdDelete**](DefaultApi.md#candidatesIdDelete) | **DELETE** /candidates/{id} | Deletes a candidate
 [**candidatesIdReactivatePost**](DefaultApi.md#candidatesIdReactivatePost) | **POST** /candidates/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
 [**candidatesIdSuspendPost**](DefaultApi.md#candidatesIdSuspendPost) | **POST** /candidates/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
 [**candidatesPost**](DefaultApi.md#candidatesPost) | **POST** /candidates | Registers a new candidate
+[**employersEliminatedPut**](DefaultApi.md#employersEliminatedPut) | **PUT** /employers/Eliminated | Elimina un Empleador
 [**employersPost**](DefaultApi.md#employersPost) | **POST** /employers | Registers a new employer
+[**employersReactivatedPut**](DefaultApi.md#employersReactivatedPut) | **PUT** /employers/Reactivated | Reactiva un Empleador
 [**meetingAcceptPut**](DefaultApi.md#meetingAcceptPut) | **PUT** /meeting/accept | Accept a meeting
 [**offerEliminitedPut**](DefaultApi.md#offerEliminitedPut) | **PUT** /offer/Eliminited | Eliminates an offer
 [**offerIdReportPost**](DefaultApi.md#offerIdReportPost) | **POST** /offer/{id}/report | Reports an offer
 [**offerPost**](DefaultApi.md#offerPost) | **POST** /offer | Creates a new offer
 [**offerReactivedPut**](DefaultApi.md#offerReactivedPut) | **PUT** /offer/Reactived | Reactivates an offer
 
+
+<a name="authLoginPost"></a>
+# **authLoginPost**
+> inline_response_200 authLoginPost()
+
+Logs in a Candidate given an email and password
+
+    Logs in via HTTP Basic a given user using the email and password provided
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**inline_response_200**](../Models/inline_response_200.md)
+
+### Authorization
+
+[BasicAuth](../README.md#BasicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="cVPost"></a>
+# **cVPost**
+> String cVPost(CVSubmitForm)
+
+Registers a new CV of a candidate
+
+    Creates a new cv that can be approved
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **CVSubmitForm** | [**CVSubmitForm**](../Models/CVSubmitForm.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 <a name="candidatesIdDelete"></a>
 # **candidatesIdDelete**
@@ -36,7 +91,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -63,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -91,7 +146,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -118,7 +173,34 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="employersEliminatedPut"></a>
+# **employersEliminatedPut**
+> String employersEliminatedPut(EmployerStateChangeInformation)
+
+Elimina un Empleador
+
+    Esta accion cambio el estado de cualquiera a eliminado de un Empleador
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **EmployerStateChangeInformation** | [**EmployerStateChangeInformation**](../Models/EmployerStateChangeInformation.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -145,7 +227,34 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="employersReactivatedPut"></a>
+# **employersReactivatedPut**
+> String employersReactivatedPut(EmployerStateChangeInformation)
+
+Reactiva un Empleador
+
+    Esta accion cambio el estado de suspendido a reactivado/activo de un Empleador
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **EmployerStateChangeInformation** | [**EmployerStateChangeInformation**](../Models/EmployerStateChangeInformation.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -172,7 +281,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -199,7 +308,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -227,7 +336,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -254,7 +363,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -281,7 +390,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 

@@ -34,6 +34,10 @@ import { RatingVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferRatingVO"
 import { OfferReportVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferReportVO";
 import { Sectors, SectorVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferSectorVo";
 import { OfferStatesEnum, OfferStateVO } from "src/Dominio/AggRoots/Offer/ValueObjects/OfferStateVo";
+import { User } from "src/Dominio/AggRoots/User/user.root";
+import { UserId } from "src/Dominio/AggRoots/User/ValueObjects/userId.object";
+import { UserMail } from "src/Dominio/AggRoots/User/ValueObjects/userMail.object";
+import { UserPassword } from "src/Dominio/AggRoots/User/ValueObjects/userPassword.object";
 import { ApplicationDTO } from "../DTO/Application/ApplicationDTO.dto";
 import { CandidateDTO } from "../DTO/Candidate/Candidate.dto";
 import { CreateEmployerDTO } from "../DTO/Employer/CreateEmployer";
@@ -43,6 +47,7 @@ import { MeetingDTO } from "../DTO/Meeting/Meeting.dto";
 import { ModifyMeetingDTO } from "../DTO/Meeting/modifyMeetingDTO";
 import { createOfferDTO } from "../DTO/Offer/CreateOffer.dto";
 import { OfferDTO } from "../DTO/Offer/OfferDTO";
+import { UserDTO } from "../DTO/User/User.dto";
 /*import { Candidate } from 'src/Dominio/AggRoots/Candidate/Candidate';
 import { CandidateIdVo } from 'src/Dominio/AggRoots/Candidate/ValueObjects/CandidateIdVo';
 import { Employer } from 'src/Dominio/AggRoots/Employer/Employer';
@@ -171,12 +176,17 @@ export class EntitiesFactory {
       static fromCandidateToCandidateDTO(candidate: Candidate): CandidateDTO{
         const candidateDTO: CandidateDTO =  new CandidateDTO(
           {
-              candidateId : candidate.Id,
-              name : candidate.name,
-              state : candidate.state,
-              location : candidate.location,
-              phone : candidate.phone,
-              mail : candidate.email
+              candidateId : candidate.Id.value,
+              name: candidate.name.names.valueOf(),
+              lastname: candidate.name.lastNames.valueOf(),
+              state : candidate.state.state,
+              location: {
+                latitude: candidate.location.latitude.valueOf(),
+                longitude: candidate.location.longitude.valueOf()
+              },
+              phone: candidate.phone.areaCode.valueOf() + candidate.phone.phoneNumber.valueOf(),
+              email: candidate.email.email.valueOf(),
+              birthdate: candidate.birthDay.birthDate
           }
         );
         return candidateDTO;
@@ -213,6 +223,14 @@ export class EntitiesFactory {
   }
 
   //FROM ENTITY TO DTO
+
+  static fromUserDTOToUser(dto: UserDTO) {
+    return new User(
+      new UserId(dto.id),
+      new UserPassword(dto.password),
+      new UserMail(dto.email)
+    )
+  }
 
   static fromMeetingLocationVOToLocationDTO(
     meetingLocation: MeetingLocationVO,

@@ -28,7 +28,7 @@ function create_exampleCandidate(): Candidate{
         new CandidateBirthDateVo(new Date('2000-01-16')),
         new CandidateLocationVo(20, 90)
     );
-    exampleCandidate.registerCandidate();
+    exampleCandidate.registerCandidate("");
 
     return exampleCandidate
 }

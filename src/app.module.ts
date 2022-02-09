@@ -1,4 +1,4 @@
-import { Inject, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,6 +16,15 @@ import { OfferController } from './Infrastructure/Controllers/Offer/OfferControl
 import { MeetingApplicationService } from './Application/ApplicationServices/MeetingApplicationService.service';
 import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
+import { BasicStrategy } from 'passport-http';
+import { AuthService } from './Infrastructure/Services/auth.service';
+import { UserRepository } from './Application/Repositories/User/repository.interface';
+import { UserApplicationService } from './Application/ApplicationServices/UserApplicationService.service';
+import { UserFirestoreAdapterService } from './Infrastructure/Firestore/UserFirestoreAdapter.adapter';
+import { UserCreationHandler } from './Infrastructure/Event/Handlers/UserCreation.handler';
+import { UserController } from './Infrastructure/Controllers/User/user.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -24,6 +33,15 @@ const employerServiceProvider = {
   },
   inject: [EmployerRepositoryService]
 }
+
+const userServiceProvider = {
+  provide: 'UserService',
+  useFactory: (repo: UserRepository) => {
+    return new UserApplicationService(repo)
+  },
+  inject: [UserFirestoreAdapterService]
+}
+
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
   useFactory: (Offerrepo: OfferFirestoreAdapter, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
@@ -57,19 +75,31 @@ const meetingAdapterProvider = {
         'meetings',
         'offers',
         'candidates',
-        'applications'
+        'applications',
+        'users'
       ]
     }),
     CandidateModule,
-    CqrsModule
+    CqrsModule,
+    JwtModule.register({
+      secret: 'secret',
+    })
   ],
   controllers: [
     AppController, 
     MeetingController, 
     OfferController, 
+    UserController,
     EmployerController
   ],
   providers: [
+    // Users stack
+    UserFirestoreAdapterService,
+    userServiceProvider,
+    UserCreationHandler,
+    AuthService,
+    JwtAuthService,
+
     AppService, 
     MeetingApplicationService,
     MeetingFirestoreAdapter,
@@ -77,7 +107,7 @@ const meetingAdapterProvider = {
     OfferFirestoreAdapter,
     EmployerRepositoryService,
     employerServiceProvider,
-    meetingAdapterProvider
+    meetingAdapterProvider,
   ],
 })
 export class AppModule {}

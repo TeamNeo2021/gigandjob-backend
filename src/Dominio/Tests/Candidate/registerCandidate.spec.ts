@@ -24,7 +24,7 @@ const exampleCandidate = new Candidate(
     new CandidateLocationVo(20, 90)
 );
 
- return exampleCandidate.registerCandidate();
+ return exampleCandidate.registerCandidate("");
 
 }
 
@@ -42,7 +42,7 @@ const RegisterCandidateWithSuspendedState = ()=>{
         new CandidateLocationVo(20, 90)
     );
     
-      exampleCandidate.registerCandidate();
+      exampleCandidate.registerCandidate("");
     
     }
 
@@ -60,8 +60,8 @@ const RegisterCandidateTwice = ()=>{
         new CandidateLocationVo(20, 90)
     );
     
-    exampleCandidate.registerCandidate();//register candidate 1st time
-    exampleCandidate.registerCandidate();//register candidate 2nd time
+    exampleCandidate.registerCandidate("");//register candidate 1st time
+    exampleCandidate.registerCandidate("");//register candidate 2nd time
     
     }
 
