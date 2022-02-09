@@ -19,6 +19,7 @@ import { DashboardController } from './Infrastructure/Controllers/Read-side/dash
 import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/DashboardWebQueryFirestoreAdapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
+import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -97,6 +98,7 @@ const meetingAdapterProvider = {
     employerServiceProvider,
     meetingAdapterProvider,
     OfferQueryFirestoreAdapter,
+    CandidateFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
   ],
 })

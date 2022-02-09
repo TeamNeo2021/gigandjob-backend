@@ -171,10 +171,16 @@ export class OfferApplicationService implements IApplicationService {
         break;
       }
       case ApplyToOfferDTO: {
+        console.log("estoy en service")
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         let Offer_Applied = await this.Offerrepo.getOfferById(cmd.offerId);
+        console.log(Offer_Applied.Direction.latitude)
+        console.log(Offer_Applied) 
+        console.log(Offer_Applied.Direction['_latitude']) 
         let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Applied);
         console.log('Saque esta: ' + Offer_Applied);
+        console.log(cmd.candidateId)
+        console.log(this.CandidaterepoC)
         const Candidate: Candidate = await this.CandidaterepoC.getOne(
           cmd.candidateId,
         );
@@ -188,7 +194,7 @@ export class OfferApplicationService implements IApplicationService {
         );
         DSApplyToOfer.createApplication();
 
-        try {
+       /* try {
           this.Sender.send(
             cmd.employerId,
             new CandidateApplied(
@@ -201,7 +207,7 @@ export class OfferApplicationService implements IApplicationService {
           );
         } catch (error) {
           throw error;
-        }
+        }*/
         Offer_Applied = EntitiesFactory.fromOfferToOfferDTO(newOffer);
         this.Offerrepo.save(Offer_Applied);
         this.CandidaterepoC.modify(Candidate.id, Candidate);

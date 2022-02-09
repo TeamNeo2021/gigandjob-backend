@@ -1,5 +1,6 @@
 import {
   Body,
+  ConsoleLogger,
   Controller,
   Get,
   Header,
@@ -25,6 +26,7 @@ import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value 
 import { OfferQueryFirestoreAdapter } from 'src/Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 import { LocationDTO } from 'src/Application/DTO/Location.dto';
 import { InvalidOfferDirection } from 'src/Dominio/AggRoots/Offer/Errors/InvalidOfferDirection.error';
+import { CandidateFirestoreAdapter } from 'src/Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 
 type ReportBody = {
   reason: string;
@@ -39,12 +41,12 @@ type ReactivateOfferBody = {
 export class OfferController {
   private readonly offerApplicationService: OfferApplicationService;
   private readonly Offerrepo: OfferFirestoreAdapter;
-  private readonly CandidaterepoC: ICandidateRepository;
   private readonly Employerrepo: EmployerRepositoryService;
   private readonly Sender: INotificationSender;
   constructor(
     offerRepo: OfferFirestoreAdapter,
     private OfferQueryRepo: OfferQueryFirestoreAdapter,
+    private CandidaterepoC: CandidateFirestoreAdapter,
   ) {
     this.Offerrepo = offerRepo;
     this.offerApplicationService = new OfferApplicationService(
@@ -116,6 +118,7 @@ export class OfferController {
     @Body('description') description: string,
     @Body('duration_days') duration_days: number,
   ) {
+    console.log("estoy en controlador")
     let newApplication = new ApplyToOfferDTO({
       offerId: idOffer,
       employerId: idEmployer,
@@ -126,6 +129,7 @@ export class OfferController {
       description: description,
       duration_days: duration_days,
     });
+    console.log("estoy en controlador y voy al service")
     await this.offerApplicationService.Handle(newApplication);
   }
 
