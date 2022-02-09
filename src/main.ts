@@ -3,11 +3,10 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  //TODO: some function to switch repositories
   const app = await NestFactory.create(AppModule);
-
   app.enableCors()
   app.use(cookieParser('secret'))
-  await app.listen(3000);
+  const PORT = process.env.PORT || 5000;
+  await app.listen(PORT);
 }
 bootstrap();
