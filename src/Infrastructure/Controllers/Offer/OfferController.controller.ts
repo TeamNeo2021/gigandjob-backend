@@ -161,4 +161,18 @@ export class OfferController {
       );
     return query;
   }
+
+  @Get(':id/getone')
+  @HttpCode(200)
+  @Header('Access-Control_Allow_Origin', '*')
+  async getOne(@Param('id') offerId: string) {
+    const query = await this.OfferQueryRepo.getOne(offerId);
+    console.log(query)
+    if (!query)
+      throw new HttpException(
+        'Could not find a register with that date',
+        HttpStatus.NO_CONTENT,
+      );
+    return query;
+  }
 }
