@@ -200,9 +200,9 @@ export class Candidate extends AggregateRoot {
      * Register a new Candidate 
      * @returns Candidate
     */
-    public registerCandidate() {
+    public registerCandidate(password: string) {
         console.log('Registering Candidate #: ', this._id, '\nName: ', this._name.fullName);
-        this.Apply(new CandidateRegisteredDomainEvent(this));
+        this.Apply(new CandidateRegisteredDomainEvent(this, password));
         return this;
     }
 

@@ -15,13 +15,15 @@ import { CandidateConfiguration } from "../Configuration/Candidate/configuration
 import { CandidateScheduler } from "../Scheduler/Candidate/scheduler.interface";
 import { ReactivateCandidateDTO } from "../DTO/Candidate/ReactivateCandidate.dto";
 import { EliminateCandidateDTO } from "../DTO/Candidate/EliminateCandidate.dto";
+import { Publisher } from "../Publisher/publisher.interface";
 
 export class CandidateApplicationService implements IApplicationService{
 
     constructor(
         private repository: ICandidateRepository,
         private configuration: CandidateConfiguration,
-        private scheduler: CandidateScheduler
+        private scheduler: CandidateScheduler,
+        private publisher: Publisher
     ){}
 
     async Handle(command: any): Promise<void> {
@@ -40,7 +42,11 @@ export class CandidateApplicationService implements IApplicationService{
                     new CandidateBirthDateVo(new Date(dto.birthDate)),
                     new CandidateLocationVo(dto.latitude, dto.longitude),
                 );
-        
+
+                candidate.registerCandidate(dto.password);
+
+                await this.publisher.publish(candidate.GetChanges() as any[])
+
                 await this.repository.save(candidate);
                 break;
             }

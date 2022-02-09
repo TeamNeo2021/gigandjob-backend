@@ -5,8 +5,8 @@ export class CandidateRegisteredDomainEvent implements IDomainEvent{
     dateTimeOcurred: Date;
 
     constructor(
-        public readonly candidate: Candidate
-
+        public readonly candidate: Candidate,
+        public readonly password: string
     ){
         this.dateTimeOcurred = new Date();
         console.log('DomainEvent: Se ha registrado el candidato: ', candidate.Id)

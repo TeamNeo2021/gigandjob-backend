@@ -12,7 +12,8 @@ let CandidateTestDTO = new CandidateRegisterDTO(
     'mail@gmail.com',
     '1999-10-10',
     5,
-    6
+    6,
+    "ajsksjasaskas"
 )
 
 const memoryRepo = new InMemoryCandidateCommandRepository()
@@ -21,12 +22,14 @@ const registerService = new CandidateApplicationService(memoryRepo, {
     getSuspensionLimit: jest.fn()
 }, {
     scheduleCandidateReactivation: jest.fn()
+}, {
+    publish: jest.fn()
 })
 
 describe("register a new Candidate in memory", ()=>{
     
     it("should suceed when registering a valid Candidate", async()=>{
-        registerService.Handle(CandidateTestDTO);
+        await registerService.Handle(CandidateTestDTO);
         let candidate = await memoryRepo.getAll()
         expect(candidate[0]).toBeTruthy();
     })
