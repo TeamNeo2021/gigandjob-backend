@@ -166,7 +166,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     comDesignation: string,
     offers: Offer[],
   ) {
-    let newEmployer = new Employer(
+    const newEmployer = new Employer(
       new EmployerIdVO(id),
       EmployerNameVO.Unsafe(name),
       EmployerDescriptionVO.Unsafe(description),
@@ -193,7 +193,7 @@ export class Employer extends AggregateRoot implements IInternalEventHandler {
     id: EmployerIdVO = new EmployerIdVO(),
   ) {
     console.log('Registrar Empleador');
-    let employer = new Employer(
+    const employer = new Employer(
       id,
       name,
       description,

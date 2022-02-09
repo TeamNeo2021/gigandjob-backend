@@ -12,7 +12,10 @@ import { OfferModified } from '../../DomainEvents/OfferEvents/OfferModified';
 import { PublicationDateVO } from './ValueObjects/OfferPublicationDateVO';
 import { CandidateApplied } from '../../DomainEvents/CandidateEvents/CandidateApplied';
 import { ApplicationId } from './Application/Value Objects/ApplicationId';
-import { ApplicationState, ApplicationStates } from './Application/Value Objects/ApplicationStates';
+import {
+  ApplicationState,
+  ApplicationStates,
+} from './Application/Value Objects/ApplicationStates';
 import { ApplicationBudget } from './Application/Value Objects/ApplicationBudget';
 import { ApplicationDescription } from './Application/Value Objects/ApplicationDescription';
 import { ApplicationTime } from './Application/Value Objects/ApplicationTime';
@@ -29,7 +32,6 @@ import { OfferReportVO } from './ValueObjects/OfferReportVO';
 import { ApplicationEliminated } from 'src/Dominio/DomainEvents/ApplicationEvents/ApplicationEliminated';
 import { OfferLocationVO } from './ValueObjects/OfferDirectionVO';
 
-
 export class Offer extends AggregateRoot implements IInternalEventHandler {
   private OfferId: OfferIdVO;
   private State: OfferStateVO;
@@ -41,7 +43,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   private Budget: BudgetVO;
   private Description: DescriptionVO;
   private application: Application[];
-  private reports: OfferReportVO[] = []
+  private reports: OfferReportVO[] = [];
 
   constructor(
     offerId: OfferIdVO,
@@ -53,7 +55,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     budget: BudgetVO,
     description: DescriptionVO,
     reports: OfferReportVO[] = [],
-    application: Application[] = []
+    application: Application[] = [],
   ) {
     super();
     this.OfferId = offerId;
@@ -115,17 +117,19 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         break;
 
       case OfferReported:
-        const evt = event as unknown as OfferReported
+        const evt = event as unknown as OfferReported;
         if (this.State.state == OfferStatesEnum.Eliminated) {
-          throw InvalidOfferReportError.reportedEliminatedOffer(this._Id._value)
+          throw InvalidOfferReportError.reportedEliminatedOffer(
+            this._Id._value,
+          );
         }
         if (this.State.state == OfferStatesEnum.Suspended) {
-          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value)
+          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value);
         }
-        if (this.reports.find(r => r.reporterId == evt.report.reporterId)) {
-          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value)
+        if (this.reports.find((r) => r.reporterId == evt.report.reporterId)) {
+          throw InvalidOfferReportError.reportedSuspendedOffer(this._Id._value);
         }
-        this.reports.push(evt.report)
+        this.reports.push(evt.report);
         break;
 
       case OfferReactivated:
@@ -139,21 +143,20 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
         }
         break;
 
-        
-        case OfferReactivated:
-          // si el estado anterior esta activa
-          if (this.State.state == OfferStatesEnum.Active) {
-            throw InvalidOfferState.ReactivteActiveState();
-          }
-          // si el estado anterior es eliminada
-          if (this.State.state == OfferStatesEnum.Eliminated) {
-            throw InvalidOfferState.ChangingEliminatadState();
-          }
-          // si el estado anterior no es suspendida
-          if (this.State.state != OfferStatesEnum.Suspended) {
-            throw InvalidOfferState.ReactivteNotSuspendedState();
-          }
-          break;
+      case OfferReactivated:
+        // si el estado anterior esta activa
+        if (this.State.state == OfferStatesEnum.Active) {
+          throw InvalidOfferState.ReactivteActiveState();
+        }
+        // si el estado anterior es eliminada
+        if (this.State.state == OfferStatesEnum.Eliminated) {
+          throw InvalidOfferState.ChangingEliminatadState();
+        }
+        // si el estado anterior no es suspendida
+        if (this.State.state != OfferStatesEnum.Suspended) {
+          throw InvalidOfferState.ReactivteNotSuspendedState();
+        }
+        break;
 
       case CandidateApplied:
         const eventCandidateApplied: CandidateApplied =
@@ -224,7 +227,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
 
   // Reportar oferta
   public ReportOffer(report: OfferReportVO) {
-    this.Apply(new OfferReported(report))
+    this.Apply(new OfferReported(report));
   }
 
   //Suspender oferta
@@ -255,8 +258,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     return this;
   }
 
-
-
   //Implementacion de crearOferta con domain event
   static CreateOffer(
     State: OfferStateVO,
@@ -271,7 +272,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     console.log('Crear Oferta');
     if (State.state != OfferStatesEnum.Active)
       throw InvalidOfferState.BadCreatedOffer();
-    let offer = new Offer(
+    const offer = new Offer(
       id,
       State,
       PublicationDate,
@@ -365,7 +366,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
   }
 
   get Reports(): readonly OfferReportVO[] {
-    return this.reports
+    return this.reports;
   }
 
   public createApplication(
@@ -392,12 +393,12 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     description: string,
     time: number,
     state: ApplicationStates,
-    previous_state: ApplicationStates
+    previous_state: ApplicationStates,
   ) {
     const currentState = new ApplicationState(),
-          previousState = new ApplicationState()
-        
-    currentState.current = state
+      previousState = new ApplicationState();
+
+    currentState.current = state;
 
     const application = new Application(
       this.Apply,
@@ -406,19 +407,17 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
       currentState,
       new ApplicationBudget(budget),
       new ApplicationDescription(description),
-      new ApplicationTime(time)
-    )
+      new ApplicationTime(time),
+    );
 
-    application.setPreviousState(previous_state)
+    application.setPreviousState(previous_state);
 
-    this.application.push(application)
+    this.application.push(application);
   }
   //Eliminar aplicacion
   public EliminateApplication(application: Application) {
     console.log('Eliminar Aplicacion');
     this.Apply(new ApplicationEliminated());
-    application.setState(ApplicationStates.Eliminated)
-    
+    application.setState(ApplicationStates.Eliminated);
   }
-
 }

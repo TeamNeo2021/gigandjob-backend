@@ -1,11 +1,11 @@
-import { IDomainEvent } from "../IDomainEvent";
+import { IDomainEvent } from '../IDomainEvent';
 
 export class MeetingModifiedEvent implements IDomainEvent {
-    public readonly dateTimeOcurred: Date;
+  public readonly dateTimeOcurred: Date;
 
-    constructor() {
-        this.dateTimeOcurred = new Date(Date.now());
-    }
+  constructor() {
+    this.dateTimeOcurred = new Date(Date.now());
+  }
 }
 
 /*

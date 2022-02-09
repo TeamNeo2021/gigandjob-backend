@@ -1,3 +1,3 @@
-export interface IDomainEvent{
-    dateTimeOcurred: Date,
+export interface IDomainEvent {
+  dateTimeOcurred: Date;
 }

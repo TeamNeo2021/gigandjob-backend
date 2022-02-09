@@ -1,4 +1,4 @@
-import { InvalidEmployerName } from "../Errors/InvalidEmployerName.error";
+import { InvalidEmployerName } from '../Errors/InvalidEmployerName.error';
 
 export class EmployerNameVO {
   value_name_employer: string;
@@ -6,20 +6,20 @@ export class EmployerNameVO {
   private constructor() {}
 
   static Create(value: string) {
-    const name = new EmployerNameVO()
-    if (!value || value.trim() == "") {
+    const name = new EmployerNameVO();
+    if (!value || value.trim() == '') {
       throw InvalidEmployerName.EmptyName();
     }
     if (value.length > 20) {
       throw InvalidEmployerName.TooBigName();
     }
     name.value_name_employer = value;
-    return name
+    return name;
   }
 
   static Unsafe(value: string) {
-    const name = new EmployerNameVO()
+    const name = new EmployerNameVO();
     name.value_name_employer = value;
-    return name
+    return name;
   }
 }

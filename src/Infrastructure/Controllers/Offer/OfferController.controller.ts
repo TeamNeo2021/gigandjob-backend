@@ -23,20 +23,20 @@ type ReactivateOfferBody = {
 
 @Controller('offer')
 export class OfferController {
-    private readonly offerApplicationService: OfferApplicationService;
-    private readonly Offerrepo: OfferFirestoreAdapter;
-    private readonly CandidaterepoC: ICandidateRepository;
-    private readonly Employerrepo: EmployerRepositoryService;
-    private readonly Sender: INotificationSender;
-    constructor(offerRepo: OfferFirestoreAdapter){
-        this.Offerrepo = offerRepo;
-        this.offerApplicationService = 
-            new OfferApplicationService(
-                this.Offerrepo,
-                this.CandidaterepoC,
-                this.Employerrepo,
-                this.Sender);
-    }
+  private readonly offerApplicationService: OfferApplicationService;
+  private readonly Offerrepo: OfferFirestoreAdapter;
+  private readonly CandidaterepoC: ICandidateRepository;
+  private readonly Employerrepo: EmployerRepositoryService;
+  private readonly Sender: INotificationSender;
+  constructor(offerRepo: OfferFirestoreAdapter) {
+    this.Offerrepo = offerRepo;
+    this.offerApplicationService = new OfferApplicationService(
+      this.Offerrepo,
+      this.CandidaterepoC,
+      this.Employerrepo,
+      this.Sender,
+    );
+  }
 
   @Post()
   @HttpCode(201)
@@ -45,32 +45,27 @@ export class OfferController {
     @Body('sector') Sector: string,
     @Body('budget') Budget: number,
     @Body('description') Description: string,
-  
-    
   ): string {
-    let request: createOfferDTO = new createOfferDTO(
-      {
-        direction: Direction,
-        sector: Sector,
-        budget: Budget,
-        description: Description,
-
-      }
-    );
+    const request: createOfferDTO = new createOfferDTO({
+      direction: Direction,
+      sector: Sector,
+      budget: Budget,
+      description: Description,
+    });
     this.offerApplicationService.Handle(request);
     return 'Offer has been created';
   }
 
   @Put('Reactived') // PUT /Offers/Reactived
   ReactivedOffer(@Body('idOffer') IdOffer: string): any {
-    let request: ReactivateOfferDTO = new ReactivateOfferDTO(IdOffer);
+    const request: ReactivateOfferDTO = new ReactivateOfferDTO(IdOffer);
     this.offerApplicationService.Handle(request);
     return 'Esta accion reactiva una oferta';
   }
 
   @Put('Eliminated') // PUT /Offers/Eliminated
   EliminatedOffer(@Body('idOffer') IdOffer: string): any {
-    let request: EliminatedOfferDTO = new EliminatedOfferDTO(IdOffer);
+    const request: EliminatedOfferDTO = new EliminatedOfferDTO(IdOffer);
     this.offerApplicationService.Handle(request);
     return 'Esta accion elimina una oferta';
   }
@@ -100,7 +95,7 @@ export class OfferController {
     @Body('description') description: string,
     @Body('duration_days') duration_days: number,
   ) {
-    let newApplication = new ApplyToOfferDTO({
+    const newApplication = new ApplyToOfferDTO({
       offerId: idOffer,
       employerId: idEmployer,
       candidateId: idCandidate,
@@ -119,7 +114,7 @@ export class OfferController {
     @Body('id_offer') id_offer: string,
     @Body('date') date: Date,
   ) {
-    let result = await this.offerApplicationService.Handle(
+    const result = await this.offerApplicationService.Handle(
       new LikeOfferDTO({
         id_candidate: id_candidate,
         id_offer: id_offer,

@@ -1,4 +1,3 @@
-export interface IApplicationService
-{
-     Handle(command: any): void;
+export interface IApplicationService {
+  Handle(command: any): void;
 }

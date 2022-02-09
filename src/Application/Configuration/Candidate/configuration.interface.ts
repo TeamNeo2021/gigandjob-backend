@@ -1,3 +1,3 @@
 export interface CandidateConfiguration {
-    getSuspensionLimit(): Promise<number>
+  getSuspensionLimit(): Promise<number>;
 }

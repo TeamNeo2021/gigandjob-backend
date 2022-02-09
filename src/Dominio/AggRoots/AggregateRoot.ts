@@ -4,11 +4,13 @@ import { IDomainEvent } from '../DomainEvents/IDomainEvent';
 import { IDomainEventHandler } from '../DomainEvents/IDomainEventHandler';
 import { IInternalEventHandler } from './IInternalEventHandler';
 
-export abstract class AggregateRoot implements IInternalEventHandler, IObservable {
+export abstract class AggregateRoot
+  implements IInternalEventHandler, IObservable
+{
   public tid: string;
   public observers: IObserver[] = [];
   protected readonly changes: IDomainEvent[] = [];
-  
+
   protected abstract When(event: any): void;
   protected abstract EnsureValidState(): void;
 
@@ -17,7 +19,6 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
     this.EnsureValidState();
     this.changes.push(event);
     this.notifyAll();
-
   }
 
   public GetChanges(): readonly object[] {
@@ -28,10 +29,7 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
     this.changes.splice(0, this.changes.length);
   }
 
-  protected ApplyToEntity(
-    entity: IInternalEventHandler,
-    event: any
-  ): void {
+  protected ApplyToEntity(entity: IInternalEventHandler, event: any): void {
     entity.Handle(event);
   }
 
@@ -40,34 +38,33 @@ export abstract class AggregateRoot implements IInternalEventHandler, IObservabl
   }
 
   //IObservable methods
-  public notifyAll(): void{
-    for (let observer of this.observers){
+  public notifyAll(): void {
+    for (const observer of this.observers) {
       observer.update();
     }
   }
 
   public addObserver(observer: IObserver): void {
-      const isExist = this.observers.includes(observer);
-      if (isExist) {
-          return console.log('Observer has been added already.');
-      }
+    const isExist = this.observers.includes(observer);
+    if (isExist) {
+      return console.log('Observer has been added already.');
+    }
 
-      this.observers.push(observer);
-      console.log('Added an observer.');
+    this.observers.push(observer);
+    console.log('Added an observer.');
   }
-  
+
   public removeObserver(observer: IObserver): void {
     const observerIndex = this.observers.indexOf(observer);
     if (observerIndex === -1) {
-        return console.log('Nonexistent observer.');
+      return console.log('Nonexistent observer.');
     }
 
     this.observers.splice(observerIndex, 1);
     console.log('Romoved an observer.');
   }
 
-  public getObservers():IObserver[]{
+  public getObservers(): IObserver[] {
     return this.observers;
   }
-  
 }

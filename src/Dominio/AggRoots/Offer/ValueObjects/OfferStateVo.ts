@@ -1,14 +1,14 @@
-export class OfferStateVO{
-    state: OfferStatesEnum;    
+export class OfferStateVO {
+  state: OfferStatesEnum;
 
-    constructor(currentState: OfferStatesEnum){
-        this.state = currentState;        
-    }
+  constructor(currentState: OfferStatesEnum) {
+    this.state = currentState;
+  }
 }
 
-export enum OfferStatesEnum{
-    Active,
-    Suspended,
-    Closed,
-    Eliminated,
+export enum OfferStatesEnum {
+  Active,
+  Suspended,
+  Closed,
+  Eliminated,
 }

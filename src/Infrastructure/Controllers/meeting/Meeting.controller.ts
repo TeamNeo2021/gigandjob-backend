@@ -3,16 +3,15 @@ import { AcceptMeeting } from 'src/Application/DTO/Meeting/AcceptMeeting';
 import { IMeetingRepository } from 'src/Application/Repositories/MeetingRepository.repo';
 import { FirestoreModule } from 'src/Infrastructure/Firestore/config/firestore.module';
 import { MeetingFirestoreAdapter } from 'src/Infrastructure/Firestore/MeetingFirestoreAdapter.adapter';
-import { MeetingApplicationService} from '../../../Application/ApplicationServices/MeetingApplicationService.service';
+import { MeetingApplicationService } from '../../../Application/ApplicationServices/MeetingApplicationService.service';
 import { RejectMeeting } from '../../../Application/DTO/Meeting/RejectMeetingDTO';
-
 
 @Controller('meeting')
 export class MeetingController {
-  
-  constructor(@Inject('MeetingApplicationService') private meetingService: MeetingApplicationService) {
-    
-  }
+  constructor(
+    @Inject('MeetingApplicationService')
+    private meetingService: MeetingApplicationService,
+  ) {}
 
   //dominio/meeting/accept
   @Put('accept')

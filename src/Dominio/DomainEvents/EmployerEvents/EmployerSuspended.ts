@@ -1,12 +1,9 @@
-import { IDomainEvent } from "../IDomainEvent";
-
+import { IDomainEvent } from '../IDomainEvent';
 
 export class EmployerSuspended implements IDomainEvent {
+  public dateTimeOcurred: Date;
 
-    public dateTimeOcurred: Date;
-    
-
-    constructor() {
-        this.dateTimeOcurred = new Date(Date.now());        
-    }
+  constructor() {
+    this.dateTimeOcurred = new Date(Date.now());
+  }
 }

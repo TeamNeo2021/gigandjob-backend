@@ -1,9 +1,9 @@
-import { IDomainEvent } from "../IDomainEvent";
+import { IDomainEvent } from '../IDomainEvent';
 
 export class OfferReactivated implements IDomainEvent {
-    dateTimeOcurred: Date;
+  dateTimeOcurred: Date;
 
-    constructor() {
-        this.dateTimeOcurred = new Date(Date.now());
-    }
+  constructor() {
+    this.dateTimeOcurred = new Date(Date.now());
+  }
 }

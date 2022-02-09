@@ -21,29 +21,35 @@ import { EmployerStates } from 'src/Dominio/AggRoots/Employer/ValueObjects/Emplo
 
 @Injectable()
 export class EmployerRepositoryService implements EmployerRepository {
-    constructor(@Inject('employers') private collection: CollectionReference<EmployerDTO>) {}
+  constructor(
+    @Inject('employers') private collection: CollectionReference<EmployerDTO>,
+  ) {}
 
-    async save(employer: EmployerDTO): Promise<void> {
-        await this.collection.doc(employer.employerId).set(employer);
-       
-    }
-    async eliminate(id: string): Promise<void> {
-        await this.collection.doc(id).update({
-            state: EmployerStates[EmployerStates.Eliminated]
-        })
-    }
+  async save(employer: EmployerDTO): Promise<void> {
+    await this.collection.doc(employer.employerId).set(employer);
+  }
+  async eliminate(id: string): Promise<void> {
+    await this.collection.doc(id).update({
+      state: EmployerStates[EmployerStates.Eliminated],
+    });
+  }
 
-    async get(id: string): Promise<EmployerDTO> {
-        const employerQuery = await this.collection.where('id', '==', id).limit(1).get(),
-              employerResult = employerQuery.docs[0].data()
-        if (!employerResult) return null
+  async get(id: string): Promise<EmployerDTO> {
+    const employerQuery = await this.collection
+        .where('id', '==', id)
+        .limit(1)
+        .get(),
+      employerResult = employerQuery.docs[0].data();
+    if (!employerResult) return null;
 
-        return new EmployerDTO(employerQuery);
-    }
+    return new EmployerDTO(employerQuery);
+  }
 
-    async getAll(): Promise<EmployerDTO[]> {
-        const employerQuery = await this.collection.get()
+  async getAll(): Promise<EmployerDTO[]> {
+    const employerQuery = await this.collection.get();
 
-        return employerQuery.docs.map( employer => new EmployerDTO(employer.data()));
-    }
+    return employerQuery.docs.map(
+      (employer) => new EmployerDTO(employer.data()),
+    );
+  }
 }

@@ -15,10 +15,10 @@ export class BudgetVO {
       throw InvalidOfferBudget.NegativeBugdget();
     }
 
-    return new BudgetVO(value)
+    return new BudgetVO(value);
   }
 
   static Unsafe(value: number) {
-    return new BudgetVO(value)
+    return new BudgetVO(value);
   }
 }

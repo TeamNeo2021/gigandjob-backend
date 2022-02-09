@@ -37,13 +37,10 @@ describe('Register Employer', () => {
       'description.value_employer_description',
       'This is a test employer',
     );
-    expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'location',
-      {
-        latitude: 90,
-        longitude: 90,
-      },
-    );
+    expect(saveMockFn.mock.calls[0][0]).toHaveProperty('location', {
+      latitude: 90,
+      longitude: 90,
+    });
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
       'state.value_state',
       EmployerStates.Active,

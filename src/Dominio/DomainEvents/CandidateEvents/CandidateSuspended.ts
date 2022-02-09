@@ -1,5 +1,5 @@
-import { IDomainEvent } from "../IDomainEvent";
+import { IDomainEvent } from '../IDomainEvent';
 
-export class CandidateSuspended implements IDomainEvent{
-    dateTimeOcurred: Date;
+export class CandidateSuspended implements IDomainEvent {
+  dateTimeOcurred: Date;
 }

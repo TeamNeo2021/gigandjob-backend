@@ -1,8 +1,8 @@
-import { CvId } from "src/Dominio/AggRoots/CV/ValueObjects/cvId.object";
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
+import { CvId } from 'src/Dominio/AggRoots/CV/ValueObjects/cvId.object';
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 
 export class CvRejectedDomainEvent implements IDomainEvent {
-    dateTimeOcurred: Date;
+  dateTimeOcurred: Date;
 
-    constructor(public readonly id: CvId) { }
+  constructor(public readonly id: CvId) {}
 }

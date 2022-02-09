@@ -11,11 +11,11 @@ export class MockOfferRepo implements IOfferRepository {
   getAll(): Promise<OfferDTO[]> {
     throw new Error('Method not implemented.');
   }
-  clear()  {
+  clear() {
     this.Offers = [];
   }
 
-  async save(offer: OfferDTO): Promise<void> {    
+  async save(offer: OfferDTO): Promise<void> {
     this.Offers.push(offer);
   }
   async getOfferById(id_offer: string): Promise<OfferDTO> {
@@ -30,4 +30,3 @@ export class MockOfferRepo implements IOfferRepository {
     throw new Error('Method not implemented.');
   }
 }
-

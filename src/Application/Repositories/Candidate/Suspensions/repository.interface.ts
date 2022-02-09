@@ -1,3 +1,3 @@
 export interface CandidateSuspensionRespository {
-    getSuspensionCount(id: string): Promise<number>
+  getSuspensionCount(id: string): Promise<number>;
 }

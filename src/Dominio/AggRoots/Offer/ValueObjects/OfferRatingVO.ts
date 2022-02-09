@@ -15,10 +15,10 @@ export class RatingVO {
       throw InvalidOfferRating.NegativeRating();
     }
 
-    return new RatingVO(value)
+    return new RatingVO(value);
   }
 
   static Unsafe(value: number) {
-    return new RatingVO(value)
+    return new RatingVO(value);
   }
 }

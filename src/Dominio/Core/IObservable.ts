@@ -1,7 +1,7 @@
-import { IObserver } from "./IObserver";
+import { IObserver } from './IObserver';
 
 export interface IObservable {
-    notifyAll():void;
-    addObserver(observer: IObserver): void;
-    removeObserver(observer: IObserver): void;
+  notifyAll(): void;
+  addObserver(observer: IObserver): void;
+  removeObserver(observer: IObserver): void;
 }

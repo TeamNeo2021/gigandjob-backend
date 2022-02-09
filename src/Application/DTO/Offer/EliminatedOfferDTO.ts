@@ -1,9 +1,7 @@
 export class EliminatedOfferDTO {
+  public id_offer: string;
 
-    public id_offer:string;
-
-    constructor(id:string){
-        this.id_offer=id;
-    }
-
+  constructor(id: string) {
+    this.id_offer = id;
+  }
 }

@@ -1,5 +1,5 @@
-import { IDomainEvent } from "src/Dominio/DomainEvents/IDomainEvent";
+import { IDomainEvent } from 'src/Dominio/DomainEvents/IDomainEvent';
 
-export interface INotificationSender{
-    send(target: string, event: IDomainEvent):void;
+export interface INotificationSender {
+  send(target: string, event: IDomainEvent): void;
 }

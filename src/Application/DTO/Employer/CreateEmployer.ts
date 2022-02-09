@@ -1,20 +1,16 @@
-import { LocationDTO } from "../Location.dto";
+import { LocationDTO } from '../Location.dto';
 
-export class CreateEmployerDTO{
- 
-    public name: string;
-    public description: string;
-    public state: string;
-    public location: LocationDTO;
-    public rif: string;
-    public phone: string;
-    public mail: string;
-    public comDesignation: string;
+export class CreateEmployerDTO {
+  public name: string;
+  public description: string;
+  public state: string;
+  public location: LocationDTO;
+  public rif: string;
+  public phone: string;
+  public mail: string;
+  public comDesignation: string;
 
-	constructor(
-    employerData:any
-  ) {
-   
+  constructor(employerData: any) {
     this.name = employerData.name;
     this.description = employerData.description;
     this.state = employerData.state;
@@ -23,5 +19,5 @@ export class CreateEmployerDTO{
     this.phone = employerData.phone;
     this.mail = employerData.mail;
     this.comDesignation = employerData.comDesignation;
-	}
+  }
 }

@@ -1,3 +1,3 @@
 export class ReactivateEmployerDTO {
-    constructor(public id: string) {}
+  constructor(public id: string) {}
 }

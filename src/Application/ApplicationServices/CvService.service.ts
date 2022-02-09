@@ -22,11 +22,11 @@ export class CvService implements IApplicationService {
       case RequestCvApprovalDTO: {
         console.log('entra al case');
 
-        let cmd: RequestCvApprovalDTO = <RequestCvApprovalDTO>command;
+        const cmd: RequestCvApprovalDTO = <RequestCvApprovalDTO>command;
         console.log('1');
 
-        let Workxp: CvWorkExperience[] = [];
-        let Studies: CvStudies[] = [];
+        const Workxp: CvWorkExperience[] = [];
+        const Studies: CvStudies[] = [];
         for (const iterator of cmd.workExperiences) {
           Workxp.push(
             new CvWorkExperience(

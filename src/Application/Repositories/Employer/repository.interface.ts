@@ -1,11 +1,10 @@
-import { EmployerDTO } from "src/Application/DTO/Employer/Employer.dto";
-import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
+import { EmployerDTO } from 'src/Application/DTO/Employer/Employer.dto';
+import { Employer } from 'src/Dominio/AggRoots/Employer/Employer';
 
 export interface EmployerRepository {
-
-    get(id: string): Promise<EmployerDTO>
-    getAll(): Promise<EmployerDTO[]>
-    save(employer: EmployerDTO): Promise<void>;
-    eliminate(id: string): Promise<void>;
-    //insert(id: string): Promise<void>(employer: EmployerDTO): Promise<void>;
+  get(id: string): Promise<EmployerDTO>;
+  getAll(): Promise<EmployerDTO[]>;
+  save(employer: EmployerDTO): Promise<void>;
+  eliminate(id: string): Promise<void>;
+  //insert(id: string): Promise<void>(employer: EmployerDTO): Promise<void>;
 }

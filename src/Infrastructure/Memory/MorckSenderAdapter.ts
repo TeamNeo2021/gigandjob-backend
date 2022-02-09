@@ -11,12 +11,12 @@ export class MockSenderAdapter implements INotificationSender {
         console.log('Sending notification to employer: ' + target);
         this.NotificatedIds.push(target);
         break;
-    
+
       case OfferCompleted:
         console.log('Sending notification offercompleted: ' + target);
         this.NotificatedIds.push(target);
         break;
-      
+
       default:
         throw new Error(
           `MockNotificationSender: Event doesn't exist: ${event.constructor}`,

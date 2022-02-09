@@ -1,14 +1,14 @@
-export class ApplicationState{
-   public current: ApplicationStates
+export class ApplicationState {
+  public current: ApplicationStates;
 
-   constructor(){
-       this.current = ApplicationStates.Active;
-   }
+  constructor() {
+    this.current = ApplicationStates.Active;
+  }
 }
 
-export enum ApplicationStates{
-    Active,
-    Inactive,
-    Canceled,
-    Eliminated,
+export enum ApplicationStates {
+  Active,
+  Inactive,
+  Canceled,
+  Eliminated,
 }

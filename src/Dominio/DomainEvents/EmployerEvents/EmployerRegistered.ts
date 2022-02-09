@@ -10,38 +10,38 @@ import { EmployerRifVO } from '../../AggRoots/Employer/ValueObjects/EmployerRifV
 import { IDomainEvent } from '../IDomainEvent';
 
 export class EmployerRegistered implements IDomainEvent {
-    public dateTimeOcurred: Date;
+  public dateTimeOcurred: Date;
 
-    id: EmployerIdVO
-    name: EmployerNameVO;
-    description: EmployerDescriptionVO;
-    state: EmployerStateVO;
-    location: EmployerLocationVO;
-    rif: EmployerRifVO;
-    phone: EmployerPhoneVO;
-    mail: EmployerMailVO;
-    comDesignation: EmployerComercialDesignationVO;
+  id: EmployerIdVO;
+  name: EmployerNameVO;
+  description: EmployerDescriptionVO;
+  state: EmployerStateVO;
+  location: EmployerLocationVO;
+  rif: EmployerRifVO;
+  phone: EmployerPhoneVO;
+  mail: EmployerMailVO;
+  comDesignation: EmployerComercialDesignationVO;
 
-    constructor(
-        id: EmployerIdVO,
-        name: EmployerNameVO,
-        description: EmployerDescriptionVO,
-        state: EmployerStateVO,
-        location: EmployerLocationVO,
-        rif: EmployerRifVO,
-        phone: EmployerPhoneVO,
-        mail: EmployerMailVO,
-        comDesignation: EmployerComercialDesignationVO,
-    ) {
-        this.id = id
-        this.dateTimeOcurred = new Date(Date.now());
-        this.name = name;
-        this.description = description;
-        this.state = state;
-        this.location = location;
-        this.rif = rif;
-        this.phone = phone;
-        this.mail = mail;
-        this.comDesignation = comDesignation;
-    }
+  constructor(
+    id: EmployerIdVO,
+    name: EmployerNameVO,
+    description: EmployerDescriptionVO,
+    state: EmployerStateVO,
+    location: EmployerLocationVO,
+    rif: EmployerRifVO,
+    phone: EmployerPhoneVO,
+    mail: EmployerMailVO,
+    comDesignation: EmployerComercialDesignationVO,
+  ) {
+    this.id = id;
+    this.dateTimeOcurred = new Date(Date.now());
+    this.name = name;
+    this.description = description;
+    this.state = state;
+    this.location = location;
+    this.rif = rif;
+    this.phone = phone;
+    this.mail = mail;
+    this.comDesignation = comDesignation;
+  }
 }

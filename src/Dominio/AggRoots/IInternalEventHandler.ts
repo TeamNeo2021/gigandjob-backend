@@ -1,6 +1,5 @@
-import { IDomainEvent } from "../DomainEvents/IDomainEvent";
+import { IDomainEvent } from '../DomainEvents/IDomainEvent';
 
-
-export interface IInternalEventHandler{
-    Handle(event:IDomainEvent):void;
+export interface IInternalEventHandler {
+  Handle(event: IDomainEvent): void;
 }

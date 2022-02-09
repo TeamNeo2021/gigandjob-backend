@@ -61,11 +61,11 @@ export class OfferApplicationService implements IApplicationService {
     switch (command.constructor) {
       case createOfferDTO: {
         // cast command to get intellisense
-        let cmd: createOfferDTO = <createOfferDTO>command;
+        const cmd: createOfferDTO = <createOfferDTO>command;
 
         //! This is tresspassing aggregate offer
         //! by accesing directly to its VO's
-        let new_offer = EntitiesFactory.fromCreateOfferDTOtoOffer(cmd); //At this point the CreatedOfferEvent is made
+        const new_offer = EntitiesFactory.fromCreateOfferDTOtoOffer(cmd); //At this point the CreatedOfferEvent is made
 
         //This should never happen, but in case RandomUUID generates
         //an used UUID, this will stop the creation
@@ -90,9 +90,9 @@ export class OfferApplicationService implements IApplicationService {
       }
 
       case ReactivateOfferDTO: {
-        let cmd: ReactivateOfferDTO = <ReactivateOfferDTO>command;
-        let offerReactived = await this.Offerrepo.getOfferById(cmd.id_offer);
-        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(offerReactived);
+        const cmd: ReactivateOfferDTO = <ReactivateOfferDTO>command;
+        const offerReactived = await this.Offerrepo.getOfferById(cmd.id_offer);
+        const newOffer = EntitiesFactory.fromOfferDTOtoOffer(offerReactived);
         newOffer.ReactivateOffer();
         await this.Offerrepo.save(
           EntitiesFactory.fromOfferToOfferDTO(newOffer),
@@ -101,10 +101,13 @@ export class OfferApplicationService implements IApplicationService {
       }
 
       case EliminatedOfferDTO: {
-        let cmd: EliminatedOfferDTO = <EliminatedOfferDTO>command;
-        let Offer_Eliminated = await this.Offerrepo.getOfferById(cmd.id_offer);
+        const cmd: EliminatedOfferDTO = <EliminatedOfferDTO>command;
+        const Offer_Eliminated = await this.Offerrepo.getOfferById(
+          cmd.id_offer,
+        );
         if (Offer_Eliminated) {
-          let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Eliminated);
+          const newOffer =
+            EntitiesFactory.fromOfferDTOtoOffer(Offer_Eliminated);
           newOffer.EliminateOffer();
           await this.Offerrepo.save(
             EntitiesFactory.fromOfferToOfferDTO(newOffer),
@@ -114,9 +117,9 @@ export class OfferApplicationService implements IApplicationService {
       }
 
       case ReportOfferDTO: {
-        let cmd: ReportOfferDTO = <ReportOfferDTO>command;
+        const cmd: ReportOfferDTO = <ReportOfferDTO>command;
         const Offer_Reported = await this.Offerrepo.getOfferById(cmd.id);
-        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Reported);
+        const newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Reported);
         newOffer.ReportOffer(OfferReportVO.Create(cmd.reporterId, cmd.reason));
         await this.Offerrepo.save(
           EntitiesFactory.fromOfferToOfferDTO(newOffer),
@@ -128,12 +131,12 @@ export class OfferApplicationService implements IApplicationService {
         const cmd: EliminateOfferFromEmployerEliminatedDTO = <
           EliminateOfferFromEmployerEliminatedDTO
         >command;
-        let employer = await this.Employerrepo.get(cmd.id_employer);
-        for (let offer of employer.offers) {
+        const employer = await this.Employerrepo.get(cmd.id_employer);
+        for (const offer of employer.offers) {
           //revisar esto
-          let NewOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
+          const NewOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
           NewOffer.EliminateOffer();
-          let SaveOffer = EntitiesFactory.fromOfferToOfferDTO(NewOffer);
+          const SaveOffer = EntitiesFactory.fromOfferToOfferDTO(NewOffer);
           await this.Offerrepo.save(SaveOffer);
         }
 
@@ -145,14 +148,14 @@ export class OfferApplicationService implements IApplicationService {
           EliminateApplicationFromCandidateDTO
         >command;
         const offers = await this.Offerrepo.getAll();
-        for (let offer of offers) {
-          let newOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
-          for (let application of newOffer._application) {
+        for (const offer of offers) {
+          const newOffer = EntitiesFactory.fromOfferDTOtoOffer(offer);
+          for (const application of newOffer._application) {
             if (application.getCandidateId.toString() == cmd.id_candidate) {
               newOffer.EliminateApplication(application);
             }
           }
-          let fOffer = EntitiesFactory.fromOfferToOfferDTO(newOffer);
+          const fOffer = EntitiesFactory.fromOfferToOfferDTO(newOffer);
           await this.Offerrepo.save(fOffer);
         }
       }
@@ -173,7 +176,7 @@ export class OfferApplicationService implements IApplicationService {
       case ApplyToOfferDTO: {
         const cmd: ApplyToOfferDTO = <ApplyToOfferDTO>command;
         let Offer_Applied = await this.Offerrepo.getOfferById(cmd.offerId);
-        let newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Applied);
+        const newOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Applied);
         console.log('Saque esta: ' + Offer_Applied);
         const Candidate: Candidate = await this.CandidaterepoC.getOne(
           cmd.candidateId,
@@ -209,19 +212,16 @@ export class OfferApplicationService implements IApplicationService {
       }
       case CompletedOfferDTO: {
         const hired: CompletedOfferDTO = <CompletedOfferDTO>command;
-        let Offer_Completed = await this.Offerrepo.getOfferById(
+        const Offer_Completed = await this.Offerrepo.getOfferById(
           new OfferIdVO().value,
         );
-        let newOfferCompleted =
+        const newOfferCompleted =
           EntitiesFactory.fromOfferDTOtoOffer(Offer_Completed);
         let applicationHired: ApplicantHired;
         applicationHired.CandidateContract(newOfferCompleted);
-        
-        try{
-          this.Sender.send(
-            hired.id_offer,
-            new OfferCompleted()
-          )
+
+        try {
+          this.Sender.send(hired.id_offer, new OfferCompleted());
         } catch (error) {
           throw error;
         }
@@ -237,9 +237,9 @@ export class OfferApplicationService implements IApplicationService {
       //     break;
 
       case SuspendOfferDTO: {
-        let cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
+        const cmd: SuspendOfferDTO = <SuspendOfferDTO>command;
         let Offer_Suspended = await this.Offerrepo.getOfferById(cmd.id_offer);
-        let NewOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Suspended);
+        const NewOffer = EntitiesFactory.fromOfferDTOtoOffer(Offer_Suspended);
         NewOffer.SuspendOffer(false);
         Offer_Suspended = EntitiesFactory.fromOfferToOfferDTO(NewOffer);
         await this.Offerrepo.save(Offer_Suspended);

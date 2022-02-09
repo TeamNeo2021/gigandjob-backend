@@ -1,3 +1,3 @@
 export class EliminateEmployerDTO {
-    constructor(public id: string) {}
+  constructor(public id: string) {}
 }

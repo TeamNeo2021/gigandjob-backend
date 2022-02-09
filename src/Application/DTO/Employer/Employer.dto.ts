@@ -1,17 +1,17 @@
-import { LocationDTO } from "../Location.dto";
-import { OfferDTO } from "../Offer/OfferDTO";
+import { LocationDTO } from '../Location.dto';
+import { OfferDTO } from '../Offer/OfferDTO';
 
-export class EmployerDTO{
-    public employerId: string;
-    public name: string;
-    public description: string;
-    public state: string;
-    public location: LocationDTO;
-    public rif: string;
-    public phone: string;
-    public mail: string;
-    public comDesignation: string;
-    public offers : OfferDTO[] = [];
+export class EmployerDTO {
+  public employerId: string;
+  public name: string;
+  public description: string;
+  public state: string;
+  public location: LocationDTO;
+  public rif: string;
+  public phone: string;
+  public mail: string;
+  public comDesignation: string;
+  public offers: OfferDTO[] = [];
 
   //  public comDesignation: EmployerComercialDesignationVO;
 
@@ -26,5 +26,5 @@ export class EmployerDTO{
     this.mail = employerData.mail;
     this.comDesignation = employerData.comDesignation;
     this.offers = employerData.offers;
-	}
+  }
 }

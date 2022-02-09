@@ -1,7 +1,6 @@
-import { EmployerIdVO } from "../../AggRoots/Employer/ValueObjects/EmployerIdVO";
-import { EmployerStateVO } from "../../AggRoots/Employer/ValueObjects/EmployerStateVo";
-import { IDomainEvent } from "../IDomainEvent";
-
+import { EmployerIdVO } from '../../AggRoots/Employer/ValueObjects/EmployerIdVO';
+import { EmployerStateVO } from '../../AggRoots/Employer/ValueObjects/EmployerStateVo';
+import { IDomainEvent } from '../IDomainEvent';
 
 export class EmployerEliminated implements IDomainEvent {
   public dateTimeOcurred: Date;

@@ -1,110 +1,111 @@
-import { CandidateApplied } from "../../../DomainEvents/CandidateEvents/CandidateApplied";
-import { Entity } from "../../../Core/Entity";
-import { CandidateIdVo } from "../../Candidate/ValueObjects/CandidateIdVo";
-import { ApplicationBudget } from "./Value Objects/ApplicationBudget";
-import { ApplicationDescription } from "./Value Objects/ApplicationDescription";
-import { ApplicationId } from "./Value Objects/ApplicationId";
-import { ApplicationState, ApplicationStates } from "./Value Objects/ApplicationStates";
-import { ApplicationTime } from "./Value Objects/ApplicationTime";
+import { CandidateApplied } from '../../../DomainEvents/CandidateEvents/CandidateApplied';
+import { Entity } from '../../../Core/Entity';
+import { CandidateIdVo } from '../../Candidate/ValueObjects/CandidateIdVo';
+import { ApplicationBudget } from './Value Objects/ApplicationBudget';
+import { ApplicationDescription } from './Value Objects/ApplicationDescription';
+import { ApplicationId } from './Value Objects/ApplicationId';
+import {
+  ApplicationState,
+  ApplicationStates,
+} from './Value Objects/ApplicationStates';
+import { ApplicationTime } from './Value Objects/ApplicationTime';
 
+export class Application extends Entity<ApplicationId> {
+  public readonly id: ApplicationId;
+  public candidateId: CandidateIdVo;
+  public state: ApplicationState;
+  public previous_state?: ApplicationState;
+  public budget: ApplicationBudget;
+  public description: ApplicationDescription;
+  public time: ApplicationTime;
 
-export class Application extends Entity<ApplicationId>{
-    public readonly id: ApplicationId;
-    public candidateId: CandidateIdVo;
-    public state: ApplicationState;
-    public previous_state?: ApplicationState;
-    public budget: ApplicationBudget;
-    public description: ApplicationDescription;
-    public time: ApplicationTime;
-    
+  constructor(
+    applier: any,
+    id: ApplicationId,
+    candidateId: CandidateIdVo,
+    state: ApplicationState,
+    budget: ApplicationBudget,
+    description: ApplicationDescription,
+    time: ApplicationTime,
+  ) {
+    super(applier);
+    this.id = id;
+    this.candidateId = candidateId;
+    this.state = state;
+    this.budget = budget;
+    this.description = description;
+    this.time = time;
+  }
 
-    constructor(applier: any,
-        id:ApplicationId, 
-        candidateId:CandidateIdVo,
-        state: ApplicationState,
-        budget: ApplicationBudget,
-        description: ApplicationDescription,
-        time: ApplicationTime) 
-    {
-        
-        super(applier); 
-        this.id = id;
-        this.candidateId = candidateId;
-        this.state = state;
-        this.budget = budget;
-        this.description = description; 
-        this.time = time;
+  protected when(event: any): void {
+    switch (event.constructor) {
+      case CandidateApplied:
+        console.log(
+          'application ' +
+            this.id +
+            ' created from candidate ' +
+            event.candidateId,
+        );
+        break;
+
+      default:
+        break;
     }
-
-     protected when(event: any): void {
-       switch (event.constructor) {
-           case CandidateApplied:
-               console.log('application '
-                           + this.id 
-                           + ' created from candidate '
-                           +event.candidateId)   
-               break;
-       
-           default:
-               break;
-       }
-     }
-     protected EnsureValidState(): void {
-        let valid =
-            this.id != null &&
-            this.budget != null &&
-            this.description != null &&
-            this.time != null;
-            switch (this.state.current) {
-                case ApplicationStates.Active: 
-                    if (this.previous_state.current == ApplicationStates.Inactive){
-                        throw new Error("Invalid change of application state");
-                    }
-                    break;
-                case ApplicationStates.Inactive: 
-                    if (this.previous_state.current == ApplicationStates.Inactive){
-                        throw new Error("Invalid change of application state");
-                    }
-                    break;
-                default:
-                    break;
-            };
-
-        if (!valid){
-            throw new Error("Invalid state for application");
+  }
+  protected EnsureValidState(): void {
+    const valid =
+      this.id != null &&
+      this.budget != null &&
+      this.description != null &&
+      this.time != null;
+    switch (this.state.current) {
+      case ApplicationStates.Active:
+        if (this.previous_state.current == ApplicationStates.Inactive) {
+          throw new Error('Invalid change of application state');
         }
-        
-     }
-
-    public getState():ApplicationStates{
-        return this.state.current;
-    }
-    public setState(state: ApplicationStates){
-         this.state.current = state;
-    }
-
-    public getPreviousState():ApplicationStates{
-        return this.previous_state.current;
+        break;
+      case ApplicationStates.Inactive:
+        if (this.previous_state.current == ApplicationStates.Inactive) {
+          throw new Error('Invalid change of application state');
+        }
+        break;
+      default:
+        break;
     }
 
-    public setPreviousState(state: ApplicationStates) {
-        this.previous_state.current = state
+    if (!valid) {
+      throw new Error('Invalid state for application');
     }
+  }
 
-    public getCandidateId(): CandidateIdVo{
-        return this.candidateId;
+  public getState(): ApplicationStates {
+    return this.state.current;
+  }
+  public setState(state: ApplicationStates) {
+    this.state.current = state;
+  }
 
-    }
+  public getPreviousState(): ApplicationStates {
+    return this.previous_state.current;
+  }
 
-    public get getBudget(): ApplicationBudget{
-        return this.budget;
-    }
+  public setPreviousState(state: ApplicationStates) {
+    this.previous_state.current = state;
+  }
 
-    public getTime(): ApplicationTime{
-        return this.time;
-    }
+  public getCandidateId(): CandidateIdVo {
+    return this.candidateId;
+  }
 
-    public getDescription() {
-        return this.description
-    }
+  public get getBudget(): ApplicationBudget {
+    return this.budget;
+  }
+
+  public getTime(): ApplicationTime {
+    return this.time;
+  }
+
+  public getDescription() {
+    return this.description;
+  }
 }

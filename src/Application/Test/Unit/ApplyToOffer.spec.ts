@@ -115,21 +115,21 @@ function create_Service(
 describe('Create an aplication to an offer', () => {
   it('should suceed when valid candidate applies to a valid Offer', async () => {
     await MCCrepo.save(exampleCandidate);
-    let newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer);
+    const newOffer = EntitiesFactory.fromOfferToOfferDTO(exampleOffer);
     await Orepo.save(newOffer);
-    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
+    const ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     await ApplyService.Handle(ExCommand).catch((err) => {
       throw err;
     });
-    let new_offer = await Orepo.getOfferById(newOffer.OfferId);
-    let new_test_offer = EntitiesFactory.fromOfferDTOtoOffer(new_offer);
+    const new_offer = await Orepo.getOfferById(newOffer.OfferId);
+    const new_test_offer = EntitiesFactory.fromOfferDTOtoOffer(new_offer);
     expect(
       () =>
         new_test_offer._application[0].getCandidateId() == exampleCandidate.Id,
     );
   });
   it('Should fail when using an Invalid command', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
+    const ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     let error: any = undefined;
     await ApplyService.Handle(WrongCommand).catch((err) => (error = err));
     expect(() => {
@@ -139,7 +139,7 @@ describe('Create an aplication to an offer', () => {
     );
   });
   it('Should send a notification to the given employer', async () => {
-    let ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
+    const ApplyService = create_Service(Orepo, MCCrepo, EMrepo, Msender);
     await ApplyService.Handle(ExCommand).catch((err) => {
       throw err;
     });
