@@ -1,4 +1,15 @@
-import { Body, Controller, HttpCode, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { OfferFirestoreAdapter } from '../../Firestore/OfferFirestoreAdapter.adapter';
 import { OfferApplicationService } from '../../../Application/ApplicationServices/Offer/OfferApplicationService.service';
 import { createOfferDTO } from '../../../Application/DTO/Offer/CreateOffer.dto';
@@ -11,6 +22,7 @@ import { EmployerRepositoryService } from 'src/Infrastructure/Firestore/Employer
 import { ApplyToOfferDTO } from '../../../Application/DTO/Application/ApplicationDTO.dto';
 import { LikeOfferDTO } from '../../../Application/DTO/Offer/LikeOfferDTO.dto';
 import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates';
+import { OfferQueryFirestoreAdapter } from 'src/Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 
 type ReportBody = {
   reason: string;
@@ -23,20 +35,23 @@ type ReactivateOfferBody = {
 
 @Controller('offer')
 export class OfferController {
-    private readonly offerApplicationService: OfferApplicationService;
-    private readonly Offerrepo: OfferFirestoreAdapter;
-    private readonly CandidaterepoC: ICandidateRepository;
-    private readonly Employerrepo: EmployerRepositoryService;
-    private readonly Sender: INotificationSender;
-    constructor(offerRepo: OfferFirestoreAdapter){
-        this.Offerrepo = offerRepo;
-        this.offerApplicationService = 
-            new OfferApplicationService(
-                this.Offerrepo,
-                this.CandidaterepoC,
-                this.Employerrepo,
-                this.Sender);
-    }
+  private readonly offerApplicationService: OfferApplicationService;
+  private readonly Offerrepo: OfferFirestoreAdapter;
+  private readonly CandidaterepoC: ICandidateRepository;
+  private readonly Employerrepo: EmployerRepositoryService;
+  private readonly Sender: INotificationSender;
+  constructor(
+    offerRepo: OfferFirestoreAdapter,
+    private OfferQueryRepo: OfferQueryFirestoreAdapter,
+  ) {
+    this.Offerrepo = offerRepo;
+    this.offerApplicationService = new OfferApplicationService(
+      this.Offerrepo,
+      this.CandidaterepoC,
+      this.Employerrepo,
+      this.Sender,
+    );
+  }
 
   @Post()
   @HttpCode(201)
@@ -45,18 +60,13 @@ export class OfferController {
     @Body('sector') Sector: string,
     @Body('budget') Budget: number,
     @Body('description') Description: string,
-  
-    
   ): string {
-    let request: createOfferDTO = new createOfferDTO(
-      {
-        direction: Direction,
-        sector: Sector,
-        budget: Budget,
-        description: Description,
-
-      }
-    );
+    let request: createOfferDTO = new createOfferDTO({
+      direction: Direction,
+      sector: Sector,
+      budget: Budget,
+      description: Description,
+    });
     this.offerApplicationService.Handle(request);
     return 'Offer has been created';
   }
@@ -130,5 +140,18 @@ export class OfferController {
       message: 'Offer Liked',
       result: result,
     };
+  }
+
+  @Get('getall')
+  @HttpCode(200)
+  @Header('Access-Control_Allow_Origin', '*')
+  async getAll() {
+    const query = await this.OfferQueryRepo.getAll();
+    if (!query)
+      throw new HttpException(
+        'Could not find a register with that date',
+        HttpStatus.NO_CONTENT,
+      );
+    return query;
   }
 }
