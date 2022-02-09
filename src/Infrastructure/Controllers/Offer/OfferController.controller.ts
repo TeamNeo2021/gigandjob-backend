@@ -148,7 +148,7 @@ export class OfferController {
     };
   }
 
-  @Get('getall')
+  @Get('getalll')
   @HttpCode(200)
   @Header('Access-Control_Allow_Origin', '*')
   async getAll() {
