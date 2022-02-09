@@ -11,9 +11,9 @@ export class DashboardWebQueryFirestoreAdapter
 
     constructor(@Inject('dashboardModel') private queryModel: CollectionReference<DashboardWebModelDTO>) {}
 
-    async getModel(date: Date): Promise<DashboardWebModelDTO> {
+    async getModel(): Promise<DashboardWebModelDTO> {
         
-        const query = await this.queryModel.where('date', '==', date).get();
+        const query = await this.queryModel.get();
         try {
             const result = query.docs[0].data();
             const dashboardDTO = new DashboardWebModelDTO(

@@ -1,27 +1,18 @@
 import { CollectionReference } from "@google-cloud/firestore";
 import { Inject } from "@nestjs/common";
 import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
-import { UserApplicationService } from "src/Application/ApplicationServices/UserApplicationService.service";
+import { MeetingDTO } from "src/Application/DTO/Meeting/Meeting.dto";
 import { DashboardWebModelDTO } from "src/Application/DTO/QueryModel DTO's/dashboard_web.dto";
-import { CreateUserDTO } from "src/Application/DTO/User/CreateUser.dto";
-import { UserDTO } from "src/Application/DTO/User/User.dto";
 import { CandidateRegisteredDomainEvent } from "src/Dominio/DomainEvents/CandidateEvents/CandidateRegistered";
+import { CandidateStateModified } from "src/Dominio/DomainEvents/CandidateEvents/CandidateStateModified";
 
-
-//This class listen the Nest EventBus and uses Firestore to update readside
 @EventsHandler(CandidateRegisteredDomainEvent)
-export class UserCreationHandler implements IEventHandler<CandidateRegisteredDomainEvent> {
+export class UserDeletionHandler implements IEventHandler<CandidateStateModified> {
     constructor(
-        @Inject('UserService') private service: UserApplicationService,
-        @Inject('users') private Usercollection: CollectionReference<UserDTO>,
+        @Inject('meetings') private Meetingscollection: CollectionReference<MeetingDTO>,
         @Inject('dashboardModel') private DashboardCollection: CollectionReference<DashboardWebModelDTO>){}
 
-    async handle(event: CandidateRegisteredDomainEvent) {
-        await this.service.handle(new CreateUserDTO(
-            event.candidate.id, 
-            event.candidate.email.email.valueOf(), 
-            event.password
-        ));
+    async handle(event: CandidateStateModified) {
         await this.updateReadSide();
     };
 
@@ -29,7 +20,7 @@ export class UserCreationHandler implements IEventHandler<CandidateRegisteredDom
 
         let users: number;
 
-        const sizeQuery = await this.Usercollection.get().then(snap =>
+        const sizeQuery = await this.Meetingscollection.get().then(snap =>
             users = snap.size
         )
 

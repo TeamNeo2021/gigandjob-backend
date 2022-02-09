@@ -9,15 +9,15 @@ export class DashboardController {
     
 
     constructor(private queryModel: DashboardWebQueryFirestoreAdapter){}
-    @Get('/:dateString')
+    @Get()
     @HttpCode(200)
     @Header("Access-Control_Allow_Origin", "*")
-    async getDashboardModel(@Param('dateString') dateString: string){
-        const dateWithTime: Date = new Date(dateString)
+    async getDashboardModel(){
+        
 
-        const cleanDate: Date = new Date(dateWithTime.toDateString())
+        
 
-        const query = await this.queryModel.getModel(cleanDate)
+        const query = await this.queryModel.getModel()
 
         if (!query) throw new HttpException(
             'Could not find a register with that date',
