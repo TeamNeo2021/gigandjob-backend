@@ -23,6 +23,8 @@ import { ApplyToOfferDTO } from '../../../Application/DTO/Application/Applicatio
 import { LikeOfferDTO } from '../../../Application/DTO/Offer/LikeOfferDTO.dto';
 import { ApplicationStates } from 'src/Dominio/AggRoots/Offer/Application/Value Objects/ApplicationStates';
 import { OfferQueryFirestoreAdapter } from 'src/Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
+import { LocationDTO } from 'src/Application/DTO/Location.dto';
+import { InvalidOfferDirection } from 'src/Dominio/AggRoots/Offer/Errors/InvalidOfferDirection.error';
 
 type ReportBody = {
   reason: string;
@@ -56,16 +58,20 @@ export class OfferController {
   @Post()
   @HttpCode(201)
   createOffer(
-    @Body('direction') Direction: string,
+    @Body('latitude') latitude: number,
+    @Body('longitude') longitude: number,
     @Body('sector') Sector: string,
     @Body('budget') Budget: number,
     @Body('description') Description: string,
   ): string {
     let request: createOfferDTO = new createOfferDTO({
-      direction: Direction,
-      sector: Sector,
-      budget: Budget,
-      description: Description,
+      Direction: {
+        latitude,
+        longitude,
+      },
+      Sector: Sector,
+      Budget: Budget,
+      Description: Description,
     });
     this.offerApplicationService.Handle(request);
     return 'Offer has been created';
@@ -147,6 +153,7 @@ export class OfferController {
   @Header('Access-Control_Allow_Origin', '*')
   async getAll() {
     const query = await this.OfferQueryRepo.getAll();
+    console.log(query)
     if (!query)
       throw new HttpException(
         'Could not find a register with that date',

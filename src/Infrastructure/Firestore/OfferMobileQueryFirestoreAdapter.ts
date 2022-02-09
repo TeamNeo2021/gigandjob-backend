@@ -10,7 +10,18 @@ export class OfferQueryFirestoreAdapter implements OfferMobileQueryModel {
   ) {}
 
   async getAll(): Promise<OfferDTO[]> {
+    //console.log("traigo tanga")
     const offerQuery = await this.offerRepository.get();
+    //console.log(offerQuery.docs)
     return offerQuery.docs.map((offerDoc) => new OfferDTO(offerDoc.data()));
   }
+
+  /*async getAll(): Promise<OfferDTO[]> {
+    const Ofertas: OfferDTO[] = [];
+    const offerQuery = await this.offerRepository.get();
+    offerQuery.docs.map((offerDoc) =>
+      Ofertas.push(new OfferDTO(offerDoc.data())),
+    );
+    return Ofertas;
+  }*/
 }
