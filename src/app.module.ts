@@ -89,7 +89,8 @@ const meetingAdapterProvider = {
         'offers',
         'candidates',
         'applications',
-        'users'
+        'users',
+        'dashboardModel'
       ]
     }),
     CandidateModule,
@@ -115,6 +116,7 @@ const meetingAdapterProvider = {
     JwtAuthService,
 
     AppService, 
+    DashboardWebQueryFirestoreAdapter,
     MeetingApplicationService,
     MeetingFirestoreAdapter,
     OfferApplicationService,
@@ -123,7 +125,6 @@ const meetingAdapterProvider = {
     employerServiceProvider,
     meetingAdapterProvider,
     OfferQueryFirestoreAdapter,
-    DashboardWebQueryFirestoreAdapter,
   ],
 })
 export class AppModule {}
