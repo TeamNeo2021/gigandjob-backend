@@ -23,7 +23,8 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
     async saveMeeting(meeting: MeetingDTO)/**: Promise<MeetingDTO> */ {
       try {
         let newMeeting = await this.collection.doc(meeting.id).set(
-            meeting
+            { ...meeting, location: { ...meeting.location } }
+            // antes dentro de set no decia { ...meeting, location: { ...meeting.location } }, sino meeting
         );
         console.log('MeeetingFirestoreAdapter: saveMeeting response: ', newMeeting);
         // let meetingDTO = new MeetingDTO(  newMeeting );

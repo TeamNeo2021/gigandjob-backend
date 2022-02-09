@@ -18,31 +18,41 @@ import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFires
 import { DashboardController } from './Infrastructure/Controllers/Read-side/dashboard/dashboard.controller';
 import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/DashboardWebQueryFirestoreAdapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
+import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
   useFactory: (repo: EmployerRepositoryService) => {
-    return new EmployerApplicationService(repo)
+    return new EmployerApplicationService(repo);
   },
-  inject: [EmployerRepositoryService]
-}
+  inject: [EmployerRepositoryService],
+};
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
-  useFactory: (Offerrepo: OfferFirestoreAdapter, candidateRepoC: ICandidateRepository, Employerrepo: EmployerRepositoryService, Sender: INotificationSender) => new OfferApplicationService(Offerrepo, candidateRepoC, Employerrepo,Sender),
-  Inject: [OfferFirestoreAdapter]
-}
+  useFactory: (
+    Offerrepo: OfferFirestoreAdapter,
+    candidateRepoC: ICandidateRepository,
+    Employerrepo: EmployerRepositoryService,
+    Sender: INotificationSender,
+  ) =>
+    new OfferApplicationService(
+      Offerrepo,
+      candidateRepoC,
+      Employerrepo,
+      Sender,
+    ),
+  Inject: [OfferFirestoreAdapter],
+};
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
   useFactory: (repo: MeetingFirestoreAdapter) => {
-    return new MeetingApplicationService(repo)
+    return new MeetingApplicationService(repo);
   },
-  inject: [MeetingFirestoreAdapter]
-}
-
+  inject: [MeetingFirestoreAdapter],
+};
 
 @Module({
-  
   imports: [
     //TODO: Arreglar una vez se haya conectado bien con firestore
     ConfigModule.forRoot({
@@ -60,21 +70,25 @@ const meetingAdapterProvider = {
         'offers',
         'candidates',
         'applications',
-        'dashboardModel'
-      ]
+        'dashboardModel',
+      ],
     }),
     CandidateModule,
-    CqrsModule
+    CqrsModule,
   ],
   controllers: [
-    AppController, 
-    MeetingController, 
-    OfferController, 
+    AppController,
+    MeetingController,
+    OfferController,
     EmployerController,
-    DashboardController
+    AppController,
+    MeetingController,
+    OfferController,
+    EmployerController,
+    DashboardController,
   ],
   providers: [
-    AppService, 
+    AppService,
     MeetingApplicationService,
     MeetingFirestoreAdapter,
     OfferApplicationService,
@@ -82,7 +96,8 @@ const meetingAdapterProvider = {
     EmployerRepositoryService,
     employerServiceProvider,
     meetingAdapterProvider,
-    DashboardWebQueryFirestoreAdapter
+    OfferQueryFirestoreAdapter,
+    DashboardWebQueryFirestoreAdapter,
   ],
 })
 export class AppModule {}
