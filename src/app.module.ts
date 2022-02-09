@@ -20,6 +20,7 @@ import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/Da
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
+import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -99,6 +100,7 @@ const meetingAdapterProvider = {
     meetingAdapterProvider,
     OfferQueryFirestoreAdapter,
     CandidateFirestoreAdapter,
+    MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
   ],
 })

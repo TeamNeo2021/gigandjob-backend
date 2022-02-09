@@ -34,7 +34,10 @@ export class OfferFirestoreAdapter implements IOfferRepository {
   }
 
   async save(offer: OfferDTO): Promise<void> {
-    await this.offerRepository.doc(offer.OfferId).set({ ...offer, Direction: { ...offer.Direction },applications:[...offer.applications] });
+    await this.offerRepository.doc(offer.OfferId).set(
+      { ...offer,
+      Direction: { ...offer.Direction },
+      applications:{...offer.applications} });
     //.set({ ...offer, Direction: { ...offer.Direction } }) 
     //Esto es necesario con todos los location u objetos que sean tipo personalizados AKA DTO,variables como location
   }
