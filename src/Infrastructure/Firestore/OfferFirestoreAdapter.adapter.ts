@@ -34,20 +34,26 @@ export class OfferFirestoreAdapter implements IOfferRepository {
   }
 
   async save(offer: OfferDTO): Promise<void> {
-    await this.offerRepository.doc(offer.OfferId).set({ ...offer, Direction: { ...offer.Direction } });
+    await this.offerRepository.doc(offer.OfferId).set(
+      { ...offer,
+        //applications:{...offer.applications}
+      Direction: { ...offer.Direction },
+       });
     //.set({ ...offer, Direction: { ...offer.Direction } }) 
     //Esto es necesario con todos los location u objetos que sean tipo personalizados AKA DTO,variables como location
   }
 
   async getOfferById(id_offer: string): Promise<OfferDTO> {
-    const offerQuery = await this.offerRepository
+    /*const offerQuery = await this.offerRepository
         .where('id', '==', id_offer)
         .get(),
       offerResult = offerQuery.docs[0].data();
 
     if (!offerResult) return null;
 
-    return new OfferDTO(offerResult);
+    return new OfferDTO(offerResult);*/
+    const offerQuery = await this.offerRepository.doc(id_offer).get();
+    return new OfferDTO(offerQuery.data());
   }
 
   async exists(id_offer: string): Promise<boolean> {

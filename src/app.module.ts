@@ -28,8 +28,11 @@ import { UserController } from './Infrastructure/Controllers/User/user.controlle
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
-import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
+import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
+import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
+import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
+import { Publisher } from './Infrastructure/Event/Publishers/publisher';
 
 
 const employerServiceProvider = {
@@ -67,10 +70,10 @@ const offerServiceProvider = {
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
-  useFactory: (repo: MeetingFirestoreAdapter) => {
-    return new MeetingApplicationService(repo);
+  useFactory: (repo: MeetingFirestoreAdapter, candidateRepo: ICandidateRepository, employerRepo: EmployerRepository, publisher: Publisher) => {
+    return new MeetingApplicationService(repo, candidateRepo, employerRepo, publisher);
   },
-  inject: [MeetingFirestoreAdapter],
+  inject: [MeetingFirestoreAdapter, CandidateFirestoreAdapter, EmployerRepositoryService, Publisher],
 };
 
 @Module({
@@ -87,7 +90,7 @@ const meetingAdapterProvider = {
       inject: [ConfigService],
       collections: [
         'employers',
-        'meetings',
+        'Meetings',
         'offers',
         'candidates',
         'applications',
@@ -110,6 +113,8 @@ const meetingAdapterProvider = {
     DashboardController,
   ],
   providers: [
+    Publisher,
+
     // Users stack
     UserFirestoreAdapterService,
     userServiceProvider,
@@ -127,6 +132,9 @@ const meetingAdapterProvider = {
     employerServiceProvider,
     meetingAdapterProvider,
     OfferQueryFirestoreAdapter,
+    CandidateFirestoreAdapter,
+    MeetingQueryFirestoreAdapter,
+    DashboardWebQueryFirestoreAdapter,
   ],
 })
 export class AppModule {}
