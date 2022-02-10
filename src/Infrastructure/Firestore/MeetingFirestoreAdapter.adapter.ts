@@ -23,7 +23,7 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
     constructor(
         @Inject('Meetings') private collection: CollectionReference<MeetingDataModel>,
         @Inject('employers') private ecollection: CollectionReference<EmployerDTO>,
-        @Inject('candidates') private ccollection: CollectionReference<CandidateDTO>,
+        @Inject('candidates') private ccollection: CollectionReference<any>,
     ) {}
 
     private async dataModelToDTO(meetingData: MeetingDataModel) {
@@ -34,14 +34,26 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
 
         return new MeetingDTO({
             ...meetingData,
+            date: (meetingData.date as any).toDate(),
             employer: new EmployerDTO(employerData),
-            candidate: candidateData
+            candidate: new CandidateDTO({
+                candidateId: candidateData.id,
+                state: candidateData.state,
+                name: candidateData.name.names,
+                lastname: candidateData.name.lastname,
+                phone: candidateData.phone.areaCode + " " + candidateData.phone.phoneNumber,
+                email: candidateData.email,
+                birthdate: new Date(candidateData.birthdate),
+                location: candidateData.location
+            })
         });
     }
 
     async getById(id: string): Promise<MeetingDTO> {
-        const meetingQuery = await this.collection.doc(id).get(),
-              meetingData = meetingQuery.data()
+        const meetingQuery = await this.collection.doc(id).get();
+        console.log(meetingQuery.data())
+        const meetingData = meetingQuery.data()
+        
             
         return await this.dataModelToDTO(meetingData)
     }

@@ -57,9 +57,10 @@ export class Meeting extends AggregateRoot {
       case MeetingModifiedEvent:
         break;
       case MeetingAccepted:
-        this.state = new MeetingStateVO(MeetingStates.Active);
+        this._state = new MeetingStateVO(MeetingStates.Active);
+        break;
       case MeetingRejected:
-        this.state = new MeetingStateVO(MeetingStates.Rejected);
+        this._state = new MeetingStateVO(MeetingStates.Rejected);
         break;
     }
   }
