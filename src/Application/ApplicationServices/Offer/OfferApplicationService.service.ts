@@ -194,7 +194,7 @@ export class OfferApplicationService implements IApplicationService {
         );
         DSApplyToOfer.createApplication();
 
-       /* try {
+        try {
           this.Sender.send(
             cmd.employerId,
             new CandidateApplied(
@@ -207,7 +207,7 @@ export class OfferApplicationService implements IApplicationService {
           );
         } catch (error) {
           throw error;
-        }*/
+        }
         Offer_Applied = EntitiesFactory.fromOfferToOfferDTO(newOffer);
         this.Offerrepo.save(Offer_Applied);
         this.CandidaterepoC.modify(Candidate.id, Candidate);

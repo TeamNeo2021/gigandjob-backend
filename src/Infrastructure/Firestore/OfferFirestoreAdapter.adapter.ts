@@ -47,7 +47,7 @@ export class OfferFirestoreAdapter implements IOfferRepository {
     /*const offerQuery = await this.offerRepository
         .where('id', '==', id_offer)
         .get(),
-      offerResult = offerQuery.docs[0].data();
+    offerResult = offerQuery.docs[0].data();
 
     if (!offerResult) return null;
 

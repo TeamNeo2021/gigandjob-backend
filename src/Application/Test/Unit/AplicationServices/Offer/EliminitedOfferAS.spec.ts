@@ -35,8 +35,7 @@ const offerDTO = new OfferDTO({
   Rating: 0,
   Direction: new LocationDTO({
     latitude: 24,
-    longitude: 150,
-    
+    longitude: 80, 
   }),
   Sector: Sectors.Laws,
   Budget: 400,

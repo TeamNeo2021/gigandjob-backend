@@ -63,6 +63,6 @@ describe('Register Employer', () => {
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
       'comDesignation.value_comercial_designation',
       'Some comDesignation',
-    );
+    );  
   });
-});
+}); 

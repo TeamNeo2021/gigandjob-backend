@@ -31,8 +31,10 @@ import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobi
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
 import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
-import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
 import { Publisher } from './Infrastructure/Event/Publishers/publisher';
+import { UserDeletionHandler } from './Infrastructure/Event/Handlers/UserDeletion.handler';
+import { MeetingCreationHandler } from './Infrastructure/Event/Handlers/MeetingCreation.handler';
+import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
 
 
 const employerServiceProvider = {
@@ -119,6 +121,8 @@ const meetingAdapterProvider = {
     UserFirestoreAdapterService,
     userServiceProvider,
     UserCreationHandler,
+    UserDeletionHandler,
+    MeetingCreationHandler,
     AuthService,
     JwtAuthService,
 
@@ -135,6 +139,7 @@ const meetingAdapterProvider = {
     CandidateFirestoreAdapter,
     MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
+    MockSenderAdapter
   ],
 })
 export class AppModule {}
