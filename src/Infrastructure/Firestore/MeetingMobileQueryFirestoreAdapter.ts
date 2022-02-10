@@ -8,12 +8,13 @@ import { OfferMobileQueryModel } from 'src/Application/QueryModels/offer_mobile'
 @Injectable()
 export class MeetingQueryFirestoreAdapter implements MeeetingQueryModel {
   constructor(
-    @Inject('meetings') private collection: CollectionReference<MeetingDTO>,
+    @Inject('Meetings') private collection: CollectionReference<MeetingDTO>,
   ) {}
 
         async getAll(candidateId: string): Promise<MeetingDTO[]> {
             try {
-                    let candidateMeetingDocs = await (await this.collection.where('candidateId', '==', candidateId).get()).docs;
+                    console.log(candidateId)
+                    let candidateMeetingDocs = await (await this.collection.where('CandidateId', '==', candidateId).get()).docs;
                     console.log('MeeetingFirestoreAdapter: getAllCandidateMeetings candidateMeetingDocs: ', candidateMeetingDocs);
                     let candidateMeetingsList = candidateMeetingDocs.map(doc => {
                         console.log('getAllCandidateMeetings ...mapping doc: ', doc);

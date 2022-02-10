@@ -12,18 +12,22 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
     repository :any;
     
     constructor(
-        @Inject('meetings') private collection: CollectionReference<MeetingDTO>) {}
+        @Inject('Meetings') private collection: CollectionReference<MeetingDTO>) {}
 
 
-    getById(id: string): Promise<MeetingDTO> {
-        throw new Error('Method not implemented.');
+    async getById(id: string): Promise<MeetingDTO> {
+    const meetingQuery = await this.collection.doc(id).get();
+    return new MeetingDTO(meetingQuery.data());
     }
 
 
     async saveMeeting(meeting: MeetingDTO)/**: Promise<MeetingDTO> */ {
       try {
         let newMeeting = await this.collection.doc(meeting.id).set(
-            { ...meeting, location: { ...meeting.location } }
+            { ...meeting,
+                location: { ...meeting.location },
+                //candidate: { ...meeting.candidate }
+            }
             // antes dentro de set no decia { ...meeting, location: { ...meeting.location } }, sino meeting
         );
         console.log('MeeetingFirestoreAdapter: saveMeeting response: ', newMeeting);

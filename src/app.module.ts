@@ -68,7 +68,7 @@ const meetingAdapterProvider = {
       inject: [ConfigService],
       collections: [
         'employers',
-        'meetings',
+        'Meetings',
         'offers',
         'candidates',
         'applications',
