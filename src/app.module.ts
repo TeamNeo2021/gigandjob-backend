@@ -34,6 +34,7 @@ import { EmployerRepository } from './Application/Repositories/Employer/reposito
 import { Publisher } from './Infrastructure/Event/Publishers/publisher';
 import { UserDeletionHandler } from './Infrastructure/Event/Handlers/UserDeletion.handler';
 import { MeetingCreationHandler } from './Infrastructure/Event/Handlers/MeetingCreation.handler';
+import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
 
 
 const employerServiceProvider = {
@@ -138,6 +139,7 @@ const meetingAdapterProvider = {
     CandidateFirestoreAdapter,
     MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
+    MockSenderAdapter
   ],
 })
 export class AppModule {}

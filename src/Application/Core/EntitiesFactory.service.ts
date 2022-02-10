@@ -254,12 +254,27 @@ export class EntitiesFactory {
         console.log(offerDTO.Direction.latitude)
         console.log(offerDTO.Direction)
         console.log(offerDTO.PublicationDate)
+        let clean_latitude: number;
+        let clean_longitude: number;
+
+        //Lets clean Direction
+        if(!offerDTO.Direction['_latitude']){
+          clean_latitude = offerDTO.Direction.latitude
+        }else{
+          clean_latitude = offerDTO.Direction['_latitude']
+        };
+        if(!offerDTO.Direction['_longitude']){
+          clean_longitude = offerDTO.Direction.longitude
+        }else{
+          clean_longitude = offerDTO.Direction['_longitude']
+        }
+
         const offer: Offer = new Offer(
           new OfferIdVO(offerDTO.OfferId),
           new OfferStateVO(offerDTO.State),
           PublicationDateVO.Unsafe(offerDTO.PublicationDate),
           RatingVO.Unsafe(offerDTO.Rating),
-          new OfferLocationVO(offerDTO.Direction['_latitude'], offerDTO.Direction['_longitude']),
+          new OfferLocationVO(clean_latitude, clean_longitude),
           new SectorVO(offerDTO.Sector),
           BudgetVO.Unsafe(offerDTO.Budget),
           DescriptionVO.Unsafe(offerDTO.Description),
