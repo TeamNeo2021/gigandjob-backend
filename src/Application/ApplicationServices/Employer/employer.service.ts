@@ -3,7 +3,7 @@ import { CreateEmployerCommandDTO } from "src/Application/DTO/CreateEmployer.dto
 import { Employer } from "src/Dominio/AggRoots/Employer/Employer";
 import { EmployerNameVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerNameVo";
 import { EmployerDescriptionVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerDescriptionVO";
-import { EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
+import { EmployerStates, EmployerStateVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerStateVo";
 import { EmployerLocationVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerLocationVO";
 import { EmployerRifVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerRifVO";
 import { EmployerPhoneVO } from "src/Dominio/AggRoots/Employer/ValueObjects/EmployerPhoneVo";
@@ -12,9 +12,10 @@ import { EmployerComercialDesignationVO } from "src/Dominio/AggRoots/Employer/Va
 import { EntitiesFactory } from "src/Application/Core/EntitiesFactory.service";
 import { ReactivateEmployerDTO } from "src/Application/DTO/Employer/ReactivateEmployer.dto";
 import { EliminateEmployerDTO } from "src/Application/DTO/Employer/EliminateEmployer.dto";
+import { Publisher } from "src/Application/Publisher/publisher.interface";
 
 export class EmployerApplicationService {
-    constructor(private repository: EmployerRepository) {}
+    constructor(private repository: EmployerRepository, private publisher: Publisher) {}
 
     async Handle(command: any): Promise<void> {
         switch (command.constructor){
@@ -43,9 +44,13 @@ export class EmployerApplicationService {
             }
 
             case EliminateEmployerDTO: {
-                const id = (command as EliminateEmployerDTO).id
+                const id = (command as EliminateEmployerDTO).id,
+                      employerDTO = await this.repository.get(id),
+                      employer = EntitiesFactory.fromEmployerDtoToEmployer(employerDTO),
+                      eliminatedEmployer = employer.EliminateEmployer(new EmployerStateVO(EmployerStates.Eliminated))
 
                 await this.repository.eliminate(id)
+                this.publisher.publish(eliminatedEmployer.GetChanges() as any[])
                 break;
             }
 
@@ -63,6 +68,7 @@ export class EmployerApplicationService {
                 )
 
                 await this.repository.save(EntitiesFactory.fromEmployerToEmployerDTO(employer))
+                this.publisher.publish(employer.GetChanges() as any[])
                 break;
             }
         }
