@@ -268,7 +268,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OfferReportInformation"
-  /dashboard/{dateString}:
+  /dashboard:
     get:
       summary: Read-Side for dashboard
       description: Queries the info to build the web dashboard screen 
@@ -276,13 +276,6 @@ paths:
         application/json: 
           schema:
             $ref: '#/components/schemas/DashboardQueryDate'
-      parameters: 
-        - dateString: string
-          in: path
-          required: true
-          description: The date to query the info
-          schema:
-            type: string
       responses: 
         '200':
           description: 'A dashboard DTO JSON'

@@ -28,6 +28,8 @@ import { UserController } from './Infrastructure/Controllers/User/user.controlle
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
+import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
+import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 
 
 const employerServiceProvider = {
