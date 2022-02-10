@@ -34,7 +34,7 @@ export class EmployerRepositoryService implements EmployerRepository {
     }
 
     async get(id: string): Promise<EmployerDTO> {
-        const employerQuery = await this.collection.where('id', '==', id).limit(1).get(),
+        const employerQuery = await this.collection.where('employerId', '==', id).limit(1).get(),
               employerResult = employerQuery.docs[0].data()
         if (!employerResult) return null
         

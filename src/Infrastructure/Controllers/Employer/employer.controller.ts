@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Inject, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, Inject, Param, Post, Put } from '@nestjs/common';
 import { EmployerApplicationService } from 'src/Application/ApplicationServices/Employer/employer.service';
 import { CreateEmployerCommandDTO } from 'src/Application/DTO/CreateEmployer.dto';
 import { EliminateEmployerDTO } from 'src/Application/DTO/Employer/EliminateEmployer.dto';
@@ -49,8 +49,8 @@ export class EmployerController {
     return 'Esta accion reactiva un Empleador';
   }
 
-    @Put('Eliminated') // PUT /employers/Eliminated
-    EliminateEmployer(@Body('id') id: string): any {
+    @Delete('/:id') // PUT /employers/Eliminated
+    EliminateEmployer(@Param('id') id: string): any {
     let request: EliminateEmployerDTO = new EliminateEmployerDTO(id);
     this.employerService.Handle(request);
     return 'Esta accion elimina un Empleador';
