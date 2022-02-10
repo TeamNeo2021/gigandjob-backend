@@ -140,7 +140,8 @@ const meetingAdapterProvider = {
     MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
     EmployerCreationHandler,
-    EmployerDeletionHandler
+    EmployerDeletionHandler,
+    MockSenderAdapter
   ],
 })
 export class AppModule {}
