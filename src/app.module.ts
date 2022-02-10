@@ -118,6 +118,7 @@ const meetingAdapterProvider = {
   ],
   providers: [
     Publisher,
+    MockSenderAdapter,
 
     // Users stack
     UserFirestoreAdapterService,
