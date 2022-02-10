@@ -16,6 +16,7 @@ import { CandidateScheduler } from "../Scheduler/Candidate/scheduler.interface";
 import { ReactivateCandidateDTO } from "../DTO/Candidate/ReactivateCandidate.dto";
 import { EliminateCandidateDTO } from "../DTO/Candidate/EliminateCandidate.dto";
 import { Publisher } from "../Publisher/publisher.interface";
+import { CandidateStateModified } from "src/Dominio/DomainEvents/CandidateEvents/CandidateStateModified";
 
 export class CandidateApplicationService implements IApplicationService{
 
@@ -82,7 +83,10 @@ export class CandidateApplicationService implements IApplicationService{
             case EliminateCandidateDTO: {
                 const id = (command as EliminateCandidateDTO).id
 
+                await this.publisher.publish([new CandidateStateModified('Eliminated')])
                 await this.repository.eliminate(id)
+
+                
                 
                 break;
             }
