@@ -4,10 +4,11 @@ export class MeetingDateVO {
     value: Date;
     constructor(value: Date) {
         let today = new Date();
+        let clean_today = new Date(today.getFullYear(),today.getMonth(), today.getDay())
         if (Date == null || Date == undefined){
             throw  new InvalidMeetingDate();
         }
-        else if (value >= today){
+        else if (value >= clean_today){
             this.value = value
         }
         else {

@@ -6,10 +6,10 @@ import { DashboardWebModelDTO } from "src/Application/DTO/QueryModel DTO's/dashb
 
 import { MeetingScheduledEvent } from "src/Dominio/DomainEvents/MeetingEvents/MeetingScheduled.event";
 
-@EventsHandler()
+@EventsHandler(MeetingScheduledEvent)
 export class MeetingCreationHandler implements IEventHandler<MeetingScheduledEvent> {
     constructor(
-        @Inject('meetings') private Meetingscollection: CollectionReference<MeetingDTO>,
+        @Inject('Meetings') private Meetingscollection: CollectionReference<MeetingDTO>,
         @Inject('dashboardModel') private DashboardCollection: CollectionReference<DashboardWebModelDTO>){}
 
     async handle(event: MeetingScheduledEvent) {
@@ -18,19 +18,27 @@ export class MeetingCreationHandler implements IEventHandler<MeetingScheduledEve
 
     async updateReadSide(): Promise<void>{
 
+
         let meetings: number;
 
         const today = new Date();
 
-        const clean_today = new Date(today.getFullYear(),today.getMonth(), today.getDay())
+        //const clean_today = new Date(today.getFullYear(),today.getMonth(), today.getDay());
+
+        const clean_today = new Date(2022,2,9) 
+
+        console.log('clean_today', clean_today)
 
         const query = await this.Meetingscollection
-                            .where('date', '==', clean_today)
+                            .where('date', '==', clean_today.getTime())
                             .get();
         
-        const results = query.docs[0].data();
+        const doc = query.docs[0]?.data()
 
-        console.log('results', results);
+
+        if (!doc) return null;
+
+        console.log('doc', doc)
 
         // const updateQuery = await this.DashboardCollection.doc('N4apURXjdiD4jAkrzK79').update(
         //     {
