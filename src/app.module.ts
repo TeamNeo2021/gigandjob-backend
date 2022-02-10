@@ -33,14 +33,16 @@ import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/Meeting
 import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
 import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
 import { Publisher } from './Infrastructure/Event/Publishers/publisher';
+import { EmployerCreationHandler } from './Infrastructure/Event/Handlers/EmployerCreation.handler';
+import { EmployerDeletionHandler } from './Infrastructure/Event/Handlers/EmployerDeletion.handler';
 
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
-  useFactory: (repo: EmployerRepositoryService) => {
-    return new EmployerApplicationService(repo);
+  useFactory: (repo: EmployerRepositoryService, publisher: Publisher) => {
+    return new EmployerApplicationService(repo, publisher);
   },
-  inject: [EmployerRepositoryService]
+  inject: [EmployerRepositoryService, Publisher]
 }
 
 const userServiceProvider = {
@@ -135,6 +137,8 @@ const meetingAdapterProvider = {
     CandidateFirestoreAdapter,
     MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
+    EmployerCreationHandler,
+    EmployerDeletionHandler
   ],
 })
 export class AppModule {}

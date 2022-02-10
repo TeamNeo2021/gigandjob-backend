@@ -24,7 +24,7 @@ export class EmployerRepositoryService implements EmployerRepository {
     constructor(@Inject('employers') private collection: CollectionReference<EmployerDTO>) {}
 
     async save(employer: EmployerDTO): Promise<void> {
-        await this.collection.doc(employer.employerId).set(employer);
+        await this.collection.doc(employer.employerId).set({ ...employer, location: { ...employer.location }});
        
     }
     async eliminate(id: string): Promise<void> {
