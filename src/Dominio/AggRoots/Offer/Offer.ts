@@ -391,7 +391,7 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     description: string,
     time: number,
     state: ApplicationStates,
-    previous_state: ApplicationStates
+    previous_state?: ApplicationStates
   ) {
     const currentState = new ApplicationState(),
           previousState = new ApplicationState()
