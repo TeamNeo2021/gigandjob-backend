@@ -38,7 +38,7 @@ export class EmployerRepositoryService implements EmployerRepository {
               employerResult = employerQuery.docs[0].data()
         if (!employerResult) return null
 
-        return new EmployerDTO(employerQuery);
+        return new EmployerDTO(employerResult);
     }
 
     async getAll(): Promise<EmployerDTO[]> {

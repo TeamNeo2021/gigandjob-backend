@@ -152,15 +152,15 @@ export class EntitiesFactory {
       static fromEmployerToEmployerDTO(employer: Employer): EmployerDTO{
         const employerDTO: EmployerDTO =  new EmployerDTO(
           {
-              employerId : employer.employerId,
-              name : employer.name,
-              description : employer.description,
-              state : employer.state,
+              employerId : employer.employerId.guid_value,
+              name : employer.name.value_name_employer,
+              description : employer.description.value_employer_description,
+              state : employer.state.value_state,
               location : employer.location,
-              rif : employer.rif,
-              phone : employer.phone,
-              mail : employer.mail,
-              comDesignation : employer.comDesignation,
+              rif : employer.rif.value_employer_rif,
+              phone : employer.phone.value_employer_phone,
+              mail : employer.mail.value_employer_mail,
+              comDesignation : employer.comDesignation.value_comercial_designation,
               offers : employer.offers.map(EntitiesFactory.fromOfferToOfferDTO),
           }
         );
@@ -245,23 +245,29 @@ export class EntitiesFactory {
 /**
        * Use it when instantiating an Offer from an Response
        * 
-       * @param OfferDTO 
+       * @param offerDTO 
        * @returns Offer
        */
-      static fromOfferDTOtoOffer(OfferDTO: OfferDTO): Offer {
+      static fromOfferDTOtoOffer(offerDTO: OfferDTO): Offer {
+        console.log("estoy en fromODTO")
+        console.log(offerDTO)
+        console.log(offerDTO.Direction.latitude)
+        console.log(offerDTO.Direction)
+        console.log(offerDTO.PublicationDate)
         const offer: Offer = new Offer(
-          new OfferIdVO(OfferDTO.OfferId),
-          new OfferStateVO(OfferDTO.State),
-          PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
-          RatingVO.Unsafe(OfferDTO.Rating),
-          new OfferLocationVO(OfferDTO.Direction.latitude, OfferDTO.Direction.longitude),
-          new SectorVO(OfferDTO.Sector),
-          BudgetVO.Unsafe(OfferDTO.Budget),
-          DescriptionVO.Unsafe(OfferDTO.Description),
-          OfferDTO.reports.map(r => OfferReportVO.Unsafe(r.reporterId, r.reason)),
-        );
+          new OfferIdVO(offerDTO.OfferId),
+          new OfferStateVO(offerDTO.State),
+          PublicationDateVO.Unsafe(offerDTO.PublicationDate),
+          RatingVO.Unsafe(offerDTO.Rating),
+          new OfferLocationVO(offerDTO.Direction['_latitude'], offerDTO.Direction['_longitude']),
+          new SectorVO(offerDTO.Sector),
+          BudgetVO.Unsafe(offerDTO.Budget),
+          DescriptionVO.Unsafe(offerDTO.Description),
+          offerDTO.reports.map(r => OfferReportVO.Unsafe(r.reporterId, r.reason)),
+        )
+        console.log("sali de fromODTO");
 
-        OfferDTO.applications.forEach(app => {
+        offerDTO.applications.forEach(app => {
           offer.unsafeCreateApplication(
             app.applicationId,
             app.candidateId,
