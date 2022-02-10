@@ -30,6 +30,7 @@ import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
+import { Publisher } from './Infrastructure/Event/Publishers/publisher';
 
 
 const employerServiceProvider = {
@@ -67,8 +68,8 @@ const offerServiceProvider = {
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
-  useFactory: (repo: MeetingFirestoreAdapter) => {
-    return new MeetingApplicationService(repo);
+  useFactory: (repo: MeetingFirestoreAdapter, publisher: Publisher) => {
+    return new MeetingApplicationService(repo, publisher);
   },
   inject: [MeetingFirestoreAdapter],
 };

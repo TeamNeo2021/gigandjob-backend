@@ -7,14 +7,16 @@ import { AcceptMeeting } from '../DTO/Meeting/AcceptMeeting';
 import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
 import { ModifyMeetingDTO } from '../DTO/Meeting/modifyMeetingDTO';
 import { RejectMeeting } from '../DTO/Meeting/RejectMeetingDTO';
+import { Publisher } from '../Publisher/publisher.interface';
 
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
 
 export class MeetingApplicationService implements IApplicationService {
-  private repository: IMeetingRepository;
-  constructor(repository: IMeetingRepository) {
-    this.repository = repository;
-  }
+  
+  constructor(
+    private repository: IMeetingRepository,
+    private publisher: Publisher) {}
+
   async Handle(command: any): Promise<void> {
     switch (command.constructor) {
       case AcceptMeeting: {
@@ -30,6 +32,7 @@ export class MeetingApplicationService implements IApplicationService {
         const MMdto: ModifyMeetingDTO =
           EntitiesFactory.fromMeetingToModifyMeetingDTO(AMeeting);
         this.repository.modifyMeeting(MMdto);
+        this.publisher.publish(AMeeting.GetChanges() as any[])
         break;
       }
       case RejectMeeting: {
