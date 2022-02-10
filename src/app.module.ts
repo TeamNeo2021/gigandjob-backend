@@ -32,6 +32,8 @@ import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateF
 import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
 import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
 import { Publisher } from './Infrastructure/Event/Publishers/publisher';
+import { EmployerCreationHandler } from './Infrastructure/Event/Handlers/EmployerCreation.handler';
+import { EmployerDeletionHandler } from './Infrastructure/Event/Handlers/EmployerDeletion.handler';
 import { UserDeletionHandler } from './Infrastructure/Event/Handlers/UserDeletion.handler';
 import { MeetingCreationHandler } from './Infrastructure/Event/Handlers/MeetingCreation.handler';
 import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
@@ -39,10 +41,10 @@ import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
-  useFactory: (repo: EmployerRepositoryService) => {
-    return new EmployerApplicationService(repo);
+  useFactory: (repo: EmployerRepositoryService, publisher: Publisher) => {
+    return new EmployerApplicationService(repo, publisher);
   },
-  inject: [EmployerRepositoryService]
+  inject: [EmployerRepositoryService, Publisher]
 }
 
 const userServiceProvider = {
@@ -121,10 +123,8 @@ const meetingAdapterProvider = {
     UserFirestoreAdapterService,
     userServiceProvider,
     UserCreationHandler,
-    UserDeletionHandler,
-    MeetingCreationHandler,
-    AuthService,
     JwtAuthService,
+    AuthService,
 
     AppService, 
     DashboardWebQueryFirestoreAdapter,
@@ -139,7 +139,8 @@ const meetingAdapterProvider = {
     CandidateFirestoreAdapter,
     MeetingQueryFirestoreAdapter,
     DashboardWebQueryFirestoreAdapter,
-    MockSenderAdapter
+    EmployerCreationHandler,
+    EmployerDeletionHandler
   ],
 })
 export class AppModule {}

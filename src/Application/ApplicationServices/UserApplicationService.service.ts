@@ -15,8 +15,11 @@ export class UserApplicationService {
         if (cmd instanceof CreateUserDTO) {
             await this.repository.save(new UserDTO(cmd.id, cmd.email, cmd.password));
         } else if (cmd instanceof LoginUserDTO) {
-            const dto = await this.repository.find(cmd.email),
-                  user = EntitiesFactory.fromUserDTOToUser(dto);
+            const dto = await this.repository.find(cmd.email);
+
+            if (!dto) return null
+
+            const user = EntitiesFactory.fromUserDTOToUser(dto);
 
             if (user.passwordMatches(cmd.password)) return dto;
         }

@@ -17,10 +17,7 @@ export class UserController {
               jwt = await this.jwtService.signAsync({ ...user }, { subject: user.id }),
               { id, email, ...rest } = user
 
-        response.cookie('jwt', jwt, { signed: true })
-
-
-        return { id, email }
+        return { jwt }
     }
 
     @Post('logout')

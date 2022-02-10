@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { CandidateApplicationService } from '../../../Application/ApplicationServices/CandidateApplicationService.service';
 import { CandidateRegisterDTO } from '../../../Application/DTO/Candidate/RegisterCandidate.dto';
 import { SuspendCandidateDTO } from '../../../Application/DTO/Candidate/SuspendCandidate.dto';
@@ -9,6 +9,7 @@ import { AuthedUser } from 'src/Infrastructure/Decorators/Auth/AuthedUser';
 import { UserDTO } from 'src/Application/DTO/User/User.dto';
 import { CandidateFirestoreAdapter } from 'src/Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
+import { AuthGuard } from '@nestjs/passport';
 
 type CaniddateSuspensionBody = {
     until: string
@@ -40,7 +41,7 @@ export class CandidateController {
     ) {}
 
     @Get('profile')
-    @Authorize()
+    @UseGuards(AuthGuard('jwt'))
     async get(@AuthedUser() user: UserDTO) {
         return EntitiesFactory.fromCandidateToCandidateDTO(await this.repository.getOne(user.id))
     }

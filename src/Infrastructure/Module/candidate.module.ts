@@ -10,6 +10,7 @@ import { CandidateFirestoreAdapter } from "../Firestore/CandidateFirestoreAdapte
 import { CandidateSchedulerService } from "../Scheduler/candidate-scheduler.service";
 import { Publisher } from "../Event/Publishers/publisher";
 import { CqrsModule, EventBus } from "@nestjs/cqrs";
+import { JwtAuthService } from "../Services/jwt.auth.service";
 
 const candidateApplicationServiceProvider = {
   provide: 'CandidateApplicationService',
@@ -26,6 +27,7 @@ const candidateApplicationServiceProvider = {
   ],
   providers: [
     Publisher,
+    JwtAuthService,
     CandidateFirestoreAdapter,
     CandidateSchedulerService,
     CandidateSuspensionsLimitService,
