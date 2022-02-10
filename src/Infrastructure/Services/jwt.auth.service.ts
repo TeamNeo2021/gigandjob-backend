@@ -7,7 +7,11 @@ export class JwtAuthService extends PassportStrategy(Strategy) {
     constructor() {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([
-                (req: Request) => req.signedCookies.jwt
+                (req: Request) => {
+                    console.log(req.cookies)
+                    console.log(req.signedCookies)
+                    return req.signedCookies.jwt
+                }
             ]),
             ignoreExpiration: true,
             secretOrKey: "secret"
@@ -15,6 +19,7 @@ export class JwtAuthService extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: UserDTO) {
+
         return payload
     }
 }

@@ -121,8 +121,8 @@ const meetingAdapterProvider = {
     UserFirestoreAdapterService,
     userServiceProvider,
     UserCreationHandler,
-    AuthService,
     JwtAuthService,
+    AuthService,
 
     AppService, 
     DashboardWebQueryFirestoreAdapter,
