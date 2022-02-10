@@ -95,10 +95,10 @@ export class CandidateFirestoreAdapter implements ICandidateRepository {
         })
     }
     async getOne(id: string): Promise<Candidate> {
-        console.log("toy en get one")
+        
         const candidateQuery = await this.repo.doc(id).get(),
               candidateResult = candidateQuery.data()
-        console.log(candidateResult)
+        
         
         if (!candidateResult) return null
 

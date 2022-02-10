@@ -42,7 +42,6 @@ export class MeetingApplicationService implements IApplicationService {
                 new MeetingStateVO(MeetingStates[cmd.state]),
               )
         await this.repository.saveMeeting(EntitiesFactory.fromMeetingToMeetingDTO(meeting))
-        console.log('meeting', meeting.GetChanges() as any[])
         this.publisher.publish(meeting.GetChanges() as any[])
         break
       }

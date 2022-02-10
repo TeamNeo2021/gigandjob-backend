@@ -304,12 +304,27 @@ export class EntitiesFactory {
        * @returns Offer
        */
       static fromCreateOfferDTOtoOffer(OfferDTO: createOfferDTO): Offer { //PILAS ESTO ES PARA CREAR UN OFFER
+        let clean_latitude: number;
+        let clean_longitude: number;
+
+        //Lets clean Direction
+        if(!OfferDTO.Direction['_latitude']){
+          clean_latitude = OfferDTO.Direction.latitude
+        }else{
+          clean_latitude = OfferDTO.Direction['_latitude']
+        };
+        if(!OfferDTO.Direction['_longitude']){
+          clean_longitude = OfferDTO.Direction.longitude
+        }else{
+          clean_longitude = OfferDTO.Direction['_longitude']
+        };
+        
         const offer: Offer =  Offer.CreateOffer(
           // new OfferIdVO(OfferDTO.OfferId),
           new OfferStateVO(OfferStatesEnum[OfferDTO.State]),
           PublicationDateVO.Unsafe(OfferDTO.PublicationDate),
           RatingVO.Unsafe(OfferDTO.Rating),
-          new OfferLocationVO(OfferDTO.Direction.latitude, OfferDTO.Direction.longitude),
+          new OfferLocationVO(clean_latitude, clean_longitude),
           new SectorVO(Sectors[OfferDTO.Sector]),
           BudgetVO.Unsafe(OfferDTO.Budget),
           DescriptionVO.Unsafe(OfferDTO.Description),

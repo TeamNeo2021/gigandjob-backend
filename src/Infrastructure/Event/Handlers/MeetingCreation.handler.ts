@@ -25,7 +25,7 @@ export class MeetingCreationHandler implements IEventHandler<MeetingScheduledEve
 
         const clean_today = new Date(today.toDateString())
 
-        console.log('clean_today', clean_today)
+        
 
         const sizeQuery = await this.Meetingscollection
             .where('date', '==', clean_today)
@@ -34,7 +34,7 @@ export class MeetingCreationHandler implements IEventHandler<MeetingScheduledEve
                 meetings = snap.size)
 
         
-
+        console.log('meetings', meetings)
         const updateQuery = await this.DashboardCollection.doc('N4apURXjdiD4jAkrzK79').update(
             {
                 'meetings': meetings
