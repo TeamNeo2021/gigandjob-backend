@@ -8,24 +8,28 @@ import { CandidateSuspensionsLimitService } from "../Configuration/candidate-sus
 import { CandidateController } from "../Controllers/Candidate/candidateController.controller";
 import { CandidateFirestoreAdapter } from "../Firestore/CandidateFirestoreAdapter.adapter";
 import { CandidateSchedulerService } from "../Scheduler/candidate-scheduler.service";
+import { Publisher } from "../Event/Publishers/publisher";
+import { CqrsModule, EventBus } from "@nestjs/cqrs";
 
 const candidateApplicationServiceProvider = {
   provide: 'CandidateApplicationService',
-  useFactory: (repo: ICandidateRepository, ref: ModuleRef, config: CandidateConfiguration) => {
-    return new CandidateApplicationService(repo, config, ref.get(CandidateSchedulerService))
+  useFactory: (repo: ICandidateRepository, publisher: Publisher, ref: ModuleRef, config: CandidateConfiguration) => {
+    return new CandidateApplicationService(repo, config, ref.get(CandidateSchedulerService), publisher)
   },
-  inject: [CandidateFirestoreAdapter, ModuleRef, CandidateSuspensionsLimitService]
+  inject: [CandidateFirestoreAdapter, Publisher, ModuleRef, CandidateSuspensionsLimitService]
 }
 
 @Module({
   imports: [
-    ScheduleModule.forRoot()
+    CqrsModule,
+    ScheduleModule.forRoot(),
   ],
   providers: [
+    Publisher,
     CandidateFirestoreAdapter,
     CandidateSchedulerService,
     CandidateSuspensionsLimitService,
-    candidateApplicationServiceProvider
+    candidateApplicationServiceProvider,
   ],
   controllers: [
     CandidateController    

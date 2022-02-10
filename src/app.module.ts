@@ -1,4 +1,4 @@
-import { Inject, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,18 +18,38 @@ import { MeetingFirestoreAdapter } from './Infrastructure/Firestore/MeetingFires
 import { DashboardController } from './Infrastructure/Controllers/Read-side/dashboard/dashboard.controller';
 import { DashboardWebQueryFirestoreAdapter } from './Infrastructure/Firestore/DashboardWebQueryFirestoreAdapter';
 import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestoreAdapter.adapter';
+import { BasicStrategy } from 'passport-http';
+import { AuthService } from './Infrastructure/Services/auth.service';
+import { UserRepository } from './Application/Repositories/User/repository.interface';
+import { UserApplicationService } from './Application/ApplicationServices/UserApplicationService.service';
+import { UserFirestoreAdapterService } from './Infrastructure/Firestore/UserFirestoreAdapter.adapter';
+import { UserCreationHandler } from './Infrastructure/Event/Handlers/UserCreation.handler';
+import { UserController } from './Infrastructure/Controllers/User/user.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthService } from './Infrastructure/Services/jwt.auth.service';
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
 import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
+import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
+
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
   useFactory: (repo: EmployerRepositoryService) => {
     return new EmployerApplicationService(repo);
   },
-  inject: [EmployerRepositoryService],
-};
+  inject: [EmployerRepositoryService]
+}
+
+const userServiceProvider = {
+  provide: 'UserService',
+  useFactory: (repo: UserRepository) => {
+    return new UserApplicationService(repo)
+  },
+  inject: [UserFirestoreAdapterService]
+}
+
 const offerServiceProvider = {
   provide: 'OfferApplicationService',
   useFactory: (
@@ -73,25 +93,34 @@ const meetingAdapterProvider = {
         'offers',
         'candidates',
         'applications',
-        'dashboardModel',
-      ],
+        'users',
+        'dashboardModel'
+      ]
     }),
     CandidateModule,
     CqrsModule,
+    JwtModule.register({
+      secret: 'secret',
+    })
   ],
   controllers: [
-    AppController,
-    MeetingController,
-    OfferController,
-    EmployerController,
-    AppController,
-    MeetingController,
-    OfferController,
+    AppController, 
+    MeetingController, 
+    OfferController, 
+    UserController,
     EmployerController,
     DashboardController,
   ],
   providers: [
-    AppService,
+    // Users stack
+    UserFirestoreAdapterService,
+    userServiceProvider,
+    UserCreationHandler,
+    AuthService,
+    JwtAuthService,
+
+    AppService, 
+    DashboardWebQueryFirestoreAdapter,
     MeetingApplicationService,
     MeetingFirestoreAdapter,
     OfferApplicationService,

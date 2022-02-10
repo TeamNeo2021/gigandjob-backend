@@ -4,6 +4,11 @@ import { CandidateRegisterDTO } from '../../../Application/DTO/Candidate/Registe
 import { SuspendCandidateDTO } from '../../../Application/DTO/Candidate/SuspendCandidate.dto';
 import { ReactivateCandidateDTO } from '../../../Application/DTO/Candidate/ReactivateCandidate.dto';
 import { EliminateCandidateDTO } from '../../../Application/DTO/Candidate/EliminateCandidate.dto';
+import { Authorize } from 'src/Infrastructure/Decorators/Auth/Authorize';
+import { AuthedUser } from 'src/Infrastructure/Decorators/Auth/AuthedUser';
+import { UserDTO } from 'src/Application/DTO/User/User.dto';
+import { CandidateFirestoreAdapter } from 'src/Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
+import { EntitiesFactory } from 'src/Application/Core/EntitiesFactory.service';
 
 type CaniddateSuspensionBody = {
     until: string
@@ -11,7 +16,7 @@ type CaniddateSuspensionBody = {
 
 type CandidateRegisterData = {
     name: {
-        firtstname: string
+        firstname: string
         lastnames: string
     }
     phone: {
@@ -24,25 +29,36 @@ type CandidateRegisterData = {
         latitude: number,
         longitude: number
     }
+    password: string
 }
 
 @Controller('Candidate')
 export class CandidateController {
-    constructor(@Inject('CandidateApplicationService') private service: CandidateApplicationService) {}
+    constructor(
+        @Inject('CandidateApplicationService') private service: CandidateApplicationService,
+        private repository: CandidateFirestoreAdapter
+    ) {}
+
+    @Get('profile')
+    @Authorize()
+    async get(@AuthedUser() user: UserDTO) {
+        return EntitiesFactory.fromCandidateToCandidateDTO(await this.repository.getOne(user.id))
+    }
 
     @Post()
     @HttpCode(201)
     async createOffer(@Body() body: CandidateRegisterData): Promise<string> {
         this.service.Handle(
             new CandidateRegisterDTO(
-                body.name.firtstname,
+                body.name.firstname,
                 body.name.lastnames,
                 body.phone.areaCode,
                 body.phone.phoneNumber,
                 body.email,
                 body.birthdate,
                 body.location.latitude,
-                body.location.longitude
+                body.location.longitude,
+                body.password
             )
         );
         return 'Candidate has been registed'

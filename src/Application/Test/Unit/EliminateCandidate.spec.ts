@@ -25,7 +25,9 @@ const memoryRepo = new InMemoryCandidateCommandRepository()
 const eliminateService = new CandidateApplicationService(memoryRepo, {
     getSuspensionLimit: jest.fn(),
 }, {
-    scheduleCandidateReactivation: jest.fn()
+    scheduleCandidateReactivation: jest.fn(),
+}, {
+    publish: jest.fn()
 })
 
 describe("eliminate a candidate in memory", ()=>{

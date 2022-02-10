@@ -102,7 +102,6 @@ export class CandidateFirestoreAdapter implements ICandidateRepository {
         
         if (!candidateResult) return null
 
-        console.log(entityToClass(candidateResult))
         return entityToClass(candidateResult)
     }
 

@@ -15,13 +15,16 @@ import { CandidateConfiguration } from "../Configuration/Candidate/configuration
 import { CandidateScheduler } from "../Scheduler/Candidate/scheduler.interface";
 import { ReactivateCandidateDTO } from "../DTO/Candidate/ReactivateCandidate.dto";
 import { EliminateCandidateDTO } from "../DTO/Candidate/EliminateCandidate.dto";
+import { Publisher } from "../Publisher/publisher.interface";
+import { CandidateStateModified } from "src/Dominio/DomainEvents/CandidateEvents/CandidateStateModified";
 
 export class CandidateApplicationService implements IApplicationService{
 
     constructor(
         private repository: ICandidateRepository,
         private configuration: CandidateConfiguration,
-        private scheduler: CandidateScheduler
+        private scheduler: CandidateScheduler,
+        private publisher: Publisher
     ){}
 
     async Handle(command: any): Promise<void> {
@@ -30,17 +33,28 @@ export class CandidateApplicationService implements IApplicationService{
             case CandidateRegisterDTO: {
                 
                 let dto: CandidateRegisterDTO = <CandidateRegisterDTO> command
-
+                console.log(dto.birthDate.split('-'));
+                console.log(new Date(1995, 6, 2));
                 let candidate = new Candidate(
                     new CandidateIdVo(),
                     new CandidateStateVo(CandidateStatesEnum.Active),
                     new CandidateFullNameVo(dto.name, dto.lastname),
                     new CandidatePhoneVo(dto.phoneCode, dto.phoneNumber),
                     new CandidateEmailVo(dto.email),
-                    new CandidateBirthDateVo(new Date(dto.birthDate)),
+                    new CandidateBirthDateVo(
+                        new Date(
+                            parseInt(dto.birthDate.split('-')[2]),
+                            parseInt(dto.birthDate.split('-')[1]),
+                            parseInt(dto.birthDate.split('-')[0])
+                        )
+                    ),
                     new CandidateLocationVo(dto.latitude, dto.longitude),
                 );
-        
+
+                candidate.registerCandidate(dto.password);
+
+                await this.publisher.publish(candidate.GetChanges() as any[])
+
                 await this.repository.save(candidate);
                 break;
             }
@@ -76,7 +90,10 @@ export class CandidateApplicationService implements IApplicationService{
             case EliminateCandidateDTO: {
                 const id = (command as EliminateCandidateDTO).id
 
+                await this.publisher.publish([new CandidateStateModified('Eliminated')])
                 await this.repository.eliminate(id)
+
+                
                 
                 break;
             }
