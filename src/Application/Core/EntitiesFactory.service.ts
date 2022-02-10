@@ -81,7 +81,7 @@ export class EntitiesFactory {
           new MeetingIDVO(Mdto.id),
           new MeetingStateVO(MeetingStates[Mdto.state]),
           new MeetingDescriptionVO(Mdto.description),
-          new MeetingDateVO(Mdto.date),
+          MeetingDateVO.Unsafe(Mdto.date),
           new MeetingLocationVO(
            Mdto.location.latitude , Mdto.location.longitude,
           ),
@@ -214,7 +214,7 @@ export class EntitiesFactory {
   static fromMeetingToModifyMeetingDTO(Meeting: Meeting): ModifyMeetingDTO {
     const MMDto: ModifyMeetingDTO = new ModifyMeetingDTO(
       Meeting.id._id as string, //todo esto debe ser refactorizado
-      Meeting.state.current.toString(),
+      MeetingStates[Meeting.state.current],
       Meeting.description.value,
       Meeting.date.value,
       this.fromMeetingLocationVOToLocationDTO(Meeting.location),

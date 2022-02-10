@@ -61,8 +61,10 @@ export class MeetingApplicationService implements IApplicationService {
         console.log('A punto de llamar entity fact');
         const AMeeting: Meeting = EntitiesFactory.fromMeetingDtotoMeeting(Mdto);
         console.log('entityfactory superado');
+        console.log(AMeeting)
         AMeeting.Accept();
         console.log('Accept Superado');
+        console.log(AMeeting)
         const MMdto: ModifyMeetingDTO =
           EntitiesFactory.fromMeetingToModifyMeetingDTO(AMeeting);
         this.repository.modifyMeeting(MMdto);

@@ -74,6 +74,7 @@ export class MeetingController {
   ): Promise<any> {
     request = new AcceptMeeting(CI, MI);
     await this.meetingService.Handle(request).catch((err) => {
+      console.error(err)
       throw err;
     });
     return 'ok';

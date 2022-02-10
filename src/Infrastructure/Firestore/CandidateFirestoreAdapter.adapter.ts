@@ -11,7 +11,7 @@ import { CandidatePhoneVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/Ca
 import { CandidateStatesEnum, CandidateStateVo } from "src/Dominio/AggRoots/Candidate/ValueObjects/CandidateStateVo";
 
 
-type CandidateEntity = {
+export type CandidateEntity = {
     id: string
     state: {
         value: number,
