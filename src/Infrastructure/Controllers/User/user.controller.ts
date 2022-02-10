@@ -17,7 +17,7 @@ export class UserController {
               jwt = await this.jwtService.signAsync({ ...user }, { subject: user.id }),
               { id, email, ...rest } = user
 
-        return { jwt }
+        return { jwt, id, email }
     }
 
     @Post('logout')
