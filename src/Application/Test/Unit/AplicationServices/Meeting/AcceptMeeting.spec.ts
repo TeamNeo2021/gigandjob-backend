@@ -9,10 +9,19 @@ import { EmployerStates } from '../../../../../Dominio/AggRoots/Employer/ValueOb
 import { MeetingStates } from '../../../../../Dominio/AggRoots/Meeting/ValueObjects/MeetingStateVO';
 import { MockMeetingAdapter } from '../../../../../Infrastructure/Memory/MockMeetingRepo';
 import { LocationDTO } from '../../../../DTO/Location.dto';
-import { CandidateDTO } from 'src/Application/DTO/Candidate/Candidate.dto';
-import { EmployerDTO } from 'src/Application/DTO/Employer/Employer.dto';
+import { CandidateDTO } from '../../../../DTO/Candidate/Candidate.dto';
+import { EmployerDTO } from '../../../../DTO/Employer/Employer.dto';
+import { ICandidateRepository } from '../../../../Repositories/CandidateRepository';
+import { EmployerRepository } from 'src/Application/Repositories/Employer/repository.interface';
+import { Publisher } from '../../../../Publisher/publisher.interface';
+import { MockEmployerRepo } from '../../../../../Infrastructure/Memory/MockEmployerRepo.repo';
+import { InMemoryCandidateCommandRepository } from '../../../../../Infrastructure/Memory/InMemoryCandidateCommandRepository.repo';
+import { MockPublisher } from '../../../../../Infrastructure/Memory/MockPublisher';
 
 const MeetingRepo = new MockMeetingAdapter();
+const CandidateRepo = new InMemoryCandidateCommandRepository();
+const EmployerRepo = new MockEmployerRepo();
+const publisherMock = new MockPublisher();
 
 const WrongCommand = { Prueba: 1 };
 
@@ -29,12 +38,13 @@ const exampleEmployer = new EmployerDTO({
 });
 
 const exampleCandidate = new CandidateDTO({
-  id: randomUUID(),
+  candidateId: randomUUID().toString(),
   state: CandidateStatesEnum.Active,
-  name: 'Peter Parker',
+  name: 'Peter',
+  lastname: 'Parker',
   phone: '0414 4407938',
   email: 'spidey@gmail.com',
-  birthDate: new Date('2000-01-16'),
+  birthdate: new Date('2000-01-16'),
   location: { latitude: 20, longitude: 90 },
 });
 
@@ -53,15 +63,24 @@ const ExCommand = new AcceptMeeting(
   exampleMeeting.id,
 );
 
-function create_Service(repoO: IMeetingRepository): MeetingApplicationService {
-  const service = new MeetingApplicationService(repoO);
+function create_Service(
+                        repoO: IMeetingRepository,
+                        repoC: ICandidateRepository,
+                        repoE: EmployerRepository,
+                        publi: Publisher
+                      ): MeetingApplicationService {
+  const service = new MeetingApplicationService(
+                      repoO,
+                      repoC,
+                      repoE,
+                      publi); 
   return service;
 }
 
 describe('Accept a meeting', () => {
   it('should suceed when valid candidate acceps valid Meeting', async () => {
     MeetingRepo.saveMeeting(exampleMeeting);
-    const MeetingService = create_Service(MeetingRepo);
+    const MeetingService = create_Service(MeetingRepo, CandidateRepo,EmployerRepo,publisherMock);
     await MeetingService.Handle(ExCommand).catch();
     const ModifiedMeeting = await MeetingRepo.getById(exampleMeeting.id);
     expect(() => ModifiedMeeting.id == exampleMeeting.id);

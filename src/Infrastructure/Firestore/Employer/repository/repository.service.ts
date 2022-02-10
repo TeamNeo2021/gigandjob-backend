@@ -37,7 +37,7 @@ export class EmployerRepositoryService implements EmployerRepository {
         const employerQuery = await this.collection.where('id', '==', id).limit(1).get(),
               employerResult = employerQuery.docs[0].data()
         if (!employerResult) return null
-
+        
         return new EmployerDTO(employerResult);
     }
 

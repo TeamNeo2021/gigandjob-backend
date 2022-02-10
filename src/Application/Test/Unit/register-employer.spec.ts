@@ -12,6 +12,8 @@ describe('Register Employer', () => {
         getAll: getAllMockFn,
         save: saveMockFn,
         eliminate: jest.fn(),
+      }, {
+        publish: jest.fn()
       }),
       registerEmployerCommand = new CreateEmployerCommandDTO(
         'Michael Nelo',
@@ -30,11 +32,11 @@ describe('Register Employer', () => {
     await employerApplicationService.Handle(registerEmployerCommand);
     expect(saveMockFn).toHaveBeenCalled();
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'name.value_name_employer',
+      'name',
       'Michael Nelo',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'description.value_employer_description',
+      'description',
       'This is a test employer',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
@@ -45,24 +47,24 @@ describe('Register Employer', () => {
       },
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'state.value_state',
+      'state',
       EmployerStates.Active,
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'rif.value_employer_rif',
+      'rif',
       'J-123123123',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'phone.value_employer_phone',
+      'phone',
       '+58 4241956647',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'mail.value_employer_mail',
+      'mail',
       'mknelo.18@est.ucab.edu.ve',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
-      'comDesignation.value_comercial_designation',
+      'comDesignation',
       'Some comDesignation',
-    );
+    );  
   });
-});
+}); 

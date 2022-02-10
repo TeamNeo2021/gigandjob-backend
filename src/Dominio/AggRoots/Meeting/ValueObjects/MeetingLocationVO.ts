@@ -1,12 +1,12 @@
 import {InvalidMeetingLocationError} from "../Errors/InvalidMeetingLocation.error";
 
 export class MeetingLocationVO {
-    private _latitude: Number;
+    private _latitude: number;
    
-    private _longitude: Number;
+    private _longitude: number;
  
 
-    constructor(latitude: Number, longitude: Number) {
+    constructor(latitude: number, longitude: number) {
         if( this.checkNull(latitude) && this.checkNull(longitude) && this.checkLatitude(latitude) && this.checkLongitude(longitude) ){
 
             this._latitude = latitude;
@@ -18,23 +18,23 @@ export class MeetingLocationVO {
 
     //getters and setters
 
-    public get latitude(): Number {
+    public get latitude(): number {
         return this._latitude;
     }
-    public set latitude(value: Number) {
+    public set latitude(value: number) {
         this._latitude = value;
     }
 
 
-    public get longitude(): Number {
+    public get longitude(): number {
         return this._longitude;
     }
-    public set longitude(value: Number) {
+    public set longitude(value: number) {
         this._longitude = value;
     }
 
     
-    checkNull(coord:Number){
+    checkNull(coord:number){
         if(coord != undefined){
             return true
         }else{
@@ -43,7 +43,7 @@ export class MeetingLocationVO {
         }
     }
 
-    checkLatitude(coord:Number){
+    checkLatitude(coord:number){
         if(coord< -90 || coord>90){
             throw InvalidMeetingLocationError.latitudeOutOfRange();
             return false;
@@ -51,7 +51,7 @@ export class MeetingLocationVO {
             return true
         }
 
-    }checkLongitude(coord:Number){
+    }checkLongitude(coord:number){
         if(coord< -180 || coord>180){
             throw InvalidMeetingLocationError.longitudeOutOfRange();
             return false;

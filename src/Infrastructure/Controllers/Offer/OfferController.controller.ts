@@ -27,6 +27,7 @@ import { OfferQueryFirestoreAdapter } from 'src/Infrastructure/Firestore/OfferMo
 import { LocationDTO } from 'src/Application/DTO/Location.dto';
 import { InvalidOfferDirection } from 'src/Dominio/AggRoots/Offer/Errors/InvalidOfferDirection.error';
 import { CandidateFirestoreAdapter } from 'src/Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
+import { MockSenderAdapter } from 'src/Infrastructure/Memory/MorckSenderAdapter';
 
 type ReportBody = {
   reason: string;
@@ -42,11 +43,12 @@ export class OfferController {
   private readonly offerApplicationService: OfferApplicationService;
   private readonly Offerrepo: OfferFirestoreAdapter;
   private readonly Employerrepo: EmployerRepositoryService;
-  private readonly Sender: INotificationSender;
+  
   constructor(
     offerRepo: OfferFirestoreAdapter,
     private OfferQueryRepo: OfferQueryFirestoreAdapter,
     private CandidaterepoC: CandidateFirestoreAdapter,
+    private Sender: MockSenderAdapter //TODO: Cambiar mock por adapter
   ) {
     this.Offerrepo = offerRepo;
     this.offerApplicationService = new OfferApplicationService(

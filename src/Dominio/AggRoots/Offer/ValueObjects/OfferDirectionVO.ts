@@ -2,10 +2,10 @@ import { InvalidOfferDirection } from "../Errors/InvalidOfferDirection.error";
 
 export class OfferLocationVO {
   
-  private _latitude: Number; 
-  private _longitude: Number;
+  private _latitude: number; 
+  private _longitude: number;
  
-  constructor(latitude: Number, longitude: Number) {
+  constructor(latitude: number, longitude: number) {
       if( this.checkNull(latitude) && this.checkNull(longitude) && this.checkLatitude(latitude) && this.checkLongitude(longitude) ){
           this._latitude = latitude;
           this._longitude = longitude;
@@ -16,17 +16,17 @@ export class OfferLocationVO {
 
     //getters and setters
 
-    public get latitude(): Number {
+    public get latitude(): number {
         return this._latitude;
     }
-    public set latitude(value: Number) {
+    public set latitude(value: number) {
         this._latitude = value;
     }
 
-    public get longitude(): Number {
+    public get longitude(): number {
         return this._longitude;
     }
-    public set longitude(value: Number) {
+    public set longitude(value: number) {
         this._longitude = value;
     }
       

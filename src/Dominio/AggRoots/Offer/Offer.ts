@@ -268,7 +268,6 @@ export class Offer extends AggregateRoot implements IInternalEventHandler {
     Description: DescriptionVO,
     id: OfferIdVO = new OfferIdVO(),
   ) {
-    console.log('Crear Oferta');
     if (State.state != OfferStatesEnum.Active)
       throw InvalidOfferState.BadCreatedOffer();
     let offer = new Offer(
