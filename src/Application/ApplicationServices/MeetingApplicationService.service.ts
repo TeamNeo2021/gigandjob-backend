@@ -12,6 +12,7 @@ import { CreateMeetingDTO } from '../DTO/Meeting/CreateMeetingDTO.dto';
 import { MeetingDTO } from '../DTO/Meeting/Meeting.dto';
 import { ModifyMeetingDTO } from '../DTO/Meeting/modifyMeetingDTO';
 import { RejectMeeting } from '../DTO/Meeting/RejectMeetingDTO';
+import { Publisher } from '../Publisher/publisher.interface';
 import { ICandidateRepository } from '../Repositories/CandidateRepository';
 import { EmployerRepository } from '../Repositories/Employer/repository.interface';
 import { IMeetingRepository } from '../Repositories/MeetingRepository.repo';
@@ -41,7 +42,7 @@ export class MeetingApplicationService implements IApplicationService {
                 new MeetingStateVO(MeetingStates[cmd.state]),
               )
         await this.repository.saveMeeting(EntitiesFactory.fromMeetingToMeetingDTO(meeting))
-        this.publisher.publish(meeting.GetChanges())
+        this.publisher.publish(meeting.GetChanges() as any[])
         break
       }
       case AcceptMeeting: {

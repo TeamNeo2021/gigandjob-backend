@@ -32,6 +32,7 @@ import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateF
 import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
 import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
 import { CandidateController } from './Infrastructure/Controllers/Candidate/candidateController.controller';
+import { Publisher } from './Infrastructure/Event/Publishers/publisher';
 
 
 const employerServiceProvider = {
@@ -69,10 +70,10 @@ const offerServiceProvider = {
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
-  useFactory: (repo: MeetingFirestoreAdapter, candidateRepo: ICandidateRepository, employerRepo: EmployerRepository) => {
-    return new MeetingApplicationService(repo, candidateRepo, employerRepo);
+  useFactory: (repo: MeetingFirestoreAdapter, candidateRepo: ICandidateRepository, employerRepo: EmployerRepository, publisher: Publisher) => {
+    return new MeetingApplicationService(repo, candidateRepo, employerRepo, publisher);
   },
-  inject: [MeetingFirestoreAdapter, CandidateFirestoreAdapter, EmployerRepositoryService],
+  inject: [MeetingFirestoreAdapter, CandidateFirestoreAdapter, EmployerRepositoryService, Publisher],
 };
 
 @Module({
@@ -112,6 +113,8 @@ const meetingAdapterProvider = {
     DashboardController,
   ],
   providers: [
+    Publisher,
+
     // Users stack
     UserFirestoreAdapterService,
     userServiceProvider,

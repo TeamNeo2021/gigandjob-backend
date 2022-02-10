@@ -35,7 +35,7 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
         return new MeetingDTO({
             ...meetingData,
             employer: new EmployerDTO(employerData),
-            candidate: new CandidateDTO(candidateData)
+            candidate: candidateData
         });
     }
 
