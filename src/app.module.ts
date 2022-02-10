@@ -21,6 +21,7 @@ import { OfferFirestoreAdapter } from './Infrastructure/Firestore/OfferFirestore
 import { OfferQueryFirestoreAdapter } from './Infrastructure/Firestore/OfferMobileQueryFirestoreAdapter';
 import { CandidateFirestoreAdapter } from './Infrastructure/Firestore/CandidateFirestoreAdapter.adapter';
 import { MeetingQueryFirestoreAdapter } from './Infrastructure/Firestore/MeetingMobileQueryFirestoreAdapter';
+import { EmployerRepository } from './Application/Repositories/Employer/repository.interface';
 
 const employerServiceProvider = {
   provide: 'EmployerApplicationService',
@@ -48,10 +49,10 @@ const offerServiceProvider = {
 
 const meetingAdapterProvider = {
   provide: 'MeetingApplicationService',
-  useFactory: (repo: MeetingFirestoreAdapter) => {
-    return new MeetingApplicationService(repo);
+  useFactory: (repo: MeetingFirestoreAdapter, candidateRepo: ICandidateRepository, employerRepo: EmployerRepository) => {
+    return new MeetingApplicationService(repo, candidateRepo, employerRepo);
   },
-  inject: [MeetingFirestoreAdapter],
+  inject: [MeetingFirestoreAdapter, CandidateFirestoreAdapter, EmployerRepositoryService],
 };
 
 @Module({

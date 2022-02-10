@@ -10,7 +10,7 @@ export class CandidateDTO {
   public location: LocationDTO;
 
   constructor(candidateData: any) {
-    this.candidateId = candidateData.id;
+    this.candidateId = candidateData.candidateId;
     this.state = candidateData.state;
     this.name = candidateData.name;
     this.phone = candidateData.phone;

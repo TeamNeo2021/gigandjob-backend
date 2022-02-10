@@ -14,7 +14,7 @@ export class MeetingQueryFirestoreAdapter implements MeeetingQueryModel {
         async getAll(candidateId: string): Promise<MeetingDTO[]> {
             try {
                     console.log(candidateId)
-                    let candidateMeetingDocs = await (await this.collection.where('CandidateId', '==', candidateId).get()).docs;
+                    let candidateMeetingDocs = (await this.collection.where('candidate', '==', candidateId).get()).docs;
                     console.log('MeeetingFirestoreAdapter: getAllCandidateMeetings candidateMeetingDocs: ', candidateMeetingDocs);
                     let candidateMeetingsList = candidateMeetingDocs.map(doc => {
                         console.log('getAllCandidateMeetings ...mapping doc: ', doc);

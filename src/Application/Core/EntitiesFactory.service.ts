@@ -147,15 +147,15 @@ export class EntitiesFactory {
       static fromEmployerToEmployerDTO(employer: Employer): EmployerDTO{
         const employerDTO: EmployerDTO =  new EmployerDTO(
           {
-              employerId : employer.employerId,
-              name : employer.name,
-              description : employer.description,
-              state : employer.state,
+              employerId : employer.employerId.guid_value,
+              name : employer.name.value_name_employer,
+              description : employer.description.value_employer_description,
+              state : employer.state.value_state,
               location : employer.location,
-              rif : employer.rif,
-              phone : employer.phone,
-              mail : employer.mail,
-              comDesignation : employer.comDesignation,
+              rif : employer.rif.value_employer_rif,
+              phone : employer.phone.value_employer_phone,
+              mail : employer.mail.value_employer_mail,
+              comDesignation : employer.comDesignation.value_comercial_designation,
               offers : employer.offers.map(EntitiesFactory.fromOfferToOfferDTO),
           }
         );
@@ -171,12 +171,13 @@ export class EntitiesFactory {
       static fromCandidateToCandidateDTO(candidate: Candidate): CandidateDTO{
         const candidateDTO: CandidateDTO =  new CandidateDTO(
           {
-              candidateId : candidate.Id,
+              candidateId : candidate.Id.value,
               name : candidate.name,
               state : candidate.state,
               location : candidate.location,
               phone : candidate.phone,
-              mail : candidate.email
+              email : candidate.email,
+              birthDate: candidate.birthDay.birthDate
           }
         );
         return candidateDTO;
