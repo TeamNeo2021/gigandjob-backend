@@ -23,27 +23,22 @@ export class MeetingCreationHandler implements IEventHandler<MeetingScheduledEve
 
         const today = new Date();
 
-        //const clean_today = new Date(today.getFullYear(),today.getMonth(), today.getDay());
-
-        const clean_today = new Date(2022,2,9) 
+        const clean_today = new Date(today.toDateString())
 
         console.log('clean_today', clean_today)
 
-        const query = await this.Meetingscollection
-                            .where('date', '==', clean_today.getTime())
-                            .get();
+        const sizeQuery = await this.Meetingscollection
+            .where('date', '==', clean_today)
+            .get()
+            .then(snap => 
+                meetings = snap.size)
+
         
-        const doc = query.docs[0]?.data()
 
-
-        if (!doc) return null;
-
-        console.log('doc', doc)
-
-        // const updateQuery = await this.DashboardCollection.doc('N4apURXjdiD4jAkrzK79').update(
-        //     {
-        //         'meetings': meetings
-        //     }        
-        // )
+        const updateQuery = await this.DashboardCollection.doc('N4apURXjdiD4jAkrzK79').update(
+            {
+                'meetings': meetings
+            }        
+        )
     };
 }
