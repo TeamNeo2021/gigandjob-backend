@@ -106,6 +106,53 @@ export class OfferController {
     };
   }
 
+  @Get('getall')
+  @HttpCode(200)
+  @Header('Access-Control_Allow_Origin', '*')
+  async getAll() {
+    const query = await this.OfferQueryRepo.getAll();
+    console.log(query)
+    if (!query)
+      throw new HttpException(
+        'Could not find a register with that date',
+        HttpStatus.NO_CONTENT,
+      );
+    return query;
+  }
+
+  @Get(':id/getone')
+  @HttpCode(200)
+  @Header('Access-Control_Allow_Origin', '*')
+  async getOne(@Param('id') offerId: string) {
+    const query = await this.OfferQueryRepo.getOne(offerId);
+    console.log(query)
+    if (!query)
+      throw new HttpException(
+        'Could not find a register with that date',
+        HttpStatus.NO_CONTENT,
+      );
+    return query;
+  }
+
+  @Put('likeOffer')
+  async likeOffer(
+    @Body('id_candidate') id_candidate: string,
+    @Body('id_offer') id_offer: string,
+    @Body('date') date: Date,
+  ) {
+    let result = await this.offerApplicationService.Handle(
+      new LikeOfferDTO({
+        id_candidate: id_candidate,
+        id_offer: id_offer,
+        date: date,
+      }),
+    );
+    return {
+      message: 'Offer Liked',
+      result: result,
+    };
+  }
+
   //APPLICATION
 
   @Put('/applyToOffer')
@@ -133,52 +180,5 @@ export class OfferController {
     });
     console.log("estoy en controlador y voy al service")
     await this.offerApplicationService.Handle(newApplication);
-  }
-
-  @Put('likeOffer')
-  async likeOffer(
-    @Body('id_candidate') id_candidate: string,
-    @Body('id_offer') id_offer: string,
-    @Body('date') date: Date,
-  ) {
-    let result = await this.offerApplicationService.Handle(
-      new LikeOfferDTO({
-        id_candidate: id_candidate,
-        id_offer: id_offer,
-        date: date,
-      }),
-    );
-    return {
-      message: 'Offer Liked',
-      result: result,
-    };
-  }
-
-  @Get('getall')
-  @HttpCode(200)
-  @Header('Access-Control_Allow_Origin', '*')
-  async getAll() {
-    const query = await this.OfferQueryRepo.getAll();
-    console.log(query)
-    if (!query)
-      throw new HttpException(
-        'Could not find a register with that date',
-        HttpStatus.NO_CONTENT,
-      );
-    return query;
-  }
-
-  @Get(':id/getone')
-  @HttpCode(200)
-  @Header('Access-Control_Allow_Origin', '*')
-  async getOne(@Param('id') offerId: string) {
-    const query = await this.OfferQueryRepo.getOne(offerId);
-    console.log(query)
-    if (!query)
-      throw new HttpException(
-        'Could not find a register with that date',
-        HttpStatus.NO_CONTENT,
-      );
-    return query;
   }
 }

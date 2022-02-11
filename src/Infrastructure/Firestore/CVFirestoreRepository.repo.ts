@@ -57,7 +57,7 @@ function entityToClass(cvResult: CVEntity) {
 
 @Injectable()
 export class CVFirestoreRepository implements ICVCommandRepository{
-    constructor(@Inject('candidates') private repo: CollectionReference<CVEntity>) {}
+    constructor(@Inject('cv') private repo: CollectionReference<CVEntity>) {}
     
     async save(cv: Cv): Promise<void> {
         let studies : studies[] = [];

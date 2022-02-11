@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Req } from '@nestjs/common';
 import { CvService } from 'src/Application/ApplicationServices/CvService.service';
 import { RequestCvApprovalDTO } from 'src/Application/DTO/Candidate/RequestCvApproval.dto';
 
@@ -23,26 +23,28 @@ export class CVController {
 
     @Post()
     @HttpCode(201)
-    RequestCVApproval(
+    async RequestCVApproval(
         @Body('CvID') cvID: string,
         @Body('CandidateID') candidateID: string,
         @Body('description') description: string,
         @Body('workExperiences') workExperiences: [work],
         @Body('studies') studies: [studies],
-        @Body('Buffer') photo: Buffer,
+        @Body('Buffer') photo: String,
         @Body('CandidateBirthdate') candidatebirthdate: string,
-    ): string {
+        @Body() body,
+        @Req() req
+    ) {
         let request: RequestCvApprovalDTO = new RequestCvApprovalDTO(
             cvID,
             candidateID,
             description,
             workExperiences,
             studies, 
-            photo,
+            Buffer.from(photo, 'base64'),
             candidatebirthdate,
         )
 
-        this.service.Handle(request);
+        await this.service.Handle(request);
         return 'CV has been submitted for approval'
     }
 }

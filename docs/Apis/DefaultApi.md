@@ -5,17 +5,27 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**authLoginPost**](DefaultApi.md#authLoginPost) | **POST** /auth/login | Logs in a Candidate given an email and password
+[**authLogoutPost**](DefaultApi.md#authLogoutPost) | **POST** /auth/logout | Logs out a Candidate given a JWT
 [**cVPost**](DefaultApi.md#cVPost) | **POST** /CV | Registers a new CV of a candidate
-[**candidatesIdDelete**](DefaultApi.md#candidatesIdDelete) | **DELETE** /candidates/{id} | Deletes a candidate
-[**candidatesIdReactivatePost**](DefaultApi.md#candidatesIdReactivatePost) | **POST** /candidates/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
-[**candidatesIdSuspendPost**](DefaultApi.md#candidatesIdSuspendPost) | **POST** /candidates/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
-[**candidatesPost**](DefaultApi.md#candidatesPost) | **POST** /candidates | Registers a new candidate
-[**employersEliminatedPut**](DefaultApi.md#employersEliminatedPut) | **PUT** /employers/Eliminated | Elimina un Empleador
+[**candidateIdDelete**](DefaultApi.md#candidateIdDelete) | **DELETE** /Candidate/{id} | Deletes a candidate
+[**candidateIdReactivatePost**](DefaultApi.md#candidateIdReactivatePost) | **POST** /Candidate/{id}/reactivate | Reactivates a candidate or deletes if treshold is surpased
+[**candidateIdSuspendPost**](DefaultApi.md#candidateIdSuspendPost) | **POST** /Candidate/{id}/suspend | Suspends a candidate or deletes if treshold is surpased
+[**candidatePost**](DefaultApi.md#candidatePost) | **POST** /Candidate | Registers a new candidate
+[**candidateProfileGet**](DefaultApi.md#candidateProfileGet) | **GET** /Candidate/profile | Gets the data of the current logged in Candidate
+[**dashboardGet**](DefaultApi.md#dashboardGet) | **GET** /dashboard | Read-Side for dashboard
+[**employersIdDelete**](DefaultApi.md#employersIdDelete) | **DELETE** /employers/:id | Deletes an Employer
 [**employersPost**](DefaultApi.md#employersPost) | **POST** /employers | Registers a new employer
 [**employersReactivatedPut**](DefaultApi.md#employersReactivatedPut) | **PUT** /employers/Reactivated | Reactiva un Empleador
 [**meetingAcceptPut**](DefaultApi.md#meetingAcceptPut) | **PUT** /meeting/accept | Accept a meeting
+[**meetingIdGetallGet**](DefaultApi.md#meetingIdGetallGet) | **GET** /meeting/{id}/getall | Gets all meetings of a Candidate
+[**meetingPost**](DefaultApi.md#meetingPost) | **POST** /meeting | Creates a meeting
+[**meetingRejectPut**](DefaultApi.md#meetingRejectPut) | **PUT** /meeting/reject | Reject a meeting
+[**offerApplyToOfferPut**](DefaultApi.md#offerApplyToOfferPut) | **PUT** /offer/applyToOffer | Applies to an offer
 [**offerEliminitedPut**](DefaultApi.md#offerEliminitedPut) | **PUT** /offer/Eliminited | Eliminates an offer
+[**offerGetallGet**](DefaultApi.md#offerGetallGet) | **GET** /offer/getall | Gets all registered offers
+[**offerIdGetoneGet**](DefaultApi.md#offerIdGetoneGet) | **GET** /offer/{id}/getone | Gets a existing offer
 [**offerIdReportPost**](DefaultApi.md#offerIdReportPost) | **POST** /offer/{id}/report | Reports an offer
+[**offerLikeOfferPut**](DefaultApi.md#offerLikeOfferPut) | **PUT** /offer/likeOffer | Likes an offer
 [**offerPost**](DefaultApi.md#offerPost) | **POST** /offer | Creates a new offer
 [**offerReactivedPut**](DefaultApi.md#offerReactivedPut) | **PUT** /offer/Reactived | Reactivates an offer
 
@@ -38,6 +48,30 @@ This endpoint does not need any parameter.
 ### Authorization
 
 [BasicAuth](../README.md#BasicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="authLogoutPost"></a>
+# **authLogoutPost**
+> String authLogoutPost()
+
+Logs out a Candidate given a JWT
+
+    Log out a Candidate given it&#39;s JWT
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -71,9 +105,9 @@ Name | Type | Description  | Notes
 - **Content-Type**: application/json
 - **Accept**: application/json
 
-<a name="candidatesIdDelete"></a>
-# **candidatesIdDelete**
-> String candidatesIdDelete(id)
+<a name="candidateIdDelete"></a>
+# **candidateIdDelete**
+> String candidateIdDelete(id)
 
 Deletes a candidate
 
@@ -98,9 +132,9 @@ Name | Type | Description  | Notes
 - **Content-Type**: Not defined
 - **Accept**: application/json
 
-<a name="candidatesIdReactivatePost"></a>
-# **candidatesIdReactivatePost**
-> String candidatesIdReactivatePost(id)
+<a name="candidateIdReactivatePost"></a>
+# **candidateIdReactivatePost**
+> String candidateIdReactivatePost(id)
 
 Reactivates a candidate or deletes if treshold is surpased
 
@@ -125,9 +159,9 @@ Name | Type | Description  | Notes
 - **Content-Type**: Not defined
 - **Accept**: application/json
 
-<a name="candidatesIdSuspendPost"></a>
-# **candidatesIdSuspendPost**
-> String candidatesIdSuspendPost(id, CandidateSuspensionForm)
+<a name="candidateIdSuspendPost"></a>
+# **candidateIdSuspendPost**
+> String candidateIdSuspendPost(id, CandidateSuspensionForm)
 
 Suspends a candidate or deletes if treshold is surpased
 
@@ -153,9 +187,9 @@ Name | Type | Description  | Notes
 - **Content-Type**: application/json
 - **Accept**: application/json
 
-<a name="candidatesPost"></a>
-# **candidatesPost**
-> String candidatesPost(CandidateRegistrationForm)
+<a name="candidatePost"></a>
+# **candidatePost**
+> String candidatePost(CandidateRegistrationForm)
 
 Registers a new candidate
 
@@ -180,18 +214,70 @@ Name | Type | Description  | Notes
 - **Content-Type**: application/json
 - **Accept**: application/json
 
-<a name="employersEliminatedPut"></a>
-# **employersEliminatedPut**
-> String employersEliminatedPut(EmployerStateChangeInformation)
+<a name="candidateProfileGet"></a>
+# **candidateProfileGet**
+> String candidateProfileGet(CandidateRegistrationForm)
 
-Elimina un Empleador
+Gets the data of the current logged in Candidate
 
-    Esta accion cambio el estado de cualquiera a eliminado de un Empleador
+    Gets the data of the current logged in Candidate
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **CandidateRegistrationForm** | [**CandidateRegistrationForm**](../Models/CandidateRegistrationForm.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="dashboardGet"></a>
+# **dashboardGet**
+> DashboardDTO dashboardGet()
+
+Read-Side for dashboard
+
+    Queries the info to build the web dashboard screen
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DashboardDTO**](../Models/DashboardDTO.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="employersIdDelete"></a>
+# **employersIdDelete**
+> String employersIdDelete(id, EmployerStateChangeInformation)
+
+Deletes an Employer
+
+    This action changes the state of the employer to deleted
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **UUID**| The id of the employer to delete | [default to null]
  **EmployerStateChangeInformation** | [**EmployerStateChangeInformation**](../Models/EmployerStateChangeInformation.md)|  |
 
 ### Return type
@@ -288,6 +374,115 @@ Name | Type | Description  | Notes
 - **Content-Type**: application/json
 - **Accept**: application/json
 
+<a name="meetingIdGetallGet"></a>
+# **meetingIdGetallGet**
+> String meetingIdGetallGet(id, MeetingAcceptanceForm)
+
+Gets all meetings of a Candidate
+
+    Gets all meeting booked with a given Candidate
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **UUID**| The id of the candidate with which the meetings are booked | [default to null]
+ **MeetingAcceptanceForm** | [**MeetingAcceptanceForm**](../Models/MeetingAcceptanceForm.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="meetingPost"></a>
+# **meetingPost**
+> String meetingPost(MeetingCreationForm)
+
+Creates a meeting
+
+    Creates a meeting with a given employer ID and candidate ID
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **MeetingCreationForm** | [**MeetingCreationForm**](../Models/MeetingCreationForm.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="meetingRejectPut"></a>
+# **meetingRejectPut**
+> String meetingRejectPut(MeetingAcceptanceForm)
+
+Reject a meeting
+
+    Candidate rejects going to a meeting with the employer
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **MeetingAcceptanceForm** | [**MeetingAcceptanceForm**](../Models/MeetingAcceptanceForm.md)|  |
+
+### Return type
+
+**String**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="offerApplyToOfferPut"></a>
+# **offerApplyToOfferPut**
+> OfferReportInformation offerApplyToOfferPut(OfferApplicationInformation)
+
+Applies to an offer
+
+    Applies a candidate to an offer
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **OfferApplicationInformation** | [**OfferApplicationInformation**](../Models/OfferApplicationInformation.md)|  |
+
+### Return type
+
+[**OfferReportInformation**](../Models/OfferReportInformation.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
 <a name="offerEliminitedPut"></a>
 # **offerEliminitedPut**
 > String offerEliminitedPut(OfferIdForm)
@@ -315,6 +510,57 @@ Name | Type | Description  | Notes
 - **Content-Type**: application/json
 - **Accept**: application/json
 
+<a name="offerGetallGet"></a>
+# **offerGetallGet**
+> List offerGetallGet()
+
+Gets all registered offers
+
+    Returns all registered offers in the system
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List**](../Models/OfferModel.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="offerIdGetoneGet"></a>
+# **offerIdGetoneGet**
+> OfferModel offerIdGetoneGet(id)
+
+Gets a existing offer
+
+    Returns an offer given it&#39;s id
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **String**| The id of the offer to be returned | [default to null]
+
+### Return type
+
+[**OfferModel**](../Models/OfferModel.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
 <a name="offerIdReportPost"></a>
 # **offerIdReportPost**
 > OfferReportInformation offerIdReportPost(id, OfferReportInformation)
@@ -333,6 +579,33 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OfferReportInformation**](../Models/OfferReportInformation.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+<a name="offerLikeOfferPut"></a>
+# **offerLikeOfferPut**
+> String offerLikeOfferPut(OfferLikeInformation)
+
+Likes an offer
+
+    Candidate gives like to an offer
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **OfferLikeInformation** | [**OfferLikeInformation**](../Models/OfferLikeInformation.md)|  |
+
+### Return type
+
+**String**
 
 ### Authorization
 

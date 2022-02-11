@@ -6,13 +6,7 @@ import { UserDTO } from "src/Application/DTO/User/User.dto";
 export class JwtAuthService extends PassportStrategy(Strategy) {
     constructor() {
         super({
-            jwtFromRequest: ExtractJwt.fromExtractors([
-                (req: Request) => {
-                    console.log(req.cookies)
-                    console.log(req.signedCookies)
-                    return req.signedCookies.jwt
-                }
-            ]),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: true,
             secretOrKey: "secret"
         })

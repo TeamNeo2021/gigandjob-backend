@@ -37,6 +37,9 @@ import { EmployerDeletionHandler } from './Infrastructure/Event/Handlers/Employe
 import { UserDeletionHandler } from './Infrastructure/Event/Handlers/UserDeletion.handler';
 import { MeetingCreationHandler } from './Infrastructure/Event/Handlers/MeetingCreation.handler';
 import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
+import { CVController } from './Infrastructure/Controllers/CV/CvController.controller';
+import { CVFirestoreRepository } from './Infrastructure/Firestore/CVFirestoreRepository.repo';
+import { CvService } from './Application/ApplicationServices/CvService.service';
 
 
 const employerServiceProvider = {
@@ -53,6 +56,14 @@ const userServiceProvider = {
     return new UserApplicationService(repo)
   },
   inject: [UserFirestoreAdapterService]
+}
+
+const cvServiceProvider = {
+  provide: 'CvService',
+  useFactory: (repo: CVFirestoreRepository) => {
+    return new CvService(repo)
+  },
+  inject: [CVFirestoreRepository]
 }
 
 const offerServiceProvider = {
@@ -99,7 +110,8 @@ const meetingAdapterProvider = {
         'candidates',
         'applications',
         'users',
-        'dashboardModel'
+        'dashboardModel',
+        'cv'
       ]
     }),
     CandidateModule,
@@ -115,6 +127,7 @@ const meetingAdapterProvider = {
     UserController,
     EmployerController,
     DashboardController,
+    CVController
   ],
   providers: [
     Publisher,
@@ -129,6 +142,7 @@ const meetingAdapterProvider = {
 
     AppService, 
     DashboardWebQueryFirestoreAdapter,
+    CVFirestoreRepository,
     MeetingApplicationService,
     MeetingFirestoreAdapter,
     OfferApplicationService,
@@ -136,6 +150,7 @@ const meetingAdapterProvider = {
     EmployerRepositoryService,
     employerServiceProvider,
     meetingAdapterProvider,
+    cvServiceProvider,
     OfferQueryFirestoreAdapter,
     CandidateFirestoreAdapter,
     MeetingQueryFirestoreAdapter,
