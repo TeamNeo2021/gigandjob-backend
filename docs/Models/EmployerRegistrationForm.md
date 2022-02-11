@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** | Employer&#39;s full name | [default to null]
 **description** | **String** | Description of the employer | [default to null]
-**location** | **String** | Address of the employer | [default to null]
+**location** | [**EmployerRegistrationForm_location**](EmployerRegistrationForm_location.md) |  | [default to null]
 **state** | **String** | Current state of the employer | [default to null]
 **rif** | **String** | Rif of the employer | [default to null]
 **phone** | **String** | Phone of the employer | [default to null]

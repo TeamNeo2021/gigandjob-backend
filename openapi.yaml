@@ -85,7 +85,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CandidateRegistrationForm"
+              $ref: "#/components/schemas/CandidateProfileInformation"
       responses:
         '200':
           description: 'A success message'
@@ -463,27 +463,32 @@ components:
           format: date
           description: Date until the candidate remains suspended
           example: "January 28 2022 18:00:00 GMT+04:00"
-    CandidateRegistrationForm:
-      description: Form data needed to register a candidate
+    CandidateProfileInformation:
+      description: Information relevant to the profile of the Candidate
       type: object
       required: 
+        - candidateId
         - name
         - lastname
-        - phoneCode
+        - state
+        - phone
         - email
         - birthdate
-        - latitude
-        - longitude
+        - location
       properties:
+        candidateId:
+          type: string
+          format: uuid
+          description: ID of the candidate
         name:
           type: string
           description: First name of the candidate
         lastname:
           type: string
           description: Last name of the candidate
-        phoneCode:
+        phone:
           type: string
-          description: Area code of the phone number of the candidate
+          description: Full phone definition of the candidate
         email:
           format: email
           type: string
@@ -492,12 +497,62 @@ components:
           format: date
           type: string
           description: Birth date of the candidate
-        latitude:
-          type: double
-          description: Latitude coordinate of the candidate location 
-        longitude:
-          type: double
-          description: Longitude coordinate of the candidate location 
+        location:
+          type: object
+          properties:
+            latitude:
+              type: double
+              description: Latitude coordinate of the candidate location 
+            longitude:
+              type: double
+              description: Longitude coordinate of the candidate location 
+    CandidateRegistrationForm:
+      description: Form data needed to register a candidate
+      type: object
+      required: 
+        - name
+        - phone
+        - email
+        - birthdate
+        - location
+      properties:
+        name:
+          type: object
+          description: Names of the candidate
+          properties:
+            firstname:
+              type: string
+              description: First name of the candidate
+            lastname:
+              type: string
+              description: Last name of the candidate
+        phone:
+          type: object
+          description: Phone definition of the candidate
+          properties:
+            areaCode:
+              type: string
+              description: Area code of the phone number of the Candidate
+            phoneNumber:
+              type: string
+              description: Phone number of the Candidate
+        email:
+          format: email
+          type: string
+          description: Email of the candidate
+        birthdate:
+          format: date
+          type: string
+          description: Birth date of the candidate
+        location:
+          type: object
+          properties:
+            latitude:
+              type: double
+              description: Latitude coordinate of the candidate location 
+            longitude:
+              type: double
+              description: Longitude coordinate of the candidate location 
     EmployerRegistrationForm:
       description: Form data needed to register an employer
       type: object
@@ -518,8 +573,17 @@ components:
           type: string
           description: Description of the employer
         location:
-          type: string
-          description: Address of the employer
+          type: object
+          required:
+            - latitude
+            - longitude
+          properties:
+            latitude:
+              type: number
+              description: Latitude of the location
+            longitude:
+              type: number
+              description: Longitude of the location
         state:
           type: string
           description: Current state of the employer
@@ -570,9 +634,12 @@ components:
         budget:
           description: Budget of the offer
           type: number
-        description:
-          description: Description of the offer
-          type: string
+        latitude:
+          type: number
+          description: Latitude of the location
+        longitude:
+          type: number
+          description: Longitude of the location
     OfferIdForm:
       description: Form data that indicates an offer Id
       type: object

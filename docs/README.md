@@ -39,10 +39,15 @@ Class | Method | HTTP request | Description
  - [CVSubmitForm](./Models/CVSubmitForm.md)
  - [CVSubmitForm_studies](./Models/CVSubmitForm_studies.md)
  - [CVSubmitForm_workExperiences](./Models/CVSubmitForm_workExperiences.md)
+ - [CandidateProfileInformation](./Models/CandidateProfileInformation.md)
+ - [CandidateProfileInformation_location](./Models/CandidateProfileInformation_location.md)
  - [CandidateRegistrationForm](./Models/CandidateRegistrationForm.md)
+ - [CandidateRegistrationForm_name](./Models/CandidateRegistrationForm_name.md)
+ - [CandidateRegistrationForm_phone](./Models/CandidateRegistrationForm_phone.md)
  - [CandidateSuspensionForm](./Models/CandidateSuspensionForm.md)
  - [DashboardDTO](./Models/DashboardDTO.md)
  - [EmployerRegistrationForm](./Models/EmployerRegistrationForm.md)
+ - [EmployerRegistrationForm_location](./Models/EmployerRegistrationForm_location.md)
  - [EmployerStateChangeInformation](./Models/EmployerStateChangeInformation.md)
  - [MeetingAcceptanceForm](./Models/MeetingAcceptanceForm.md)
  - [MeetingCreationForm](./Models/MeetingCreationForm.md)
@@ -71,4 +76,3 @@ Class | Method | HTTP request | Description
 ### BearerAuth
 
 - **Type**: HTTP bearer authentication
-

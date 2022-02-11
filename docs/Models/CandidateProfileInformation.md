@@ -1,10 +1,12 @@
-# CandidateRegistrationForm
+# CandidateProfileInformation
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | [**CandidateRegistrationForm_name**](CandidateRegistrationForm_name.md) |  | [default to null]
-**phone** | [**CandidateRegistrationForm_phone**](CandidateRegistrationForm_phone.md) |  | [default to null]
+**candidateId** | **UUID** | ID of the candidate | [default to null]
+**name** | **String** | First name of the candidate | [default to null]
+**lastname** | **String** | Last name of the candidate | [default to null]
+**phone** | **String** | Full phone definition of the candidate | [default to null]
 **email** | **String** | Email of the candidate | [default to null]
 **birthdate** | **date** | Birth date of the candidate | [default to null]
 **location** | [**CandidateProfileInformation_location**](CandidateProfileInformation_location.md) |  | [default to null]

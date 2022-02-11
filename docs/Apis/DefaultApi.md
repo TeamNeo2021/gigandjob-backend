@@ -216,7 +216,7 @@ Name | Type | Description  | Notes
 
 <a name="candidateProfileGet"></a>
 # **candidateProfileGet**
-> String candidateProfileGet(CandidateRegistrationForm)
+> String candidateProfileGet(CandidateProfileInformation)
 
 Gets the data of the current logged in Candidate
 
@@ -226,7 +226,7 @@ Gets the data of the current logged in Candidate
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **CandidateRegistrationForm** | [**CandidateRegistrationForm**](../Models/CandidateRegistrationForm.md)|  |
+ **CandidateProfileInformation** | [**CandidateProfileInformation**](../Models/CandidateProfileInformation.md)|  |
 
 ### Return type
 

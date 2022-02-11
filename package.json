@@ -30,6 +30,7 @@
     "@nestjs/passport": "^8.1.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.0.2",
+    "@nestjs/serve-static": "^2.2.2",
     "@types/passport": "^1.0.7",
     "@types/passport-http": "^0.3.9",
     "cookie-parser": "^1.4.6",

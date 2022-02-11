@@ -130,7 +130,7 @@ $ npm run test:cov -->
 <a name="documentation-for-api-endpoints"></a>
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:5000*
+All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -166,10 +166,15 @@ Class | Method | HTTP request | Description
  - [CVSubmitForm](./docs/Models/CVSubmitForm.md)
  - [CVSubmitForm_studies](./docs/Models/CVSubmitForm_studies.md)
  - [CVSubmitForm_workExperiences](./docs/Models/CVSubmitForm_workExperiences.md)
+ - [CandidateProfileInformation](./docs/Models/CandidateProfileInformation.md)
+ - [CandidateProfileInformation_location](./docs/Models/CandidateProfileInformation_location.md)
  - [CandidateRegistrationForm](./docs/Models/CandidateRegistrationForm.md)
+ - [CandidateRegistrationForm_name](./docs/Models/CandidateRegistrationForm_name.md)
+ - [CandidateRegistrationForm_phone](./docs/Models/CandidateRegistrationForm_phone.md)
  - [CandidateSuspensionForm](./docs/Models/CandidateSuspensionForm.md)
  - [DashboardDTO](./docs/Models/DashboardDTO.md)
  - [EmployerRegistrationForm](./docs/Models/EmployerRegistrationForm.md)
+ - [EmployerRegistrationForm_location](./docs/Models/EmployerRegistrationForm_location.md)
  - [EmployerStateChangeInformation](./docs/Models/EmployerStateChangeInformation.md)
  - [MeetingAcceptanceForm](./docs/Models/MeetingAcceptanceForm.md)
  - [MeetingCreationForm](./docs/Models/MeetingCreationForm.md)

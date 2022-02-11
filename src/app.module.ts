@@ -40,6 +40,8 @@ import { MockSenderAdapter } from './Infrastructure/Memory/MorckSenderAdapter';
 import { CVController } from './Infrastructure/Controllers/CV/CvController.controller';
 import { CVFirestoreRepository } from './Infrastructure/Firestore/CVFirestoreRepository.repo';
 import { CvService } from './Application/ApplicationServices/CvService.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path/posix';
 
 
 const employerServiceProvider = {
@@ -94,6 +96,9 @@ const meetingAdapterProvider = {
 @Module({
   imports: [
     //TODO: Arreglar una vez se haya conectado bien con firestore
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '/')
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
