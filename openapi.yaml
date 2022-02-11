@@ -835,3 +835,67 @@ components:
                 type: string
               degree:
                 type: string
+
+    OfferLikeInformation:
+      description: 'Necessary information to like an offer'
+      type: object
+      required: 
+        - id_candidate
+        - id_offer
+        - date
+      properties:
+        id_candidate: 
+          type: string
+          format: UUID
+          description: 'The id of the candidate who is liking an offer'
+        id_offer:
+          type: string
+          format: UUID
+          description: 'The id of the offer who is being liked'
+        date:
+          type: Date
+          description: 'The date when the offer is being liked'
+
+      MeetingCreationForm:
+        description: 'Form data needed to create a meet'
+        type: object
+        required:
+          - candidate
+          - employer
+          - state
+          - description
+          - date
+          - location
+        properties:
+          candidate:
+            type: string
+            format: UUID
+            description: 'Id of the candidate invited to the meeting'
+          employer:
+            type: string
+            format: UUID
+            description: 'Id of the employer who is creating the meeting'
+          state: 
+            type: string
+            description: 'Initial state of the meeting'
+          description:
+            type: string
+            description: 'Brief description of the meeting'
+          date:
+            type: Date
+            description: 'The time when the meeting will occurr'
+          location:
+            type: object
+            description: 'Location in coordinates where the meeting will be'
+            required:
+              - latitude
+              - longitude
+            properties:
+              latitude: 
+                type: number
+                description: 'Latitude of the coordinates'
+              longitude: 
+                type: number
+                description: 'Longitude of the coordinates'
+
+            
