@@ -13,10 +13,6 @@ export class DashboardController {
     @HttpCode(200)
     @Header("Access-Control_Allow_Origin", "*")
     async getDashboardModel(){
-        
-
-        
-
         const query = await this.queryModel.getModel()
 
         if (!query) throw new HttpException(

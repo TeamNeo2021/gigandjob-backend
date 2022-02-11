@@ -45,7 +45,21 @@ paths:
                     type: string
                     format: email
                     description: Email of the user
-  /candidates:
+                  jwt:
+                    type: string
+                    format: jwt
+  /auth/logout:
+    post:
+      summary: Logs out a Candidate given a JWT
+      description: Log out a Candidate given it's JWT
+      responses:
+        '200':
+          description: A succesfull message
+          content:
+            application/json:
+              schema:
+                type: string
+  /Candidate:
     post:
       summary: Registers a new candidate
       description: Creates a new candidate that can apply to job offers
@@ -62,7 +76,24 @@ paths:
             application/json:
               schema: 
                 type: string
-  /candidates/{id}/suspend:
+  /Candidate/profile:
+    get:
+      summary: Gets the data of the current logged in Candidate
+      description: Gets the data of the current logged in Candidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CandidateRegistrationForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema: 
+                type: string
+  /Candidate/{id}/suspend:
     post:
       summary: Suspends a candidate or deletes if treshold is surpased
       description: Suspends a candidate and the candidate is no longer to apply to a offer
@@ -87,7 +118,7 @@ paths:
             application/json:
               schema: 
                 type: string
-  /candidates/{id}/reactivate:
+  /Candidate/{id}/reactivate:
     post:
       summary: Reactivates a candidate or deletes if treshold is surpased
       description: Reactivates a candidate and the candidate is able to apply to a offer
@@ -106,7 +137,7 @@ paths:
             application/json:
               schema: 
                 type: string
-  /candidates/{id}:
+  /Candidate/{id}:
     delete:
       summary: Deletes a candidate
       description: Deletes a candidate and it's related records
@@ -159,10 +190,18 @@ paths:
             application/json:
               schema: 
                 type: string
-  /employers/Eliminated:
-    put:
-      summary: Elimina un Empleador
-      description: Esta accion cambio el estado de cualquiera a eliminado de un Empleador
+  /employers/:id:
+    delete:
+      summary: Deletes an Employer
+      description: This action changes the state of the employer to deleted
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the employer to delete
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -186,6 +225,65 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/MeetingAcceptanceForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /meeting/reject:
+    put:
+      summary: Reject a meeting
+      description: Candidate rejects going to a meeting with the employer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingAcceptanceForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /meeting/{id}/getall:
+    get:
+      summary: Gets all meetings of a Candidate
+      description: Gets all meeting booked with a given Candidate
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the candidate with which the meetings are booked
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingAcceptanceForm"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /meeting:
+    post:
+      summary: Creates a meeting
+      description: Creates a meeting with a given employer ID and candidate ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingCreationForm"
       responses:
         '200':
           description: 'A success message'
@@ -268,6 +366,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OfferReportInformation"
+  /offer/applyToOffer:
+    put:
+      summary: Applies to an offer
+      description: Applies a candidate to an offer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferApplicationInformation"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferReportInformation"
+  /offer/likeOffer:
+    put:
+      summary: Likes an offer
+      description: Candidate gives like to an offer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OfferLikeInformation"
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: string
+  /offer/getall:
+    get:
+      summary: Gets all registered offers
+      description: Returns all registered offers in the system
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OfferModel"
+  /offer/{id}/getone:
+    get:
+      summary: Gets a existing offer
+      description: Returns an offer given it's id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the offer to be returned
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'A success message'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferModel"
   /dashboard:
     get:
       summary: Read-Side for dashboard
@@ -445,10 +608,154 @@ components:
         - id
       properties:
         id:
-          description: id del empleador a cambiar de estado
+          description: Id del empleador a cambiar de estado
           type: string
           format: uuid
-
+    OfferApplicationInformation:
+      description: Information needed to apply a candidate to an offer
+      type: object
+      required:
+        - idOffer
+        - idCandidate
+        - idEmployer
+        - state
+        - budget
+        - description
+        - duration_days
+      properties:
+        idOffer:
+          type: string
+          format: uuid
+          description: Id of the offer to apply to
+        idCandidate:
+          type: string
+          format: uuid
+          description: Id of the candidate who's applying to the offer
+        idEmployer:
+          type: string
+          format: uuid
+          description: Id of the employer who issued the offer
+        state:
+          type: string
+          description: State of the application
+          enum: [Active, Inactive, Canceled, Eliminated]
+        budget:
+          type: number
+          description: Budget of the application
+        description:
+          type: string
+          description: Description of the application
+        duration_days:
+          type: number
+          description: Days of duration of the application
+    OfferModel:
+      description: Offer information
+      type: object
+      required: 
+        - OfferId
+        - State
+        - PublicationDate
+        - Rating
+        - Direction
+        - Sector
+        - Budget
+        - Description
+        - reports
+        - applications
+      properties:
+        OfferId:
+          description: Id of the offer
+          type: string
+          format: uuid
+        State:
+          description: State of the offer
+          type: string
+          enum: [Active, Suspended, Closed, Eliminated]
+        PublicationDate:
+          description: Date of publication of the offer
+          type: date
+        Rating:
+          description: Rating of the offer
+          type: number
+        Direction:
+          description: Latitude and longitude of the location of the offer
+          type: object
+          required:
+            - latitude
+            - longitude
+          properties:
+            latitude:
+              type: number
+              description: Latitude of the location
+            longitude:
+              type: number
+              description: Longitude of the location
+        Sector:
+          type: string
+          description: Sector in which the offer will be developed
+          enum: [Technology, Laws]
+        Budget:
+          type: number
+          description: Budget of the offer
+        Description:
+          type: string
+          description: Description of the offer
+        reports:
+          type: array
+          description: Reports (if any) issued to the offer
+          items:
+            type: object
+            required:
+              - reporterId
+              - reason
+            properties:
+              reporterId:
+                type: string
+                format: uuid
+                description: Id of the candidate that issued the report
+              reason:
+                type: string
+                description: Reason of the report
+        applications:
+          type: array
+          description: Applications (if any) of the offer
+          items:
+            type: object
+            required:
+              - applicationId
+              - state
+              - candidateId
+              - previous_state
+              - budget
+              - description
+              - duration_days
+            properties:
+              applicationId:
+                type: string
+                format: uuid
+                description: Id of the application
+              state:
+                type: string
+                enum: [Active, Inactive, Canceled, Eliminated]
+                description: State of the application
+              candidateId:
+                type: string
+                description: Id of the Candidate that issued this application
+                format: uuid
+              previous_state:
+                type: string
+                enum: [Active, Inactive, Canceled, Eliminated]
+                description: Previous state of the application
+              budget:
+                type: number
+                description: Budget of the application
+              description:
+                type: string
+                description: Description of the application
+              duration_days:
+                type: number
+                description: Days of duration of the application
+          
     DashboardQueryDate:
       description: Date that is used for query the dashboard data
       type: Date
