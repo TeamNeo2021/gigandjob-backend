@@ -45,7 +45,7 @@ export class Meeting extends AggregateRoot {
   protected When(event: IDomainEvent): void {
     switch (event.constructor) {
       case MeetingCanceledEvent:
-        const today = new MeetingDateVO(new Date());
+        const today = MeetingDateVO.Create(new Date());
         if (!today.LessThan(this.date)) {
           throw InvalidMeetingDate.MeetingDateExpired();
         }

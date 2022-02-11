@@ -48,7 +48,7 @@ describe('Register Employer', () => {
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
       'state',
-      EmployerStates.Active,
+      'Active',
     );
     expect(saveMockFn.mock.calls[0][0]).toHaveProperty(
       'rif',

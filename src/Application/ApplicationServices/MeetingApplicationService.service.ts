@@ -37,7 +37,7 @@ export class MeetingApplicationService implements IApplicationService {
           employer = await this.employerRepository.get(cmd.employer),
           candidate = await this.candidateRepository.getOne(cmd.candidate),
           meeting = Meeting.ScheduleOn(
-            new MeetingDateVO(cmd.date),
+            MeetingDateVO.Create(cmd.date),
             EntitiesFactory.fromEmployerDtoToEmployer(employer),
             candidate,
             new MeetingDescriptionVO(cmd.description),

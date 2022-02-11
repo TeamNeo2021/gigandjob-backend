@@ -1,7 +1,7 @@
 import { InvalidMeetingDate } from "../Errors/InvalidMeetingDate.error";
 
 export class MeetingDateVO {
-    constructor(public value: Date) {}
+    private constructor(public value: Date) {}
 
     public LessThan(date: MeetingDateVO): boolean{
         if (this.value < date.value){

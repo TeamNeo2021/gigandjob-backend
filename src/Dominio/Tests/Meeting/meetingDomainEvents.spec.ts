@@ -11,7 +11,7 @@ import { create_exampleCandidate } from "../Candidate/eliminateCandidate.spec";
 const exampleCandidate = create_exampleCandidate();
 
 const meetingExample = Meeting.ScheduleOn(
-    new MeetingDateVO(new Date(2022,11,31)),
+    MeetingDateVO.Create(new Date(2022,11,31)),
     exampleEmployer,
     exampleCandidate,
     new MeetingDescriptionVO('Meeting test description'),

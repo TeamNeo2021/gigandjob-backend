@@ -38,21 +38,21 @@ const exampleCandidate = create_exampleCandidate();
 function example_meetings(candidate: CandidateIdVo): Meeting[]{
     return [
         Meeting.ScheduleOn(
-            new MeetingDateVO(new Date(2022,11,20)),
+            MeetingDateVO.Create(new Date(2022,11,20)),
             exampleEmployer,
             exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
             new MeetingLocationVO(25,95),
         ),
         Meeting.ScheduleOn(
-            new MeetingDateVO(date),
+            MeetingDateVO.Create(date),
             exampleEmployer,
             exampleCandidate,
             new MeetingDescriptionVO('Meeting test description'),
             new MeetingLocationVO(25,95),
         ),
         Meeting.ScheduleOn(
-            new MeetingDateVO(new Date(2022,11,22)),
+            MeetingDateVO.Create(new Date(2022,11,22)),
             exampleEmployer,
             create_exampleCandidate(),
             new MeetingDescriptionVO('Meeting test description'),
