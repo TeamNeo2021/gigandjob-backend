@@ -450,7 +450,7 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-      in: cookie
+      in: header
   schemas:
     CandidateSuspensionForm:
       description: Form data needed to suspend a candidate

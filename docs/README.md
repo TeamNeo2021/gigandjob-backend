@@ -70,5 +70,5 @@ Class | Method | HTTP request | Description
 <a name="BearerAuth"></a>
 ### BearerAuth
 
-- **Type**: HTTP basic authentication
+- **Type**: HTTP bearer authentication
 
