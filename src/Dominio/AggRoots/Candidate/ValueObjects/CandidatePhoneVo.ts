@@ -9,6 +9,8 @@ export class CandidatePhoneVo{
     private _phone: String;
 
     constructor(areaCode: String, phone:String){
+        console.log(areaCode)
+        console.log(phone)
         if(this.areaCodeValidate(areaCode) && this.phoneValidate(phone) ){
             this._areaCode = areaCode;
             this._phone = phone;

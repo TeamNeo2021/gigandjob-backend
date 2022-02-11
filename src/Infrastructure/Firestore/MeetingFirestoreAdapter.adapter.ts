@@ -42,7 +42,7 @@ export class MeetingFirestoreAdapter implements IMeetingRepository {
                 state: candidateData.state,
                 name: candidateData.name.names,
                 lastname: candidateData.name.lastname,
-                phone: candidateData.phone.areaCode + candidateData.phone.phoneNumber,
+                phone: candidateData.phone.areaCode + " " + candidateData.phone.phoneNumber,
                 email: candidateData.email,
                 birthdate: new Date(candidateData.birthdate),
                 location: candidateData.location
