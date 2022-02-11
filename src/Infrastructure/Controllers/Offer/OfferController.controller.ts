@@ -120,7 +120,7 @@ export class OfferController {
     @Body('description') description: string,
     @Body('duration_days') duration_days: number,
   ) {
-    console.log("estoy en controlador")
+    
     let newApplication = new ApplyToOfferDTO({
       offerId: idOffer,
       employerId: idEmployer,
@@ -131,6 +131,7 @@ export class OfferController {
       description: description,
       duration_days: duration_days,
     });
+    console.log('newApplication', newApplication)
     console.log("estoy en controlador y voy al service")
     await this.offerApplicationService.Handle(newApplication);
   }

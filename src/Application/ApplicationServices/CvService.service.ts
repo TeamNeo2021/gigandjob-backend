@@ -17,13 +17,13 @@ export class CvService implements IApplicationService {
   }
 
   async Handle(command: any): Promise<void> {
-    console.log('entra al handle');
+    
     switch (command.constructor) {
       case RequestCvApprovalDTO: {
-        console.log('entra al case');
+        
 
         let cmd: RequestCvApprovalDTO = <RequestCvApprovalDTO>command;
-        console.log('1');
+        
 
         let Workxp: CvWorkExperience[] = [];
         let Studies: CvStudies[] = [];
