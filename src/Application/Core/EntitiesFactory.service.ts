@@ -101,7 +101,7 @@ export class EntitiesFactory {
         const meetingDTO = new MeetingDTO(
           {
             id : meeting.id._id,
-            state : meeting.state.current,
+            state : MeetingStates[meeting.state.current],
             description : meeting.description.value,
             date : meeting.date.value,
             location : {
@@ -155,7 +155,7 @@ export class EntitiesFactory {
               employerId : employer.employerId.guid_value,
               name : employer.name.value_name_employer,
               description : employer.description.value_employer_description,
-              state : employer.state.value_state,
+              state : EmployerStates[employer.state.value_state],
               location : employer.location,
               rif : employer.rif.value_employer_rif,
               phone : employer.phone.value_employer_phone,
